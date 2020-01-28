@@ -23,6 +23,7 @@
     "replace": {
         "viserio/bus-contract": "self.version",
         "viserio/cache-contract": "self.version",
+        "viserio/config-contract": "self.version",
         "viserio/console-contract": "self.version",
         "viserio/container-contract": "self.version",
         "viserio/cookie-contract": "self.version",
@@ -37,7 +38,6 @@
         "viserio/log-contract": "self.version",
         "viserio/mail-contract": "self.version",
         "viserio/manager-contract": "self.version",
-        "viserio/options-resolver-contract": "self.version",
         "viserio/pagination-contract": "self.version",
         "viserio/parser-contract": "self.version",
         "viserio/pipeline-contract": "self.version",
@@ -69,7 +69,7 @@
     },
     "suggest": {
         "psr/http-message": "Required to use Http, Routing contract (^1.0.0).",
-        "psr/http-server-middleware": "Required to use Routing Contract Middleware Contracts (^1.0.0).",
+        "psr/http-server-middleware": "Required to use Routing Contract Middleware Contract (^1.0.0).",
         "symfony/console": "Required to use the Console Contract (^4.3.8 | ^5.0.0)."
     },
     "extra": {

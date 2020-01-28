@@ -38,7 +38,7 @@ jobs:
           "Component/Log",
           "Component/Mail",
           "Component/Manager",
-          "Component/OptionsResolver",
+          "Component/Config",
           "Component/Pagination",
           "Component/Parser",
           "Component/Path",
@@ -65,7 +65,7 @@ jobs:
           fetch-depth: 2
 
       - name: "Setup PHP"
-        uses: shivammathur/setup-php@1.7.2
+        uses: shivammathur/setup-php@1.8.1
         with:
           php-version: 7.4
           extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, inotify, pcntl, posix

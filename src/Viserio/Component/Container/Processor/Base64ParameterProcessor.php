@@ -38,7 +38,7 @@ class Base64ParameterProcessor extends AbstractParameterProcessor
         $value = \base64_decode(\strtr($key, '-_', '+/'), true);
 
         if ($value === false) {
-            throw new RuntimeException(sprintf('Base64 decoding of [%s] failed, on given parameter [%s].', $key, $parameter));
+            throw new RuntimeException(\sprintf('Base64 decoding of [%s] failed, on given parameter [%s].', $key, $parameter));
         }
 
         return $value;

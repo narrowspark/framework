@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\Definition;
 
+use Traversable;
 use Viserio\Contract\Container\Definition\IteratorDefinition as IteratorDefinitionContract;
 
 final class IteratorDefinition extends AbstractDefinition implements IteratorDefinitionContract
@@ -20,7 +21,7 @@ final class IteratorDefinition extends AbstractDefinition implements IteratorDef
     /**
      * List of parameter to pass when calling the class.
      *
-     * @var null|array<string|int, mixed>
+     * @var null|array<int|string, mixed>
      */
     private ?array $argument;
 
@@ -34,9 +35,9 @@ final class IteratorDefinition extends AbstractDefinition implements IteratorDef
     /**
      * Create a new Iterator Definition instance.
      *
-     * @param string              $name
-     * @param string|\Traversable $value
-     * @param int                 $type
+     * @param string             $name
+     * @param string|Traversable $value
+     * @param int                $type
      */
     public function __construct(string $name, $value, int $type)
     {
@@ -44,8 +45,8 @@ final class IteratorDefinition extends AbstractDefinition implements IteratorDef
 
         $this->value = $value;
 
-        if ($value instanceof \Traversable) {
-            $this->setArgument(iterator_to_array($value));
+        if ($value instanceof Traversable) {
+            $this->setArgument(\iterator_to_array($value));
         }
     }
 
@@ -68,5 +69,4 @@ final class IteratorDefinition extends AbstractDefinition implements IteratorDef
 
         return $this;
     }
-
 }

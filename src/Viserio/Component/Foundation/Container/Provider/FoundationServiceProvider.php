@@ -19,19 +19,19 @@ use Viserio\Component\Container\Definition\ReferenceDefinition;
 use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
-use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
-use Viserio\Contract\OptionsResolver\RequiresValidatedOption as RequiresValidatedOptionContract;
+use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
+use Viserio\Contract\Config\RequiresValidatedConfig as RequiresValidatedConfigContract;
 
 class FoundationServiceProvider implements RequiresComponentConfigContract,
-    RequiresMandatoryOptionContract,
-    RequiresValidatedOptionContract,
+    RequiresMandatoryConfigContract,
+    RequiresValidatedConfigContract,
     ServiceProviderContract
 {
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): array
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'app'];
     }
@@ -39,7 +39,7 @@ class FoundationServiceProvider implements RequiresComponentConfigContract,
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): array
+    public static function getMandatoryOptions(): iterable
     {
         return [
             'url',
@@ -49,7 +49,7 @@ class FoundationServiceProvider implements RequiresComponentConfigContract,
     /**
      * {@inheritdoc}
      */
-    public static function getOptionValidators(): array
+    public static function getConfigValidators(): iterable
     {
         return [
             'url' => ['string'],

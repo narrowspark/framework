@@ -16,13 +16,13 @@ namespace Viserio\Provider\Framework\Container\Processor;
 use Viserio\Component\Container\Processor\AbstractParameterProcessor;
 use Viserio\Contract\Container\CompiledContainer as CompiledContainerContract;
 use Viserio\Contract\Container\Exception\InvalidArgumentException;
-use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
-use Viserio\Contract\OptionsResolver\RequiresValidatedOption as RequiresValidatedOptionContract;
+use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
+use Viserio\Contract\Config\RequiresValidatedConfig as RequiresValidatedConfigContract;
 
 final class DirectoryParameterProcessor extends AbstractParameterProcessor implements RequiresComponentConfigContract,
-    RequiresMandatoryOptionContract,
-    RequiresValidatedOptionContract
+    RequiresMandatoryConfigContract,
+    RequiresValidatedConfigContract
 {
     public const PARAMETER_KEY = 'viserio.app.directory.processor.check_strict';
 
@@ -59,7 +59,7 @@ final class DirectoryParameterProcessor extends AbstractParameterProcessor imple
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): array
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'app', 'directory'];
     }
@@ -67,7 +67,7 @@ final class DirectoryParameterProcessor extends AbstractParameterProcessor imple
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): array
+    public static function getMandatoryOptions(): iterable
     {
         return [
             'mapper',
@@ -77,11 +77,19 @@ final class DirectoryParameterProcessor extends AbstractParameterProcessor imple
     /**
      * {@inheritdoc}
      */
-    public static function getOptionValidators(): array
+    public static function getConfigValidators(): iterable
     {
         return [
             'mapper' => ['array'],
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function isRuntime(): bool
+    {
+        return true;
     }
 
     /**
@@ -125,6 +133,6 @@ final class DirectoryParameterProcessor extends AbstractParameterProcessor imple
             return $parameter;
         }
 
-        return \str_replace($search, $value, $parameter);
+        return \str_replace($search, $newValue, $parameter);
     }
 }

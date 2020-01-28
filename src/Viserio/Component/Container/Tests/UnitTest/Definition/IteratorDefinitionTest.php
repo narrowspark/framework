@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Container\Tests\UnitTest\Definition;
 
 use stdClass;
-use Viserio\Component\Container\Definition\ArrayDefinition;
 use Viserio\Component\Container\Definition\IteratorDefinition;
 use Viserio\Component\Container\Definition\ParameterDefinition;
 use Viserio\Contract\Container\Definition\Definition as DefinitionContract;
@@ -33,11 +32,19 @@ final class IteratorDefinitionTest extends AbstractDefinitionTest
     /**
      * {@inheritdoc}
      */
+    protected function getDefinition(): IteratorDefinition
+    {
+        return new IteratorDefinition($this->getDefinitionName(), $this->value, DefinitionContract::SINGLETON);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function getValue(): array
     {
         return [
             1 => 'int_key',
-            'string' => 'string',
+            'string' => new ParameterDefinition('string', 'string'),
             'int' => 0,
             'float' => 1.1,
             'bool' => false,
@@ -73,16 +80,6 @@ final class IteratorDefinitionTest extends AbstractDefinitionTest
         return 'test';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function getDefinition(): IteratorDefinition
-    {
-        $value = $this->value;
-        $value['string'] = new ParameterDefinition('string', 'string');
-
-        return new IteratorDefinition($this->getDefinitionName(), $value, DefinitionContract::SINGLETON);
-    }
     public function testSetAddAndGetParameters(): void
     {
         self::assertSame($this->definition, $this->definition->setArgument($this->value), '->setArgument() implements a fluent interface');

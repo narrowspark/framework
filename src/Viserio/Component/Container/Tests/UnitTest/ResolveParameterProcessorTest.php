@@ -56,13 +56,30 @@ final class ResolveParameterProcessorTest extends MockeryTestCase
 
     public function testProcess(): void
     {
+        $this->containerMock->shouldReceive('getParameters')
+            ->times(3)
+            ->andReturn(
+                [
+                    'foo' => 'test',
+                    'bar' => [
+                        'baz' => 'test'
+                    ]
+                ]
+            );
+
+        self::assertSame('test', $this->processor->process('foo|resolve'));
+        self::assertSame('test', $this->processor->process('bar.baz|resolve'));
+
+        $this->containerMock->shouldReceive('hasParameter')
+            ->once()
+            ->with('call')
+            ->andReturn(true);
         $this->containerMock->shouldReceive('getParameter')
-            ->with('foo')
+            ->once()
+            ->with('call')
             ->andReturn('test');
 
-        $value = $this->processor->process('foo|resolve');
-
-        self::assertSame('test', $value);
+        self::assertSame('test', $this->processor->process('call|resolve'));
     }
 
     public function testProcessThrowException(): void
@@ -70,9 +87,12 @@ final class ResolveParameterProcessorTest extends MockeryTestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Parameter [foo] found when resolving env var [foo|resolve] must be scalar, [object] given.');
 
-        $this->containerMock->shouldReceive('getParameter')
-            ->with('foo')
-            ->andReturn(new stdClass());
+        $this->containerMock->shouldReceive('getParameters')
+            ->andReturn(
+                [
+                    'foo' => new stdClass()
+                ]
+            );
 
         $this->processor->process('foo|resolve');
     }

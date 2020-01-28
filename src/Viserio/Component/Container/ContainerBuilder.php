@@ -18,9 +18,9 @@ use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionFunction;
 use ReflectionFunctionAbstract;
+use Throwable;
 use Traversable;
 use Viserio\Component\Container\Definition\AliasDefinition;
-use Viserio\Component\Container\Definition\ArrayDefinition;
 use Viserio\Component\Container\Definition\ClosureDefinition;
 use Viserio\Component\Container\Definition\FactoryDefinition;
 use Viserio\Component\Container\Definition\IteratorDefinition;
@@ -39,6 +39,7 @@ use Viserio\Contract\Container\Exception\CircularDependencyException;
 use Viserio\Contract\Container\Exception\InvalidArgumentException;
 use Viserio\Contract\Container\Exception\LogicException;
 use Viserio\Contract\Container\Exception\NotFoundException;
+use Viserio\Contract\Container\Exception\ParameterNotFoundException;
 use Viserio\Contract\Container\Factory as FactoryContract;
 use Viserio\Contract\Container\Pipe as PipeContract;
 use Viserio\Contract\Container\ServiceProvider\AliasServiceProvider as AliasServiceProviderContract;
@@ -66,7 +67,7 @@ final class ContainerBuilder implements ContainerBuilderContract
     /**
      * The container's definitions.
      *
-     * @var ArrayDefinition[]|ClosureDefinition[]|DefinitionContract[]|FactoryDefinition[]|IteratorDefinition[]|ObjectDefinition[]|UndefinedDefinition[]
+     * @var ClosureDefinition[]|DefinitionContract[]|FactoryDefinition[]|IteratorDefinition[]|ObjectDefinition[]|UndefinedDefinition[]
      */
     private $definitions = [];
 
@@ -341,7 +342,7 @@ final class ContainerBuilder implements ContainerBuilderContract
     /**
      * {@inheritdoc}
      *
-     * @return ArrayDefinition|ClosureDefinition|FactoryDefinition|IteratorDefinition|ObjectDefinition|UndefinedDefinition
+     * @return ClosureDefinition|FactoryDefinition|IteratorDefinition|ObjectDefinition|UndefinedDefinition
      */
     public function bind(string $abstract, $concrete = null)
     {
@@ -357,7 +358,7 @@ final class ContainerBuilder implements ContainerBuilderContract
     /**
      * {@inheritdoc}
      *
-     * @return ArrayDefinition|ClosureDefinition|FactoryDefinition|IteratorDefinition|ObjectDefinition|UndefinedDefinition
+     * @return ClosureDefinition|FactoryDefinition|IteratorDefinition|ObjectDefinition|UndefinedDefinition
      */
     public function singleton(string $abstract, $concrete = null)
     {
@@ -420,7 +421,7 @@ final class ContainerBuilder implements ContainerBuilderContract
     /**
      * {@inheritdoc}
      *
-     * @return ArrayDefinition|ClosureDefinition|FactoryDefinition|IteratorDefinition|ObjectDefinition|ParameterDefinition
+     * @return ClosureDefinition|FactoryDefinition|IteratorDefinition|ObjectDefinition|ParameterDefinition
      */
     public function getDefinition(string $id): DefinitionContract
     {
@@ -437,7 +438,7 @@ final class ContainerBuilder implements ContainerBuilderContract
     public function getParameter(string $id): DefinitionContract
     {
         if (! \array_key_exists($id, $this->parameters)) {
-            throw new NotFoundException($id, null, null, [], \sprintf('You have requested a non-existent parameter [%s].', $id));
+            throw new ParameterNotFoundException($id);
         }
 
         return $this->parameters[$id];
@@ -743,7 +744,7 @@ final class ContainerBuilder implements ContainerBuilderContract
      *
      * @throws \Viserio\Contract\Container\Exception\InvalidArgumentException
      *
-     * @return ArrayDefinition|ClosureDefinition|FactoryDefinition|IteratorDefinition|ObjectDefinition|UndefinedDefinition
+     * @return ClosureDefinition|FactoryDefinition|IteratorDefinition|ObjectDefinition|UndefinedDefinition
      */
     public static function createDefinition(string $name, $value, int $type, bool $throw = false): DefinitionContract
     {
@@ -751,14 +752,14 @@ final class ContainerBuilder implements ContainerBuilderContract
             throw new InvalidArgumentException('A Definition or Argument class cant be used as value.');
         }
 
-        if (($traversable = $value instanceof Traversable) || is_string($value)) {
+        if (($traversable = $value instanceof Traversable) || \is_string($value)) {
             $hasTraversableInterface = false;
 
             if ($traversable === false) {
                 try {
                     $reflection = new ReflectionClass($value);
                     $hasTraversableInterface = $reflection->implementsInterface(Traversable::class);
-                } catch (\Throwable $exception) {
+                } catch (Throwable $exception) {
                 }
             }
 
@@ -775,12 +776,8 @@ final class ContainerBuilder implements ContainerBuilderContract
             return new ClosureDefinition($name, $value, $type);
         }
 
-        if (is_method($value) || \is_callable($value) || (\is_array($value) && isset($value[1]) && $value[1] === '__invoke') || (\is_array($value) && isset($value[0], $value[1]) && $value[0] instanceof ReferenceDefinitionContract && \is_string($value[1]))) {
+        if (\is_callable($value) || is_method($value) || (\is_array($value) && isset($value[1]) && $value[1] === '__invoke') || (\is_array($value) && isset($value[0], $value[1]) && $value[0] instanceof ReferenceDefinitionContract && \is_string($value[1]))) {
             return new FactoryDefinition($name, $value, $type);
-        }
-
-        if (\is_array($value)) {
-            return new ArrayDefinition($name, $value, $type);
         }
 
         if ($throw === false) {

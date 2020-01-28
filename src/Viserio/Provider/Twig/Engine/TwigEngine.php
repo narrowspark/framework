@@ -18,10 +18,10 @@ use Twig\Environment;
 use Twig\Extension\ExtensionInterface;
 use Viserio\Component\View\Engine\AbstractBaseEngine;
 use Viserio\Contract\Container\Traits\ContainerAwareTrait;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
+use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
 use Viserio\Contract\View\Exception\RuntimeException;
 
-class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionContract
+class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultConfigContract
 {
     use ContainerAwareTrait;
 
@@ -47,7 +47,7 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionCont
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): array
+    public static function getMandatoryOptions(): iterable
     {
         return \array_merge(
             parent::getMandatoryOptions(),
@@ -67,7 +67,7 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionCont
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): array
+    public static function getDefaultConfig(): iterable
     {
         return [
             'engines' => [

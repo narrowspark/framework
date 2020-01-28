@@ -5,13 +5,13 @@
                 "global"
             ]
         },
-        "options": {
+        "config": {
             "global": {
                 "viserio": {
                     "view": {
                         "engines": {
                             "twig": {
-                                "options": {
+                                "config": {
                                     "debug": "%env:APP_DEBUG%",
                                     "cache": "%directory:storage%/view/twig"
                                 }

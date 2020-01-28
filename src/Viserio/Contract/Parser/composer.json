@@ -4,7 +4,7 @@
     "description": "The Viserio Parser Contract package.",
     "keywords": [
         "abstractions",
-        "contracts",
+        "Contract",
         "decoupling",
         "interfaces",
         "interoperability",

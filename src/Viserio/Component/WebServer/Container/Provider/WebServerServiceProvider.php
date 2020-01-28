@@ -42,15 +42,15 @@ use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuil
 use Viserio\Contract\Container\ServiceProvider\ExtendServiceProvider as ExtendServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
 use Viserio\Contract\Events\EventManager;
-use Viserio\Contract\OptionsResolver\Exception\InvalidArgumentException;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
-use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresValidatedOption as RequiresValidatedOptionContract;
+use Viserio\Contract\Config\Exception\InvalidArgumentException;
+use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
+use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Contract\Config\RequiresValidatedConfig as RequiresValidatedConfigContract;
 
 class WebServerServiceProvider implements ExtendServiceProviderContract,
-    ProvidesDefaultOptionContract,
+    ProvidesDefaultConfigContract,
     RequiresComponentConfigContract,
-    RequiresValidatedOptionContract,
+    RequiresValidatedConfigContract,
     ServiceProviderContract
 {
     /**
@@ -88,6 +88,21 @@ class WebServerServiceProvider implements ExtendServiceProviderContract,
             ->addTag(AddConsoleCommandPipe::TAG);
         $container->singleton(ServerStopCommand::class)
             ->addTag(AddConsoleCommandPipe::TAG);
+
+        $arguments = $container->has(ConsoleKernelContract::class) ? [
+            (new ReferenceDefinition(ConsoleKernelContract::class))->addMethodCall('getPublicPath'),
+            (new ReferenceDefinition(ConsoleKernelContract::class))->addMethodCall('getEnvironment'),
+        ] : [
+            new OptionDefinition('web_folder', self::class),
+            new OptionDefinition('env', self::class),
+        ];
+
+        $container->singleton(ServerServeCommand::class)
+            ->setArguments($arguments)
+            ->addTag(AddConsoleCommandPipe::TAG);
+        $container->singleton(ServerStartCommand::class)
+            ->setArguments($arguments)
+            ->addTag(AddConsoleCommandPipe::TAG);
     }
 
     /**
@@ -113,20 +128,20 @@ class WebServerServiceProvider implements ExtendServiceProviderContract,
                 $definition->addMethodCall('attach', [ConsoleEvents::COMMAND, [new ReferenceDefinition(DumpListenerEvent::class), 'configure'], 1024]);
             },
             Application::class => static function (ObjectDefinitionContract $definition, ContainerBuilderContract $container): void {
-                $arguments = $container->has(ConsoleKernelContract::class) ? [
-                    (new ReferenceDefinition(ConsoleKernelContract::class))->addMethodCall('getPublicPath'),
-                    (new ReferenceDefinition(ConsoleKernelContract::class))->addMethodCall('getEnvironment'),
-                ] : [
-                    new OptionDefinition('web_folder', self::class),
-                    new OptionDefinition('env', self::class),
-                ];
-
-                $container->singleton(ServerServeCommand::class)
-                    ->setArguments($arguments)
-                    ->addTag(AddConsoleCommandPipe::TAG);
-                $container->singleton(ServerStartCommand::class)
-                    ->setArguments($arguments)
-                    ->addTag(AddConsoleCommandPipe::TAG);
+//                $arguments = $container->has(ConsoleKernelContract::class) ? [
+//                    (new ReferenceDefinition(ConsoleKernelContract::class))->addMethodCall('getPublicPath'),
+//                    (new ReferenceDefinition(ConsoleKernelContract::class))->addMethodCall('getEnvironment'),
+//                ] : [
+//                    new OptionDefinition('web_folder', self::class),
+//                    new OptionDefinition('env', self::class),
+//                ];
+//
+//                $container->singleton(ServerServeCommand::class)
+//                    ->setArguments($arguments)
+//                    ->addTag(AddConsoleCommandPipe::TAG);
+//                $container->singleton(ServerStartCommand::class)
+//                    ->setArguments($arguments)
+//                    ->addTag(AddConsoleCommandPipe::TAG);
             },
         ];
     }
@@ -134,7 +149,7 @@ class WebServerServiceProvider implements ExtendServiceProviderContract,
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): array
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'webserver'];
     }
@@ -142,7 +157,7 @@ class WebServerServiceProvider implements ExtendServiceProviderContract,
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): array
+    public static function getDefaultConfig(): iterable
     {
         return [
             'debug_server' => [
@@ -154,7 +169,7 @@ class WebServerServiceProvider implements ExtendServiceProviderContract,
     /**
      * {@inheritdoc}
      */
-    public static function getOptionValidators(): array
+    public static function getConfigValidators(): iterable
     {
         return [
             'debug_server' => static function ($optionValue, $optionsKey): void {

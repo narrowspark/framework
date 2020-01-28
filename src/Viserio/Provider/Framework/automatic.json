@@ -11,7 +11,7 @@
             "Viserio\\Provider\\Framework\\Bootstrap\\LoadServiceProviderBootstrap": ["global"],
             "Viserio\\Provider\\Framework\\Bootstrap\\PrepareContainerBuilderBootstrap": ["global"]
         },
-        "options": {
+        "config": {
             "global": {
                 "viserio": {
                     "app": {

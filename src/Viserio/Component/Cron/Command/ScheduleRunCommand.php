@@ -17,11 +17,11 @@ use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Cron\Cron;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
+use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 
 class ScheduleRunCommand extends AbstractCommand implements RequiresComponentConfigContract,
-    RequiresMandatoryOptionContract
+    RequiresMandatoryConfigContract
 {
     use OptionsResolverTrait;
 
@@ -38,7 +38,7 @@ class ScheduleRunCommand extends AbstractCommand implements RequiresComponentCon
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): array
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'cron'];
     }
@@ -46,7 +46,7 @@ class ScheduleRunCommand extends AbstractCommand implements RequiresComponentCon
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): array
+    public static function getMandatoryOptions(): iterable
     {
         return [
             'env',

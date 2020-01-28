@@ -89,7 +89,7 @@ final class Base64ParameterProcessorTest extends TestCase
     public function testProcessWithInvalid(string $key, string $parameter): void
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage(sprintf('Base64 decoding of [%s] failed, on given parameter [%s].', $key, $parameter));
+        $this->expectExceptionMessage(\sprintf('Base64 decoding of [%s] failed, on given parameter [%s].', $key, $parameter));
 
         $this->processor->process($parameter);
     }

@@ -101,7 +101,7 @@ final class AddConsoleCommandPipe implements PipeContract
                 ->addArgument(new IteratorArgument($lazyCommandRefs))
                 ->setPublic(true);
 
-            $containerBuilder->bind('console.command.ids', $serviceIds);
+            $containerBuilder->setParameter('console.command.ids', $serviceIds);
         }
     }
 }

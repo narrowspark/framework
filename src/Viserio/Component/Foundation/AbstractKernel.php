@@ -20,7 +20,6 @@ use Psr\Container\ContainerInterface;
 use ReflectionObject;
 use Viserio\Component\Container\AbstractCompiledContainer;
 use Viserio\Component\Container\LazyProxy\ProxyDumper;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\LazyProxy\Dumper as ProxyDumperContract;
 use Viserio\Contract\Foundation\BootstrapState as BootstrapStateContract;
@@ -30,8 +29,6 @@ use Viserio\Contract\Foundation\Kernel as KernelContract;
 
 abstract class AbstractKernel implements KernelContract
 {
-    use OptionsResolverTrait;
-
     /**
      * The current framework full version.
      *

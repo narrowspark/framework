@@ -18,10 +18,10 @@ use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\Exception\Filter as FilterContract;
-use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
+use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 
-class VerboseFilter implements FilterContract, RequiresComponentConfigContract, RequiresMandatoryOptionContract
+class VerboseFilter implements FilterContract, RequiresComponentConfigContract, RequiresMandatoryConfigContract
 {
     use OptionsResolverTrait;
 
@@ -45,7 +45,7 @@ class VerboseFilter implements FilterContract, RequiresComponentConfigContract, 
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): array
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'exception'];
     }
@@ -53,7 +53,7 @@ class VerboseFilter implements FilterContract, RequiresComponentConfigContract, 
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): array
+    public static function getMandatoryOptions(): iterable
     {
         return ['debug'];
     }

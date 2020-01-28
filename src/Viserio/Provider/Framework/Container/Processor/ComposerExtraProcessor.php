@@ -41,6 +41,14 @@ class ComposerExtraProcessor extends AbstractParameterProcessor
     /**
      * {@inheritdoc}
      */
+    public static function isRuntime(): bool
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public static function getProvidedTypes(): array
     {
         return ['composer-extra' => 'string'];

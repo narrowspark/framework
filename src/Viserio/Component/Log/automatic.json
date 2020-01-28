@@ -12,7 +12,7 @@
                 "testing"
             ]
         },
-        "options": {
+        "config": {
             "global": {
                 "viserio": {
                     "logging": {

@@ -30,9 +30,9 @@ use Viserio\Contract\Exception\Displayer as DisplayerContract;
 use Viserio\Contract\Exception\Filter as FilterContract;
 use Viserio\Contract\Exception\HttpHandler as HttpHandlerContract;
 use Viserio\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
+use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 
-class Handler extends ErrorHandler implements HttpHandlerContract, RequiresMandatoryOptionContract
+class Handler extends ErrorHandler implements HttpHandlerContract, RequiresMandatoryConfigContract
 {
     use ResponseFactoryAwareTrait;
     use AcceptHeaderTrait;
@@ -85,7 +85,7 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): array
+    public static function getMandatoryOptions(): iterable
     {
         return ['env'];
     }
@@ -93,10 +93,10 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): array
+    public static function getDefaultConfig(): iterable
     {
         return \array_merge(
-            parent::getDefaultOptions(),
+            parent::getDefaultConfig(),
             [
                 'http' => [
                     'displayer' => [

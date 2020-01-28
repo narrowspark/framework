@@ -16,6 +16,7 @@ namespace Viserio\Component\Container\Tests\IntegrationTest\Pipeline;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Pipeline\RegisterParameterProcessorsPipe;
+use Viserio\Component\Container\Processor\EnvParameterProcessor;
 use Viserio\Component\Container\Tests\Fixture\Processor\BadProcessor;
 use Viserio\Component\Container\Tests\Fixture\Processor\FooParameterProcessor;
 use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
@@ -28,7 +29,7 @@ use Viserio\Contract\Container\Exception\InvalidArgumentException;
  */
 final class RegisterParameterProcessorsPipeTest extends TestCase
 {
-    public function testSimpleProcessor(): void
+    public function testProcessorNonRuntimeProcessors(): void
     {
         $container = new ContainerBuilder();
         $container->singleton('foo', FooParameterProcessor::class)
@@ -36,9 +37,22 @@ final class RegisterParameterProcessorsPipeTest extends TestCase
 
         $this->process($container);
 
-        self::assertTrue($container->hasDefinition('viserio.container.parameter.processors'));
-        self::assertTrue($container->hasParameter('viserio.container.parameter.provided.processor.types'));
-        self::assertSame(['foo' => ['string']], $container->getParameter('viserio.container.parameter.provided.processor.types')->getValue());
+        self::assertTrue($container->hasDefinition(RegisterParameterProcessorsPipe::PROCESSORS_KEY));
+        self::assertTrue($container->hasParameter(RegisterParameterProcessorsPipe::PROCESSOR_TYPES_PARAMETER_KEY));
+        self::assertSame(['foo' => ['string']], $container->getParameter(RegisterParameterProcessorsPipe::PROCESSOR_TYPES_PARAMETER_KEY)->getValue());
+    }
+
+    public function testProcessorWithRuntimeProcessors(): void
+    {
+        $container = new ContainerBuilder();
+        $container->singleton('foo', EnvParameterProcessor::class)
+            ->addTag(RegisterParameterProcessorsPipe::TAG);
+
+        $this->process($container);
+
+        self::assertTrue($container->hasDefinition(RegisterParameterProcessorsPipe::RUNTIME_PROCESSORS_KEY));
+        self::assertTrue($container->hasParameter(RegisterParameterProcessorsPipe::RUNTIME_PROCESSOR_TYPES_PARAMETER_KEY));
+        self::assertSame(['env' => ['bool', 'int', 'float', 'string', 'array']], $container->getParameter(RegisterParameterProcessorsPipe::RUNTIME_PROCESSOR_TYPES_PARAMETER_KEY)->getValue());
     }
 
     public function testNoProcessor(): void

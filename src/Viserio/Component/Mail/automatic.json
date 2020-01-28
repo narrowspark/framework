@@ -10,7 +10,7 @@
                 "global"
             ]
         },
-        "options": {
+        "config": {
             "global": {
                 "viserio": {
                     "mail": {

@@ -25,8 +25,8 @@
     "require": {
         "php": "^7.4",
         "twig/twig": "^2.11.0 || ^3.0.0",
+        "viserio/config-contract": "^1.0@dev",
         "viserio/filesystem": "^1.0@dev",
-        "viserio/options-resolver-contract": "^1.0@dev",
         "viserio/view": "^1.0@dev"
     },
     "require-dev": {

@@ -60,7 +60,6 @@ class ResolveRuntimeParameterProcessor extends AbstractParameterProcessor
     {
         [$key,, $search] = $this->getData($parameter);
 
-
         $value = \array_reduce(
             \explode('.', $key),
             static function ($value, $key) {

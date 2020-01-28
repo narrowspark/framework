@@ -70,7 +70,7 @@ final class ServiceReferenceGraph implements ServiceReferenceGraphContract
      * {@inheritdoc}
      */
     public function connect(
-        ?string $sourceId,
+        $sourceId,
         $sourceValue,
         ?string $destId,
         $destValue = null,
@@ -95,12 +95,12 @@ final class ServiceReferenceGraph implements ServiceReferenceGraphContract
     /**
      * Create a new node if the value is not the same.
      *
-     * @param string $id
-     * @param mixed  $value
+     * @param int|string $id
+     * @param mixed      $value
      *
      * @return \Viserio\Contract\Container\ServiceReferenceGraphNode
      */
-    private function createNode(string $id, $value): ServiceReferenceGraphNodeContract
+    private function createNode($id, $value): ServiceReferenceGraphNodeContract
     {
         if (\array_key_exists($id, $this->nodes) && $this->nodes[$id]->getValue() === $value) {
             return $this->nodes[$id];

@@ -315,7 +315,7 @@ final class InlineServiceDefinitionsPipeTest extends TestCase
         $container->bind('inline');
         $container->singleton('service-closure')
             ->setArguments([new ClosureArgument(new ReferenceDefinition('inline'))]);
-        $container->singleton('iterator')
+        $container->singleton('iterator2')
             ->setArguments([new IteratorArgument([new ReferenceDefinition('inline')])]);
 
         $this->process($container);
@@ -329,7 +329,7 @@ final class InlineServiceDefinitionsPipeTest extends TestCase
         self::assertSame('inline', $values[0]->getName());
 
         /** @var UndefinedDefinition $definition2 */
-        $definition2 = $container->getDefinition('iterator');
+        $definition2 = $container->getDefinition('iterator2');
         $values = $definition2->getArgument(0)->getValue();
 
         self::assertInstanceOf(ReferenceDefinition::class, $values[0]);

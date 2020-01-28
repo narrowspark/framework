@@ -35,4 +35,11 @@ interface Parameter
      * @return bool
      */
     public function hasParameter(string $id): bool;
+
+    /**
+     * Returns all static parameters.
+     *
+     * @return array<string|int, mixed>
+     */
+    public function getParameters(): array;
 }

@@ -161,7 +161,7 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
     }
 
     /**
-     * @todo add to interface
+     * {@inheritDoc}
      */
     public function getParameters(): array
     {
@@ -295,9 +295,7 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
      */
     public function hasParameter(string $id): bool
     {
-        $array = \array_merge($this->parameters, $this->loadedDynamicParameters, $this->dynamicParameterMapper);
-
-        if (\array_key_exists($id, $array)) {
+        if (\array_key_exists($id, $this->parameters)) {
             return true;
         }
 
@@ -306,7 +304,7 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
             static function ($value, $key) {
                 return $value[$key] ?? null;
             },
-            $array
+            $this->parameters
         );
 
         return $value !== null;

@@ -13,38 +13,34 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\Pipeline;
 
-use Viserio\Component\Container\Definition\IteratorDefinition;
 use Viserio\Component\Container\Definition\ParameterDefinition;
 use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\Definition\ChangeAwareDefinition as ChangeAwareDefinitionContract;
 use Viserio\Contract\Container\Definition\Definition;
-use Viserio\Contract\Container\Definition\MethodCallsAwareDefinition as MethodCallsAwareDefinitionContract;
+use Viserio\Contract\Container\Definition\ObjectDefinition;
 use Viserio\Contract\Container\Definition\PropertiesAwareDefinition as PropertiesAwareDefinitionContract;
-use Viserio\Contract\Container\Definition\ReferenceDefinition as ReferenceDefinitionContract;
 use Viserio\Contract\Container\Definition\TagAwareDefinition as TagAwareDefinitionContract;
 use Viserio\Contract\Container\Definition\UndefinedDefinition as UndefinedDefinitionContract;
 use Viserio\Contract\Container\Exception\CircularParameterException;
 use Viserio\Contract\Container\Exception\ParameterNotFoundException;
 use Viserio\Contract\Container\Exception\RuntimeException;
-use Viserio\Contract\Container\Processor\ParameterProcessor;
 
 /**
  * @internal
  */
 final class ResolveParameterPlaceHolderPipe extends AbstractRecursivePipe
 {
-    /** @var string */
-    public const PARAMETER_NAME = 'viserio.container.parameter.strict_check';
-
-    /** @var null|array<int|string, mixed> */
-    private ?array $resolved = null;
-
     /**
-     * Check if the param resolver should throw a exception on missing placeholder.
+     * Check if the param resolver should throw a exception on missing placeholder value.
      *
      * @var bool
      */
-    private bool $isStrict;
+    private bool $throwOnResolveException;
+
+    private bool $resolveArrays;
+
+    /** @var null|array<int|string, mixed> */
+    private array $resolved = [];
 
     /** @var array<string, bool> */
     private array $providedTypes;
@@ -55,6 +51,12 @@ final class ResolveParameterPlaceHolderPipe extends AbstractRecursivePipe
 
     private bool $isAlias = false;
 
+    public function __construct($resolveArrays = true, $throwOnResolveException = true)
+    {
+        $this->resolveArrays = $resolveArrays;
+        $this->throwOnResolveException = $throwOnResolveException;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -62,8 +64,10 @@ final class ResolveParameterPlaceHolderPipe extends AbstractRecursivePipe
     {
         $this->containerBuilder = $containerBuilder;
 
-        $this->isStrict = $containerBuilder->hasParameter(self::PARAMETER_NAME) ? (bool) $containerBuilder->getParameter(self::PARAMETER_NAME)->getValue() : true;
-        $this->providedTypes = $containerBuilder->hasParameter('viserio.container.parameter.provided.processor.types') ? (array) $containerBuilder->getParameter('viserio.container.parameter.provided.processor.types')->getValue() : [];
+        $this->providedTypes = \array_merge(
+            $containerBuilder->hasParameter(RegisterParameterProcessorsPipe::PROCESSOR_TYPES_PARAMETER_KEY) ? (array) $containerBuilder->getParameter(RegisterParameterProcessorsPipe::PROCESSOR_TYPES_PARAMETER_KEY)->getValue() : [],
+            $containerBuilder->hasParameter(RegisterParameterProcessorsPipe::RUNTIME_PROCESSOR_TYPES_PARAMETER_KEY) ? (array) $containerBuilder->getParameter(RegisterParameterProcessorsPipe::RUNTIME_PROCESSOR_TYPES_PARAMETER_KEY)->getValue() : [],
+        );
 
         try {
             $parameters = [];
@@ -113,9 +117,8 @@ final class ResolveParameterPlaceHolderPipe extends AbstractRecursivePipe
 
             $this->isService = false;
         } finally {
-            $definitions = $parameters = $aliases = [];
-
             $this->containerBuilder = null;
+            $this->resolved = [];
         }
     }
 
@@ -125,7 +128,9 @@ final class ResolveParameterPlaceHolderPipe extends AbstractRecursivePipe
     protected function processValue($value, $isRoot = false)
     {
         if (\is_string($value)) {
-            return $this->resolveValue($value);
+            $v = $this->resolveValue($value);
+
+            return $this->resolveArrays || ! $v || ! \is_array($v) ? $v : $value;
         }
 
         if ($value instanceof ParameterDefinition) {
@@ -147,8 +152,8 @@ final class ResolveParameterPlaceHolderPipe extends AbstractRecursivePipe
                 $value->setTags($this->processValue($value->getTags()));
             }
 
-            if ($value instanceof MethodCallsAwareDefinitionContract && ($value instanceof ReferenceDefinitionContract ?? $value->getChange('method_calls'))) {
-                $value->setMethodCalls($this->processValue($value->getMethodCalls()));
+            if ($value instanceof ObjectDefinition && $value->getChange('class')) {
+                $value->setClass($this->processValue($value->getClass()));
             }
         }
 
@@ -156,6 +161,14 @@ final class ResolveParameterPlaceHolderPipe extends AbstractRecursivePipe
 
         if ($value instanceof UndefinedDefinitionContract) {
             $value->setValue($this->processValue($value->getValue()));
+
+            if ($value->getChange('class')) {
+                $value->setClass($this->processValue($value->getClass()));
+            }
+
+            if ($value->getChange('class_arguments')) {
+                $value->setClass($this->processValue($value->getClass()));
+            }
 
             if ($value->getChange('decorated_service')) {
                 $value->decorate((string) $this->processValue($value->getDecorator()));
@@ -208,14 +221,14 @@ final class ResolveParameterPlaceHolderPipe extends AbstractRecursivePipe
      * @throws \Viserio\Contract\Container\Exception\CircularParameterException if a circular reference if detected
      * @throws \Viserio\Contract\Container\Exception\RuntimeException           when a given parameter has a type problem
      *
-     * @return string
+     * @return mixed
      */
-    private function resolveString(string $expression, array $resolving = []): string
+    private function resolveString(string $expression, array $resolving = [])
     {
         // we do this to deal with non string values (Boolean, integer, ...)
         // as the preg_replace_callback throw an exception when trying
         // a non-string in a parameter value
-        if (\preg_match('/^\{([^\{\}|^\{|^\s]+)\$/', $expression, $match)) {
+        if (\preg_match('/^\{([^\{\s]+)\}$/', $expression, $match)) {
             $key = $match[1];
 
             if (\array_key_exists($key, $resolving)) {
@@ -224,45 +237,51 @@ final class ResolveParameterPlaceHolderPipe extends AbstractRecursivePipe
 
             $resolving[$key] = true;
 
-            if (\array_key_exists($key, $this->resolved)) {
-                return $this->containerBuilder->getParameter($key)->getValue();
-            }
+            try {
+                return $this->resolved[$key] ??= $this->resolveValue($this->containerBuilder->getParameter($key)->getValue(), $resolving);
+            } catch (ParameterNotFoundException $exception) {
+                if ($this->throwOnResolveException) {
+                    throw new ParameterNotFoundException($key, $this->isService ? $this->currentId : null, $this->isParameter ? $this->currentId : null, null, [], null, $this->isAlias ? \sprintf('The alias [%s] has a dependency on a non-existent parameter [%s].', $this->currentId, $key) : '');
+                }
 
-            return $this->resolved[$key] = $this->resolveValue($key, $resolving);
+                return $expression;
+            }
         }
 
-        $result = \preg_replace_callback(ParameterProcessor::PARAMETER_REGEX, function ($match) use ($expression, $resolving) {
+        $result = \preg_replace_callback('/\{\{|\{([^\{\s]+)\}/', function ($match) use ($expression, $resolving) {
+            // skip {{
+            if (! isset($match[1])) {
+                return '{{';
+            }
+
             $key = $match[1];
 
             if (\array_key_exists($key, $resolving)) {
                 throw new CircularParameterException($this->currentId, \array_keys($resolving));
             }
 
-            if ($this->containerBuilder->hasParameter($key)) {
+            try {
                 $resolved = $this->containerBuilder->getParameter($key)->getValue();
-            } elseif ($this->containerBuilder->has($key)) {
-                $resolved = $key;
-            } elseif ($this->isStrict) {
+            } catch (ParameterNotFoundException $exception) {
                 $array = \explode('|', $key);
 
                 unset($array[\array_key_first($array)]);
 
-                if (\count(\array_intersect($array, \array_keys($this->providedTypes))) === 0) {
+                if ($this->throwOnResolveException && \count(\array_intersect($array, \array_keys($this->providedTypes))) !== 0) {
                     throw new ParameterNotFoundException($key, $this->isService ? $this->currentId : null, $this->isParameter ? $this->currentId : null, null, [], null, $this->isAlias ? \sprintf('The alias [%s] has a dependency on a non-existent parameter [%s].', $this->currentId, $key) : '');
                 }
 
                 return $match[0];
-            } else {
-                $resolved = $key;
             }
 
             if (! \is_string($resolved) && ! \is_numeric($resolved)) {
                 throw new RuntimeException(\sprintf('A string value must be composed of strings and/or numbers, but found parameter [%s] of type [%s] inside a string value [%s].', $key, \gettype($resolved), $expression));
             }
 
+            $resolved = (string) $resolved;
             $resolving[$key] = true;
 
-            return $this->resolved !== null && \array_key_exists($key, $this->resolved) ? (string) $resolved : $this->resolved[$key] = $this->resolveString($resolved, $resolving);
+            return \array_key_exists($key, $this->resolved) ? $resolved : $this->resolved[$key] = $this->resolveString($resolved, $resolving);
         }, $expression);
 
         if ($result === null) {

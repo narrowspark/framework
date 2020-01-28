@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\Tests\IntegrationTest\Dumper;
 
+use ArrayIterator;
 use ArrayObject;
 use EmptyIterator;
-use Exception;
 use PhpParser\Lexer\Emulative;
 use PhpParser\ParserFactory;
 use Psr\Container\ContainerInterface;
@@ -31,10 +31,12 @@ use Viserio\Component\Container\Dumper\PhpDumper;
 use Viserio\Component\Container\LazyProxy\ProxyDumper;
 use Viserio\Component\Container\PhpParser\PrettyPrinter;
 use Viserio\Component\Container\Pipeline\RegisterParameterProcessorsPipe;
+use Viserio\Component\Container\Pipeline\ResolvePreloadPipe;
 use Viserio\Component\Container\Processor\Base64ParameterProcessor;
+use Viserio\Component\Container\Processor\EnvParameterProcessor;
 use Viserio\Component\Container\Processor\JsonParameterProcessor;
 use Viserio\Component\Container\Processor\PhpTypeParameterProcessor;
-use Viserio\Component\Container\Processor\ResolveParameterProcessor;
+use Viserio\Component\Container\Processor\ResolveRuntimeParameterProcessor;
 use Viserio\Component\Container\RewindableGenerator;
 use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\Container\Tests\Fixture\Autowire\CollisionInterface;
@@ -46,6 +48,7 @@ use Viserio\Component\Container\Tests\Fixture\Circular\DummyFoobarCircular;
 use Viserio\Component\Container\Tests\Fixture\Circular\FoobarCircular;
 use Viserio\Component\Container\Tests\Fixture\Circular\FooCircular;
 use Viserio\Component\Container\Tests\Fixture\Circular\FooForCircularWithAddCalls;
+use Viserio\Component\Container\Tests\Fixture\ConstructValueClass;
 use Viserio\Component\Container\Tests\Fixture\CustomParentContainer;
 use Viserio\Component\Container\Tests\Fixture\EmptyClass;
 use Viserio\Component\Container\Tests\Fixture\FactoryClass;
@@ -65,7 +68,6 @@ use Viserio\Component\Container\Tests\Fixture\Method\CallFixture;
 use Viserio\Component\Container\Tests\Fixture\Preload\C1;
 use Viserio\Component\Container\Tests\Fixture\Preload\C2;
 use Viserio\Component\Container\Tests\Fixture\Preload\C3;
-use Viserio\Component\Container\Tests\Fixture\Processor\EnvParameterProcessor;
 use Viserio\Component\Container\Tests\Fixture\Processor\FooParameterProcessor;
 use Viserio\Component\Container\Tests\Fixture\ScalarFactory;
 use Viserio\Component\Container\Tests\Fixture\Wither;
@@ -84,8 +86,14 @@ final class PhpDumperTest extends AbstractContainerTestCase
 {
     public const TEST = 'TEST';
 
+    /**
+     * {@inheritdoc}
+     */
     protected const DUMP_CLASS_CONTAINER = false;
 
+    /**
+     * {@inheritdoc}
+     */
     protected const SKIP_TEST_PIPE = true;
 
     public function testCompilingToAnInvalidClassNameThrowsAnError(): void
@@ -206,6 +214,55 @@ final class PhpDumperTest extends AbstractContainerTestCase
         }
     }
 
+    public function testHasParameter(): void
+    {
+        $this->containerBuilder->setParameter('foo.bar', 'test');
+        $this->containerBuilder->setParameter('test', [
+            'foo' => [
+                'bar' => 'false',
+            ],
+        ]);
+
+        $this->containerBuilder->compile();
+
+        self::assertFalse($this->containerBuilder->hasParameter('foo'));
+        self::assertTrue($this->containerBuilder->hasParameter('foo.bar'));
+        self::assertTrue($this->containerBuilder->hasParameter('test'));
+
+        $this->assertDumpedContainer(__FUNCTION__);
+
+        self::assertFalse($this->container->hasParameter('foo'));
+        self::assertTrue($this->container->hasParameter('foo.bar'));
+        self::assertTrue($this->container->hasParameter('test.foo'));
+        self::assertTrue($this->container->hasParameter('test.foo.bar'));
+        self::assertFalse($this->container->hasParameter('test.notfound'));
+    }
+
+    public function testGetParameter(): void
+    {
+        $array = [
+            'foo' => [
+                'bar' => 'false',
+            ],
+        ];
+
+        $this->containerBuilder->setParameter('bar', 'foo');
+        $this->containerBuilder->setParameter('foo.bar', 'test');
+        $this->containerBuilder->setParameter('test', $array);
+
+        $this->containerBuilder->compile();
+
+        self::assertSame('test', $this->containerBuilder->getParameter('foo.bar')->getValue());
+        self::assertSame($array, $this->containerBuilder->getParameter('test')->getValue());
+
+        $this->assertDumpedContainer(__FUNCTION__);
+
+        self::assertSame('foo', $this->container->getParameter('bar'));
+        self::assertSame('test', $this->container->getParameter('foo.bar'));
+        self::assertSame(['bar' => 'false'], $this->container->getParameter('test.foo'));
+        self::assertSame('false', $this->container->getParameter('test.foo.bar'));
+    }
+
     public function testScalarService(): void
     {
         $this->containerBuilder->bind('foo', [ScalarFactory::class, 'getSomeValue'])
@@ -240,108 +297,45 @@ final class PhpDumperTest extends AbstractContainerTestCase
         self::assertSame('be_', $this->container->getParameter('be'));
     }
 
-    public function testContainerCanBeDumpedWithArray(): void
+    public function testArrayParameters(): void
     {
-        $data = [
-            'foo' => 'bar',
-            'null' => null,
-            'true' => true,
-            'false' => false,
-            'int1' => 1,
-            'int0' => 0,
-            'float' => 31.10,
-            'empty' => '',
+        $this->containerBuilder->setParameter('array_1', [123]);
+        $this->containerBuilder->setParameter('array_2', [__DIR__]);
+        $this->containerBuilder->setParameter('viserio.container.dumper.inline_class_loader', false);
+
+        $this->containerBuilder->bind('bar', FooClass::class)
+            ->addMethodCall('setBar', ['{array_1}', '{array_2}', '{{array_1}}', [123]])
+            ->setPublic(true);
+
+        $this->containerBuilder->compile();
+
+        $className = $this->getDumperContainerClassName(__FUNCTION__);
+        $dirPath = \rtrim($this->getDumpFolderPath(), \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR;
+
+        $this->dumperOptions = [
+            'file' => $dirPath . $className . '.php',
         ];
 
-        $this->containerBuilder->bind('foo', $data)->setPublic(true);
-
-        $this->containerBuilder->compile();
-
         $this->assertDumpedContainer(__FUNCTION__);
-
-        $array = $this->container->get('foo');
-
-        self::assertCount(\count($data), $array);
-        self::assertSame($data, $array);
     }
 
-    public function testContainerCanBeDumpedWithComplicatedArray(): void
+    public function testContainerCanBeDumpedWithArrayObject(): void
     {
-        $expectedArray = [
-            1 => 'int_key',
-            'string' => 'string',
-            'int' => 0,
-            'float' => 1.1,
-            'bool' => false,
-            'array' => [
-                1 => 'int_key',
-                'string' => 'string',
-                'int' => 0,
-                'float' => 1.1,
-                'bool' => false,
-                'object' => new stdClass(),
-                'null' => null,
-                'anoObject' => new class() {
-                    /** @var string */
-                    public $test = 'test';
-                },
-                Exception::class => Exception::class,
-            ],
-            'object' => new stdClass(),
-            'null' => null,
-            'anoObject' => new class() {
-                /** @var string */
-                public $test = 'test2';
-            },
-            'object_with_properties' => (object) [
-                'only dot' => '.',
-            ],
-            Exception::class => Exception::class,
+        $fruits = [
+            'apple' => 'yummy',
+            'orange' => 'ah ya, nice',
+            'grape' => 'wow, I love it!',
+            'plum' => 'nah, not me',
         ];
 
-        $this->containerBuilder->bind(
-            'foo',
-            $expectedArray
-        )->setPublic(true);
-
-        $this->containerBuilder->compile();
-
-        $this->arrangePhpParser();
-
-        $this->assertDumpedContainer(__FUNCTION__);
-
-        $array = $this->container->get('foo');
-
-        self::assertCount(\count($expectedArray), $array);
-
-        foreach ($expectedArray as $key => $value) {
-            $this->assertArrayContent($array, $key, $value);
-        }
-    }
-
-    public function testContainerCanBeDumpedWithExtendArray(): void
-    {
-        $this->containerBuilder->bind('foo', ['foo' => 'bar'])
+        $this->containerBuilder->singleton('foo', new ArrayObject($fruits))
             ->setPublic(true);
-        $this->containerBuilder->bind('be', ['bar' => 'hey'])
-            ->setPublic(true);
-        $this->containerBuilder->extend('foo', function (DefinitionContract $definition, ContainerBuilder $container) {
-            return $definition->setValue(\array_merge($container->getDefinition('be')->getValue(), $definition->getValue()));
-        });
-        $this->containerBuilder->extend('be', function (DefinitionContract $definition) {
-            $array = $definition->getValue();
-
-            $array['test'] = 'yeah';
-
-            return $definition->setValue($array);
-        });
 
         $this->containerBuilder->compile();
 
         $this->assertDumpedContainer(__FUNCTION__);
 
-        self::assertSame(['bar' => 'hey', 'foo' => 'bar'], $this->container->get('foo'));
-        self::assertSame(['bar' => 'hey', 'test' => 'yeah'], $this->container->get('be'));
+        self::assertSame($fruits, \iterator_to_array($this->container->get('foo')));
     }
 
     public function testContainerCanBeDumpedWithSimpleClosure(): void
@@ -762,24 +756,6 @@ final class PhpDumperTest extends AbstractContainerTestCase
         self::assertSame('Hello', $this->container->get('foo'));
     }
 
-    public function testContainerCanBeDumpedWithArrayObject(): void
-    {
-        $fruits = [
-            'apple' => 'yummy',
-            'orange' => 'ah ya, nice',
-            'grape' => 'wow, I love it!',
-            'plum' => 'nah, not me',
-        ];
-        $this->containerBuilder->singleton('foo', new ArrayObject($fruits))
-            ->setPublic(true);
-
-        $this->containerBuilder->compile();
-
-        $this->assertDumpedContainer(__FUNCTION__);
-
-        self::assertSame($fruits, \iterator_to_array($this->container->get('foo')));
-    }
-
     public function testContainerCanBeDumpedWithEmptyIterator(): void
     {
         $this->containerBuilder->singleton('foo', new EmptyIterator())
@@ -788,6 +764,39 @@ final class PhpDumperTest extends AbstractContainerTestCase
         $this->containerBuilder->compile();
 
         $this->assertDumpedContainer(__FUNCTION__);
+    }
+
+    public function testContainerCanBeDumpedWithIteratorAndBindServices(): void
+    {
+        $this->containerBuilder->singleton('FooClassWithMethodCall', FooClass::class)
+            ->addMethodCall('setBar', ['foo']);
+        $this->containerBuilder->singleton(stdClass::class);
+        $this->containerBuilder->bind('baz', stdClass::class);
+
+        $this->containerBuilder->singleton('foo', ArrayIterator::class)
+            ->setArgument([
+                new ReferenceDefinition('FooClassWithMethodCall'),
+                new ReferenceDefinition(stdClass::class),
+                new ReferenceDefinition('baz'),
+            ])
+            ->setPublic(true);
+
+        $this->containerBuilder->compile();
+
+        $this->assertDumpedContainer(__FUNCTION__);
+
+        /** @var ArrayIterator $iterator */
+        $iterator = $this->container->get('foo')->getIterator();
+
+        self::assertInstanceOf(FooClass::class, $iterator->current());
+
+        $iterator->next();
+
+        self::assertInstanceOf(stdClass::class, $iterator->current());
+
+        $iterator->next();
+
+        self::assertInstanceOf(stdClass::class, $iterator->current());
     }
 
     public function testContainerCanBeDumpedWithInvokeCallableClass(): void
@@ -954,8 +963,8 @@ final class PhpDumperTest extends AbstractContainerTestCase
     {
         $this->arrangeFilesContainerConfiguration();
 
-        $this->containerBuilder->setParameter('container.dumper.inline_class_loader', true);
-        $this->containerBuilder->setParameter('container.dumper.as_files', true);
+        $this->containerBuilder->setParameter('viserio.container.dumper.inline_class_loader', true);
+        $this->containerBuilder->setParameter('viserio.container.dumper.as_files', true);
         $this->containerBuilder->compile();
 
         $className = $this->getDumperContainerClassName(__FUNCTION__);
@@ -976,14 +985,14 @@ final class PhpDumperTest extends AbstractContainerTestCase
     public function testPreloadOptimizations(): void
     {
         $this->containerBuilder->singleton(C1::class)
-            ->addTag('container.preload')
+            ->addTag(ResolvePreloadPipe::TAG)
             ->setPublic(true);
         $this->containerBuilder->singleton(C2::class)
             ->addArgument(new ReferenceDefinition(C3::class))
             ->setPublic(true);
         $this->containerBuilder->singleton(C3::class);
 
-        $this->containerBuilder->setParameter('container.dumper.inline_class_loader', true);
+        $this->containerBuilder->setParameter('viserio.container.dumper.inline_class_loader', true);
 
         $this->containerBuilder->compile();
 
@@ -1019,8 +1028,8 @@ final class PhpDumperTest extends AbstractContainerTestCase
     {
         $this->arrangeFilesContainerConfiguration();
 
-        $this->containerBuilder->setParameter('container.dumper.inline_factories', true);
-        $this->containerBuilder->setParameter('container.dumper.inline_class_loader', true);
+        $this->containerBuilder->setParameter('viserio.container.dumper.inline_factories', true);
+        $this->containerBuilder->setParameter('viserio.container.dumper.inline_class_loader', true);
 
         /** @var \Viserio\Contract\Container\Definition\TagAwareDefinition $definition */
         $definition = $this->containerBuilder->getDefinition('bar');
@@ -1028,7 +1037,7 @@ final class PhpDumperTest extends AbstractContainerTestCase
 
         $this->containerBuilder->bind('non_shared_foo', FooClass::class)
             ->setPublic(true);
-        $this->containerBuilder->setParameter('container.dumper.as_files', true);
+        $this->containerBuilder->setParameter('viserio.container.dumper.as_files', true);
 
         $this->containerBuilder->compile();
 
@@ -1047,14 +1056,14 @@ final class PhpDumperTest extends AbstractContainerTestCase
 
     public function testDumpAsFilesWithLazyFactoriesInlined(): void
     {
-        $this->containerBuilder->setParameter('container.dumper.inline_factories', true);
-        $this->containerBuilder->setParameter('container.dumper.inline_class_loader', true);
+        $this->containerBuilder->setParameter('viserio.container.dumper.inline_factories', true);
+        $this->containerBuilder->setParameter('viserio.container.dumper.inline_class_loader', true);
 
         $this->containerBuilder->singleton('lazy_foo', FooClass::class)
             ->addArgument(new ObjectDefinition(FooLazyClass::class, FooLazyClass::class, 1))
             ->setPublic(true)
             ->setLazy(true);
-        $this->containerBuilder->setParameter('container.dumper.as_files', true);
+        $this->containerBuilder->setParameter('viserio.container.dumper.as_files', true);
         $this->containerBuilder->compile();
 
         $this->proxyDumper = new ProxyDumper();
@@ -1078,8 +1087,8 @@ final class PhpDumperTest extends AbstractContainerTestCase
             ->setPublic(true)
             ->setLazy(true);
 
-        $this->containerBuilder->setParameter('container.dumper.inline_class_loader', true);
-        $this->containerBuilder->setParameter('container.dumper.as_files', true);
+        $this->containerBuilder->setParameter('viserio.container.dumper.inline_class_loader', true);
+        $this->containerBuilder->setParameter('viserio.container.dumper.as_files', true);
 
         $this->containerBuilder->compile();
 
@@ -1106,8 +1115,8 @@ final class PhpDumperTest extends AbstractContainerTestCase
             ->setPublic(true)
             ->setLazy(true);
 
-        $this->containerBuilder->setParameter('container.dumper.inline_class_loader', false);
-        $this->containerBuilder->setParameter('container.dumper.as_files', true);
+        $this->containerBuilder->setParameter('viserio.container.dumper.inline_class_loader', false);
+        $this->containerBuilder->setParameter('viserio.container.dumper.as_files', true);
 
         $this->containerBuilder->compile();
 
@@ -1204,7 +1213,7 @@ final class PhpDumperTest extends AbstractContainerTestCase
             ->setLazy(true)
             ->setPublic(true);
 
-        $this->containerBuilder->setParameter('container.dumper.inline_class_loader', true);
+        $this->containerBuilder->setParameter('viserio.container.dumper.inline_class_loader', true);
 
         $this->containerBuilder->compile();
 
@@ -1607,7 +1616,7 @@ final class PhpDumperTest extends AbstractContainerTestCase
             ->addArgument(new ReferenceDefinition('foo'))
             ->setPublic(true);
 
-        $this->containerBuilder->setParameter('container.dumper.inline_class_loader', true);
+        $this->containerBuilder->setParameter('viserio.container.dumper.inline_class_loader', true);
 
         $this->containerBuilder->compile();
 
@@ -1625,7 +1634,7 @@ final class PhpDumperTest extends AbstractContainerTestCase
             ->setPublic(true)
             ->setProperty('foo', new ReferenceDefinition('foo', ReferenceDefinition::IGNORE_ON_UNINITIALIZED_REFERENCE));
 
-        $this->containerBuilder->setParameter('container.dumper.inline_class_loader', true);
+        $this->containerBuilder->setParameter('viserio.container.dumper.inline_class_loader', true);
 
         $this->containerBuilder->compile();
 
@@ -1710,7 +1719,7 @@ final class PhpDumperTest extends AbstractContainerTestCase
 
         $this->containerBuilder->singleton(FooParameterProcessor::class)
             ->addTag(RegisterParameterProcessorsPipe::TAG);
-        $this->containerBuilder->singleton(ResolveParameterProcessor::class)
+        $this->containerBuilder->singleton(ResolveRuntimeParameterProcessor::class)
             ->addTag(RegisterParameterProcessorsPipe::TAG);
         $this->containerBuilder->singleton(PhpTypeParameterProcessor::class)
             ->addTag(RegisterParameterProcessorsPipe::TAG);
@@ -1725,22 +1734,32 @@ final class PhpDumperTest extends AbstractContainerTestCase
         $this->containerBuilder->setParameter('baz', '{DUMMY_FOO|env|resolve}');
         $this->containerBuilder->setParameter('foo2', '{baz|foo}');
         $this->containerBuilder->setParameter('json', '{W10=|base64_decode|json_decode}');
+        $this->containerBuilder->setParameter('foo3', 'bar.{baz|foo}');
+        $this->containerBuilder->bind('class', ConstructValueClass::class)
+            ->addArgument('{bar}')
+            ->setPublic(true);
+        $this->containerBuilder->bind('class_with_array', ConstructValueClass::class)
+            ->addArgument(['{bar}', '{foo2}'])
+            ->setPublic(true);
 
         $this->containerBuilder->compile();
 
         $this->assertDumpedContainer(__FUNCTION__);
 
-        self::assertSame('foo', $this->container->getParameter('foo2'));
-        self::assertSame('someFooBar', $this->container->getParameter('baz'));
-        self::assertSame([], $this->container->getParameter('json'));
+        try {
+            self::assertSame('foo', $this->container->getParameter('foo2'));
+            self::assertSame('bar.foo', $this->container->getParameter('foo3'));
+            self::assertSame('someFooBar', $this->container->getParameter('baz'));
+            self::assertSame([], $this->container->getParameter('json'));
 
-        // cache
-        self::assertSame([], $this->container->getParameter('json'));
-
-        \putenv('DUMMY_FOO=');
-        \putenv('DUMMY_FOO');
-        \putenv('DUMMY_BAR=');
-        \putenv('DUMMY_BAR');
+            // cache
+            self::assertSame([], $this->container->getParameter('json'));
+        } finally {
+            \putenv('DUMMY_FOO=');
+            \putenv('DUMMY_FOO');
+            \putenv('DUMMY_BAR=');
+            \putenv('DUMMY_BAR');
+        }
     }
 
     public function testCircularDynamicParameter(): void
@@ -1750,7 +1769,7 @@ final class PhpDumperTest extends AbstractContainerTestCase
 
         \putenv('DUMMY_ENV_VAR=some{foo}');
 
-        $this->containerBuilder->singleton(ResolveParameterProcessor::class)
+        $this->containerBuilder->singleton(ResolveRuntimeParameterProcessor::class)
             ->addTag(RegisterParameterProcessorsPipe::TAG);
         $this->containerBuilder->singleton(EnvParameterProcessor::class)
             ->addTag(RegisterParameterProcessorsPipe::TAG);
@@ -1766,6 +1785,241 @@ final class PhpDumperTest extends AbstractContainerTestCase
             \putenv('DUMMY_ENV_VAR=');
             \putenv('DUMMY_ENV_VAR');
         }
+    }
+
+    public function testDynamicParameterProcessorInArray(): void
+    {
+        \putenv('DUMMY_FOO=some{foo}');
+        \putenv('DUMMY_BAR={bar}');
+
+        $this->containerBuilder->singleton(FooParameterProcessor::class)
+            ->addTag(RegisterParameterProcessorsPipe::TAG);
+        $this->containerBuilder->singleton(ResolveRuntimeParameterProcessor::class)
+            ->addTag(RegisterParameterProcessorsPipe::TAG);
+        $this->containerBuilder->singleton(PhpTypeParameterProcessor::class)
+            ->addTag(RegisterParameterProcessorsPipe::TAG);
+        $this->containerBuilder->singleton(JsonParameterProcessor::class)
+            ->addTag(RegisterParameterProcessorsPipe::TAG);
+        $this->containerBuilder->singleton(Base64ParameterProcessor::class)
+            ->addTag(RegisterParameterProcessorsPipe::TAG);
+        $this->containerBuilder->singleton(EnvParameterProcessor::class)
+            ->addTag(RegisterParameterProcessorsPipe::TAG);
+
+        $this->containerBuilder->setParameter('baz', 'baz');
+
+        $this->containerBuilder->setParameter('foo', 'Foo{DUMMY_BAR|env|resolve}');
+        $this->containerBuilder->setParameter('bar', 'Bar');
+        $this->containerBuilder->setParameter('baz', '{DUMMY_FOO|env|resolve}');
+        $this->containerBuilder->setParameter('foo2', '{baz|foo}');
+        $this->containerBuilder->setParameter('json', '{W10=|base64_decode|json_decode}');
+        $this->containerBuilder->setParameter('foo3', 'bar.{baz|foo}');
+        $this->containerBuilder->setParameter('baza', 'baz');
+
+        $this->containerBuilder->setParameter('array', [
+            'foo' => '{array.bar|resolve}',
+            'bar' => 'Bar',
+            'baz' => '{baza|resolve}',
+            'insideArray' => [
+                'baz' => '{array.insideArray.int|resolve|int}',
+                'int' => '1',
+                'deepArray' => [
+                    'deep_baz' => '{baz|resolve}',
+                ],
+                'deepArray2' => [
+                    'deep' => 'FooBar',
+                ],
+                'deepArray3' => [
+                    'null' => null,
+                    'true' => true,
+                    'false' => false,
+                    'int1' => 1,
+                    'int0' => 0,
+                    'float' => 31.10,
+                    'empty' => '',
+                    'not_processed' => 'foo is {}foo not_processed',
+                    'escape' => '@escapeme',
+                    'binary' => "\xf0\xf0\xf0\xf0",
+                    'binary-control-char' => "This is a Bell char \x07",
+                    'true2' => 'true',
+                    'false2' => 'false',
+                    'null2' => 'null',
+                    'callableName' => 'key',
+                ],
+                'deepArray4' => [
+                    'directory' => [
+                        'mapper' => [
+                            'app' => [
+                                'foo' => 'bar',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'emptyArray' => [],
+            'null' => null,
+            'true' => true,
+            'false' => false,
+            'int1' => 1,
+            'int0' => 0,
+            'float' => 31.10,
+            'empty' => '',
+            'not_processed' => 'foo is {}foo not_processed',
+            'escape' => '@escapeme',
+            'binary' => "\xf0\xf0\xf0\xf0",
+            'binary-control-char' => "This is a Bell char \x07",
+            'true2' => 'true',
+            'false2' => 'false',
+            'null2' => 'null',
+            'callableName' => 'key',
+        ]);
+
+        $this->containerBuilder->compile();
+
+        $this->assertDumpedContainer(__FUNCTION__);
+
+        try {
+            self::assertSame([
+                'foo' => 'Bar',
+                'baz' => 'baz',
+                'insideArray' => [
+                    'baz' => 1,
+                    'deepArray' => [
+                        'deep_baz' => 'someFooBar',
+                    ],
+                    'int' => '1',
+                    'deepArray2' => [
+                        'deep' => 'FooBar',
+                    ],
+                    'deepArray3' => [
+                        'null' => null,
+                        'true' => true,
+                        'false' => false,
+                        'int1' => 1,
+                        'int0' => 0,
+                        'float' => 31.10,
+                        'empty' => '',
+                        'not_processed' => 'foo is {}foo not_processed',
+                        'escape' => '@escapeme',
+                        'binary' => "\xf0\xf0\xf0\xf0",
+                        'binary-control-char' => "This is a Bell char \x07",
+                        'true2' => 'true',
+                        'false2' => 'false',
+                        'null2' => 'null',
+                        'callableName' => 'key',
+                    ],
+                    'deepArray4' => [
+                        'directory' => [
+                            'mapper' => [
+                                'app' => [
+                                    'foo' => 'bar',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'bar' => 'Bar',
+                'emptyArray' => [],
+                'null' => null,
+                'true' => true,
+                'false' => false,
+                'int1' => 1,
+                'int0' => 0,
+                'float' => 31.10,
+                'empty' => '',
+                'not_processed' => 'foo is {}foo not_processed',
+                'escape' => '@escapeme',
+                'binary' => "\xf0\xf0\xf0\xf0",
+                'binary-control-char' => "This is a Bell char \x07",
+                'true2' => 'true',
+                'false2' => 'false',
+                'null2' => 'null',
+                'callableName' => 'key',
+            ], $this->container->getParameter('array'));
+        } finally {
+            \putenv('DUMMY_FOO=');
+            \putenv('DUMMY_FOO');
+            \putenv('DUMMY_BAR=');
+            \putenv('DUMMY_BAR');
+        }
+    }
+
+    protected const REFRESH_CONTAINER = true;
+    public function testParameterProcessorWithNormalAndDynamicParameters(): void
+    {
+        $this->containerBuilder->setParameter('viserio', [
+            'console' => [
+                'name' => 'Cerebro',
+                'version' => '1',
+            ],
+            'exception' => [
+                'debug' => '{APP_DEBUG|env|bool}',
+                'env' => '{APP_ENV|env|string}',
+            ],
+            'app' => [
+                'url' => '{APP_URL|env|string}',
+                'directory' => [
+                    'mapper' => [
+                        'app' => [
+                            FooClass::class,
+                            'getInstance',
+                        ],
+                        'config' => [
+                            FooClass::class,
+                            'getInstance',
+                        ],
+                        'database' => [
+                            FooClass::class,
+                            'getInstance',
+                        ],
+                        'public' => [
+                            FooClass::class,
+                            'getInstance',
+                        ],
+                        'resources' => [
+                            FooClass::class,
+                            'getInstance',
+                        ],
+                        'routes' => [
+                            FooClass::class,
+                            'getInstance',
+                        ],
+                        'lang' => [
+                            FooClass::class,
+                            'getInstance',
+                        ],
+                        'storage' => [
+                            FooClass::class,
+                            'getInstance',
+                        ],
+                    ],
+                ],
+                'middleware_priority' => [
+                    64 => FooClass::class,
+                ],
+            ],
+            'logging' => [
+                'default' => '{LOG_CHANNEL|env|string}',
+                'env' => '{APP_ENV|env|string}',
+                'path' => 'logs',
+                'channels' => [
+                    'stack' => [
+                        'driver' => 'stack',
+                        'channels' => [
+                            0 => 'daily',
+                        ],
+                    ],
+                ],
+            ],
+            'view' => [
+                'paths' => [
+                    0 => '{resources|directory}/views',
+                ],
+            ],
+        ]);
+
+        $this->containerBuilder->compile();
+
+        $this->assertDumpedContainer(__FUNCTION__);
     }
 
     /**
@@ -1795,32 +2049,6 @@ final class PhpDumperTest extends AbstractContainerTestCase
     }
 
     /**
-     * @param array $array
-     * @param mixed $expectedKey
-     * @param mixed $expectedValue
-     *
-     * @return void
-     */
-    private function assertArrayContent(array $array, $expectedKey, $expectedValue): void
-    {
-        self::assertArrayHasKey($expectedKey, $array);
-
-        $value = $array[$expectedKey];
-
-        if (\is_array($value)) {
-            foreach ($expectedValue as $key => $v) {
-                $this->assertArrayContent($value, $key, $v);
-            }
-        } elseif (\is_object($value) && \strpos(\get_class($value), "class@anonymous\0") !== false) {
-            self::assertSame($expectedValue->test, $value->test);
-        } elseif (\is_object($value)) {
-            self::assertEquals($expectedValue, $value);
-        } else {
-            self::assertSame($expectedValue, $value);
-        }
-    }
-
-    /**
      * @param \Viserio\Component\Container\ContainerBuilder $builder1
      */
     private function arrangeContainerEntries(ContainerBuilder $builder1): void
@@ -1831,7 +2059,6 @@ final class PhpDumperTest extends AbstractContainerTestCase
         $builder1->bind('class', EmptyClass::class);
         $builder1->bind('ano', new class() {
         });
-        $builder1->bind('array', ['test' => 'foo']);
     }
 
     private function arrangePhpParser(): void
@@ -1961,7 +2188,7 @@ final class PhpDumperTest extends AbstractContainerTestCase
                 new ReferenceDefinition('config'),
             ])
             ->addMethodCall('getInstance')
-            ->addTag('container.preload');
+            ->addTag(ResolvePreloadPipe::TAG);
         $this->containerBuilder->singleton('doc_factory_call', [new ReferenceDefinition('doc_factory'), 'createFooClass']);
 
         $this->containerBuilder->singleton(Documentation::class)

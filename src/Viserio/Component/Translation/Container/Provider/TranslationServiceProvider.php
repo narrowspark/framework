@@ -23,10 +23,10 @@ use Viserio\Contract\Container\ServiceProvider\AliasServiceProvider as AliasServ
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\ServiceProvider\ExtendServiceProvider as ExtendServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
-use Viserio\Contract\OptionsResolver\Exception\InvalidArgumentException;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
-use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresValidatedOption as RequiresValidatedOptionContract;
+use Viserio\Contract\Config\Exception\InvalidArgumentException;
+use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
+use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Contract\Config\RequiresValidatedConfig as RequiresValidatedConfigContract;
 use Viserio\Contract\Parser\Loader as LoaderContract;
 use Viserio\Contract\Translation\MessageFormatter as MessageFormatterContract;
 use Viserio\Contract\Translation\TranslationManager as TranslationManagerContract;
@@ -34,9 +34,9 @@ use Viserio\Contract\Translation\Translator as TranslatorContract;
 
 class TranslationServiceProvider implements AliasServiceProviderContract,
     ExtendServiceProviderContract,
-    ProvidesDefaultOptionContract,
+    ProvidesDefaultConfigContract,
     RequiresComponentConfigContract,
-    RequiresValidatedOptionContract,
+    RequiresValidatedConfigContract,
     ServiceProviderContract
 {
     /**
@@ -83,7 +83,7 @@ class TranslationServiceProvider implements AliasServiceProviderContract,
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): array
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'translation'];
     }
@@ -91,7 +91,7 @@ class TranslationServiceProvider implements AliasServiceProviderContract,
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): array
+    public static function getDefaultConfig(): iterable
     {
         return [
             'locale' => 'en',
@@ -102,7 +102,7 @@ class TranslationServiceProvider implements AliasServiceProviderContract,
     /**
      * {@inheritdoc}
      */
-    public static function getOptionValidators(): array
+    public static function getConfigValidators(): iterable
     {
         return [
             'locale' => ['string'],

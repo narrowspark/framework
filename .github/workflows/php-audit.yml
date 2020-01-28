@@ -27,7 +27,7 @@ jobs:
           fetch-depth: 2
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@1.7.2
+        uses: shivammathur/setup-php@1.8.1
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl, pdo, pdo_sqlite, inotify, pcntl, posix

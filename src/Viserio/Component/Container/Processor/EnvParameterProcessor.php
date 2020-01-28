@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\Processor;
 
+use Viserio\Contract\Container\Exception\InvalidArgumentException;
+
 class EnvParameterProcessor extends AbstractParameterProcessor
 {
     /**
@@ -46,14 +48,14 @@ class EnvParameterProcessor extends AbstractParameterProcessor
             $env = $_ENV[$key];
         } elseif (isset($_SERVER[$key]) && \strpos($key, 'HTTP_') !== 0) {
             $env = $_SERVER[$key];
-        } elseif ($env === null && false !== $getEnv = \getenv($key)) {
+        } elseif (false !== $getEnv = \getenv($key)) {
             $env = $getEnv;
         }
 
-        if (\is_string($env)) {
-            return \str_replace($search, $env, $parameter);
+        if ($env === null) {
+            throw new InvalidArgumentException(\sprintf('No env value found for [%s].', $parameter));
         }
 
-        return $env;
+        return \str_replace($search, $env, $parameter);
     }
 }

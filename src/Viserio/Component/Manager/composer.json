@@ -25,9 +25,9 @@
     "require": {
         "php": "^7.4",
         "symfony/polyfill-ctype": "^1.8.0",
+        "viserio/config": "^1.0@dev",
         "viserio/container-contract": "^1.0@dev",
-        "viserio/manager-contract": "^1.0@dev",
-        "viserio/options-resolver": "^1.0@dev"
+        "viserio/manager-contract": "^1.0@dev"
     },
     "provide": {
         "psr/container-implementation": "^1.0"

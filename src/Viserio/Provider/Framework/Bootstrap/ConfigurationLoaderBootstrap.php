@@ -78,40 +78,49 @@ class ConfigurationLoaderBootstrap extends AbstractFilesLoaderBootstrap implemen
         $containerBuilder = $kernel->getContainerBuilder();
         $env = $kernel->getEnvironment();
 
-        $config = [];
-
-        if ($containerBuilder->hasParameter('viserio')) {
-            $config = $containerBuilder->getParameter('viserio')->getValue();
-        } else {
-            $config['viserio'] = [];
-        }
-
-        $config['viserio']['app'] = ['env' => $env];
-
         foreach (static::getFiles($kernel->getConfigPath('packages'), self::$configExtensions) as $path) {
-            foreach ((array) require $path as $key => $value) {
-                $config[$key] = \array_merge_recursive($config[$key], $value);
-            }
+            self::setParameters($path, $containerBuilder);
         }
 
         foreach (static::getFiles($kernel->getConfigPath(), self::$configExtensions) as $path) {
-            foreach ((array) require $path as $key => $value) {
-                $config[$key] = \array_merge_recursive($config[$key], $value);
-            }
+            self::setParameters($path, $containerBuilder);
         }
 
         foreach (static::getFiles($kernel->getConfigPath($env), self::$configExtensions) as $path) {
-            foreach ((array) require $path as $key => $value) {
-                $config[$key] = \array_merge_recursive($config[$key], $value);
-            }
+            self::setParameters($path, $containerBuilder);
         }
 
         foreach (static::getFiles($kernel->getConfigPath('packages' . \DIRECTORY_SEPARATOR . $env), self::$configExtensions) as $path) {
-            foreach ((array) require $path as $key => $value) {
-                $config[$key] = \array_merge_recursive($config[$key], $value);
+            self::setParameters($path, $containerBuilder);
+        }
+    }
+
+    /**
+     * @param string $path
+     *
+     * @return array<string|int, mixed>
+     */
+    protected static function load(string $path): array
+    {
+        return (array) require $path;
+    }
+
+    /**
+     * Load parameter into container from a given path.
+     *
+     * @param string                                                                                                    $path
+     * @param \Viserio\Contract\Container\ContainerBuilder&\Viserio\Contract\Container\ServiceProvider\ContainerBuilder $containerBuilder
+     *
+     * @return void
+     */
+    private static function setParameters(string $path, $containerBuilder): void
+    {
+        foreach (static::load($path) as $key => $value) {
+            if ($containerBuilder->hasParameter($key)) {
+                $containerBuilder->setParameter($key, \array_merge_recursive($containerBuilder->getParameter($key)->getValue(), $value));
+            } else {
+                $containerBuilder->setParameter($key, $value);
             }
         }
-
-        $containerBuilder->setParameter('viserio', $config);
     }
 }

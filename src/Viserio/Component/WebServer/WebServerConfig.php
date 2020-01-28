@@ -15,15 +15,15 @@ namespace Viserio\Component\WebServer;
 
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Contract\OptionsResolver\Exception\InvalidArgumentException as OptionsResolverInvalidArgumentException;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
-use Viserio\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresValidatedOption as RequiresValidatedOptionContract;
+use Viserio\Contract\Config\Exception\InvalidArgumentException as OptionsResolverInvalidArgumentException;
+use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
+use Viserio\Contract\Config\RequiresConfig as RequiresConfigContract;
+use Viserio\Contract\Config\RequiresValidatedConfig as RequiresValidatedConfigContract;
 use Viserio\Contract\WebServer\Exception\InvalidArgumentException;
 use Viserio\Contract\WebServer\Exception\RuntimeException;
 use function gethostname;
 
-final class WebServerConfig implements ProvidesDefaultOptionContract, RequiresConfigContract, RequiresValidatedOptionContract
+final class WebServerConfig implements ProvidesDefaultConfigContract, RequiresConfigContract, RequiresValidatedConfigContract
 {
     use OptionsResolverTrait;
 
@@ -83,7 +83,7 @@ final class WebServerConfig implements ProvidesDefaultOptionContract, RequiresCo
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): array
+    public static function getDefaultConfig(): iterable
     {
         return [
             'host' => null,
@@ -94,7 +94,7 @@ final class WebServerConfig implements ProvidesDefaultOptionContract, RequiresCo
     /**
      * {@inheritdoc}
      */
-    public static function getOptionValidators(): array
+    public static function getConfigValidators(): iterable
     {
         return [
             'document_root' => static function ($value): void {

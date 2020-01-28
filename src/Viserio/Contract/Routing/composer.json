@@ -4,7 +4,7 @@
     "description": "The Viserio Routing Contract package.",
     "keywords": [
         "abstractions",
-        "contracts",
+        "Contract",
         "decoupling",
         "interfaces",
         "interoperability",
@@ -32,7 +32,7 @@
         "psr/http-server-middleware": "^1.0.0"
     },
     "suggest": {
-        "psr/http-server-middleware": "Required to use Routing Contract Middleware Contracts (^1.0)."
+        "psr/http-server-middleware": "Required to use Routing Contract Middleware Contract (^1.0)."
     },
     "extra": {
         "branch-alias": {

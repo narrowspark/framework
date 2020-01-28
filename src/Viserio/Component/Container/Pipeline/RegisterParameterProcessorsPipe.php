@@ -87,38 +87,41 @@ final class RegisterParameterProcessorsPipe implements PipeContract
                 throw new InvalidArgumentException(\sprintf('The service [%s] tagged with [%s] must implement interface [%s].', $id, $this->tag, ParameterProcessorContract::class));
             }
 
-            $definition = (new ReferenceDefinition($id))->setType($class);
-
-            /** @var ParameterProcessorContract $class */
             $isRuntimeProcessor = $class::isRuntime();
 
             foreach ($class::getProvidedTypes() as $key => $type) {
                 self::validateProvidedTypes($type, $class);
 
                 $types = \explode('|', $type);
-                if ($isRuntimeProcessor) {
-                    $runtimeProcessorTypes[$key] = $types;
-                } else {
+
+                $runtimeProcessorTypes[$key] = $types;
+
+                if (! $isRuntimeProcessor) {
                     $processorTypes[$key] = $types;
                 }
             }
 
-            if ($isRuntimeProcessor) {
-                $runtimeProcessorRefs[] = $definition;
-            } else {
-                $processorRefs[] = $definition;
+            $reference = (new ReferenceDefinition($id))
+                ->setType($class);
+
+            $runtimeProcessorRefs[] = $reference;
+
+            if (! $isRuntimeProcessor) {
+                $processorRefs[] = $reference;
             }
         }
 
         if (\count($runtimeProcessorRefs) !== 0) {
-            $containerBuilder->singleton(self::RUNTIME_PROCESSORS_KEY, new ArrayIterator($runtimeProcessorRefs))
+            $containerBuilder->singleton(self::RUNTIME_PROCESSORS_KEY, ArrayIterator::class)
+                ->setArgument($runtimeProcessorRefs)
                 ->addTag(ResolvePreloadPipe::TAG)
                 ->setPublic(true);
             $containerBuilder->setParameter(self::RUNTIME_PROCESSOR_TYPES_PARAMETER_KEY, $runtimeProcessorTypes);
         }
 
         if (\count($processorRefs) !== 0) {
-            $containerBuilder->singleton(self::PROCESSORS_KEY, new ArrayIterator($processorRefs));
+            $containerBuilder->singleton(self::PROCESSORS_KEY, ArrayIterator::class)
+                ->setArgument($processorRefs);
             $containerBuilder->setParameter(self::PROCESSOR_TYPES_PARAMETER_KEY, $processorTypes);
         }
     }

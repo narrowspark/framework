@@ -46,7 +46,6 @@ use Viserio\Component\Container\Argument\ClosureArgument;
 use Viserio\Component\Container\Argument\IteratorArgument;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Definition\AliasDefinition;
-use Viserio\Component\Container\Definition\ArrayDefinition;
 use Viserio\Component\Container\Definition\ClosureDefinition;
 use Viserio\Component\Container\Definition\ConditionDefinition;
 use Viserio\Component\Container\Definition\FactoryDefinition;
@@ -54,6 +53,7 @@ use Viserio\Component\Container\Definition\IteratorDefinition;
 use Viserio\Component\Container\Definition\ObjectDefinition;
 use Viserio\Component\Container\Definition\ParameterDefinition;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
+use Viserio\Component\Container\Definition\UndefinedDefinition;
 use Viserio\Component\Container\PhpParser\NodeVisitor\AnonymousClassLocatorVisitor;
 use Viserio\Component\Container\PhpParser\NodeVisitor\ClosureLocatorVisitor;
 use Viserio\Component\Container\PhpParser\NodeVisitor\MagicConstantVisitor;
@@ -61,6 +61,8 @@ use Viserio\Component\Container\PhpParser\NodeVisitor\ThisDetectorVisitor;
 use Viserio\Component\Container\PhpParser\NodeVisitor\UsesCollectorNodeVisitor;
 use Viserio\Component\Container\Pipeline\AnalyzeServiceDependenciesPipe;
 use Viserio\Component\Container\Pipeline\CheckCircularReferencesPipe;
+use Viserio\Component\Container\Pipeline\RegisterParameterProcessorsPipe;
+use Viserio\Component\Container\Pipeline\ResolvePreloadPipe;
 use Viserio\Component\Container\Traits\ClassMatchingTrait;
 use Viserio\Component\Container\Variable;
 use Viserio\Contract\Container\Argument\Argument as ArgumentContract;
@@ -81,9 +83,9 @@ use Viserio\Contract\Container\Exception\InvalidArgumentException;
 use Viserio\Contract\Container\Exception\LogicException;
 use Viserio\Contract\Container\Exception\RuntimeException;
 use Viserio\Contract\Container\LazyProxy\Dumper as LazyProxyContract;
+use Viserio\Contract\Container\Processor\ParameterProcessor as ParameterProcessorContract;
 use Viserio\Contract\Container\ServiceReferenceGraphNode as ServiceReferenceGraphNodeContract;
 use Viserio\Contract\Support\Exception\MissingPackageException;
-use function hash;
 
 final class PhpDumper implements DumperContract
 {
@@ -92,16 +94,16 @@ final class PhpDumper implements DumperContract
     /**
      * List of reserved variables.
      *
-     * @var array
+     * @var array<int, string>
      */
-    private static $reservedVariables = ['instance', 'class', 'this'];
+    private static array $reservedVariables = ['instance', 'class', 'this'];
 
     /**
      * Cache for preload tag check.
      *
      * @var array
      */
-    private static $preloadCache = [];
+    private static array $preloadCache = [];
 
     /**
      * A container builder instance.
@@ -125,35 +127,35 @@ final class PhpDumper implements DumperContract
     private $printer;
 
     /** @var array */
-    private $inlinedRequires = [];
+    private array $inlinedRequires = [];
 
     /**
      * List of preload classes.
      *
      * @var array
      */
-    private $preloadClasses = [];
+    private array $preloadClasses = [];
 
     /**
      * Counted variable.
      *
      * @var int
      */
-    private $variableCount = 0;
+    private int $variableCount = 0;
 
     /**
      * Array space counter for multidimensional arrays.
      *
      * @var int
      */
-    private $arraySpaceCount = 2;
+    private int $arraySpaceCount = 2;
 
     /**
      * A check if the container should be a file container.
      *
      * @var bool
      */
-    private $asFiles = false;
+    private bool $asFiles = false;
 
     /** @var null|SplObjectStorage */
     private $inlinedDefinitions;
@@ -162,68 +164,72 @@ final class PhpDumper implements DumperContract
     private $definitionVariables;
 
     /** @var array */
-    private $circularReferences = [];
+    private array $circularReferences = [];
 
     /** @var array */
-    private $singleUsePrivateIds = [];
+    private array $singleUsePrivateIds = [];
 
     /** @var array */
-    private $services = [];
+    private array $services = [];
 
     /**
      * List of uninitialized references.
      *
      * @var array
      */
-    private $uninitializedServices = [];
+    private array $uninitializedServices = [];
 
     /** @var array<int|string, mixed> */
-    private $parameters = [];
+    private array $parameters = [];
 
     /** @var array<int|string, mixed> */
-    private $dynamicParameters = [];
+    private array $runtimeParameters = [];
+
+    /** @var array<int|string, mixed> */
+    private array $runtimeParametersMapper = [];
 
     /**
      * Check if container should be dump in debug mode.
      *
      * @var bool
      */
-    private $debug = false;
+    private bool $debug = false;
 
-    /** @var bool */
-    private $inlineRequires = false;
+    private bool $inlineRequires = false;
 
-    /** @var bool */
-    private $inlineFactories = false;
+    private bool $inlineFactories = false;
 
     /** @var null|array */
-    private $referenceVariables;
+    private ?array $referenceVariables = null;
 
     /** @var null|array */
-    private $serviceCalls;
+    private ?array $serviceCalls = null;
 
     /** @var null|string */
-    private $targetDirRegex;
+    private ?string $targetDirRegex = null;
 
-    /** @var null|array */
-    private $targetDirMaxMatches;
+    /** @var null|int */
+    private ?int $targetDirMaxMatches = null;
 
     /**
      * A lazy proxy dumper.
      *
      * @var \Viserio\Contract\Container\LazyProxy\Dumper
      */
-    private $proxyDumper;
+    private ?LazyProxyContract $proxyDumper = null;
 
     /**
      * Tag that identifies the services that are always needed.
      *
      * @var string
      */
-    private $preloadTag;
+    private string $preloadTag;
 
     /** @var bool */
-    private $wrapConditionCalled = false;
+    private bool $wrapConditionCalled = false;
+
+    /** @var array<string, array<int, string>> */
+    private array $runtimeProcessorTypes = [];
 
     /**
      * Create a new PhpDumper instance.
@@ -261,18 +267,6 @@ final class PhpDumper implements DumperContract
     }
 
     /**
-     * Check if the definition is a preload one.
-     *
-     * @param mixed $definition
-     *
-     * @return bool
-     */
-    private function isPreload($definition): bool
-    {
-        return self::$preloadCache[$definition->getName()] ?? self::$preloadCache[$definition->getName()] = ($this->preloadTag && $definition->hasTag($this->preloadTag) && ! $definition->isDeprecated());
-    }
-
-    /**
      * Helps to write generated container code to file.
      *
      * @param string $fileName
@@ -307,11 +301,11 @@ final class PhpDumper implements DumperContract
             'debug' => false,
             'file' => null,
             'namespace' => null,
-            'preload_tag' => 'container.preload',
-            'as_files_parameter' => 'container.dumper.as_files',
-            'inline_class_loader_parameter' => 'container.dumper.inline_class_loader',
-            'inline_factories_parameter' => 'container.dumper.inline_factories',
-            'preload_classes_parameter' => 'container.dumper.preload_classes',
+            'preload_tag' => ResolvePreloadPipe::TAG,
+            'as_files_parameter' => 'viserio.container.dumper.as_files',
+            'inline_class_loader_parameter' => 'viserio.container.dumper.inline_class_loader',
+            'inline_factories_parameter' => 'viserio.container.dumper.inline_factories',
+            'preload_classes_parameter' => 'viserio.container.dumper.preload_classes',
         ], $options);
 
         $this->validateDumperOptions($options);
@@ -390,20 +384,14 @@ final class PhpDumper implements DumperContract
             }
         }
 
-        $proxyClasses = $this->inlineFactories ? $this->generateProxyClasses() : null;
-        $servicesContent = $this->addServices();
-
         $rawParameters = $this->containerBuilder->getParameters();
-        $processorTypes = [];
 
-        if (($parameterProvidedTypes = $rawParameters['container.parameter.provided.processor.types'] ?? null) instanceof DefinitionContract) {
-            $processorTypes = $parameterProvidedTypes->getValue();
+        if (($parameterProvidedTypes = $rawParameters[RegisterParameterProcessorsPipe::RUNTIME_PROCESSOR_TYPES_PARAMETER_KEY] ?? null) instanceof DefinitionContract) {
+            $this->runtimeProcessorTypes = $parameterProvidedTypes->getValue();
         }
 
         foreach ($rawParameters as $key => $value) {
-            $iKey = \strpos($key, ':');
-
-            if ($iKey !== false && \array_key_exists(\substr($key, 0, $iKey), $processorTypes)) {
+            if ($this->isRuntimeParameterValue($key)) {
                 throw new InvalidArgumentException(\sprintf('Parameter name cannot use dynamic parameters: [%s].', $key));
             }
 
@@ -412,27 +400,50 @@ final class PhpDumper implements DumperContract
             }
 
             if (\is_array($value)) {
-                \array_walk_recursive($value, function ($parameter) use ($key, $processorTypes): void {
-                    $this->processParameter($parameter, $key, $processorTypes);
-                });
-            } else {
-                $this->processParameter($value, $key, $processorTypes);
-            }
+                $isDynamic = false;
 
-            if (\array_key_exists($key, $this->dynamicParameters)) {
-                $this->dynamicParameters[$key] = $value;
+                $this->runtimeParameters[$key] ??= [];
+                $this->runtimeParametersMapper[$key] ??= [];
+
+                $this->processRuntimeParameters($value, $this->runtimeParameters[$key], $this->runtimeParametersMapper[$key], $isDynamic);
+
+                if (! $isDynamic) {
+                    unset($this->runtimeParameters[$key], $this->runtimeParametersMapper[$key]);
+
+                    $this->parameters[$key] = $value;
+                }
+            } elseif ($this->isRuntimeParameterValue($value)) {
+                $this->runtimeParameters[$key] = $value;
             } else {
                 $this->parameters[$key] = $value;
             }
         }
 
-        $this->phpParser = $this->printer = null;
+        $this->runtimeParameters = $this->removeEmptyValues($this->runtimeParameters);
 
-        $classContent = $this->getClassStartForCompiledClass($class, $parentClass, $options['namespace'])
-            . $servicesContent
-            . $this->addDeprecatedAliases()
-            . $this->addRemovedIds()
-            . $this->addDynamicParameters();
+        $proxyClasses = $this->inlineFactories ? $this->generateProxyClasses() : null;
+        $servicesContent = $this->addServices();
+
+        $this->phpParser = $this->printer = null;
+        $eol = "\n";
+
+        $classContent = $this->getClassStartForCompiledClass($class, $parentClass, $options['namespace']);
+
+        if (\count($this->runtimeParameters) !== 0) {
+            $classContent .= "{$eol}{$eol}    /**{$eol}     * {@inheritDoc}{$eol}     */{$eol}";
+            $classContent .= $this->generateMethod(
+                'getParameters',
+                '        return \array_merge(parent::getParameters(), $this->dynamicParameterMapper);',
+                'array',
+                [],
+                'public'
+            );
+        }
+
+        $classContent .= $servicesContent;
+        $classContent .= $this->addDeprecatedAliases();
+        $classContent .= $this->addRemovedIds();
+        $classContent .= $this->addDynamicParameterMethods();
 
         $classEndCode = $this->getClassEndForCompiledClass($options['namespace']);
         $proxyClasses = $proxyClasses ?? $this->generateProxyClasses();
@@ -447,13 +458,37 @@ final class PhpDumper implements DumperContract
             }
         }
 
+        // clear
         $this->inlinedRequires = $this->singleUsePrivateIds = $this->services = $this->circularReferences = $this->preloadClasses = [];
+        $this->parameters = $this->runtimeParameters = $this->runtimeParametersMapper = [];
         $this->targetDirRegex = $this->proxyDumper = $this->containerBuilder = $this->inlinedDefinitions = null;
         $this->definitionVariables = $this->referenceVariables = $this->serviceCalls = $this->targetDirMaxMatches = null;
         $this->containerBuilder = null;
         $this->variableCount = 0;
 
         return $code;
+    }
+
+    /**
+     * Remove any elements where the value is empty.
+     *
+     * @param array $array the array to walk
+     *
+     * @return array
+     */
+    private function removeEmptyValues(array &$array): array
+    {
+        foreach ($array as $key => &$value) {
+            if (\is_array($value)) {
+                $value = $this->removeEmptyValues($value);
+            }
+
+            if (empty($value)) {
+                unset($array[$key]);
+            }
+        }
+
+        return $array;
     }
 
     /**
@@ -464,8 +499,6 @@ final class PhpDumper implements DumperContract
     private function addParameters(): string
     {
         $eol = "\n";
-
-
         $code = '';
 
         if (\count($this->parameters) !== 0) {
@@ -478,39 +511,43 @@ final class PhpDumper implements DumperContract
             $code .= \sprintf("{$eol}        \$this->parameters = %s;", $parametersCode);
         }
 
-        if (0 !== $count = \count($this->dynamicParameters)) {
-            $code .= \sprintf("{$eol}        \$this->loadedDynamicParameters = %s;", $this->compileArray(\array_combine(\array_keys($this->dynamicParameters), \array_fill(0, $count, false)), false, true));
+        return $code;
+    }
+
+    /**
+     * Compiling the dynamic parameters to a protected dynamic parameter variables for the container.
+     *
+     * @return string
+     */
+    private function addDynamicParameters(): string
+    {
+        $eol = "\n";
+        $code = '';
+
+        if (0 !== $count = \count($this->runtimeParameters)) {
+            $code .= \sprintf("{$eol}        \$this->loadedDynamicParameters = %s;", $this->compileArray(\array_combine(\array_keys($this->runtimeParameters), \array_fill(0, $count, false))));
+            $code .= \sprintf("{$eol}        \$this->dynamicParameterMapper = %s;", $this->compileArray($this->runtimeParametersMapper));
         }
 
         return $code;
     }
 
     /**
-     * Process through value.
+     * Check if value is a dynamic value.
      *
      * @param bool|float|int|string $value
-     * @param int|string            $key
-     * @param array<string, bool>   $processorTypes
      *
-     * @return void
+     * @return bool
      */
-    private function processParameter($value, $key, array $processorTypes): void
+    private function isRuntimeParameterValue($value): bool
     {
-        if (\is_string($value) && \preg_match('/\{.*\|(.*)\}/', $value) === 1) {
-            $array = \explode('|', $key);
-
-            unset($array[\array_key_first($array)]); // is the value that is pipe to the processors
-
-            if (\count(\array_intersect($array, \array_keys($processorTypes))) === 0) {
-                $this->dynamicParameters[$key] = true;
-            }
-        }
+        return \is_string($value) && \preg_match(\sprintf(ParameterProcessorContract::PROCESSOR_WITH_PLACEHOLDER_REGEX, \implode('|', \array_keys($this->runtimeProcessorTypes))), $value) === 1;
     }
 
     /**
      * Compiling container definitions.
      *
-     *@throws ReflectionException
+     * @throws ReflectionException
      * @throws \Viserio\Contract\Container\Exception\NotFoundException
      * @throws \Viserio\Contract\Container\Exception\CircularDependencyException
      *
@@ -638,10 +675,6 @@ final class PhpDumper implements DumperContract
                 $doc .= "{$eol}     * " . \sprintf('@return %s An instance returned by %s::%s()', $definition->getReturnType() ?? 'mixed', $this->generateLiteralClass($definition->getClass()), $definition->getMethod());
             } elseif ($definition instanceof ClosureDefinition) {
                 $doc .= "{$eol}     * @return mixed Returned by a function";
-            } elseif ($definition instanceof ArrayDefinition) {
-                $returnType = 'array';
-
-                $doc .= "{$eol}     * @return array";
             } elseif ($definition instanceof IteratorDefinition) {
                 $returnType = '\Viserio\Component\Container\RewindableGenerator';
 
@@ -1026,51 +1059,50 @@ final class PhpDumper implements DumperContract
      *
      * @return string
      */
-    private function addDynamicParameters(): string
+    private function addDynamicParameterMethods(): string
     {
-        $dynamicParameters = $this->dynamicParameters;
-
-        if (\count($dynamicParameters) === 0) {
+        if (\count($this->runtimeParameters) === 0) {
             return '';
         }
 
         $eol = "\n";
-
-        $process = "        \$process = function(\$value) {{$eol}            if (is_array(\$value)) {{$eol}                \\array_walk_recursive(\$value, function (&\$parameter): void {{$eol}                    \$parameter = \$this->processParameter(\$parameter);{$eol}                });{$eol}{$eol}                return \$value;{$eol}            }{$eol}{$eol}            return \$this->processParameter(\$value);{$eol}        };{$eol}{$eol}";
-
         $cases = '';
 
-        foreach ($dynamicParameters as $key => $parameter) {
-            if ($parameter instanceof ParameterDefinition) {
-                $parameter = $parameter->getValue();
-            }
+        $this->arraySpaceCount = 3;
 
+        foreach ($this->runtimeParameters as $key => $parameter) {
             if (\is_array($parameter)) {
-                $parameter = $this->compileArray($parameter, false, true);
+                $parameter = $this->compileArray($parameter);
             } else {
-                $parameter = $this->export($parameter);
+                $parameter = \sprintf('$this->processParameter(%s)', $this->export($parameter));
             }
 
-            $cases .= \sprintf('            case %s: $value = $process(%s); break;%s', $this->export($key), $parameter, $eol);
+            $cases .= \sprintf('            case %s: $value = %s; break;%s', $this->export($key), $parameter, $eol);
         }
 
-        $switch = "        switch (\$id) {{$eol}{$cases}{$eol}            default: return parent::doGetParameter(\$id);{$eol}        }{$eol}{$eol}        \$this->loadedDynamicParameters[\$id] = true;{$eol}{$eol}        return \$this->dynamicParameters[\$id] = \$value;";
+        $this->arraySpaceCount = 2;
 
-        $code = "{$eol}{$eol}    /**{$eol}     * {@inheritdoc}{$eol}     */{$eol}" . $this->generateMethod(
+        $switchCode = "        switch (\$id) {{$eol}{$cases}{$eol}            default: return parent::doGetParameter(\$id);{$eol}        }";
+        $returnCode = "{$eol}{$eol}        \$this->loadedDynamicParameters[\$id] = true;{$eol}{$eol}        return \$this->dynamicParameters[\$id] = \\is_array(\$value) ? \\array_merge_recursive(\$value, \$this->dynamicParameterMapper[\$id] ?? []) : \$value;";
+
+        $code = "{$eol}{$eol}    /**{$eol}     * {@inheritdoc}{$eol}     */{$eol}";
+        $code .= $this->generateMethod(
             'doGetParameter',
-            "{$process}{$switch}",
+            $switchCode . $returnCode,
             null,
             ['id' => 'string'],
         );
 
-        $foreachCode = "{$eol}                /** @var \\Viserio\\Contract\\Container\\Processor\\ParameterProcessor \$processor */{$eol}                foreach (\$this->get('container.parameter.processors') as \$processor) {{$eol}                    if (\$processor->supports(\$value)) {{$eol}                        \$this->resolvingDynamicParameters[\$value] = true;{$eol}{$eol}                        return \$processor->process(\$value);{$eol}                    }{$eol}                }";
-        $arrayReduceCode = "{$eol}            \$parameter = \\array_reduce(\\explode('|', \$matches[3]), function (\$carry, string \$method) use (\$parameter) {{$eol}                if (\$carry === null) {{$eol}                    return null;{$eol}                }{$eol}{$eol}                \$value = \"{\$carry}|{\$method}\";{$eol}{$eol}                if (\\array_key_exists(\$value, \$this->resolvingDynamicParameters)) {{$eol}                    throw new \\Viserio\\Contract\\Container\\Exception\\CircularParameterException(\$parameter, \\array_keys(\$this->resolvingDynamicParameters));{$eol}                }{$eol}{$foreachCode}{$eol}            }, \$matches[2]);{$eol}";
+        $foreachCode = \sprintf("{$eol}            /** @var \\Viserio\\Contract\\Container\\Processor\\ParameterProcessor \$processor */{$eol}            foreach (\$this->get('%s') as \$processor) {{$eol}                if (\$processor->supports(\$value)) {{$eol}                    \$this->resolvingDynamicParameters[\$value] = true;{$eol}{$eol}                    return \$processor->process(\$value);{$eol}                }{$eol}            }", RegisterParameterProcessorsPipe::RUNTIME_PROCESSORS_KEY);
+        $arrayReduceCode = "{$eol}        \$value = \\array_reduce(\\explode('|', \$matches[2]), function (\$carry, string \$method) use (\$expression) {{$eol}            if (\$carry === null) {{$eol}                return null;{$eol}            }{$eol}{$eol}            \$value = \"{\$carry}|{\$method}\";{$eol}{$eol}            if (\\array_key_exists(\$value, \$this->resolvingDynamicParameters)) {{$eol}                throw new \\Viserio\\Contract\\Container\\Exception\\CircularParameterException(\$expression, \\array_keys(\$this->resolvingDynamicParameters));{$eol}            }{$eol}{$foreachCode}{$eol}        }, \$matches[1]);{$eol}";
 
-        return $code . "{$eol}{$eol}    /**{$eol}     * Process through value.{$eol}     *{$eol}     * @param int|string|float|bool \$parameter{$eol}     *{$eol}     * @return int|string|float|bool{$eol}     */{$eol}" . $this->generateMethod(
+        $code .= "{$eol}{$eol}    /**{$eol}     * Process through value.{$eol}     *{$eol}     * @param string \$expression{$eol}     *{$eol}     * @return int|string|float|bool{$eol}     */{$eol}";
+
+        return $code . $this->generateMethod(
             'processParameter',
-            "        if (\\is_string(\$parameter)) {{$eol}            \\preg_match('/(.*)?\\{(.+)\\|(.*)\\}/U', \$parameter, \$matches);{$eol}{$arrayReduceCode}{$eol}            if (isset(\$matches[1]) && \$matches[1] !== '') {{$eol}                \$parameter = \$matches[1].\$parameter;{$eol}            }{$eol}{$eol}            \$this->resolvingDynamicParameters = [];{$eol}        }{$eol}{$eol}        return \$parameter;",
+            "        if (\\preg_match('/\\{(.+)\\|(.*)\\}/U', \$expression, \$matches) === 0) {{$eol}            return \$expression;{$eol}        }{$eol}{$arrayReduceCode}{$eol}{$eol}        \$this->resolvingDynamicParameters = [];{$eol}{$eol}        if (\\is_string(\$value)) {{$eol}            return \\str_replace(\$matches[0], \$value, \$expression);{$eol}        }{$eol}{$eol}        return \$value;",
             null,
-            ['parameter' => null],
+            ['expression' => null],
             'private'
         );
     }
@@ -1152,8 +1184,8 @@ final class PhpDumper implements DumperContract
         $code .= "/**{$eol} * This class has been auto-generated by Viserio Container Component.{$eol} */{$eol}";
         $code .= "final class {$class} extends \\{$parentClass}{$eol}{";
 
-        if (\count($this->dynamicParameters) !== 0) {
-            $code .= "{$eol}    /**{$eol}    * The stack of concretions currently being built.{$eol}    *{$eol}     * @var array<string, bool>{$eol}     */{$eol}    private \$resolvingDynamicParameters = [];{$eol}";
+        if (\count($this->runtimeParameters) !== 0) {
+            $code .= "{$eol}    /**{$eol}    * The stack of concretions currently being built.{$eol}    *{$eol}     * @var array<string, bool>{$eol}     */{$eol}    private array \$resolvingDynamicParameters = [];{$eol}";
         }
 
         if ($this->asFiles || $this->targetDirRegex !== null) {
@@ -1181,6 +1213,7 @@ final class PhpDumper implements DumperContract
         }
 
         $code .= $this->addParameters();
+        $code .= $this->addDynamicParameters();
         $code .= $this->addMethodMap();
         $code .= $this->asFiles && ! $this->inlineFactories ? $this->addFileMap() : '';
         $code .= $this->addUninitializedServices();
@@ -1544,7 +1577,7 @@ final class PhpDumper implements DumperContract
      * @param bool                                                    $byConstructor
      */
     private function analyzeCircularReferences(
-        string $sourceId,
+        $sourceId,
         array $edges,
         array &$checkedNodes,
         array &$currentPath = [],
@@ -1704,95 +1737,6 @@ final class PhpDumper implements DumperContract
     }
 
     /**
-     * @param mixed $value
-     *
-     * @return string
-     */
-    private function export($value): string
-    {
-        if (\is_int($value) || \is_float($value)) {
-            return \var_export($value, true);
-        }
-
-        if ($value === false) {
-            return 'false';
-        }
-
-        if ($value === true) {
-            return 'true';
-        }
-
-        if ($value === null) {
-            return 'null';
-        }
-
-        if ($value === '') {
-            return "''";
-        }
-
-        if ($this->targetDirRegex !== null && \is_string($value) && \preg_match($this->targetDirRegex, $value, $matches, \PREG_OFFSET_CAPTURE)) {
-            $value = self::normalizePath($value);
-
-            $prefix = $matches[0][1] ? \var_export(\substr($value, 0, $matches[0][1]), true) . '.' : '';
-            $suffix = $matches[0][1] + \strlen($matches[0][0]);
-            $suffix = isset($value[$suffix]) ? '.' . \var_export(\substr($value, $suffix), true) : '';
-            $dirname = $this->asFiles ? '$this->containerDir' : '__DIR__';
-            $offset = 1 + $this->targetDirMaxMatches - \count($matches);
-
-            if (0 < $offset) {
-                $dirname = \sprintf('\dirname(__DIR__, %d)', $offset + (int) $this->asFiles);
-            } elseif ($this->asFiles) {
-                $dirname = "\$this->targetDir.''"; // empty string concatenation on purpose
-            }
-
-            if ($prefix || $suffix) {
-                return \sprintf('(%s%s%s)', $prefix, $dirname, $suffix);
-            }
-
-            return $dirname;
-        }
-
-        if (\is_string($value)) {
-            $class = \ltrim($value, '\\');
-
-            if ($class === 'stdClass') {
-                return '\\stdClass::class';
-            }
-
-            if (isset($value[0]) && \strtolower($value[0]) !== $value[0] && (\class_exists($class) || \interface_exists($class))) {
-                return \sprintf('%s::class', $this->generateLiteralClass($value));
-            }
-
-            $subIndent = '    ';
-            $value = \var_export($value, true);
-
-            if (\strpos($value, "\n") !== false || \strpos($value, "\r") !== false) {
-                $value = \strtr($value, [
-                    "\r\n" => "'.\"\\r\\n\"\n" . $subIndent . ".'",
-                    "\r" => "'.\"\\r\"\n" . $subIndent . ".'",
-                    "\n" => "'.\"\\n\"\n" . $subIndent . ".'",
-                ]);
-            }
-
-            if (\strpos($value, "\0") !== false) {
-                $value = \str_replace(['\' . "\0" . \'', '".\'\'."'], ['\'."\0".\'', ''], $value);
-            }
-
-            if (\strpos($value, "''.") !== false) {
-                $value = \str_replace("''.", '', $value);
-            }
-
-            if (\substr($value, -3) === ".''") {
-                $value = \rtrim(\substr($value, 0, -3));
-            }
-
-            return $value;
-        }
-
-        return \var_export($value, true);
-    }
-
-    /**
      * @param array  $options
      * @param array  $proxyClasses
      * @param string $code
@@ -1886,9 +1830,9 @@ final class PhpDumper implements DumperContract
             }
 
             return new \\Container{$hash}\\{$class}([
-                'container.build_hash' => '{$hash}',
-                'container.build_id' => '{$hashTime}',
-                'container.build_time' => {$time},
+                'viserio.container.build_hash' => '{$hash}',
+                'viserio.container.build_id' => '{$hashTime}',
+                'viserio.container.build_time' => {$time},
             ], __DIR__.'/Container{$hash}');{$eol}
             EOF;
 
@@ -1998,13 +1942,18 @@ final class PhpDumper implements DumperContract
      * Compile know values to executable php code for the compiled container.
      *
      * @param mixed $value
+     * @param bool  $interpolate
      *
      * @return string
      */
-    private function compileValue($value): string
+    private function compileValue($value, bool $interpolate = true): string
     {
         if (\is_array($value)) {
-            return $this->compileArray($value);
+            if ($interpolate && \count($value) !== 0 && false !== $param = \array_search($value, $this->parameters, true)) {
+                return $this->compileValue("{{$param}}");
+            }
+
+            return $this->compileArray($value, false, $interpolate);
         }
 
         if ($value instanceof ArgumentContract) {
@@ -2020,18 +1969,18 @@ final class PhpDumper implements DumperContract
                         $returnedType = \sprintf(': %s\%s', 1/* ReferenceDefinitionContract::EXCEPTION_ON_INVALID_REFERENCE */ >= $value->getBehavior() ? '' : '?', $type);
                     }
 
-                    $stringCode = $this->compileValue($value);
+                    $stringCode = $this->compileValue($value, $interpolate);
                     $eol = "\n";
 
                     return \sprintf("%sfunction ()%s {{$eol}            %s{$eol}        }", \is_int(\strpos($stringCode, '$this')) ? '' : 'static ', $returnedType, \sprintf('return %s;', $stringCode));
                 }
 
                 if ($value instanceof IteratorArgument) {
-                    return $this->compileIterator($value->getValue());
+                    return $this->compileIterator($value->getValue(), $interpolate);
                 }
 
                 if ($value instanceof ArrayArgument) {
-                    return $this->compileArray($value->getValue(), true);
+                    return $this->compileArray($value->getValue(), true, $interpolate);
                 }
             } finally {
                 [$this->definitionVariables, $this->referenceVariables] = $scope;
@@ -2062,9 +2011,9 @@ final class PhpDumper implements DumperContract
             }
 
             if ($this->referenceVariables !== null && isset($this->referenceVariables[$id])) {
-                $stringCode = $this->compileValue($this->referenceVariables[$id]);
+                $stringCode = $this->compileValue($this->referenceVariables[$id], $interpolate);
             } else {
-                $stringCode = $this->compileReferenceDefinition($value);
+                $stringCode = $this->compileReferenceDefinition($value, $interpolate);
             }
 
             $methodCalls = $value->getMethodCalls();
@@ -2074,7 +2023,7 @@ final class PhpDumper implements DumperContract
                 $parameters = [];
 
                 foreach ($methodCall[1] as $v) {
-                    $parameters[] = $this->definitionVariables !== null && \is_object($v) && $this->definitionVariables->contains($v) ? $this->compileValue($this->definitionVariables[$v]) : $this->compileValue($v);
+                    $parameters[] = $this->definitionVariables !== null && \is_object($v) && $this->definitionVariables->contains($v) ? $this->compileValue($this->definitionVariables[$v], $interpolate) : $this->compileValue($v, $interpolate);
                 }
 
                 $stringCode .= \sprintf('->%s(%s)', $methodCall[0], \implode(', ', $parameters));
@@ -2083,19 +2032,39 @@ final class PhpDumper implements DumperContract
             return $stringCode;
         }
 
-        if ($value instanceof ArrayDefinition) {
-            return $this->compileArray($value->getValue());
+        if ($value instanceof ParameterDefinition) {
+            return $this->compileParameter($value->getName());
         }
 
-        if ($value instanceof ParameterDefinition) {
-            return $this->export($value->getValue());
+        if (true === $interpolate && \is_string($value)) {
+            if ($this->isRuntimeParameterValue($value)) {
+                return \sprintf('$this->processParameter(%s)', $this->export($value));
+            }
+
+            if (\preg_match('/^{([^{]+)}$/', $value, $match)) {
+                // we do this to deal with non string values (Boolean, integer, ...)
+                // the preg_replace_callback converts them to strings
+                return $this->compileParameter($match[1]);
+            }
+
+            return \str_replace(
+                ['{{', '}}'],
+                ['{', '}'],
+                \preg_replace_callback(
+                    '/(?<!{)({)([^{]+)\1/',
+                    function ($match) {
+                        return "'." . $this->compileParameter($match[2]) . ".'";
+                    },
+                    $this->export($value)
+                )
+            );
         }
 
         if ($value instanceof ClosureDefinition) {
             $args = [];
 
             foreach ($value->getArguments() as $arg) {
-                $args[] = $this->definitionVariables !== null && \is_object($arg) && $this->definitionVariables->contains($arg) ? $this->compileValue($this->definitionVariables[$arg]) : $this->compileValue($arg);
+                $args[] = $this->definitionVariables !== null && \is_object($arg) && $this->definitionVariables->contains($arg) ? $this->compileValue($this->definitionVariables[$arg], $interpolate) : $this->compileValue($arg, $interpolate);
             }
 
             $executable = $value->isExecutable();
@@ -2113,24 +2082,24 @@ final class PhpDumper implements DumperContract
         }
 
         if ($value instanceof IteratorDefinition) {
-            return $this->compileIterator($value->getValue());
+            return $this->compileIterator($value->getArgument(), $interpolate);
         }
 
         if ($value instanceof FactoryDefinitionContract) {
-            return $this->compileFactoryDefinition($value);
+            return $this->compileFactoryDefinition($value, $interpolate);
         }
 
         if ($value instanceof ObjectDefinitionContract) {
             $className = $value->getClass();
 
             if (is_anonymous_class($className)) {
-                return $this->compileValue($value->getValue());
+                return $this->compileValue($value->getValue(), $interpolate);
             }
 
             $args = [];
 
             foreach ($value->getArguments() as $arg) {
-                $args[] = $this->definitionVariables !== null && \is_object($arg) && $this->definitionVariables->contains($arg) ? $this->compileValue($this->definitionVariables[$arg]) : $this->compileValue($arg);
+                $args[] = $this->definitionVariables !== null && \is_object($arg) && $this->definitionVariables->contains($arg) ? $this->compileValue($this->definitionVariables[$arg], $interpolate) : $this->compileValue($arg, $interpolate);
             }
 
             return \sprintf('new %s(%s)', $this->generateLiteralClass($className), \implode(', ', $args));
@@ -2197,10 +2166,10 @@ final class PhpDumper implements DumperContract
     /**
      * Compile object method calls to php code.
      *
-     * @param mixed       $definition
-     * @param string      $variableName
-     * @param null|string $sharedNonLazyId
-     * @param bool        $isProxy
+     * @param \Viserio\Contract\Container\Definition\Definition&\Viserio\Contract\Container\Definition\MethodCallsAwareDefinition $definition
+     * @param string                                                                                                              $variableName
+     * @param null|string                                                                                                         $sharedNonLazyId
+     * @param bool                                                                                                                $isProxy
      *
      *@throws \Viserio\Contract\Container\Exception\NotFoundException
      *
@@ -2250,7 +2219,9 @@ final class PhpDumper implements DumperContract
                     $variableName,
                     $call[0],
                     \implode(', ', $parameters)
-                )
+                ),
+                false,
+                $definition
             );
         }
 
@@ -2529,13 +2500,14 @@ final class PhpDumper implements DumperContract
     /**
      * Compile Iterator to a php string code.
      *
-     * @param array $values
+     * @param array|Traversable $values
+     * @param bool              $interpolate
      *
-     *@throws \Viserio\Contract\Container\Exception\NotFoundException
+     * @throws \Viserio\Contract\Container\Exception\NotFoundException
      *
      * @return string
      */
-    private function compileIterator($values): string
+    private function compileIterator($values, bool $interpolate = true): string
     {
         $operands = [0];
         $code = [];
@@ -2563,7 +2535,7 @@ final class PhpDumper implements DumperContract
                     throw new RuntimeException($message);
                 }
 
-                $v = $this->wrapServiceConditionals($v, \sprintf('        yield %s => %s;', $this->compileValue($k), $this->compileValue($v)), true);
+                $v = $this->wrapServiceConditionals($v, \sprintf('        yield %s => %s;', $this->export($k), $this->compileValue($v, $interpolate)), true);
 
                 foreach (\explode($eol, $v) as $value) {
                     if ($value) {
@@ -2586,16 +2558,17 @@ final class PhpDumper implements DumperContract
      * Compile Factroy Definition to a php string code.
      *
      * @param \Viserio\Contract\Container\Definition\FactoryDefinition $value
+     * @param bool                                                     $interpolate
      *
      * @return string
      */
-    private function compileFactoryDefinition(FactoryDefinitionContract $value): string
+    private function compileFactoryDefinition(FactoryDefinitionContract $value, bool $interpolate = true): string
     {
         $callable = $value->getValue();
         $compiledArguments = [];
 
         foreach ($value->getArguments() as $arg) {
-            $compiledArguments[] = $this->definitionVariables !== null && \is_object($arg) && $this->definitionVariables->contains($arg) ? $this->compileValue($this->definitionVariables[$arg]) : $this->compileValue($arg);
+            $compiledArguments[] = $this->definitionVariables !== null && \is_object($arg) && $this->definitionVariables->contains($arg) ? $this->compileValue($this->definitionVariables[$arg], $interpolate) : $this->compileValue($arg, $interpolate);
         }
 
         if ($callable[0] instanceof ReferenceDefinitionContract || $callable[0] instanceof ObjectDefinitionContract || $callable[0] instanceof FactoryDefinitionContract) {
@@ -2604,7 +2577,7 @@ final class PhpDumper implements DumperContract
 
             return \sprintf(
                 '%s->%s(%s)',
-                ($isNotReference ? '(' : '') . $this->compileValue($definition) . ($isNotReference ? ')' : ''),
+                ($isNotReference ? '(' : '') . $this->compileValue($definition, $interpolate) . ($isNotReference ? ')' : ''),
                 $callable[1],
                 \implode(', ', $compiledArguments)
             );
@@ -2613,7 +2586,7 @@ final class PhpDumper implements DumperContract
         $class = $callable[0];
 
         if (\is_object($class)) {
-            $class = $this->compileValue($callable[0]);
+            $class = $this->compileValue($callable[0], $interpolate);
         }
 
         // If the class is a string we can optimize away
@@ -2628,7 +2601,7 @@ final class PhpDumper implements DumperContract
         $compiledClassArguments = [];
 
         foreach ($value->getClassArguments() as $arg) {
-            $compiledClassArguments[] = $this->definitionVariables !== null && \is_object($arg) && $this->definitionVariables->contains($arg) ? $this->compileValue($this->definitionVariables[$arg]) : $this->compileValue($arg);
+            $compiledClassArguments[] = $this->definitionVariables !== null && \is_object($arg) && $this->definitionVariables->contains($arg) ? $this->compileValue($this->definitionVariables[$arg], $interpolate) : $this->compileValue($arg, $interpolate);
         }
 
         if ($callable[1] === '__invoke') {
@@ -2650,13 +2623,16 @@ final class PhpDumper implements DumperContract
      * Compile Reference Definition to a php string code.
      *
      * @param \Viserio\Contract\Container\Definition\ReferenceDefinition $reference
+     * @param bool                                                       $interpolate
      *
      * @throws \Viserio\Contract\Container\Exception\NotFoundException
      *
      * @return string
      */
-    private function compileReferenceDefinition(ReferenceDefinitionContract $reference): string
-    {
+    private function compileReferenceDefinition(
+        ReferenceDefinitionContract $reference,
+        bool $interpolate = true
+    ): string {
         $id = $reference->getName();
 
         while ($this->containerBuilder->hasAlias($id)) {
@@ -2676,7 +2652,7 @@ final class PhpDumper implements DumperContract
                     $this->uninitializedServices[$id] = true;
                 }
 
-                $code = \sprintf('$this->get(%s)', $this->compileValue($id));
+                $code = \sprintf('$this->get(%s)', $this->compileValue($id, $interpolate));
             } elseif ($uninitialized) {
                 $code = 'null';
 
@@ -2684,10 +2660,10 @@ final class PhpDumper implements DumperContract
                     return $code;
                 }
             } elseif ($this->isTrivialInstance($definition)) {
-                $code = $this->compileValue($definition);
+                $code = $this->compileValue($definition, $interpolate);
 
                 if (! isset($this->singleUsePrivateIds[$id]) && $definition->isShared()) {
-                    $code = \sprintf('$this->%s[%s] = %s', $definition->isPublic() ? 'services' : 'privates', $this->compileValue($id), $code);
+                    $code = \sprintf('$this->%s[%s] = %s', $definition->isPublic() ? 'services' : 'privates', $this->compileValue($id, $interpolate), $code);
                 }
 
                 $code = "({$code})";
@@ -2698,7 +2674,7 @@ final class PhpDumper implements DumperContract
             }
 
             if (! isset($this->singleUsePrivateIds[$id]) && $definition->isShared()) {
-                $code = \sprintf('($this->%s[%s] ?? %s)', $definition->isPublic() ? 'services' : 'privates', $this->compileValue($id), $code);
+                $code = \sprintf('($this->%s[%s] ?? %s)', $definition->isPublic() ? 'services' : 'privates', $this->compileValue($id, $interpolate), $code);
             }
 
             return $code;
@@ -2786,16 +2762,21 @@ final class PhpDumper implements DumperContract
     /**
      * Returns the service wrapped in a if condition.
      *
-     * @param mixed  $value
-     * @param string $code
-     * @param bool   $isGenerator
+     * @param mixed                                                                                                                                                   $value
+     * @param string                                                                                                                                                  $code
+     * @param bool                                                                                                                                                    $isGenerator
+     * @param null|ClosureDefinition|ConditionDefinition|DefinitionContract|FactoryDefinition|IteratorDefinition|ObjectDefinition|UndefinedDefinition $definition
      *
      *@throws \Viserio\Contract\Container\Exception\NotFoundException
      *
      * @return string
      */
-    private function wrapServiceConditionals($value, string $code, bool $isGenerator = false): string
-    {
+    private function wrapServiceConditionals(
+        $value,
+        string $code,
+        bool $isGenerator = false,
+        $definition = null
+    ): string {
         $condition = $this->getServiceConditionals($value);
 
         if ($condition === '') {
@@ -2808,7 +2789,7 @@ final class PhpDumper implements DumperContract
 
         $eol = "\n";
 
-        return $this->wrapInConditional($isGenerator ? "{$eol}{$code}{$eol}" : "{$eol}{$code}", $condition) . ($isGenerator ? '' : $eol);
+        return $this->wrapInConditional($isGenerator ? "{$eol}{$code}{$eol}" : "{$eol}{$code}", $condition, $definition) . ($isGenerator ? '' : $eol);
     }
 
     /**
@@ -2852,28 +2833,30 @@ final class PhpDumper implements DumperContract
      *
      * @param array $values
      * @param bool  $skip
-     * @param bool  $isParameter
+     * @param bool  $interpolate
      *
      * @return string
      */
-    private function compileArray(array $values, bool $skip = false, bool $isParameter = false): string
+    private function compileArray(array $values, bool $skip = false, bool $interpolate = true): string
     {
         $code = [];
 
         $this->arraySpaceCount++;
 
-        foreach ($values as $key => $v) {
-            if ($skip && ! $this->containerBuilder->has($v->getName())) {
+        foreach ($values as $key => $value) {
+            if ($skip && ! $this->containerBuilder->has($value->getName())) {
                 continue;
             }
 
-            if ($v instanceof stdClass) {
-                $v = '(object) ' . $this->compileValue((array) $v);
+            if (\is_array($value)) {
+                $value = $this->compileArray($value, $skip, $interpolate);
+            } elseif ($value instanceof stdClass) {
+                $value = '(object) ' . $this->compileArray((array) $value, $skip, $interpolate);
             } else {
-                $v = ! $isParameter ? $this->compileValue($v) : $this->export($v);
+                $value = $this->compileValue($value, $interpolate);
             }
 
-            $code[] = \sprintf(\str_repeat('    ', $this->arraySpaceCount) . '%s => %s,', $this->compileValue($key), $v);
+            $code[] = \sprintf(\str_repeat('    ', $this->arraySpaceCount) . '%s => %s,', $this->export($key), $value);
         }
 
         $this->arraySpaceCount--;
@@ -2888,13 +2871,38 @@ final class PhpDumper implements DumperContract
     }
 
     /**
-     * Compile parameters array to php code.
-     *
-     * @param array $values
+     * @param string $name
      *
      * @return string
      */
-    private function compileParameters(array $values): string
+    private function compileParameter(string $name): string
+    {
+        if ($this->containerBuilder->hasParameter($name)) {
+            $value = $this->containerBuilder->getParameter($name)->getValue();
+
+            $dumpedValue = $this->compileValue($value, false);
+
+            if (! $value || ! \is_array($value)) {
+                return $dumpedValue;
+            }
+
+            if (! \preg_match("/\\\$this->(targetDir\\.'')/", $dumpedValue)) {
+                return \sprintf('$this->parameters[%s]', $this->export($name));
+            }
+        }
+
+        return \sprintf('$this->getParameter(%s)', $this->export($name));
+    }
+
+    /**
+     * Compile parameters array to php code.
+     *
+     * @param array  $values
+     * @param string $path
+     *
+     * @return string
+     */
+    private function compileParameters(array $values, string $path = ''): string
     {
         $code = [];
         $this->arraySpaceCount++;
@@ -2905,7 +2913,15 @@ final class PhpDumper implements DumperContract
             }
 
             if (\is_array($value)) {
-                $value = $this->compileParameters($value);
+                $value = $this->compileParameters($value, $path . ' -> ' . $key);
+            } elseif ($value instanceof ArgumentContract) {
+                throw new InvalidArgumentException(\sprintf('You cannot dump a container with parameters that contain special arguments. "%s" found in "%s".', \get_class($value), $path . '->' . $key));
+            } elseif ($value instanceof Variable) {
+                throw new InvalidArgumentException(\sprintf('You cannot dump a container with parameters that contain variable references. Variable "%s" found in "%s".', $value, $path . '->' . $key));
+            } elseif ($value instanceof DefinitionContract) {
+                throw new InvalidArgumentException(\sprintf('You cannot dump a container with parameters that contain service definitions. Definition for "%s" found in "%s".', $value->getClass(), $path . '->' . $key));
+            } elseif ($value instanceof ReferenceDefinition) {
+                throw new InvalidArgumentException(\sprintf('You cannot dump a container with parameters that contain references to other services (reference to service "%s" found in "%s").', $value, $path . '->' . $key));
             } else {
                 $value = $this->export($value);
             }
@@ -2925,7 +2941,96 @@ final class PhpDumper implements DumperContract
     }
 
     /**
-     * @return array
+     * @param mixed $value
+     *
+     * @return string
+     */
+    private function export($value): string
+    {
+        if (\is_int($value) || \is_float($value)) {
+            return \var_export($value, true);
+        }
+
+        if ($value === false) {
+            return 'false';
+        }
+
+        if ($value === true) {
+            return 'true';
+        }
+
+        if ($value === null) {
+            return 'null';
+        }
+
+        if ($value === '') {
+            return "''";
+        }
+
+        if ($this->targetDirRegex !== null && \is_string($value) && \preg_match($this->targetDirRegex, $value, $matches, \PREG_OFFSET_CAPTURE)) {
+            $value = self::normalizePath($value);
+
+            $prefix = $matches[0][1] ? \var_export(\substr($value, 0, $matches[0][1]), true) . '.' : '';
+            $suffix = $matches[0][1] + \strlen($matches[0][0]);
+            $suffix = isset($value[$suffix]) ? '.' . \var_export(\substr($value, $suffix), true) : '';
+            $dirname = $this->asFiles ? '$this->containerDir' : '__DIR__';
+            $offset = 1 + $this->targetDirMaxMatches - \count($matches);
+
+            if (0 < $offset) {
+                $dirname = \sprintf('\dirname(__DIR__, %d)', $offset + (int) $this->asFiles);
+            } elseif ($this->asFiles) {
+                $dirname = "\$this->targetDir.''"; // empty string concatenation on purpose
+            }
+
+            if ($prefix || $suffix) {
+                return \sprintf('(%s%s%s)', $prefix, $dirname, $suffix);
+            }
+
+            return $dirname;
+        }
+
+        if (\is_string($value)) {
+            $class = \ltrim($value, '\\');
+
+            if ($class === 'stdClass') {
+                return '\\stdClass::class';
+            }
+
+            if (isset($value[0]) && \strtolower($value[0]) !== $value[0] && (\class_exists($class) || \interface_exists($class))) {
+                return \sprintf('%s::class', $this->generateLiteralClass($value));
+            }
+
+            $subIndent = '    ';
+            $value = \var_export($value, true);
+
+            if (\strpos($value, "\n") !== false || \strpos($value, "\r") !== false) {
+                $value = \strtr($value, [
+                    "\r\n" => "'.\"\\r\\n\"\n" . $subIndent . ".'",
+                    "\r" => "'.\"\\r\"\n" . $subIndent . ".'",
+                    "\n" => "'.\"\\n\"\n" . $subIndent . ".'",
+                ]);
+            }
+
+            if (\strpos($value, "\0") !== false) {
+                $value = \str_replace(['\' . "\0" . \'', '".\'\'."'], ['\'."\0".\'', ''], $value);
+            }
+
+            if (\strpos($value, "''.") !== false) {
+                $value = \str_replace("''.", '', $value);
+            }
+
+            if (\substr($value, -3) === ".''") {
+                $value = \rtrim(\substr($value, 0, -3));
+            }
+
+            return $value;
+        }
+
+        return \var_export($value, true);
+    }
+
+    /**
+     * @return array<string, bool>
      */
     private function getPreparedRemovedIds(): array
     {
@@ -2947,12 +3052,13 @@ final class PhpDumper implements DumperContract
     /**
      * Wrap a code in a if condition.
      *
-     * @param string $code
-     * @param string $condition
+     * @param string                                                                                                                                                  $code
+     * @param string                                                                                                                                                  $condition
+     * @param null|ClosureDefinition|ConditionDefinition|DefinitionContract|FactoryDefinition|IteratorDefinition|ObjectDefinition|UndefinedDefinition $definition
      *
      * @return string
      */
-    private function wrapInConditional(string $code, string $condition): string
+    private function wrapInConditional(string $code, string $condition, $definition = null): string
     {
         $eol = "\n";
 
@@ -2961,7 +3067,7 @@ final class PhpDumper implements DumperContract
             return $line ? '    ' . $line : $line;
         }, \explode($eol, $code)));
 
-        $asFile = $this->asFiles && ! $this->inlineFactories;
+        $asFile = $this->asFiles && ! $this->inlineFactories && ($definition !== null && ! $this->isPreload($definition));
         $beforeSpace = '';
 
         if ($this->wrapConditionCalled === false) {
@@ -3039,7 +3145,7 @@ final class PhpDumper implements DumperContract
             }
 
             if ($conditionCode !== '') {
-                $code .= $this->wrapInConditional($eol . $conditionCode, $condition) . $eol;
+                $code .= $this->wrapInConditional($eol . $conditionCode, $condition, $tmpDefinition) . $eol;
             }
 
             $tmpDefinition = null; // reset
@@ -3080,6 +3186,10 @@ final class PhpDumper implements DumperContract
 
                 if (\is_array($arg) && 3 >= \count($arg)) {
                     foreach ($arg as $k => $v) {
+                        if ($this->compileValue($k) !== $this->compileValue($k, false)) {
+                            return false;
+                        }
+
                         if (! $v || $v instanceof ParameterDefinition) {
                             continue;
                         }
@@ -3088,13 +3198,13 @@ final class PhpDumper implements DumperContract
                             continue;
                         }
 
-                        if (! \is_scalar($v)) {
+                        if (! \is_scalar($v) || $this->compileValue($v) !== $this->compileValue($v, false)) {
                             return false;
                         }
                     }
                 } elseif ($arg instanceof ReferenceDefinitionContract && $this->containerBuilder->has($id = $arg->getName()) && $this->containerBuilder->findDefinition($id)->isSynthetic()) {
                     continue;
-                } elseif (! \is_scalar($arg)) {
+                } elseif (! \is_scalar($arg) || $this->compileValue($arg) !== $this->compileValue($arg, false)) {
                     return false;
                 }
             }
@@ -3281,5 +3391,59 @@ Preloader::preload($classes);
 EOF;
 
         return $code;
+    }
+
+    /**
+     * Process parameters to find runtime parameters.
+     *
+     * @param mixed      $value
+     * @param null|array $runtimeParameters
+     * @param null|array $dynamicParameterMapper
+     * @param bool       $isDynamic
+     *
+     * @return void
+     */
+    private function processRuntimeParameters(
+        $value,
+        ?array &$runtimeParameters,
+        ?array &$dynamicParameterMapper,
+        bool &$isDynamic
+    ): void {
+        foreach ($value as $k => $v) {
+            if (\is_array($v)) {
+                if (\count($v) === 0) {
+                    $dynamicParameterMapper[$k] = $v;
+
+                    continue;
+                }
+
+                $this->processRuntimeParameters($v, $runtimeParameters[$k], $dynamicParameterMapper[$k], $isDynamic);
+
+                if ($runtimeParameters[$k] === null) {
+                    unset($runtimeParameters[$k]);
+                }
+
+                if ($dynamicParameterMapper[$k] === null) {
+                    unset($dynamicParameterMapper[$k]);
+                }
+            } elseif ($this->isRuntimeParameterValue($v)) {
+                $isDynamic = true;
+                $runtimeParameters[$k] = $v;
+            } elseif ($isDynamic) {
+                $dynamicParameterMapper[$k] = $v;
+            }
+        }
+    }
+
+    /**
+     * Check if the definition is a preload one.
+     *
+     * @param mixed $definition
+     *
+     * @return bool
+     */
+    private function isPreload($definition): bool
+    {
+        return self::$preloadCache[$definition->getName()] ?? self::$preloadCache[$definition->getName()] = ($this->preloadTag && $definition->hasTag($this->preloadTag) && ! $definition->isDeprecated());
     }
 }

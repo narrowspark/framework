@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Container\Pipeline;
 
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Container\Definition\ArrayDefinition;
 use Viserio\Component\Container\Definition\IteratorDefinition;
 use Viserio\Contract\Container\Argument\Argument as ArgumentContract;
 use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
@@ -84,7 +83,7 @@ abstract class AbstractRecursivePipe implements PipeContract
             return $value;
         }
 
-        if ($value instanceof ArrayDefinition || $value instanceof ArgumentContract) {
+        if ($value instanceof ArgumentContract) {
             $value->setValue($this->processValue($value->getValue()));
 
             return $value;

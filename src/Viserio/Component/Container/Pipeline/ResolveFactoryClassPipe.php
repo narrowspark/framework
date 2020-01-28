@@ -26,6 +26,7 @@ class ResolveFactoryClassPipe extends AbstractRecursivePipe
     protected function processValue($value, $isRoot = false)
     {
         if ($value instanceof FactoryDefinitionContract) {
+            var_dump($value);
             [$class, $method] = $value->getValue();
 
             if (\is_object($class)) {

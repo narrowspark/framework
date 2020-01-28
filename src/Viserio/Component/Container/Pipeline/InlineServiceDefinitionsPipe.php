@@ -154,16 +154,16 @@ final class InlineServiceDefinitionsPipe extends AbstractRecursivePipe
             return $value;
         }
 
+        if (! $value instanceof ReferenceDefinitionContract) {
+            return parent::processValue($value, $isRoot);
+        }
+
         if ($value instanceof DefinitionContract && \count($this->cloningIds) !== 0) {
             if ($value->isShared()) {
                 return $value;
             }
 
             $value = clone $value;
-        }
-
-        if (! $value instanceof ReferenceDefinitionContract) {
-            return parent::processValue($value, $isRoot);
         }
 
         if (! $this->containerBuilder->hasDefinition($id = $value->getName())) {

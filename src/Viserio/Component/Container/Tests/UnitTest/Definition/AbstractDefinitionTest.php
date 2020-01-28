@@ -15,7 +15,6 @@ namespace Viserio\Component\Container\Tests\UnitTest\Definition;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Container\Argument\ConditionArgument;
-use Viserio\Component\Container\Definition\ArrayDefinition;
 use Viserio\Component\Container\Definition\ClosureDefinition;
 use Viserio\Component\Container\Definition\FactoryDefinition;
 use Viserio\Component\Container\Definition\IteratorDefinition;
@@ -32,7 +31,7 @@ abstract class AbstractDefinitionTest extends MockeryTestCase
 {
     use ChangesTestTrait;
 
-    /** @var ArrayDefinition|ClosureDefinition|FactoryDefinition|IteratorDefinition|ObjectDefinition|ParameterDefinition|UndefinedDefinition */
+    /** @var ClosureDefinition|FactoryDefinition|IteratorDefinition|ObjectDefinition|ParameterDefinition|UndefinedDefinition */
     protected $definition;
 
     /** @var mixed */
@@ -54,7 +53,7 @@ abstract class AbstractDefinitionTest extends MockeryTestCase
     }
 
     /**
-     * @return ArrayDefinition|ClosureDefinition|FactoryDefinition|IteratorDefinition|ObjectDefinition|ParameterDefinition|UndefinedDefinition
+     * @return ClosureDefinition|FactoryDefinition|IteratorDefinition|ObjectDefinition|ParameterDefinition|UndefinedDefinition
      */
     abstract protected function getDefinition();
 

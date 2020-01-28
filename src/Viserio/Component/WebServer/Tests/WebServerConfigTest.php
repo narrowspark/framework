@@ -17,7 +17,7 @@ use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\WebServer\WebServerConfig;
-use Viserio\Contract\OptionsResolver\Exception\InvalidArgumentException as OptionsResolverInvalidArgumentException;
+use Viserio\Contract\Config\Exception\InvalidArgumentException as OptionsResolverInvalidArgumentException;
 use Viserio\Contract\WebServer\Exception\InvalidArgumentException;
 
 /**

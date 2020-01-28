@@ -27,9 +27,6 @@ RUN apt-get update && \
     apt-get clean -y && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ARG INSTALL_XDEBUG
-ARG XDEBUG_VERSION
-
 RUN pecl install -f libsodium && \
     pecl install redis && \
     pecl install pcov && \
@@ -70,12 +67,14 @@ RUN { \
         echo 'opcache.enable_cli=1'; \
     } > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
-
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
 RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer && \
     composer global require phploc/phploc && \
     composer global require ergebnis/composer-normalize
+
+ARG INSTALL_XDEBUG
+ARG XDEBUG_VERSION
 
 RUN if [ ${INSTALL_XDEBUG} = true ]; then pecl install "xdebug-${XDEBUG_VERSION}" ;fi
 

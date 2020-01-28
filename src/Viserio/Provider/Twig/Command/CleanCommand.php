@@ -17,10 +17,10 @@ use ArrayAccess;
 use Symfony\Component\Filesystem\Filesystem;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
+use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 
-class CleanCommand extends AbstractCommand implements RequiresComponentConfigContract, RequiresMandatoryOptionContract
+class CleanCommand extends AbstractCommand implements RequiresComponentConfigContract, RequiresMandatoryConfigContract
 {
     use OptionsResolverTrait;
 
@@ -58,7 +58,7 @@ class CleanCommand extends AbstractCommand implements RequiresComponentConfigCon
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): array
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'view'];
     }
@@ -66,7 +66,7 @@ class CleanCommand extends AbstractCommand implements RequiresComponentConfigCon
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): array
+    public static function getMandatoryOptions(): iterable
     {
         return [
             'engines' => [

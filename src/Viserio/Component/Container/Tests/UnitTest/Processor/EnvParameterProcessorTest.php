@@ -15,6 +15,7 @@ namespace Viserio\Component\Container\Tests\Processor;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Container\Processor\EnvParameterProcessor;
+use Viserio\Contract\Container\Exception\InvalidArgumentException;
 
 /**
  * @internal
@@ -38,33 +39,6 @@ final class EnvParameterProcessorTest extends TestCase
         $this->processor = new EnvParameterProcessor();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function tearDown(): void
-    {
-        \putenv('LOCAL=');
-        \putenv('TEST_TRUE=');
-        \putenv('TEST_FALSE=');
-        \putenv('TEST_NULL=');
-        \putenv('TEST_NUM=');
-        \putenv('TEST_EMPTY=');
-        \putenv('TEST_NORMAL=');
-        \putenv('TEST_QUOTES=');
-        \putenv('TEST_BASE64=');
-        \putenv('foo=');
-        \putenv('LOCAL');
-        \putenv('TEST_TRUE');
-        \putenv('TEST_FALSE');
-        \putenv('TEST_NULL');
-        \putenv('TEST_NUM');
-        \putenv('TEST_EMPTY');
-        \putenv('TEST_NORMAL');
-        \putenv('TEST_QUOTES');
-        \putenv('TEST_BASE64');
-        \putenv('foo');
-    }
-
     public function testSupports(): void
     {
         self::assertTrue($this->processor->supports('{test|env}'));
@@ -76,112 +50,62 @@ final class EnvParameterProcessorTest extends TestCase
         self::assertSame(['env' => 'bool|int|float|string|array'], EnvParameterProcessor::getProvidedTypes());
     }
 
-    public function testProcess(): void
+    /**
+     * @dataProvider provideProcessCases
+     *
+     * @param string $expected
+     * @param string $key
+     *
+     * @return void
+     */
+    public function testProcess(string $expected, string $key): void
     {
-        \putenv('LOCAL=local');
-        \putenv('foo=bar');
-        \putenv('TEST_NORMAL=teststring');
+        $types = [
+            '_ENV',
+            '_SERVER',
+            'putenv',
+        ];
 
-        self::assertSame('local', $this->processor->process('{LOCAL|env}'));
-        self::assertEquals('bar', $this->processor->process('{foo|env}'));
-        self::assertSame('teststring', $this->processor->process('{TEST_NORMAL|env}'));
+        foreach ($types as $type) {
+            if ($type === '_ENV') {
+                $_ENV[$key] = $expected;
+            } elseif ($type === '_SERVER') {
+                $_SERVER[$key] = $expected;
+            } elseif ($type === 'putenv') {
+                \putenv(\sprintf('%s=%s', $key, $expected));
+            }
 
-        $this->repository->set('foo', '{LOCAL|env}');
+            self::assertSame($expected, $this->processor->process($key . '|env'));
 
-        self::assertSame('local', $this->repository->get('foo'));
+            if ($type === '_ENV') {
+                unset($_ENV[$key]);
+            } elseif ($type === '_SERVER') {
+                unset($_ENV[$key]);
+            } elseif ($type === 'putenv') {
+                \putenv(\sprintf('%s=', $key));
+                \putenv($key);
+            }
+        }
     }
 
-    public function testEnvWithQuotes(): void
+    public static function provideProcessCases(): iterable
     {
-        \putenv('foo="bar"');
-        \putenv('TEST_QUOTES="teststring"');
+        yield ['local', 'LOCAL'];
 
-        self::assertEquals('bar', $this->processor->process('{env:foo}'));
-        self::assertSame('teststring', $this->processor->process('{env:TEST_QUOTES}'));
+        yield ['bar', 'bar'];
+
+        yield ['teststring', 'TEST_NORMAL'];
+
+        yield ['foo', '"bar"'];
+
+        yield ['TEST_QUOTES', '"teststring"'];
     }
 
-    public function testEnvTrue(): void
+    public function testProcessToThrowException(): void
     {
-        \putenv('foo=true');
-        \putenv('TEST_TRUE=true');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('No env value found for [NOT_SET|env].');
 
-        self::assertTrue($this->processor->process('{env:TEST_TRUE}'));
-
-        \putenv('foo=(true)');
-        \putenv('TEST_TRUE=(true)');
-
-        self::assertTrue($this->processor->process('{env:TEST_TRUE}'));
-    }
-
-    public function testEnvFalse(): void
-    {
-        \putenv('foo=false');
-        \putenv('TEST_FALSE=false');
-
-        self::assertFalse($this->processor->process('{env:TEST_FALSE}'));
-
-        \putenv('foo=(false)');
-        \putenv('TEST_FALSE=(false)');
-
-        self::assertFalse($this->processor->process('{env:TEST_FALSE}'));
-    }
-
-    public function testEnvEmpty(): void
-    {
-        \putenv('foo=');
-        \putenv('TEST_EMPTY=');
-
-        self::assertEquals('', $this->processor->process('{env:foo}'));
-        self::assertEquals('', $this->processor->process('{env:TEST_EMPTY}'));
-
-        \putenv('foo=empty');
-        \putenv('TEST_EMPTY=empty');
-
-        self::assertEquals('', $this->processor->process('{env:foo}'));
-        self::assertEquals('', $this->processor->process('{env:TEST_EMPTY}'));
-
-        \putenv('foo=(empty)');
-        \putenv('TEST_EMPTY=(empty)');
-
-        self::assertEquals('', $this->processor->process('{env:foo}'));
-        self::assertEquals('', $this->processor->process('{env:TEST_EMPTY}'));
-    }
-
-    public function testEnvNull(): void
-    {
-        \putenv('foo=null');
-        \putenv('TEST_NULL=null');
-
-        self::assertEquals('', $this->processor->process('{env:foo}'));
-        self::assertEquals('', $this->processor->process('{env:TEST_NULL}'));
-
-        \putenv('foo=(null)');
-        \putenv('TEST_NULL=(null)');
-
-        self::assertEquals('', $this->processor->process('{env:foo}'));
-        self::assertEquals('', $this->processor->process('{env:TEST_NULL}'));
-    }
-
-    public function testEnvWithNumber(): void
-    {
-        \putenv('foo=25');
-        \putenv('TEST_NUM=25');
-
-        self::assertEquals('25', $this->processor->process('{env:foo}'));
-        self::assertSame(25, $this->processor->process('{env:TEST_NUM}'));
-    }
-
-    public function testEnvWithBase64(): void
-    {
-        \putenv('foo=base64:dGVzdA==');
-        \putenv('TEST_BASE64=base64:dGVzdA==');
-
-        self::assertEquals('test', $this->processor->process('{env:foo}'));
-        self::assertSame('test', $this->processor->process('{env:TEST_BASE64}'));
-    }
-
-    public function testWithoutSetEnv(): void
-    {
-        self::assertSame('NOT_SET', $this->processor->process('{env:NOT_SET}'));
+        $this->processor->process('NOT_SET|env');
     }
 }

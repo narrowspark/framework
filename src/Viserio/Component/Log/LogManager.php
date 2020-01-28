@@ -30,10 +30,10 @@ use Viserio\Contract\Events\Traits\EventManagerAwareTrait;
 use Viserio\Contract\Log\Exception\InvalidArgumentException;
 use Viserio\Contract\Log\Exception\RuntimeException;
 use Viserio\Contract\Manager\Exception\InvalidArgumentException as ManagerInvalidArgumentException;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
+use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
 
 class LogManager extends AbstractManager implements LoggerInterface,
-    ProvidesDefaultOptionContract
+    ProvidesDefaultConfigContract
 {
     use LoggerTrait;
     use ParseLevelTrait;
@@ -54,7 +54,7 @@ class LogManager extends AbstractManager implements LoggerInterface,
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): array
+    public static function getDefaultConfig(): iterable
     {
         return [
             'default' => 'single',
@@ -95,7 +95,7 @@ class LogManager extends AbstractManager implements LoggerInterface,
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): array
+    public static function getMandatoryOptions(): iterable
     {
         return [
             'path',

@@ -32,9 +32,9 @@
         "paragonie/halite": "^4.6.0",
         "symfony/polyfill-mbstring": "^1.8.0",
         "viserio/cache-contract": "^1.0@dev",
+        "viserio/config": "^1.0@dev",
         "viserio/cookie-contract": "^1.0@dev",
         "viserio/manager": "^1.0@dev",
-        "viserio/options-resolver": "^1.0@dev",
         "viserio/session-contract": "^1.0@dev",
         "viserio/support": "^1.0@dev"
     },

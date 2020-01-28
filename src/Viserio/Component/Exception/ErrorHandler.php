@@ -35,12 +35,12 @@ use Viserio\Component\Exception\Transformer\UndefinedMethodFatalErrorTransformer
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\Exception\Handler as HandlerContract;
 use Viserio\Contract\Exception\Transformer as TransformerContract;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
-use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
+use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 
 class ErrorHandler implements HandlerContract,
     LoggerAwareInterface,
-    ProvidesDefaultOptionContract,
+    ProvidesDefaultConfigContract,
     RequiresComponentConfigContract
 {
     use OptionsResolverTrait;
@@ -152,7 +152,7 @@ class ErrorHandler implements HandlerContract,
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): array
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'exception'];
     }
@@ -160,7 +160,7 @@ class ErrorHandler implements HandlerContract,
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): array
+    public static function getDefaultConfig(): iterable
     {
         return [
             // A list of the exception types that should not be reported.

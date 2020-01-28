@@ -18,7 +18,7 @@
 'Component: Log': ["src/Viserio/Component/Log"]
 'Component: Mail': ["src/Viserio/Component/Mail"]
 'Component: Manager': ["src/Viserio/Component/Manager"]
-'Component: Options Resolver': ["src/Viserio/Component/OptionsResolver"]
+'Component: Options Resolver': ["src/Viserio/Component/Config"]
 'Component: Pagination': ["src/Viserio/Component/Pagination"]
 'Component: Parser': ["src/Viserio/Component/Parser"]
 'Component: Path': ["src/Viserio/Component/Path"]

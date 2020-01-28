@@ -18,7 +18,7 @@ interface IteratorDefinition extends Definition
     /**
      * Returns the argument.
      *
-     * @return array|null
+     * @return null|array
      */
     public function getArgument(): ?array;
 

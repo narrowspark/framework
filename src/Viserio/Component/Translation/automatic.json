@@ -9,7 +9,7 @@
                 "testing"
             ]
         },
-        "options": {
+        "config": {
             "global": {
                 "viserio": {
                     "translation": {

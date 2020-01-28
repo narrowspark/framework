@@ -34,11 +34,11 @@
         "psr/container": "^1.0.0",
         "symfony/polyfill-ctype": "^1.8.0",
         "symfony/polyfill-mbstring": "^1.8.0",
+        "viserio/config": "^1.0@dev",
         "viserio/console": "^1.0@dev",
         "viserio/container-contract": "^1.0@dev",
         "viserio/exception-contract": "^1.0@dev",
         "viserio/foundation-contract": "^1.0@dev",
-        "viserio/options-resolver": "^1.0@dev",
         "viserio/support": "^1.0@dev"
     },
     "provide": {

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Container\Pipeline;
 
 use Psr\Container\ContainerInterface;
+use Viserio\Component\Container\Definition\IteratorDefinition;
 use Viserio\Contract\Container\Argument\Argument as ArgumentContract;
 use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\Definition\AliasDefinition as AliasDefinitionContract;
@@ -166,6 +167,10 @@ final class AnalyzeServiceDependenciesPipe extends AbstractRecursivePipe
             );
 
             return $value;
+        }
+
+        if ($value instanceof IteratorDefinition) {
+            return parent::processValue($value->getArgument(), $isRoot);
         }
 
         if (! $value instanceof DefinitionContract) {

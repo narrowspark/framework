@@ -48,17 +48,17 @@ interface ServiceReferenceGraph extends ResettableContract
     /**
      * Connects 2 nodes together in the Graph.
      *
-     * @param null|string $sourceId
-     * @param mixed       $sourceValue
-     * @param null|string $destId
-     * @param null|mixed  $destValue
-     * @param null|mixed  $reference
-     * @param bool        $lazy
-     * @param bool        $weak
-     * @param bool        $byConstructor
+     * @param null|int|string $sourceId
+     * @param mixed           $sourceValue
+     * @param null|string     $destId
+     * @param null|mixed      $destValue
+     * @param null|mixed      $reference
+     * @param bool            $lazy
+     * @param bool            $weak
+     * @param bool            $byConstructor
      */
     public function connect(
-        ?string $sourceId,
+        $sourceId,
         $sourceValue,
         ?string $destId,
         $destValue = null,
