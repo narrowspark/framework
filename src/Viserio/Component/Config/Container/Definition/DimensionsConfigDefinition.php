@@ -11,19 +11,19 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\OptionsResolver\Container\Definition;
+namespace Viserio\Component\Config\Container\Definition;
 
-use Viserio\Component\OptionsResolver\Container\Definition\Traits\DimensionsTrait;
+use Viserio\Component\Config\Container\Definition\Traits\DimensionsTrait;
 use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 
-final class DimensionsOptionDefinition extends AbstractOptionDefinition implements RequiresComponentConfigContract
+final class DimensionsConfigDefinition extends AbstractConfigDefinition implements RequiresComponentConfigContract
 {
     use DimensionsTrait;
 
     protected static string $interfaceCheckName = RequiresComponentConfigContract::class;
 
     /**
-     * Create a new DimensionsOptionDefinition instance.
+     * Create a new DimensionsConfigDefinition instance.
      *
      * @param string      $configClass
      * @param null|string $configId

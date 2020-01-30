@@ -11,18 +11,15 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\OptionsResolver\Container\Definition;
+namespace Viserio\Component\Config\Container\Definition;
 
 use ArrayAccess;
 use ReflectionClass;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\Config\Exception\InvalidArgumentException;
 use Viserio\Contract\Config\RequiresConfig as RequiresConfigContract;
 
-abstract class AbstractOptionDefinition
+abstract class AbstractConfigDefinition
 {
-    use OptionsResolverTrait;
-
     /**
      * Name of the options aware class.
      *
@@ -70,9 +67,6 @@ abstract class AbstractOptionDefinition
         $this->class = $configClass;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected static function getConfigClass(): string
     {
         return self::$configClass;

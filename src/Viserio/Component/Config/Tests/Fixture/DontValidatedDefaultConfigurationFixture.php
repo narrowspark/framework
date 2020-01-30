@@ -11,7 +11,7 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\OptionsResolver\Tests\Fixture;
+namespace Viserio\Component\Config\Tests\Fixture;
 
 use Exception;
 use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
@@ -45,7 +45,7 @@ class DontValidatedDefaultConfigurationFixture implements ProvidesDefaultConfigC
     /**
      * {@inheritdoc}.
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryConfig(): iterable
     {
         return ['maxLength'];
     }

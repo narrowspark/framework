@@ -15,13 +15,13 @@ namespace Viserio\Component\Cookie\Container\Provider;
 
 use Viserio\Component\Cookie\CookieJar;
 use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
+use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
+use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 use Viserio\Contract\Container\ServiceProvider\AliasServiceProvider as AliasServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
 use Viserio\Contract\Cookie\QueueingFactory as JarContract;
-use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
-use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 
 class CookieServiceProvider implements AliasServiceProviderContract,
     ProvidesDefaultConfigContract,
@@ -67,7 +67,7 @@ class CookieServiceProvider implements AliasServiceProviderContract,
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryConfig(): iterable
     {
         return ['path', 'domain'];
     }

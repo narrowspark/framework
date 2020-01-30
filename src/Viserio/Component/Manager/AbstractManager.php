@@ -16,10 +16,10 @@ namespace Viserio\Component\Manager;
 use ArrayAccess;
 use Viserio\Component\Manager\Traits\ManagerTrait;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Contract\Container\Traits\ContainerAwareTrait;
-use Viserio\Contract\Manager\Manager as ManagerContract;
 use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
+use Viserio\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Contract\Manager\Manager as ManagerContract;
 
 abstract class AbstractManager implements ManagerContract,
     RequiresComponentConfigContract,

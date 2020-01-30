@@ -11,10 +11,10 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\OptionsResolver\Tests\Fixture;
+namespace Viserio\Component\Config\Tests\Fixture;
 
 use ArrayAccess;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
+use Viserio\Component\Config\Traits\OptionsResolverTrait;
 
 class OptionsResolver
 {

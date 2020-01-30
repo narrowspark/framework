@@ -66,7 +66,7 @@ class CleanCommand extends AbstractCommand implements RequiresComponentConfigCon
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryConfig(): iterable
     {
         return [
             'engines' => [

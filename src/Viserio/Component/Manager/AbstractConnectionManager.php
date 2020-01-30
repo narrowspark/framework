@@ -16,10 +16,10 @@ namespace Viserio\Component\Manager;
 use ArrayAccess;
 use Viserio\Component\Manager\Traits\ManagerTrait;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Contract\Container\Traits\ContainerAwareTrait;
-use Viserio\Contract\Manager\ConnectionManager as ConnectionManagerContract;
 use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
+use Viserio\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Contract\Manager\ConnectionManager as ConnectionManagerContract;
 
 abstract class AbstractConnectionManager implements ConnectionManagerContract,
     RequiresComponentConfigContract,

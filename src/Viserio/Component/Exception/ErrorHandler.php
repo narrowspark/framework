@@ -33,10 +33,10 @@ use Viserio\Component\Exception\Transformer\ClassNotFoundFatalErrorTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedFunctionFatalErrorTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedMethodFatalErrorTransformer;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Contract\Exception\Handler as HandlerContract;
-use Viserio\Contract\Exception\Transformer as TransformerContract;
 use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
 use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Contract\Exception\Handler as HandlerContract;
+use Viserio\Contract\Exception\Transformer as TransformerContract;
 
 class ErrorHandler implements HandlerContract,
     LoggerAwareInterface,

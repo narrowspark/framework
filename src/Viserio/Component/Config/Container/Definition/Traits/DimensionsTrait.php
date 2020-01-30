@@ -11,7 +11,7 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\OptionsResolver\Container\Definition\Traits;
+namespace Viserio\Component\Config\Container\Definition\Traits;
 
 trait DimensionsTrait
 {

@@ -11,11 +11,11 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\OptionsResolver\Tests\Container\Definition;
+namespace Viserio\Component\Config\Tests\Container\Definition;
 
 use stdClass;
-use Viserio\Component\OptionsResolver\Container\Definition\DimensionsOptionDefinition;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentConfiguration;
+use Viserio\Component\Config\Container\Definition\DimensionsConfigDefinition;
+use Viserio\Component\Config\Tests\Fixture\ConnectionComponentConfiguration;
 use Viserio\Contract\Config\Exception\InvalidArgumentException;
 
 /**
@@ -30,7 +30,7 @@ final class DimensionsOptionDefinitionTest extends AbstractOptionDefinitionTest
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Provided class [stdClass] didn\'t implement the [Viserio\Contract\Config\RequiresComponentConfig] interface or one of the parent interfaces.');
 
-        new DimensionsOptionDefinition(stdClass::class);
+        new DimensionsConfigDefinition(stdClass::class);
     }
 
     public function testGetClassDimensions(): void
@@ -48,7 +48,7 @@ final class DimensionsOptionDefinitionTest extends AbstractOptionDefinitionTest
      */
     protected function getObject(): object
     {
-        return new DimensionsOptionDefinition($this->getOptionClassName());
+        return new DimensionsConfigDefinition($this->getOptionClassName());
     }
 
     /**

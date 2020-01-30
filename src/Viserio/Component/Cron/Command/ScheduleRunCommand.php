@@ -46,7 +46,7 @@ class ScheduleRunCommand extends AbstractCommand implements RequiresComponentCon
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryConfig(): iterable
     {
         return [
             'env',

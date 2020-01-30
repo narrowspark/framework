@@ -11,7 +11,7 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\OptionsResolver\Tests\Fixture;
+namespace Viserio\Component\Config\Tests\Fixture;
 
 use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
@@ -26,7 +26,7 @@ class ConnectionComponentMandatoryConfiguration implements RequiresComponentConf
         return ['doctrine', 'connection'];
     }
 
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryConfig(): iterable
     {
         return ['orm_default'];
     }

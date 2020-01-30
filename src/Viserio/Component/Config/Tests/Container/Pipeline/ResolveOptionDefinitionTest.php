@@ -11,17 +11,17 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\OptionsResolver\Tests\Container\Pipeline;
+namespace Viserio\Component\Config\Tests\Container\Pipeline;
 
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use Viserio\Component\Config\Container\Definition\ConfigDefinition;
+use Viserio\Component\Config\Container\Definition\DimensionsConfigDefinition;
+use Viserio\Component\Config\Container\Pipeline\ResolveConfigDefinitionPipe;
+use Viserio\Component\Config\Tests\Fixture\ConnectionComponentConfiguration;
+use Viserio\Component\Config\Tests\Fixture\ConnectionComponentDefaultConfigConfiguration;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Definition\ObjectDefinition;
-use Viserio\Component\OptionsResolver\Container\Definition\DimensionsOptionDefinition;
-use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
-use Viserio\Component\OptionsResolver\Container\Pipeline\ResolveOptionDefinitionPipe;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultConfigConfiguration;
 use Viserio\Contract\Container\Exception\NotFoundException;
 
 /**
@@ -40,7 +40,7 @@ final class ResolveOptionDefinitionTest extends TestCase
             ],
         ]);
         $container->singleton('foo', stdClass::class)
-            ->addArgument(new OptionDefinition('params', ConnectionComponentDefaultConfigConfiguration::class));
+            ->addArgument(new ConfigDefinition('params', ConnectionComponentDefaultConfigConfiguration::class));
 
         $this->process($container);
 
@@ -61,7 +61,7 @@ final class ResolveOptionDefinitionTest extends TestCase
             ],
         ]);
         $container->singleton('foo', stdClass::class)
-            ->addArgument(new DimensionsOptionDefinition(ConnectionComponentConfiguration::class));
+            ->addArgument(new DimensionsConfigDefinition(ConnectionComponentConfiguration::class));
 
         $this->process($container);
 
@@ -83,7 +83,7 @@ final class ResolveOptionDefinitionTest extends TestCase
      */
     private function process(ContainerBuilder $container): void
     {
-        $pipe = new ResolveOptionDefinitionPipe();
+        $pipe = new ResolveConfigDefinitionPipe();
 
         $pipe->process($container);
     }

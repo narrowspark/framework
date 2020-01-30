@@ -17,11 +17,11 @@ use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
 use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
-use Viserio\Contract\Foundation\Bootstrap as BootstrapContract;
-use Viserio\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 use Viserio\Contract\Config\RequiresValidatedConfig as RequiresValidatedConfigContract;
+use Viserio\Contract\Foundation\Bootstrap as BootstrapContract;
+use Viserio\Contract\Foundation\Kernel as KernelContract;
 
 class SetRequestForConsoleBootstrap implements BootstrapContract,
     RequiresComponentConfigContract,
@@ -39,7 +39,7 @@ class SetRequestForConsoleBootstrap implements BootstrapContract,
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryConfig(): iterable
     {
         return [
             'url',

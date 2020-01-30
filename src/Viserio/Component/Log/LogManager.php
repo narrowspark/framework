@@ -26,11 +26,11 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
 use Viserio\Component\Manager\AbstractManager;
+use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
 use Viserio\Contract\Events\Traits\EventManagerAwareTrait;
 use Viserio\Contract\Log\Exception\InvalidArgumentException;
 use Viserio\Contract\Log\Exception\RuntimeException;
 use Viserio\Contract\Manager\Exception\InvalidArgumentException as ManagerInvalidArgumentException;
-use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
 
 class LogManager extends AbstractManager implements LoggerInterface,
     ProvidesDefaultConfigContract
@@ -95,7 +95,7 @@ class LogManager extends AbstractManager implements LoggerInterface,
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryConfig(): iterable
     {
         return [
             'path',

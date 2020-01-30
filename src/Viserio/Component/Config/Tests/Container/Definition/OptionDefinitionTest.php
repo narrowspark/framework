@@ -11,10 +11,10 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\OptionsResolver\Tests\Container\Definition;
+namespace Viserio\Component\Config\Tests\Container\Definition;
 
-use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultConfigConfiguration;
+use Viserio\Component\Config\Container\Definition\ConfigDefinition;
+use Viserio\Component\Config\Tests\Fixture\ConnectionDefaultConfigConfiguration;
 
 /**
  * @internal
@@ -28,7 +28,7 @@ final class OptionDefinitionTest extends AbstractOptionDefinitionTest
      */
     protected function getObject(): object
     {
-        return new OptionDefinition('params', $this->getOptionClassName());
+        return new ConfigDefinition('params', $this->getOptionClassName());
     }
 
     /**

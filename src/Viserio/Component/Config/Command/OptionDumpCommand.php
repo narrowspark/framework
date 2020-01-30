@@ -11,7 +11,7 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\OptionsResolver\Command;
+namespace Viserio\Component\Config\Command;
 
 use ReflectionClass;
 use RuntimeException;
@@ -131,7 +131,7 @@ class OptionDumpCommand extends AbstractCommand
     /**
      * Get a modified OptionsReader instance.
      *
-     * @return \Viserio\Component\OptionsResolver\Command\OptionsReader
+     * @return \Viserio\Component\Config\Command\OptionsReader
      */
     private function getConfigReader(): OptionsReader
     {

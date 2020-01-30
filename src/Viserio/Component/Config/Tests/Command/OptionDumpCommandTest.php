@@ -11,15 +11,15 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\OptionsResolver\Tests\Command;
+namespace Viserio\Component\Config\Tests\Command;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use org\bovigo\vfs\vfsStream;
 use RuntimeException;
+use Viserio\Component\Config\Command\OptionDumpCommand;
+use Viserio\Component\Config\Tests\Fixture\ConnectionComponentConfiguration;
+use Viserio\Component\Config\Tests\Fixture\Options\ConfigurationFixture;
 use Viserio\Component\Console\Tester\CommandTestCase;
-use Viserio\Component\OptionsResolver\Command\OptionDumpCommand;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixture\Options\ConfigurationFixture;
 use Viserio\Component\Parser\Dumper;
 
 /**
@@ -32,7 +32,7 @@ final class OptionDumpCommandTest extends CommandTestCase
     /** @var \org\bovigo\vfs\vfsStreamDirectory */
     private $root;
 
-    /** @var \Viserio\Component\OptionsResolver\Command\OptionDumpCommand */
+    /** @var \Viserio\Component\Config\Command\OptionDumpCommand */
     private $command;
 
     /**

@@ -11,7 +11,7 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\OptionsResolver\Tests\Fixture;
+namespace Viserio\Component\Config\Tests\Fixture;
 
 use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
 use Viserio\Contract\Config\RequiresComponentConfigId as RequiresComponentConfigIdContract;
@@ -44,7 +44,7 @@ class UniversalContainerIdComponentConfiguration implements ProvidesDefaultConfi
         return self::getData('dimensions');
     }
 
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryConfig(): iterable
     {
         return self::getData('getMandatoryOptions');
     }

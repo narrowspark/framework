@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Viserio\Provider\Framework\Container\Processor;
 
 use Viserio\Component\Container\Processor\AbstractParameterProcessor;
-use Viserio\Contract\Container\CompiledContainer as CompiledContainerContract;
-use Viserio\Contract\Container\Exception\InvalidArgumentException;
 use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 use Viserio\Contract\Config\RequiresValidatedConfig as RequiresValidatedConfigContract;
+use Viserio\Contract\Container\CompiledContainer as CompiledContainerContract;
+use Viserio\Contract\Container\Exception\InvalidArgumentException;
 
 final class DirectoryParameterProcessor extends AbstractParameterProcessor implements RequiresComponentConfigContract,
     RequiresMandatoryConfigContract,
@@ -67,7 +67,7 @@ final class DirectoryParameterProcessor extends AbstractParameterProcessor imple
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryConfig(): iterable
     {
         return [
             'mapper',

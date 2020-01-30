@@ -11,16 +11,16 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\OptionsResolver\Tests\Provider;
+namespace Viserio\Component\Config\Tests\Provider;
 
+use Viserio\Component\Config\Command\OptionDumpCommand;
+use Viserio\Component\Config\Command\OptionReaderCommand;
+use Viserio\Component\Config\Container\Pipeline\ResolveConfigDefinitionPipe;
+use Viserio\Component\Config\Container\Provider\ConfigServiceProvider;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Container\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Test\AbstractContainerTestCase;
-use Viserio\Component\OptionsResolver\Command\OptionDumpCommand;
-use Viserio\Component\OptionsResolver\Command\OptionReaderCommand;
-use Viserio\Component\OptionsResolver\Container\Pipeline\ResolveOptionDefinitionPipe;
-use Viserio\Component\OptionsResolver\Container\Provider\OptionsResolverServiceProvider;
 
 /**
  * @internal
@@ -34,7 +34,7 @@ final class OptionsResolverServiceProviderTest extends AbstractContainerTestCase
         $count = 0;
 
         foreach ($this->containerBuilder->getPipelineConfig()->getBeforeOptimizationPipelines() as $pipeline) {
-            if ($pipeline instanceof ResolveOptionDefinitionPipe) {
+            if ($pipeline instanceof ResolveConfigDefinitionPipe) {
                 $count++;
             }
         }
@@ -55,7 +55,7 @@ final class OptionsResolverServiceProviderTest extends AbstractContainerTestCase
     {
         $containerBuilder->bind('config', []);
         $containerBuilder->register(new ConsoleServiceProvider());
-        $containerBuilder->register(new OptionsResolverServiceProvider());
+        $containerBuilder->register(new ConfigServiceProvider());
     }
 
     /**

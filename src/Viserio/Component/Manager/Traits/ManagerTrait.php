@@ -51,7 +51,7 @@ trait ManagerTrait
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryConfig(): iterable
     {
         return [static::CONFIG_LIST_NAME];
     }

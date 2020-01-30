@@ -26,11 +26,11 @@ use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\ErrorHandler;
 use Viserio\Component\Exception\ExceptionIdentifier;
 use Viserio\Component\Exception\Traits\RegisterAndUnregisterTrait;
+use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 use Viserio\Contract\Exception\Displayer as DisplayerContract;
 use Viserio\Contract\Exception\Filter as FilterContract;
 use Viserio\Contract\Exception\HttpHandler as HttpHandlerContract;
 use Viserio\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
-use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 
 class Handler extends ErrorHandler implements HttpHandlerContract, RequiresMandatoryConfigContract
 {
@@ -85,7 +85,7 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryConfig(): iterable
     {
         return ['env'];
     }

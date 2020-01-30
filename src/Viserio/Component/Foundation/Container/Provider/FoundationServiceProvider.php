@@ -17,11 +17,11 @@ use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
 use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
-use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
-use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
 use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 use Viserio\Contract\Config\RequiresValidatedConfig as RequiresValidatedConfigContract;
+use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
+use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
 
 class FoundationServiceProvider implements RequiresComponentConfigContract,
     RequiresMandatoryConfigContract,
@@ -39,7 +39,7 @@ class FoundationServiceProvider implements RequiresComponentConfigContract,
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryConfig(): iterable
     {
         return [
             'url',

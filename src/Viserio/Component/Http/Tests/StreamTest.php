@@ -662,6 +662,26 @@ final class StreamTest extends MockeryTestCase
         self::assertSame('Could not open input file: StreamTest.php', $contents);
     }
 
+    public function testConvertsToStringNonSeekableStream(): void
+    {
+        $handle = \popen('echo foo', 'r');
+        $stream = new Stream($handle);
+
+        self::assertFalse($stream->isSeekable());
+        self::assertSame('foo', \trim((string) $stream));
+    }
+
+    public function testConvertsToStringNonSeekablePartiallyReadStream(): void
+    {
+        $handle = \popen('echo bar', 'r');
+        $stream = new Stream($handle);
+        $firstLetter = $stream->read(1);
+
+        self::assertFalse($stream->isSeekable());
+        self::assertSame('b', $firstLetter);
+        self::assertSame('ar', \trim((string) $stream));
+    }
+
     /**
      * @param Stream $stream
      */

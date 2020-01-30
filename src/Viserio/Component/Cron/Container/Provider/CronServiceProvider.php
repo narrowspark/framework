@@ -20,14 +20,14 @@ use Viserio\Component\Cron\Command\CronListCommand;
 use Viserio\Component\Cron\Command\ScheduleRunCommand;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
-use Viserio\Contract\Container\ServiceProvider\AliasServiceProvider as AliasServiceProviderContract;
-use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
-use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
-use Viserio\Contract\Cron\Schedule as ScheduleContract;
 use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
 use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 use Viserio\Contract\Config\RequiresValidatedConfig as RequiresValidatedConfigContract;
+use Viserio\Contract\Container\ServiceProvider\AliasServiceProvider as AliasServiceProviderContract;
+use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
+use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
+use Viserio\Contract\Cron\Schedule as ScheduleContract;
 
 class CronServiceProvider implements AliasServiceProviderContract,
     ProvidesDefaultConfigContract,
@@ -78,7 +78,7 @@ class CronServiceProvider implements AliasServiceProviderContract,
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryConfig(): iterable
     {
         return ['path'];
     }

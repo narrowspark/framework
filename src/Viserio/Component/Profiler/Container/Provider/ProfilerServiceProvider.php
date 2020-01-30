@@ -27,14 +27,14 @@ use Viserio\Component\Profiler\DataCollector\MemoryDataCollector;
 use Viserio\Component\Profiler\DataCollector\PhpInfoDataCollector;
 use Viserio\Component\Profiler\DataCollector\TimeDataCollector;
 use Viserio\Component\Profiler\Profiler;
+use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
+use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 use Viserio\Contract\Container\ServiceProvider\AliasServiceProvider as AliasServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
 use Viserio\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Contract\HttpFoundation\Terminable as TerminableContract;
-use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
-use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 use Viserio\Contract\Profiler\Profiler as ProfilerContract;
 use Viserio\Contract\Routing\Router as RouterContract;
 use Viserio\Contract\Routing\UrlGenerator as UrlGeneratorContract;
@@ -85,7 +85,7 @@ class ProfilerServiceProvider implements AliasServiceProviderContract,
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryConfig(): iterable
     {
         return [
             'enable',

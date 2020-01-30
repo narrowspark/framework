@@ -98,7 +98,7 @@ class ConfigurationLoaderBootstrap extends AbstractFilesLoaderBootstrap implemen
     /**
      * @param string $path
      *
-     * @return array<string|int, mixed>
+     * @return array<int|string, mixed>
      */
     protected static function load(string $path): array
     {

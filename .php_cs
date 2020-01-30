@@ -64,7 +64,7 @@ $config->getFinder()
     ->exclude('src/Viserio/Component/Log/Tests/Container/Provider/Compiled/')
     ->exclude('src/Viserio/Component/Mail/Tests/Container/Provider/Compiled/')
     ->exclude('src/Viserio/Component/Manager/Tests/Container/Provider/Compiled/')
-    ->exclude('src/Viserio/Component/OptionsResolver/Tests/Container/Provider/Compiled/')
+    ->exclude('src/Viserio/Component/Config/Tests/Container/Provider/Compiled/')
     ->exclude('src/Viserio/Component/Parser/Tests/Container/Provider/Compiled/')
     ->exclude('src/Viserio/Component/Path/Tests/Container/Provider/Compiled/')
     ->exclude('src/Viserio/Component/Profiler/Tests/Container/Provider/Compiled/')
@@ -89,8 +89,6 @@ $config->getFinder()
     ->notPath('src/Viserio/Component/Container/Tests/Fixture/Reflection/ExpandClassNoNamespace.php')
     ->notPath('src/Viserio/Component/Container/Tests/Fixture/Reflection/ExpandClassInBracketedNamespace.php')
     ->notPath('src/Viserio/Component/Container/Tests/Fixture/Reflection/ExpandClassInNamespace.php')
-
-    ->notPath('src/Viserio/Component/OptionsResolver/Traits/OptionsResolverTrait.php')
 
     ->notPath('src/Viserio/Component/Validation/Sanitizer.php')
 

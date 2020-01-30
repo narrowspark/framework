@@ -36,16 +36,16 @@ use Viserio\Component\WebServer\Command\ServerStatusCommand;
 use Viserio\Component\WebServer\Command\ServerStopCommand;
 use Viserio\Component\WebServer\Event\DumpListenerEvent;
 use Viserio\Component\WebServer\RequestContextProvider;
+use Viserio\Contract\Config\Exception\InvalidArgumentException;
+use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
+use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Contract\Config\RequiresValidatedConfig as RequiresValidatedConfigContract;
 use Viserio\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Contract\Container\Definition\ObjectDefinition as ObjectDefinitionContract;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\ServiceProvider\ExtendServiceProvider as ExtendServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
 use Viserio\Contract\Events\EventManager;
-use Viserio\Contract\Config\Exception\InvalidArgumentException;
-use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
-use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\Config\RequiresValidatedConfig as RequiresValidatedConfigContract;
 
 class WebServerServiceProvider implements ExtendServiceProviderContract,
     ProvidesDefaultConfigContract,
@@ -132,8 +132,8 @@ class WebServerServiceProvider implements ExtendServiceProviderContract,
 //                    (new ReferenceDefinition(ConsoleKernelContract::class))->addMethodCall('getPublicPath'),
 //                    (new ReferenceDefinition(ConsoleKernelContract::class))->addMethodCall('getEnvironment'),
 //                ] : [
-//                    new OptionDefinition('web_folder', self::class),
-//                    new OptionDefinition('env', self::class),
+//                    new ConfigDefinition('web_folder', self::class),
+//                    new ConfigDefinition('env', self::class),
 //                ];
 //
 //                $container->singleton(ServerServeCommand::class)

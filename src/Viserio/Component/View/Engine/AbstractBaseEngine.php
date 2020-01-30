@@ -42,7 +42,7 @@ abstract class AbstractBaseEngine implements EngineContract,
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryConfig(): iterable
     {
         return [
             'paths',

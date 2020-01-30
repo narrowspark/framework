@@ -39,7 +39,7 @@ interface Parameter
     /**
      * Returns all static parameters.
      *
-     * @return array<string|int, mixed>
+     * @return array<int|string, mixed>
      */
     public function getParameters(): array;
 }

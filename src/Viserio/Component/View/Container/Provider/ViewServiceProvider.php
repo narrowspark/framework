@@ -26,13 +26,13 @@ use Viserio\Component\View\Engine\MarkdownEngine;
 use Viserio\Component\View\Engine\PhpEngine;
 use Viserio\Component\View\ViewFactory;
 use Viserio\Component\View\ViewFinder;
+use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
+use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 use Viserio\Contract\Container\ServiceProvider\AliasServiceProvider as AliasServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\ServiceProvider\PipelineServiceProvider as PipelineServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
-use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
-use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 use Viserio\Contract\View\EngineResolver as EngineResolverContract;
 use Viserio\Contract\View\Factory as FactoryContract;
 use Viserio\Contract\View\Finder as FinderContract;
@@ -55,7 +55,7 @@ class ViewServiceProvider implements AliasServiceProviderContract,
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryConfig(): iterable
     {
         return [
             'paths',

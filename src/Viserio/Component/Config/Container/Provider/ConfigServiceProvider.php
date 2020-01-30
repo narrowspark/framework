@@ -11,19 +11,19 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\OptionsResolver\Container\Provider;
+namespace Viserio\Component\Config\Container\Provider;
 
+use Viserio\Component\Config\Command\OptionDumpCommand;
+use Viserio\Component\Config\Command\OptionReaderCommand;
+use Viserio\Component\Config\Container\Pipeline\ResolveConfigDefinitionPipe;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Console\Container\Pipeline\AddConsoleCommandPipe;
 use Viserio\Component\Container\PipelineConfig;
-use Viserio\Component\OptionsResolver\Command\OptionDumpCommand;
-use Viserio\Component\OptionsResolver\Command\OptionReaderCommand;
-use Viserio\Component\OptionsResolver\Container\Pipeline\ResolveOptionDefinitionPipe;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\ServiceProvider\PipelineServiceProvider as PipelineServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
 
-class OptionsResolverServiceProvider implements PipelineServiceProviderContract,
+class ConfigServiceProvider implements PipelineServiceProviderContract,
     ServiceProviderContract
 {
     /**
@@ -47,7 +47,7 @@ class OptionsResolverServiceProvider implements PipelineServiceProviderContract,
         return [
             PipelineConfig::TYPE_BEFORE_OPTIMIZATION => [
                 [
-                    new ResolveOptionDefinitionPipe(),
+                    new ResolveConfigDefinitionPipe(),
                 ],
             ],
         ];

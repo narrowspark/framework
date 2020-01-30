@@ -280,6 +280,22 @@ abstract class AbstractMessageTest extends MockeryTestCase
             'array value with key' => ['foo', ['foo' => 'text/plain', 'bar' => 'application/json'], ['text/plain', 'application/json'], 'text/plain,application/json'],
             'Header with int' => ['HTTP__1', 'test', ['test'], 'test'],
             'Int header' => [1, 'test', ['test'], 'test'],
+            ['key', 'allowed key', ['allowed key'], 'allowed key'],
+            ['key#', 'allowed key', ['allowed key'], 'allowed key'],
+            ['key$', 'allowed key', ['allowed key'], 'allowed key'],
+            ['key%', 'allowed key', ['allowed key'], 'allowed key'],
+            ['key&', 'allowed key', ['allowed key'], 'allowed key'],
+            ['key*', 'allowed key', ['allowed key'], 'allowed key'],
+            ['key+', 'allowed key', ['allowed key'], 'allowed key'],
+            ['key.', 'allowed key', ['allowed key'], 'allowed key'],
+            ['key^', 'allowed key', ['allowed key'], 'allowed key'],
+            ['key_', 'allowed key', ['allowed key'], 'allowed key'],
+            ['key|', 'allowed key', ['allowed key'], 'allowed key'],
+            ['key~', 'allowed key', ['allowed key'], 'allowed key'],
+            ['key!', 'allowed key', ['allowed key'], 'allowed key'],
+            ['key-', 'allowed key', ['allowed key'], 'allowed key'],
+            ["key'", 'allowed key', ['allowed key'], 'allowed key'],
+            ['key`', 'allowed key', ['allowed key'], 'allowed key'],
         ];
     }
 
@@ -301,25 +317,23 @@ abstract class AbstractMessageTest extends MockeryTestCase
     }
 
     /**
-     * @return array<int, array<int, string>>
-     */
-    public static function provideContainsWhiteSpaceOnHeaderFieldCases(): iterable
-    {
-        return [[' key '], ['key '], [' key']];
-    }
-
-    /**
-     * @dataProvider provideContainsWhiteSpaceOnHeaderFieldCases
+     * @dataProvider provideContainsNotAllowedCharsOnHeaderFieldCases
      *
-     * @param string $header
+     * @param mixed $header
      */
-    public function testContainsWhiteSpaceOnHeaderField(string $header): void
+    public function testContainsNotAllowedCharsOnHeaderField($header): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(\sprintf('[%s] is not a valid HTTP header field name.', $header));
 
-        $message = $this->classToTest;
-        $message->withHeader($header, 'value');
+        $request = $this->classToTest;
+
+        $request->withHeader($header, 'value');
+    }
+
+    public static function provideContainsNotAllowedCharsOnHeaderFieldCases(): iterable
+    {
+        return [[' key '], ['key '], [' key'], ['key/'], ['key('], ['key\\']];
     }
 
     /**

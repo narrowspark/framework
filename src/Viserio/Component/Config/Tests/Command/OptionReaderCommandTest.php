@@ -11,16 +11,16 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\OptionsResolver\Tests\Command;
+namespace Viserio\Component\Config\Tests\Command;
 
 use Symfony\Component\VarExporter\VarExporter;
+use Viserio\Component\Config\Command\OptionReaderCommand;
+use Viserio\Component\Config\Tests\Fixture\ConnectionComponentConfiguration;
+use Viserio\Component\Config\Tests\Fixture\ConnectionComponentDefaultConfigConfiguration;
+use Viserio\Component\Config\Tests\Fixture\ConnectionComponentDefaultConfigMandatoryContainedIdConfiguration;
+use Viserio\Component\Config\Tests\Fixture\ConnectionDefaultConfigConfiguration;
+use Viserio\Component\Config\Tests\Fixture\ConnectionDefaultOptionsWithMandatoryConfigurationAndTwoLevelArrayValidator;
 use Viserio\Component\Console\Tester\CommandTestCase;
-use Viserio\Component\OptionsResolver\Command\OptionReaderCommand;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultConfigConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultConfigMandatoryContainedIdConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultConfigConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsWithMandatoryConfigurationAndTwoLevelArrayValidator;
 
 /**
  * @internal

@@ -23,15 +23,15 @@ use Viserio\Bridge\Twig\Command\LintCommand as BridgeLintCommand;
 use Viserio\Component\Console\Container\Pipeline\AddConsoleCommandPipe;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
 use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
+use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
+use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 use Viserio\Contract\Container\Definition\ObjectDefinition as ObjectDefinitionContract;
 use Viserio\Contract\Container\ServiceProvider\AliasServiceProvider as AliasServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\ServiceProvider\ExtendServiceProvider as ExtendServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\PipelineServiceProvider as PipelineServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
-use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
-use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 use Viserio\Contract\View\Factory as FactoryContract;
 use Viserio\Contract\View\Finder as FinderContract;
 use Viserio\Provider\Twig\Command\CleanCommand;
@@ -147,7 +147,7 @@ class TwigServiceProvider implements AliasServiceProviderContract,
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryConfig(): iterable
     {
         return [
             'paths',

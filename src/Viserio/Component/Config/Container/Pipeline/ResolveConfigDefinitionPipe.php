@@ -11,13 +11,13 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\OptionsResolver\Container\Pipeline;
+namespace Viserio\Component\Config\Container\Pipeline;
 
+use Viserio\Component\Config\Container\Definition\ConfigDefinition;
+use Viserio\Component\Config\Container\Definition\DimensionsConfigDefinition;
 use Viserio\Component\Container\Pipeline\AbstractRecursivePipe;
-use Viserio\Component\OptionsResolver\Container\Definition\DimensionsOptionDefinition;
-use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
 
-class ResolveOptionDefinitionPipe extends AbstractRecursivePipe
+class ResolveConfigDefinitionPipe extends AbstractRecursivePipe
 {
     /** @var array */
     private static $configResolverCache = [];
@@ -27,13 +27,13 @@ class ResolveOptionDefinitionPipe extends AbstractRecursivePipe
      */
     protected function processValue($value, $isRoot = false)
     {
-        $isOptionDefinition = $value instanceof OptionDefinition;
-        $isDimensionsOptionDefinition = $value instanceof DimensionsOptionDefinition;
+        $isOptionDefinition = $value instanceof ConfigDefinition;
+        $isDimensionsOptionDefinition = $value instanceof DimensionsConfigDefinition;
 
         if ($isOptionDefinition || $isDimensionsOptionDefinition) {
             $value::$configClass = $value->getClass();
 
-            /** @var DimensionsOptionDefinition|OptionDefinition $value */
+            /** @var ConfigDefinition|DimensionsConfigDefinition $value */
             $value::$classDimensions = $value->getClassDimensions();
 
             if (! isset(self::$configResolverCache[$value::$configClass])) {

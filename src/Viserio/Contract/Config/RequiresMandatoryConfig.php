@@ -16,9 +16,9 @@ namespace Viserio\Contract\Config;
 interface RequiresMandatoryConfig
 {
     /**
-     * Returns a list of mandatory options which must be available.
+     * Return mandatory config which must be available.
      *
-     * @return array List with mandatory options, can be nested
+     * @return array mandatory config, can be nested
      */
-    public static function getMandatoryOptions(): iterable;
+    public static function getMandatoryConfig(): iterable;
 }
