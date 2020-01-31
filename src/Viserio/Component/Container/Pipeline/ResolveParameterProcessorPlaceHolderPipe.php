@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Viserio\Component\Container\Pipeline;
 
 use Viserio\Component\Container\Definition\ParameterDefinition;
+use Viserio\Component\Container\Traits\ParameterProcessResolvingTrait;
 use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\Definition\ChangeAwareDefinition as ChangeAwareDefinitionContract;
 use Viserio\Contract\Container\Definition\Definition;
 use Viserio\Contract\Container\Definition\MethodCallsAwareDefinition as MethodCallsAwareDefinitionContract;
-use Viserio\Contract\Container\Definition\ObjectDefinition as ObjectDefinitionContract;
 use Viserio\Contract\Container\Definition\PropertiesAwareDefinition as PropertiesAwareDefinitionContract;
 use Viserio\Contract\Container\Definition\ReferenceDefinition as ReferenceDefinitionContract;
 use Viserio\Contract\Container\Definition\TagAwareDefinition as TagAwareDefinitionContract;
@@ -29,7 +29,17 @@ use Viserio\Contract\Container\Definition\UndefinedDefinition as UndefinedDefini
  */
 final class ResolveParameterProcessorPlaceHolderPipe extends AbstractRecursivePipe
 {
-    private array $processors = [];
+    use ParameterProcessResolvingTrait;
+
+    private iterable $processors = [];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getProcessors(): iterable
+    {
+        return $this->processors;
+    }
 
     /**
      * {@inheritdoc}
@@ -42,13 +52,12 @@ final class ResolveParameterProcessorPlaceHolderPipe extends AbstractRecursivePi
             $processors = $this->containerBuilder->getDefinition(RegisterParameterProcessorsPipe::PROCESSORS_KEY)->getValue();
 
             foreach ($processors as $definition) {
-                if ($definition instanceof ObjectDefinitionContract) {
-                    $class = $this->containerBuilder->findDefinition($definition->getName())->getValue();
+                $class = $this->containerBuilder->findDefinition($definition->getName())
+                    ->getValue();
 
-                    $reflection = $this->containerBuilder->getClassReflector($class);
+                $reflection = $this->containerBuilder->getClassReflector($class);
 
-                    $this->processors[] = $reflection->newInstanceWithoutConstructor();
-                }
+                $this->processors[] = $reflection->newInstanceWithoutConstructor();
             }
         }
 
@@ -134,13 +143,13 @@ final class ResolveParameterProcessorPlaceHolderPipe extends AbstractRecursivePi
      *
      * @return mixed The resolved value
      */
-    private function resolveValue($value, array $resolving = [])
+    protected function resolveValue($value)
     {
         if (\is_array($value)) {
             $args = [];
 
             foreach ($value as $k => $v) {
-                $args[$k] = $this->resolveValue($v, $resolving);
+                $args[$k] = $this->resolveValue($v);
             }
 
             return $args;
@@ -150,57 +159,6 @@ final class ResolveParameterProcessorPlaceHolderPipe extends AbstractRecursivePi
             return $value;
         }
 
-        return $this->resolveString($value, $resolving);
-    }
-
-    /**
-     * Resolve a string expression.
-     *
-     * @param string $expression
-     * @param array  $resolving  An array of keys that are being resolved (used internally to detect circular references)
-     *
-     * @throws \Viserio\Contract\Container\Exception\CircularParameterException if a circular reference if detected
-     * @throws \Viserio\Contract\Container\Exception\RuntimeException           when a given parameter has a type problem
-     *
-     * @return string
-     */
-    private function resolveString(string $expression, array $resolving): string
-    {
-        if (\preg_match('/\{(.+)\|(.*)\}/U', $expression, $matches) === 0) {
-            return $expression;
-        }
-
-        $value = \array_reduce(\explode('|', $matches[2]), function ($carry, string $method) use ($expression, $resolving) {
-            if ($carry === null) {
-                return null;
-            }
-
-            $value = "{$carry}|{$method}";
-
-            if (\array_key_exists($value, $resolving)) {
-                throw new \Viserio\Contract\Container\Exception\CircularParameterException($expression, \array_keys($resolving));
-            }
-
-            /** @var \Viserio\Contract\Container\Processor\ParameterProcessor $processor */
-            foreach ($this->processors as $processor) {
-                if ($processor->supports($value)) {
-                    $resolving[$value] = true;
-
-                    return $processor->process($value);
-                }
-            }
-
-            return null;
-        }, $matches[1]);
-
-        if ($value === null) {
-            return $expression;
-        }
-
-        if (\is_string($value)) {
-            return \str_replace($matches[0], $value, $expression);
-        }
-
-        return $value;
+        return $this->resolveString($value) ?? $value;
     }
 }

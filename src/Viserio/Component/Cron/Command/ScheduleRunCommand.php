@@ -16,15 +16,13 @@ namespace Viserio\Component\Cron\Command;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Cron\Cron;
 use Viserio\Component\Cron\Schedule;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 
+// @todo fix config resolving
 class ScheduleRunCommand extends AbstractCommand implements RequiresComponentConfigContract,
     RequiresMandatoryConfigContract
 {
-    use OptionsResolverTrait;
-
     /**
      * {@inheritdoc}
      */

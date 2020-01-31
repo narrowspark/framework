@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Translation\Container\Provider;
 
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
+use Viserio\Component\Config\Container\Definition\ConfigDefinition;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
-use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
 use Viserio\Component\Translation\Formatter\IntlMessageFormatter;
 use Viserio\Component\Translation\TranslationManager;
 use Viserio\Contract\Config\Exception\InvalidArgumentException;
@@ -47,8 +47,8 @@ class TranslationServiceProvider implements AliasServiceProviderContract,
         $container->singleton(MessageFormatterContract::class, IntlMessageFormatter::class);
 
         $container->singleton(TranslationManagerContract::class, TranslationManager::class)
-            ->addMethodCall('setLocale', [new OptionDefinition('locale', self::class)])
-            ->addMethodCall('setDirectories', [new OptionDefinition('directories', self::class)])
+            ->addMethodCall('setLocale', [new ConfigDefinition('locale', self::class)])
+            ->addMethodCall('setDirectories', [new ConfigDefinition('directories', self::class)])
             ->addMethodCall('setLogger', [new ReferenceDefinition(PsrLoggerInterface::class, ReferenceDefinition::IGNORE_ON_UNINITIALIZED_REFERENCE)]);
 
         $container->singleton(TranslatorContract::class, [new ReferenceDefinition(TranslationManagerContract::class), 'getTranslator']);
@@ -63,7 +63,7 @@ class TranslationServiceProvider implements AliasServiceProviderContract,
             TranslationManagerContract::class => static function (ObjectDefinitionContract $definition, ContainerBuilderContract $container): void {
                 if ($container->has(LoaderContract::class)) {
                     $definition->addMethodCall('setLoader', [new ReferenceDefinition(LoaderContract::class)])
-                        ->addMethodCall('import', [new OptionDefinition('files', self::class)]);
+                        ->addMethodCall('import', [new ConfigDefinition('files', self::class)]);
                 }
             },
         ];

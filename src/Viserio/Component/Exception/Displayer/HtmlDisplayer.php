@@ -18,7 +18,6 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use Viserio\Component\Exception\ExceptionInfo;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
 use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\Exception\Displayer as DisplayerContract;
@@ -26,7 +25,6 @@ use Viserio\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
 
 class HtmlDisplayer implements DisplayerContract, ProvidesDefaultConfigContract, RequiresComponentConfigContract
 {
-    use OptionsResolverTrait;
     use ResponseFactoryAwareTrait;
 
     /**
@@ -52,7 +50,7 @@ class HtmlDisplayer implements DisplayerContract, ProvidesDefaultConfigContract,
     public function __construct(ResponseFactoryInterface $responseFactory, $config = [])
     {
         $this->responseFactory = $responseFactory;
-        $this->resolvedOptions = self::resolveOptions($config);
+        $this->resolvedOptions = $config;
     }
 
     /**

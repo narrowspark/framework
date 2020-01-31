@@ -29,6 +29,13 @@ use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigCo
 final class ConfigurationDimensionsIterator extends IteratorIterator
 {
     /**
+     * List of dimensions.
+     *
+     * @var array<int, string>
+     */
+    private array $dimensions;
+
+    /**
      * Create a new ConfigurationDimensionsIterator instance.
      *
      * @param string      $class
@@ -38,20 +45,20 @@ final class ConfigurationDimensionsIterator extends IteratorIterator
     public function __construct(string $class, Traversable $iterator, ?string $id = null)
     {
         $dimensions = $class::getDimensions();
-        $dimensions = $dimensions instanceof Iterator ? \iterator_to_array($dimensions) : (array) $dimensions;
+        $this->dimensions = $dimensions instanceof Iterator ? \iterator_to_array($dimensions) : (array) $dimensions;
         $interfaces = \class_implements($class);
 
         if (\array_key_exists(RequiresConfigIdContract::class, $interfaces) || \array_key_exists(RequiresComponentConfigIdContract::class, $interfaces)) {
-            $dimensions[] = $id;
+            $this->dimensions[] = $id;
         } elseif ($id !== null) {
             throw new InvalidArgumentException(\sprintf('The class [%s] does not support multiple instances.', $class));
         }
 
         $array = \iterator_to_array($iterator);
 
-        foreach ($dimensions as $dimension) {
+        foreach ($this->dimensions as $dimension) {
             if ((array) $array !== $array && ! $array instanceof ArrayAccess) {
-                throw new UnexpectedValueException($dimensions, $dimension);
+                throw new UnexpectedValueException($this->dimensions, $dimension);
             }
 
             if (! isset($array[$dimension])) {
@@ -75,5 +82,13 @@ final class ConfigurationDimensionsIterator extends IteratorIterator
         }
 
         parent::__construct(new ArrayIterator($array));
+    }
+
+    /**
+     * @return array
+     */
+    public function getDimensions(): array
+    {
+        return $this->dimensions;
     }
 }

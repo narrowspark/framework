@@ -18,15 +18,12 @@ use SplFileObject;
 use Symfony\Component\Finder\Finder;
 use Twig\Environment;
 use Viserio\Bridge\Twig\Command\LintCommand as BaseLintCommand;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
 use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\View\Finder as FinderContract;
 
 class LintCommand extends BaseLintCommand implements ProvidesDefaultConfigContract, RequiresComponentConfigContract
 {
-    use OptionsResolverTrait;
-
     /**
      * {@inheritdoc}
      */

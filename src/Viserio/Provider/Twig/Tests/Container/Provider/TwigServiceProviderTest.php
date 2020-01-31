@@ -21,12 +21,12 @@ use Twig\Loader\ArrayLoader;
 use Twig\Loader\ChainLoader;
 use Twig\Loader\LoaderInterface;
 use Viserio\Bridge\Twig\Container\Provider\TwigBridgeServiceProvider;
+use Viserio\Component\Config\Container\Provider\ConfigServiceProvider;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Container\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\Filesystem\Container\Provider\FilesystemServiceProvider;
-use Viserio\Component\OptionsResolver\Container\Provider\OptionsResolverServiceProvider;
 use Viserio\Component\View\Container\Provider\ViewServiceProvider;
 use Viserio\Contract\View\Factory as FactoryContract;
 use Viserio\Provider\Twig\Command\CleanCommand;
@@ -75,7 +75,7 @@ final class TwigServiceProviderTest extends AbstractContainerTestCase
         $containerBuilder->register(new ViewServiceProvider());
         $containerBuilder->register(new TwigServiceProvider());
         $containerBuilder->register(new TwigBridgeServiceProvider());
-        $containerBuilder->register(new OptionsResolverServiceProvider());
+        $containerBuilder->register(new ConfigServiceProvider());
         $containerBuilder->register(new ConsoleServiceProvider());
         $containerBuilder->singleton(Lexer::class)
             ->setSynthetic(true);

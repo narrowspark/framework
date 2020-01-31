@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Cron\Tests\Container\Provider;
 
 use Viserio\Component\Cache\Container\Provider\CacheServiceProvider;
+use Viserio\Component\Config\Container\Provider\ConfigServiceProvider;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Container\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\ContainerBuilder;
@@ -22,7 +23,6 @@ use Viserio\Component\Cron\Command\CronListCommand;
 use Viserio\Component\Cron\Command\ScheduleRunCommand;
 use Viserio\Component\Cron\Container\Provider\CronServiceProvider;
 use Viserio\Component\Cron\Schedule;
-use Viserio\Component\OptionsResolver\Container\Provider\OptionsResolverServiceProvider;
 use Viserio\Contract\Cron\Schedule as ScheduleContract;
 
 /**
@@ -66,7 +66,7 @@ final class CronServiceProviderTest extends AbstractContainerTestCase
         $containerBuilder->register(new CacheServiceProvider());
         $containerBuilder->register(new CronServiceProvider());
         $containerBuilder->register(new ConsoleServiceProvider());
-        $containerBuilder->register(new OptionsResolverServiceProvider());
+        $containerBuilder->register(new ConfigServiceProvider());
     }
 
     /**

@@ -143,9 +143,9 @@ final class TranslatorServiceProviderContainer extends \Viserio\Component\Contai
     }
 
     /**
-     * Returns the public Viserio\Component\Config\Command\OptionDumpCommand shared service.
+     * Returns the public Viserio\Component\Config\Command\ConfigDumpCommand shared service.
      *
-     * @return \Viserio\Component\Config\Command\OptionDumpCommand
+     * @return \Viserio\Component\Config\Command\ConfigDumpCommand
      */
     protected function get5a73c93dbe469f9f1fae0210ee64ef2ab32ed536467d0570a89353766859bb62(): \Viserio\Component\OptionsResolver\Command\OptionDumpCommand
     {
@@ -153,9 +153,9 @@ final class TranslatorServiceProviderContainer extends \Viserio\Component\Contai
     }
 
     /**
-     * Returns the public Viserio\Component\Config\Command\OptionReaderCommand shared service.
+     * Returns the public Viserio\Component\Config\Command\ConfigReaderCommand shared service.
      *
-     * @return \Viserio\Component\Config\Command\OptionReaderCommand
+     * @return \Viserio\Component\Config\Command\ConfigReaderCommand
      */
     protected function get51bc2cdf2d87fcaa6a89ede54bc023ccfe784ddb4cc7a7e2be4ab3a7e9204471(): \Viserio\Component\OptionsResolver\Command\OptionReaderCommand
     {

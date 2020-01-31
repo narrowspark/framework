@@ -15,7 +15,6 @@ namespace Viserio\Component\Exception\Displayer;
 
 use ArrayAccess;
 use Psr\Http\Message\ResponseFactoryInterface;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
 use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 use Whoops\Handler\Handler;
@@ -24,8 +23,6 @@ use Whoops\Handler\PrettyPageHandler;
 class WhoopsPrettyDisplayer extends AbstractWhoopsDisplayer implements ProvidesDefaultConfigContract,
     RequiresComponentConfigContract
 {
-    use OptionsResolverTrait;
-
     /**
      * Configurations list for whoops.
      *

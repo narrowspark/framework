@@ -17,9 +17,9 @@ use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use org\bovigo\vfs\vfsStream;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
+use Viserio\Component\Config\Container\Provider\ConfigServiceProvider;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Test\AbstractContainerTestCase;
-use Viserio\Component\OptionsResolver\Container\Provider\OptionsResolverServiceProvider;
 use Viserio\Component\Parser\Container\Provider\ParserServiceProvider;
 use Viserio\Component\Translation\Container\Provider\TranslationServiceProvider;
 use Viserio\Component\Translation\TranslationManager;
@@ -95,7 +95,7 @@ return [
         $containerBuilder->singleton(PsrLoggerInterface::class)
             ->setSynthetic(true);
 
-        $containerBuilder->register(new OptionsResolverServiceProvider());
+        $containerBuilder->register(new ConfigServiceProvider());
         $containerBuilder->register(new TranslationServiceProvider());
         $containerBuilder->register(new ParserServiceProvider());
     }

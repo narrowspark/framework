@@ -34,7 +34,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Contract\\OptionsResolver\\": ""
+            "Viserio\\Contract\\Config\\": ""
         }
     },
     "minimum-stability": "dev",

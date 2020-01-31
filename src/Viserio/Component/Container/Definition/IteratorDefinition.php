@@ -23,7 +23,7 @@ final class IteratorDefinition extends AbstractDefinition implements IteratorDef
      *
      * @var null|array<int|string, mixed>
      */
-    private ?array $argument;
+    private ?array $argument = null;
 
     /**
      * Default deprecation template.

@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Viserio\Component\Cron\Container\Provider;
 
 use Psr\Cache\CacheItemPoolInterface;
+use Viserio\Component\Config\Container\Definition\ConfigDefinition;
 use Viserio\Component\Console\Container\Pipeline\AddConsoleCommandPipe;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
 use Viserio\Component\Cron\Command\CronListCommand;
 use Viserio\Component\Cron\Command\ScheduleRunCommand;
 use Viserio\Component\Cron\Schedule;
-use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
 use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
 use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
@@ -43,8 +43,8 @@ class CronServiceProvider implements AliasServiceProviderContract,
     {
         $container->singleton(ScheduleContract::class, Schedule::class)
             ->setArguments([
-                new OptionDefinition('path', self::class),
-                new OptionDefinition('console', self::class),
+                new ConfigDefinition('path', self::class),
+                new ConfigDefinition('console', self::class),
             ])
             ->setMethodCalls([
                 ['setCacheItemPool', [new ReferenceDefinition(CacheItemPoolInterface::class, ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE)]],

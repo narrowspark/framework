@@ -29,14 +29,10 @@ class ConfigurationDefaultIterator extends IteratorIterator
     public function __construct(string $class, Traversable $iterator)
     {
         $default = $class::getDefaultConfig();
+        $default = $default instanceof Iterator ? \iterator_to_array($default) : (array) $default;
 
         parent::__construct(
-            new ArrayIterator(
-                \array_replace_recursive(
-                    $default instanceof Iterator ? \iterator_to_array($default) : (array) $default,
-                    \iterator_to_array($iterator)
-                )
-            )
+            new ArrayIterator(\array_replace_recursive($default, \iterator_to_array($iterator)))
         );
     }
 }

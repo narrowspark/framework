@@ -161,7 +161,7 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getParameters(): array
     {

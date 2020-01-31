@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Cookie\Tests\Container\Provider;
 
+use Viserio\Component\Config\Container\Provider\ConfigServiceProvider;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\Cookie\Container\Provider\CookieServiceProvider;
 use Viserio\Component\Cookie\CookieJar;
-use Viserio\Component\OptionsResolver\Container\Provider\OptionsResolverServiceProvider;
 
 /**
  * @internal
@@ -46,7 +46,7 @@ final class CookieServiceProviderTest extends AbstractContainerTestCase
             ],
         ]);
         $containerBuilder->register(new CookieServiceProvider());
-        $containerBuilder->register(new OptionsResolverServiceProvider());
+        $containerBuilder->register(new ConfigServiceProvider());
     }
 
     /**

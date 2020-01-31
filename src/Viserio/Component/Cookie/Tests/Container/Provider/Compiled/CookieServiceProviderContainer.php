@@ -26,8 +26,8 @@ final class CookieServiceProviderContainer extends \Viserio\Component\Container\
         $this->services = $this->privates = [];
         $this->methodMapping = [
             \Viserio\Contract\Cookie\QueueingFactory::class => 'get67da077da233cb8b970c6aa3e8c84e8e1efdd67257110f63df9e64b40d92c534',
-            \Viserio\Component\OptionsResolver\Command\OptionDumpCommand::class => 'get5a73c93dbe469f9f1fae0210ee64ef2ab32ed536467d0570a89353766859bb62',
-            \Viserio\Component\OptionsResolver\Command\OptionReaderCommand::class => 'get51bc2cdf2d87fcaa6a89ede54bc023ccfe784ddb4cc7a7e2be4ab3a7e9204471',
+            \Viserio\Component\Config\Command\ConfigDumpCommand::class => 'get5a73c93dbe469f9f1fae0210ee64ef2ab32ed536467d0570a89353766859bb62',
+            \Viserio\Component\Config\Command\ConfigReaderCommand::class => 'get51bc2cdf2d87fcaa6a89ede54bc023ccfe784ddb4cc7a7e2be4ab3a7e9204471',
             'config' => 'get34bcaa5afa8745d92e6161e8495be3b939c5c6abb4dc2fd1f5a3cfdaba620256',
         ];
         $this->aliases = [
@@ -64,23 +64,23 @@ final class CookieServiceProviderContainer extends \Viserio\Component\Container\
     }
 
     /**
-     * Returns the public Viserio\Component\Config\Command\OptionDumpCommand shared service.
+     * Returns the public Viserio\Component\Config\Command\ConfigDumpCommand shared service.
      *
-     * @return \Viserio\Component\Config\Command\OptionDumpCommand
+     * @return \Viserio\Component\Config\Command\ConfigDumpCommand
      */
-    protected function get5a73c93dbe469f9f1fae0210ee64ef2ab32ed536467d0570a89353766859bb62(): \Viserio\Component\OptionsResolver\Command\OptionDumpCommand
+    protected function get5a73c93dbe469f9f1fae0210ee64ef2ab32ed536467d0570a89353766859bb62(): \Viserio\Component\Config\Command\ConfigDumpCommand
     {
-        return $this->services[\Viserio\Component\OptionsResolver\Command\OptionDumpCommand::class] = new \Viserio\Component\OptionsResolver\Command\OptionDumpCommand();
+        return $this->services[\Viserio\Component\Config\Command\ConfigDumpCommand::class] = new \Viserio\Component\Config\Command\ConfigDumpCommand();
     }
 
     /**
-     * Returns the public Viserio\Component\Config\Command\OptionReaderCommand shared service.
+     * Returns the public Viserio\Component\Config\Command\ConfigReaderCommand shared service.
      *
-     * @return \Viserio\Component\Config\Command\OptionReaderCommand
+     * @return \Viserio\Component\Config\Command\ConfigReaderCommand
      */
-    protected function get51bc2cdf2d87fcaa6a89ede54bc023ccfe784ddb4cc7a7e2be4ab3a7e9204471(): \Viserio\Component\OptionsResolver\Command\OptionReaderCommand
+    protected function get51bc2cdf2d87fcaa6a89ede54bc023ccfe784ddb4cc7a7e2be4ab3a7e9204471(): \Viserio\Component\Config\Command\ConfigReaderCommand
     {
-        return $this->services[\Viserio\Component\OptionsResolver\Command\OptionReaderCommand::class] = new \Viserio\Component\OptionsResolver\Command\OptionReaderCommand();
+        return $this->services[\Viserio\Component\Config\Command\ConfigReaderCommand::class] = new \Viserio\Component\Config\Command\ConfigReaderCommand();
     }
 
     /**

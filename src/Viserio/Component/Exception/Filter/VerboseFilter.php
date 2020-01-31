@@ -16,15 +16,12 @@ namespace Viserio\Component\Exception\Filter;
 use ArrayAccess;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 use Viserio\Contract\Exception\Filter as FilterContract;
 
 class VerboseFilter implements FilterContract, RequiresComponentConfigContract, RequiresMandatoryConfigContract
 {
-    use OptionsResolverTrait;
-
     /**
      * Resolved options.
      *

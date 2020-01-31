@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Console\Tests\Container\Pipeline;
 
-use SplObjectStorage;
+use stdClass;
 use Symfony\Component\Console\Input\StringInput;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Container\Pipeline\AddConsoleCommandPipe;
@@ -91,12 +91,12 @@ Viserio\Component\Console\Tests\Fixture\GoodbyeCommand made me do work! :-(
     public function testProcessThrowAnExceptionIfTheServiceIsNotASubclassOfCommand(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage(\sprintf('The service [SplObjectStorage] tagged [%s] must be a subclass of [Symfony\\Component\\Console\\Command\\Command].', AddConsoleCommandPipe::TAG));
+        $this->expectExceptionMessage(\sprintf('The service [stdClass] tagged [%s] must be a subclass of [Symfony\\Component\\Console\\Command\\Command].', AddConsoleCommandPipe::TAG));
 
         $container = $this->containerBuilder;
 
         $container->getPipelineConfig()->addPipe(new AddConsoleCommandPipe(), PipelineConfig::TYPE_BEFORE_OPTIMIZATION);
-        $container->singleton(SplObjectStorage::class)
+        $container->singleton(stdClass::class)
             ->addTag(AddConsoleCommandPipe::TAG);
 
         $container->compile();

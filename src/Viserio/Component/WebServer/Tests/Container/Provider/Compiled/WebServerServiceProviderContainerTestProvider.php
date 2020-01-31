@@ -37,8 +37,8 @@ final class WebServerServiceProviderContainerTestProvider extends \Viserio\Compo
             \Symfony\Component\VarDumper\VarDumper::class => 'get4b39bfcd6c1615eaf94a5811a808827fa131f2a8ee3ca76bbc73511c8ac261e3',
             \Viserio\Bridge\Twig\Extension\DumpExtension::class => 'get5e982a25346139e718d5327f75105fc4500493b38c9497926f65dcf3d033df69',
             \Viserio\Component\Console\Application::class => 'get206058a713a7172158e11c9d996f6a067c294ab0356ae6697060f162e057445a',
-            \Viserio\Component\OptionsResolver\Command\OptionDumpCommand::class => 'get5a73c93dbe469f9f1fae0210ee64ef2ab32ed536467d0570a89353766859bb62',
-            \Viserio\Component\OptionsResolver\Command\OptionReaderCommand::class => 'get51bc2cdf2d87fcaa6a89ede54bc023ccfe784ddb4cc7a7e2be4ab3a7e9204471',
+            \Viserio\Component\Config\Command\ConfigDumpCommand::class => 'get5a73c93dbe469f9f1fae0210ee64ef2ab32ed536467d0570a89353766859bb62',
+            \Viserio\Component\Config\Command\ConfigReaderCommand::class => 'get51bc2cdf2d87fcaa6a89ede54bc023ccfe784ddb4cc7a7e2be4ab3a7e9204471',
             \Viserio\Component\WebServer\Command\ServerDumpCommand::class => 'get00ecdb07e8470c27b588865468b9d68a6a055b62608eec25ab3f01ac0bf823c8',
             \Viserio\Component\WebServer\Command\ServerLogCommand::class => 'get6634260609a498029e937e6580d7a26c22c24e9f0eba9a1d49076e43c5847b98',
             \Viserio\Component\WebServer\Command\ServerServeCommand::class => 'getc8c0b52951027d7f408639ef7023aea3fb91821b4feb5173c77c4be1f88712eb',
@@ -73,9 +73,9 @@ final class WebServerServiceProviderContainerTestProvider extends \Viserio\Compo
     protected function getce817e8bdc75399a693ba45b876c457a0f7fd422258f7d4eabc553987c2fbd31(): \Viserio\Component\Console\CommandLoader\IteratorCommandLoader
     {
         return $this->services[\Symfony\Component\Console\CommandLoader\CommandLoaderInterface::class] = new \Viserio\Component\Console\CommandLoader\IteratorCommandLoader(new \Viserio\Component\Container\RewindableGenerator(function () {
-            yield 'option:dump' => ($this->services[\Viserio\Component\OptionsResolver\Command\OptionDumpCommand::class] ?? $this->get5a73c93dbe469f9f1fae0210ee64ef2ab32ed536467d0570a89353766859bb62());
+            yield 'option:dump' => ($this->services[\Viserio\Component\Config\Command\ConfigDumpCommand::class] ?? $this->get5a73c93dbe469f9f1fae0210ee64ef2ab32ed536467d0570a89353766859bb62());
 
-            yield 'option:read' => ($this->services[\Viserio\Component\OptionsResolver\Command\OptionReaderCommand::class] ?? $this->get51bc2cdf2d87fcaa6a89ede54bc023ccfe784ddb4cc7a7e2be4ab3a7e9204471());
+            yield 'option:read' => ($this->services[\Viserio\Component\Config\Command\ConfigReaderCommand::class] ?? $this->get51bc2cdf2d87fcaa6a89ede54bc023ccfe784ddb4cc7a7e2be4ab3a7e9204471());
 
             yield 'server:log' => ($this->services[\Viserio\Component\WebServer\Command\ServerLogCommand::class] ?? $this->get6634260609a498029e937e6580d7a26c22c24e9f0eba9a1d49076e43c5847b98());
 
@@ -219,13 +219,13 @@ final class WebServerServiceProviderContainerTestProvider extends \Viserio\Compo
     }
 
     /**
-     * Returns the public Viserio\Component\Config\Command\OptionDumpCommand shared service.
+     * Returns the public Viserio\Component\Config\Command\ConfigDumpCommand shared service.
      *
-     * @return \Viserio\Component\Config\Command\OptionDumpCommand
+     * @return \Viserio\Component\Config\Command\ConfigDumpCommand
      */
-    protected function get5a73c93dbe469f9f1fae0210ee64ef2ab32ed536467d0570a89353766859bb62(): \Viserio\Component\OptionsResolver\Command\OptionDumpCommand
+    protected function get5a73c93dbe469f9f1fae0210ee64ef2ab32ed536467d0570a89353766859bb62(): \Viserio\Component\Config\Command\ConfigDumpCommand
     {
-        $this->services[\Viserio\Component\OptionsResolver\Command\OptionDumpCommand::class] = $instance = new \Viserio\Component\OptionsResolver\Command\OptionDumpCommand();
+        $this->services[\Viserio\Component\Config\Command\ConfigDumpCommand::class] = $instance = new \Viserio\Component\Config\Command\ConfigDumpCommand();
 
         $instance->setName('option:dump');
 
@@ -233,13 +233,13 @@ final class WebServerServiceProviderContainerTestProvider extends \Viserio\Compo
     }
 
     /**
-     * Returns the public Viserio\Component\Config\Command\OptionReaderCommand shared service.
+     * Returns the public Viserio\Component\Config\Command\ConfigReaderCommand shared service.
      *
-     * @return \Viserio\Component\Config\Command\OptionReaderCommand
+     * @return \Viserio\Component\Config\Command\ConfigReaderCommand
      */
-    protected function get51bc2cdf2d87fcaa6a89ede54bc023ccfe784ddb4cc7a7e2be4ab3a7e9204471(): \Viserio\Component\OptionsResolver\Command\OptionReaderCommand
+    protected function get51bc2cdf2d87fcaa6a89ede54bc023ccfe784ddb4cc7a7e2be4ab3a7e9204471(): \Viserio\Component\Config\Command\ConfigReaderCommand
     {
-        $this->services[\Viserio\Component\OptionsResolver\Command\OptionReaderCommand::class] = $instance = new \Viserio\Component\OptionsResolver\Command\OptionReaderCommand();
+        $this->services[\Viserio\Component\Config\Command\ConfigReaderCommand::class] = $instance = new \Viserio\Component\Config\Command\ConfigReaderCommand();
 
         $instance->setName('option:read');
 

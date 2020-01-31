@@ -68,8 +68,8 @@ final class TwigServiceProviderContainer extends \Viserio\Component\Container\Ab
             \Viserio\Contract\View\EngineResolver::class => 'getff73b374d52eb13f0773f58273de538d62944effed5c8e2a7caa31b6d2180e5b',
             \Viserio\Contract\View\Factory::class => 'getb6b69b8c40146f590f39a23a8d000f621d6288e79e53d4fdbeae0164b92c7d63',
             \Viserio\Contract\View\Finder::class => 'get2bc187b27da90a561b690d6fd54a3000d8276c6e5b8e8167ce59a4b9355b3859',
-            \Viserio\Component\OptionsResolver\Command\OptionDumpCommand::class => 'get5a73c93dbe469f9f1fae0210ee64ef2ab32ed536467d0570a89353766859bb62',
-            \Viserio\Component\OptionsResolver\Command\OptionReaderCommand::class => 'get51bc2cdf2d87fcaa6a89ede54bc023ccfe784ddb4cc7a7e2be4ab3a7e9204471',
+            \Viserio\Component\Config\Command\ConfigDumpCommand::class => 'get5a73c93dbe469f9f1fae0210ee64ef2ab32ed536467d0570a89353766859bb62',
+            \Viserio\Component\Config\Command\ConfigReaderCommand::class => 'get51bc2cdf2d87fcaa6a89ede54bc023ccfe784ddb4cc7a7e2be4ab3a7e9204471',
             \Viserio\Component\View\Engine\FileEngine::class => 'get1a6c73ea96b910b7c8cc9eccb8a2efd9908e964162cfa207eeef703514994b04',
             \Viserio\Component\View\Engine\PhpEngine::class => 'getd01d428260fd74997b150257850eb533cb546f9df452b1033a6c2fae22551a64',
             \Viserio\Provider\Twig\Command\CleanCommand::class => 'getb27fd541062d323461cd1a120541021d75cbc7d2bbae5eefde976856c43fbebe',
@@ -123,9 +123,9 @@ final class TwigServiceProviderContainer extends \Viserio\Component\Container\Ab
 
             yield 'lint:twig' => ($this->services[\Viserio\Bridge\Twig\Command\LintCommand::class] ?? $this->getf32036d73b7c99ae4b0444626f14d4a6c18aa429903389f6fe326667f7ecec32());
 
-            yield 'option:dump' => ($this->services[\Viserio\Component\OptionsResolver\Command\OptionDumpCommand::class] ?? $this->get5a73c93dbe469f9f1fae0210ee64ef2ab32ed536467d0570a89353766859bb62());
+            yield 'option:dump' => ($this->services[\Viserio\Component\Config\Command\ConfigDumpCommand::class] ?? $this->get5a73c93dbe469f9f1fae0210ee64ef2ab32ed536467d0570a89353766859bb62());
 
-            yield 'option:read' => ($this->services[\Viserio\Component\OptionsResolver\Command\OptionReaderCommand::class] ?? $this->get51bc2cdf2d87fcaa6a89ede54bc023ccfe784ddb4cc7a7e2be4ab3a7e9204471());
+            yield 'option:read' => ($this->services[\Viserio\Component\Config\Command\ConfigReaderCommand::class] ?? $this->get51bc2cdf2d87fcaa6a89ede54bc023ccfe784ddb4cc7a7e2be4ab3a7e9204471());
         }, 5));
     }
 
@@ -335,13 +335,13 @@ final class TwigServiceProviderContainer extends \Viserio\Component\Container\Ab
     }
 
     /**
-     * Returns the public Viserio\Component\Config\Command\OptionDumpCommand shared service.
+     * Returns the public Viserio\Component\Config\Command\ConfigDumpCommand shared service.
      *
-     * @return \Viserio\Component\Config\Command\OptionDumpCommand
+     * @return \Viserio\Component\Config\Command\ConfigDumpCommand
      */
-    protected function get5a73c93dbe469f9f1fae0210ee64ef2ab32ed536467d0570a89353766859bb62(): \Viserio\Component\OptionsResolver\Command\OptionDumpCommand
+    protected function get5a73c93dbe469f9f1fae0210ee64ef2ab32ed536467d0570a89353766859bb62(): \Viserio\Component\Config\Command\ConfigDumpCommand
     {
-        $this->services[\Viserio\Component\OptionsResolver\Command\OptionDumpCommand::class] = $instance = new \Viserio\Component\OptionsResolver\Command\OptionDumpCommand();
+        $this->services[\Viserio\Component\Config\Command\ConfigDumpCommand::class] = $instance = new \Viserio\Component\Config\Command\ConfigDumpCommand();
 
         $instance->setName('option:dump');
 
@@ -349,13 +349,13 @@ final class TwigServiceProviderContainer extends \Viserio\Component\Container\Ab
     }
 
     /**
-     * Returns the public Viserio\Component\Config\Command\OptionReaderCommand shared service.
+     * Returns the public Viserio\Component\Config\Command\ConfigReaderCommand shared service.
      *
-     * @return \Viserio\Component\Config\Command\OptionReaderCommand
+     * @return \Viserio\Component\Config\Command\ConfigReaderCommand
      */
-    protected function get51bc2cdf2d87fcaa6a89ede54bc023ccfe784ddb4cc7a7e2be4ab3a7e9204471(): \Viserio\Component\OptionsResolver\Command\OptionReaderCommand
+    protected function get51bc2cdf2d87fcaa6a89ede54bc023ccfe784ddb4cc7a7e2be4ab3a7e9204471(): \Viserio\Component\Config\Command\ConfigReaderCommand
     {
-        $this->services[\Viserio\Component\OptionsResolver\Command\OptionReaderCommand::class] = $instance = new \Viserio\Component\OptionsResolver\Command\OptionReaderCommand();
+        $this->services[\Viserio\Component\Config\Command\ConfigReaderCommand::class] = $instance = new \Viserio\Component\Config\Command\ConfigReaderCommand();
 
         $instance->setName('option:read');
 

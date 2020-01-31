@@ -20,9 +20,9 @@ use Twig\Loader\LoaderInterface;
 use Twig\RuntimeLoader\ContainerRuntimeLoader;
 use Twig\RuntimeLoader\RuntimeLoaderInterface;
 use Viserio\Bridge\Twig\Command\LintCommand as BridgeLintCommand;
+use Viserio\Component\Config\Container\Definition\ConfigDefinition;
 use Viserio\Component\Console\Container\Pipeline\AddConsoleCommandPipe;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
-use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
 use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
 use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
@@ -55,7 +55,7 @@ class TwigServiceProvider implements AliasServiceProviderContract,
     public function build(ContainerBuilderContract $container): void
     {
         $container->singleton(TwigLoader::class)
-            ->addMethodCall('setExtension', [new OptionDefinition('engines.twig.file_extension', self::class)]);
+            ->addMethodCall('setExtension', [new ConfigDefinition('engines.twig.file_extension', self::class)]);
 
         $container->singleton(ChainLoader::class)
             ->addMethodCall('addLoader', [new ReferenceDefinition(TwigLoader::class)]);
@@ -63,7 +63,7 @@ class TwigServiceProvider implements AliasServiceProviderContract,
         $container->singleton(RuntimeLoaderInterface::class, ContainerRuntimeLoader::class);
 
         $container->singleton(TwigEnvironment::class)
-            ->setArguments([new ReferenceDefinition(LoaderInterface::class), new OptionDefinition('engines.twig.options', self::class)])
+            ->setArguments([new ReferenceDefinition(LoaderInterface::class), new ConfigDefinition('engines.twig.options', self::class)])
             ->addMethodCall('setLexer', [new ReferenceDefinition(Lexer::class, ReferenceDefinition::IGNORE_ON_UNINITIALIZED_REFERENCE)])
             ->addMethodCall('addRuntimeLoader', [new ReferenceDefinition(RuntimeLoaderInterface::class, ReferenceDefinition::IGNORE_ON_UNINITIALIZED_REFERENCE)])
             ->setPublic(true);

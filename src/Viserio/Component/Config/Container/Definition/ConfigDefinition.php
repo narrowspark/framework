@@ -13,40 +13,47 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Config\Container\Definition;
 
-use Viserio\Component\Config\Container\Definition\Traits\DimensionsTrait;
-use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
-
-final class ConfigDefinition extends AbstractConfigDefinition
+final class ConfigDefinition
 {
-    use DimensionsTrait;
+    /**
+     * Name of the config aware class.
+     *
+     * @var string
+     */
+    private string $class;
 
-    private string $key;
+    /** @var null|string */
+    private ?string $id;
 
     /**
      * Create a new ConfigDefinition instance.
      *
-     * @param string      $key         The parameter key
      * @param string      $configClass
      * @param null|string $configId
      */
-    public function __construct(string $key, string $configClass, ?string $configId = null)
+    public function __construct(string $configClass, ?string $configId = null)
     {
-        parent::__construct($configClass, $configId);
-
-        $this->key = $key;
-
-        if ($this->reflection->implementsInterface(RequiresComponentConfigContract::class)) {
-            $this->dimensions = $configClass::getDimensions();
-        }
+        $this->class = $configClass;
+        $this->id = $configId;
     }
 
     /**
-     * Get option key.
+     * Return the config aware class.
      *
      * @return string
      */
-    public function getName(): string
+    public function getClass(): string
     {
-        return $this->key;
+        return $this->class;
+    }
+
+    /**
+     * Get config id.
+     *
+     * @return string
+     */
+    public function getId(): ?string
+    {
+        return $this->id;
     }
 }

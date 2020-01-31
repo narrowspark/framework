@@ -18,7 +18,6 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Debug\ExceptionHandler as SymfonyExceptionHandler;
 use Throwable;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
 use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\Exception\Displayer as DisplayerContract;
@@ -29,7 +28,6 @@ class SymfonyDisplayer implements DisplayerContract,
     RequiresComponentConfigContract
 {
     use ResponseFactoryAwareTrait;
-    use OptionsResolverTrait;
 
     /**
      * Configurations list for whoops.

@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Config\Container\Provider;
 
-use Viserio\Component\Config\Command\OptionDumpCommand;
-use Viserio\Component\Config\Command\OptionReaderCommand;
+use Viserio\Component\Config\Command\ConfigDumpCommand;
+use Viserio\Component\Config\Command\ConfigReaderCommand;
 use Viserio\Component\Config\Container\Pipeline\ResolveConfigDefinitionPipe;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Console\Container\Pipeline\AddConsoleCommandPipe;
@@ -32,9 +32,9 @@ class ConfigServiceProvider implements PipelineServiceProviderContract,
     public function build(ContainerBuilderContract $container): void
     {
         if (\class_exists(AbstractCommand::class)) {
-            $container->singleton(OptionDumpCommand::class)
+            $container->singleton(ConfigDumpCommand::class)
                 ->addTag(AddConsoleCommandPipe::TAG);
-            $container->singleton(OptionReaderCommand::class)
+            $container->singleton(ConfigReaderCommand::class)
                 ->addTag(AddConsoleCommandPipe::TAG);
         }
     }

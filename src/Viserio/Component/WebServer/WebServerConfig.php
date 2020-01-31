@@ -14,19 +14,15 @@ declare(strict_types=1);
 namespace Viserio\Component\WebServer;
 
 use Viserio\Component\Console\Command\AbstractCommand;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Contract\Config\Exception\InvalidArgumentException as OptionsResolverInvalidArgumentException;
+use Viserio\Contract\Config\Exception\InvalidArgumentException as ConfigInvalidArgumentException;
 use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
 use Viserio\Contract\Config\RequiresConfig as RequiresConfigContract;
 use Viserio\Contract\Config\RequiresValidatedConfig as RequiresValidatedConfigContract;
 use Viserio\Contract\WebServer\Exception\InvalidArgumentException;
 use Viserio\Contract\WebServer\Exception\RuntimeException;
-use function gethostname;
 
 final class WebServerConfig implements ProvidesDefaultConfigContract, RequiresConfigContract, RequiresValidatedConfigContract
 {
-    use OptionsResolverTrait;
-
     /**
      * Resolved options.
      *
@@ -99,16 +95,16 @@ final class WebServerConfig implements ProvidesDefaultConfigContract, RequiresCo
         return [
             'document_root' => static function ($value): void {
                 if (! \is_dir($value)) {
-                    throw new OptionsResolverInvalidArgumentException(\sprintf('The document root directory [%s] does not exist.', $value));
+                    throw new ConfigInvalidArgumentException(\sprintf('The document root directory [%s] does not exist.', $value));
                 }
             },
             'router' => static function ($value): void {
                 if (! \is_string($value)) {
-                    throw OptionsResolverInvalidArgumentException::invalidType('router', $value, ['string'], self::class);
+                    throw ConfigInvalidArgumentException::invalidType('router', $value, ['string'], self::class);
                 }
 
                 if (\realpath($value) === false) {
-                    throw new OptionsResolverInvalidArgumentException(\sprintf('Router script [%s] does not exist.', $value));
+                    throw new ConfigInvalidArgumentException(\sprintf('Router script [%s] does not exist.', $value));
                 }
             },
             'host' => ['string', 'null'],

@@ -420,6 +420,7 @@ final class PhpDumper implements DumperContract
         }
 
         $this->runtimeParameters = $this->removeEmptyValues($this->runtimeParameters);
+        $this->runtimeParametersMapper = $this->removeEmptyValues($this->runtimeParametersMapper);
 
         $proxyClasses = $this->inlineFactories ? $this->generateProxyClasses() : null;
         $servicesContent = $this->addServices();
@@ -2762,9 +2763,9 @@ final class PhpDumper implements DumperContract
     /**
      * Returns the service wrapped in a if condition.
      *
-     * @param mixed                                                                                                                                                   $value
-     * @param string                                                                                                                                                  $code
-     * @param bool                                                                                                                                                    $isGenerator
+     * @param mixed                                                                                                                                   $value
+     * @param string                                                                                                                                  $code
+     * @param bool                                                                                                                                    $isGenerator
      * @param null|ClosureDefinition|ConditionDefinition|DefinitionContract|FactoryDefinition|IteratorDefinition|ObjectDefinition|UndefinedDefinition $definition
      *
      *@throws \Viserio\Contract\Container\Exception\NotFoundException
@@ -3052,8 +3053,8 @@ final class PhpDumper implements DumperContract
     /**
      * Wrap a code in a if condition.
      *
-     * @param string                                                                                                                                                  $code
-     * @param string                                                                                                                                                  $condition
+     * @param string                                                                                                                                  $code
+     * @param string                                                                                                                                  $condition
      * @param null|ClosureDefinition|ConditionDefinition|DefinitionContract|FactoryDefinition|IteratorDefinition|ObjectDefinition|UndefinedDefinition $definition
      *
      * @return string

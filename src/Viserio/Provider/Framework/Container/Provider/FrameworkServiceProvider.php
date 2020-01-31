@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Provider\Framework\Container\Provider;
 
+use Viserio\Component\Config\Container\Definition\ConfigDefinition;
 use Viserio\Component\Console\Container\Pipeline\AddConsoleCommandPipe;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
 use Viserio\Component\Container\Pipeline\RegisterParameterProcessorsPipe;
@@ -26,7 +27,6 @@ use Viserio\Component\Container\Processor\FileParameterProcessor;
 use Viserio\Component\Container\Processor\JsonParameterProcessor;
 use Viserio\Component\Container\Processor\PhpTypeParameterProcessor;
 use Viserio\Component\Container\Processor\UrlParameterProcessor;
-use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
 use Viserio\Contract\Container\CompiledContainer as CompiledContainerContract;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\ServiceProvider\PipelineServiceProvider as PipelineServiceProviderContract;
@@ -57,7 +57,7 @@ class FrameworkServiceProvider implements PipelineServiceProviderContract, Servi
 
         $container->singleton(DirectoryParameterProcessor::class)
             ->setArguments([
-                new OptionDefinition('mapper', DirectoryParameterProcessor::class),
+                new ConfigDefinition('mapper', DirectoryParameterProcessor::class),
                 new ReferenceDefinition(CompiledContainerContract::class),
             ])
             ->addTag(RegisterParameterProcessorsPipe::TAG);
