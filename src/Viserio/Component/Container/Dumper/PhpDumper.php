@@ -44,6 +44,7 @@ use Viserio\Component\Container\AbstractCompiledContainer;
 use Viserio\Component\Container\Argument\ArrayArgument;
 use Viserio\Component\Container\Argument\ClosureArgument;
 use Viserio\Component\Container\Argument\IteratorArgument;
+use Viserio\Component\Container\Argument\ParameterArgument;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Definition\AliasDefinition;
 use Viserio\Component\Container\Definition\ClosureDefinition;
@@ -1982,6 +1983,16 @@ final class PhpDumper implements DumperContract
 
                 if ($value instanceof ArrayArgument) {
                     return $this->compileArray($value->getValue(), true, $interpolate);
+                }
+
+                if ($value instanceof ParameterArgument) {
+                    [$parameterName, $default] = $value->getValue();
+
+                    if ($this->containerBuilder->hasParameter($parameterName)) {
+                        return $this->compileParameter($parameterName);
+                    }
+
+                    return $this->compileValue($default);
                 }
             } finally {
                 [$this->definitionVariables, $this->referenceVariables] = $scope;

@@ -13,17 +13,13 @@ declare(strict_types=1);
 
 namespace Viserio\Provider\Twig\Command;
 
-use ArrayAccess;
-use Symfony\Component\Filesystem\Filesystem;
 use Viserio\Component\Console\Command\AbstractCommand;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
+use Viserio\Contract\Filesystem\Filesystem as FilesystemContract;
 
 class CleanCommand extends AbstractCommand implements RequiresComponentConfigContract, RequiresMandatoryConfigContract
 {
-    use OptionsResolverTrait;
-
     /**
      * The default command name.
      *
@@ -37,22 +33,31 @@ class CleanCommand extends AbstractCommand implements RequiresComponentConfigCon
     protected $description = 'Clean the Twig Cache';
 
     /**
-     * Resolved options.
+     * The cache folder path.
      *
-     * @var array
+     * @var string
      */
-    protected $resolvedOptions = [];
+    protected string $cacheDir;
+
+    /**
+     * A Filesystem instance.
+     *
+     * @var \Viserio\Contract\Filesystem\Filesystem
+     */
+    private FilesystemContract $filesystem;
 
     /**
      * Create a new CleanCommand instance.
      *
-     * @param array|ArrayAccess $config
+     * @param \Viserio\Contract\Filesystem\Filesystem $filesystem
+     * @param string                                  $cache
      */
-    public function __construct($config)
+    public function __construct(FilesystemContract $filesystem, string $cache)
     {
         parent::__construct();
 
-        $this->resolvedOptions = self::resolveOptions($config);
+        $this->filesystem = $filesystem;
+        $this->cacheDir = $cache;
     }
 
     /**
@@ -84,13 +89,11 @@ class CleanCommand extends AbstractCommand implements RequiresComponentConfigCon
      */
     public function handle(): int
     {
-        $cacheDir = $this->resolvedOptions['engines']['twig']['options']['cache'];
+        $this->filesystem->deleteDirectory($this->cacheDir);
 
-        (new Filesystem())->remove($cacheDir);
+        @\rmdir($this->cacheDir);
 
-        @\rmdir($cacheDir);
-
-        if (\is_dir($cacheDir)) {
+        if (\is_dir($this->cacheDir)) {
             $this->error('Twig cache failed to be cleaned.');
 
             return 1;

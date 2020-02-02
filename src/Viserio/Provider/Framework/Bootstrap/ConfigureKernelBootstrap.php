@@ -57,22 +57,10 @@ class ConfigureKernelBootstrap implements BootstrapStateContract
     {
         $container = $kernel->getContainer();
 
-        $timezone = 'UTC';
-
-        if ($container->hasParameter('viserio.app.timezone')) {
-            $timezone = $container->getParameter('viserio.app.timezone');
-        }
-
-        \date_default_timezone_set($timezone);
-
-        $charset = 'UTF-8';
-
-        if ($container->hasParameter('viserio.app.charset')) {
-            $charset = $container->getParameter('viserio.app.charset');
-        }
+        \date_default_timezone_set($container->getParameter('viserio.app.timezone'));
 
         if (\function_exists('mb_internal_encoding')) {
-            \mb_internal_encoding($charset);
+            \mb_internal_encoding($container->getParameter('viserio.app.charset'));
         }
     }
 }

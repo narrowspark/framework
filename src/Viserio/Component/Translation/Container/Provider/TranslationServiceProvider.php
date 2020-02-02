@@ -42,47 +42,6 @@ class TranslationServiceProvider implements AliasServiceProviderContract,
     /**
      * {@inheritdoc}
      */
-    public function build(ContainerBuilderContract $container): void
-    {
-        $container->singleton(MessageFormatterContract::class, IntlMessageFormatter::class);
-
-        $container->singleton(TranslationManagerContract::class, TranslationManager::class)
-            ->addMethodCall('setLocale', [new ConfigDefinition('locale', self::class)])
-            ->addMethodCall('setDirectories', [new ConfigDefinition('directories', self::class)])
-            ->addMethodCall('setLogger', [new ReferenceDefinition(PsrLoggerInterface::class, ReferenceDefinition::IGNORE_ON_UNINITIALIZED_REFERENCE)]);
-
-        $container->singleton(TranslatorContract::class, [new ReferenceDefinition(TranslationManagerContract::class), 'getTranslator']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getExtensions(): array
-    {
-        return [
-            TranslationManagerContract::class => static function (ObjectDefinitionContract $definition, ContainerBuilderContract $container): void {
-                if ($container->has(LoaderContract::class)) {
-                    $definition->addMethodCall('setLoader', [new ReferenceDefinition(LoaderContract::class)])
-                        ->addMethodCall('import', [new ConfigDefinition('files', self::class)]);
-                }
-            },
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAlias(): array
-    {
-        return [
-            TranslationManager::class => TranslationManagerContract::class,
-            'translator' => TranslatorContract::class,
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public static function getDimensions(): iterable
     {
         return ['viserio', 'translation'];
@@ -136,6 +95,59 @@ class TranslationServiceProvider implements AliasServiceProviderContract,
                     }
                 }
             },
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function build(ContainerBuilderContract $container): void
+    {
+        $container->singleton(MessageFormatterContract::class, IntlMessageFormatter::class);
+
+        $container->singleton(TranslationManagerContract::class, TranslationManager::class)
+            ->addMethodCall('setLocale', [
+                (new ConfigDefinition(self::class))
+                    ->setKey('locale'),
+            ])
+            ->addMethodCall('setDirectories', [
+                (new ConfigDefinition(self::class))
+                    ->setKey('directories'),
+            ])
+            ->addMethodCall('setLogger', [new ReferenceDefinition(PsrLoggerInterface::class, ReferenceDefinition::IGNORE_ON_UNINITIALIZED_REFERENCE)]);
+
+        $container->singleton(TranslatorContract::class, [new ReferenceDefinition(TranslationManagerContract::class), 'getTranslator']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
+    {
+        return [
+            TranslationManagerContract::class => static function (ObjectDefinitionContract $definition, ContainerBuilderContract $container): void {
+                if ($container->has(LoaderContract::class)) {
+                    $definition
+                        ->addMethodCall('setLoader', [
+                            new ReferenceDefinition(LoaderContract::class),
+                        ])
+                        ->addMethodCall('import', [
+                            (new ConfigDefinition(self::class))
+                                ->setKey('files'),
+                        ]);
+                }
+            },
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAlias(): array
+    {
+        return [
+            TranslationManager::class => TranslationManagerContract::class,
+            'translator' => TranslatorContract::class,
         ];
     }
 }

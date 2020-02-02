@@ -22,12 +22,11 @@ use Symfony\Component\VarDumper\Server\Connection;
 use Symfony\Component\VarDumper\Server\DumpServer;
 use Symfony\Component\VarDumper\VarDumper;
 use Viserio\Bridge\Monolog\Formatter\ConsoleFormatter;
-use Viserio\Component\Console\Application;
+use Viserio\Component\Config\Container\Definition\ConfigDefinition;
 use Viserio\Component\Console\ConsoleEvents;
 use Viserio\Component\Console\Container\Pipeline\AddConsoleCommandPipe;
 use Viserio\Component\Container\Argument\ArrayArgument;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
-use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
 use Viserio\Component\WebServer\Command\ServerDumpCommand;
 use Viserio\Component\WebServer\Command\ServerLogCommand;
 use Viserio\Component\WebServer\Command\ServerServeCommand;
@@ -66,7 +65,8 @@ class WebServerServiceProvider implements ExtendServiceProviderContract,
         if (\class_exists(VarDumper::class)) {
             $container->singleton(Connection::class)
                 ->setArguments([
-                    new OptionDefinition('debug_server.host', self::class),
+                    (new ConfigDefinition(self::class))
+                        ->setKey('debug_server.host'),
                     new ArrayArgument([
                         'request' => new ReferenceDefinition(RequestContextProvider::class, ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE),
                         'source' => new ReferenceDefinition(SourceContextProvider::class, ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE),
@@ -75,7 +75,8 @@ class WebServerServiceProvider implements ExtendServiceProviderContract,
 
             $container->singleton(DumpServer::class)
                 ->setArguments([
-                    new OptionDefinition('debug_server.host', self::class),
+                    (new ConfigDefinition(self::class))
+                        ->setKey('debug_server.host'),
                     new ReferenceDefinition(LoggerInterface::class, ReferenceDefinition::NULL_ON_INVALID_REFERENCE),
                 ]);
 
@@ -89,12 +90,11 @@ class WebServerServiceProvider implements ExtendServiceProviderContract,
         $container->singleton(ServerStopCommand::class)
             ->addTag(AddConsoleCommandPipe::TAG);
 
-        $arguments = $container->has(ConsoleKernelContract::class) ? [
-            (new ReferenceDefinition(ConsoleKernelContract::class))->addMethodCall('getPublicPath'),
-            (new ReferenceDefinition(ConsoleKernelContract::class))->addMethodCall('getEnvironment'),
-        ] : [
-            new OptionDefinition('web_folder', self::class),
-            new OptionDefinition('env', self::class),
+        $arguments = [
+            (new ConfigDefinition(self::class))
+                ->setKey('web_folder'),
+            (new ConfigDefinition(self::class))
+                ->setKey('env'),
         ];
 
         $container->singleton(ServerServeCommand::class)
@@ -127,21 +127,18 @@ class WebServerServiceProvider implements ExtendServiceProviderContract,
                 // Register early to have a working dump() as early as possible
                 $definition->addMethodCall('attach', [ConsoleEvents::COMMAND, [new ReferenceDefinition(DumpListenerEvent::class), 'configure'], 1024]);
             },
-            Application::class => static function (ObjectDefinitionContract $definition, ContainerBuilderContract $container): void {
-//                $arguments = $container->has(ConsoleKernelContract::class) ? [
-//                    (new ReferenceDefinition(ConsoleKernelContract::class))->addMethodCall('getPublicPath'),
-//                    (new ReferenceDefinition(ConsoleKernelContract::class))->addMethodCall('getEnvironment'),
-//                ] : [
-//                    new ConfigDefinition('web_folder', self::class),
-//                    new ConfigDefinition('env', self::class),
-//                ];
-//
-//                $container->singleton(ServerServeCommand::class)
-//                    ->setArguments($arguments)
-//                    ->addTag(AddConsoleCommandPipe::TAG);
-//                $container->singleton(ServerStartCommand::class)
-//                    ->setArguments($arguments)
-//                    ->addTag(AddConsoleCommandPipe::TAG);
+            ConsoleKernelContract::class => static function ($definition, ContainerBuilderContract $container): void {
+                $arguments = [
+                    (new ReferenceDefinition(ConsoleKernelContract::class))
+                        ->addMethodCall('getPublicPath'),
+                    (new ReferenceDefinition(ConsoleKernelContract::class))
+                        ->addMethodCall('getEnvironment'),
+                ];
+
+                $container->getDefinition(ServerServeCommand::class)
+                    ->setArguments($arguments);
+                $container->getDefinition(ServerStartCommand::class)
+                    ->setArguments($arguments);
             },
         ];
     }

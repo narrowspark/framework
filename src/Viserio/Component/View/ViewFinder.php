@@ -24,28 +24,28 @@ class ViewFinder implements FinderContract
      *
      * @var array
      */
-    protected $paths = [];
+    protected array $paths = [];
 
     /**
      * The array of views that have been located.
      *
      * @var array
      */
-    protected $views = [];
+    protected array $views = [];
 
     /**
      * The namespace to file path hints.
      *
      * @var array
      */
-    protected $hints = [];
+    protected array $hints = [];
 
     /**
      * Register a view extension with the finder.
      *
      * @var array
      */
-    protected static $extensions = [
+    protected static array $extensions = [
         'php',
         'phtml',
         'css',
@@ -59,7 +59,7 @@ class ViewFinder implements FinderContract
      * @param array $paths
      * @param array $extensions
      */
-    public function __construct(array $paths, array $extensions)
+    public function __construct(array $paths, array $extensions = [])
     {
         $this->paths = $paths;
 

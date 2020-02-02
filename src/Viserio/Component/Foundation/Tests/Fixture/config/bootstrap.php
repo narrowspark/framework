@@ -12,7 +12,7 @@ declare(strict_types=1);
  */
 
 return [
-    Viserio\Component\Foundation\Bootstrap\ConfigureKernelBootstrap::class => ['global'],
+    Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariablesBootstrap::class => ['global'],
     Viserio\Component\Exception\Bootstrap\ConsoleHandleExceptionsBootstrap::class => ['console'],
     Viserio\Component\Exception\Bootstrap\HttpHandleExceptionsBootstrap::class => ['http'],
 ];

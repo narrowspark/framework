@@ -33,7 +33,6 @@ use Viserio\Component\WebServer\Command\ServerStatusCommand;
 use Viserio\Component\WebServer\Command\ServerStopCommand;
 use Viserio\Component\WebServer\Container\Provider\WebServerServiceProvider;
 use Viserio\Component\WebServer\Event\DumpListenerEvent;
-use Viserio\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Provider\Debug\Container\Provider\DebugServiceProvider;
 
 /**
@@ -41,7 +40,7 @@ use Viserio\Provider\Debug\Container\Provider\DebugServiceProvider;
  *
  * @small
  */
-final class WebServerServiceProviderTest extends AbstractContainerTestCase
+final class WebServerServiceProviderTestWithoutConsoleKernelTest extends AbstractContainerTestCase
 {
     use MockeryPHPUnitIntegration;
 
@@ -57,15 +56,6 @@ final class WebServerServiceProviderTest extends AbstractContainerTestCase
 
         $this->container->set(LoggerInterface::class, Mockery::mock(LoggerInterface::class));
 
-        $kernel = Mockery::mock(ConsoleKernelContract::class);
-        $kernel->shouldReceive('getPublicPath')
-            ->twice()
-            ->andReturn(__DIR__);
-        $kernel->shouldReceive('getEnvironment')
-            ->twice()
-            ->andReturn('env');
-
-        $this->container->set(ConsoleKernelContract::class, $kernel);
         $this->container->set(ServerRequestInterface::class, new ServerRequest('/'));
 
         self::assertInstanceOf(DumpListenerEvent::class, $this->container->get(DumpListenerEvent::class));
@@ -112,6 +102,10 @@ final class WebServerServiceProviderTest extends AbstractContainerTestCase
     protected function prepareContainerBuilder(ContainerBuilder $containerBuilder): void
     {
         $containerBuilder->setParameter('viserio', [
+            'webserver' => [
+                'web_folder' => __DIR__,
+                'env' => 'local',
+            ],
             'console' => [
                 'name' => 'test',
                 'version' => '1',
@@ -125,8 +119,6 @@ final class WebServerServiceProviderTest extends AbstractContainerTestCase
         $containerBuilder->singleton(ServerRequestInterface::class)
             ->setSynthetic(true);
         $containerBuilder->singleton(LoggerInterface::class)
-            ->setSynthetic(true);
-        $containerBuilder->singleton(ConsoleKernelContract::class)
             ->setSynthetic(true);
     }
 

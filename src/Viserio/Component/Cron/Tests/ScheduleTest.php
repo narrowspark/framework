@@ -27,6 +27,8 @@ use Viserio\Contract\Cron\Exception\LogicException;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Cron\Schedule
+ *
  * @small
  */
 final class ScheduleTest extends MockeryTestCase

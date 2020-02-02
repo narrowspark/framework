@@ -21,9 +21,9 @@ use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Component\Cron\Cron;
 
 /**
- * @coversDefaultClass \Viserio\Component\Cron\Cron
- *
  * @internal
+ *
+ * @covers \Viserio\Component\Cron\Cron
  *
  * @small
  */

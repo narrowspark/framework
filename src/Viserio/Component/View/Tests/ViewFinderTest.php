@@ -24,14 +24,14 @@ use Viserio\Contract\View\Exception\InvalidArgumentException;
  */
 final class ViewFinderTest extends MockeryTestCase
 {
-    /** @var \Viserio\Component\View\ViewFinder */
-    private $finder;
+    /** @var null|\Viserio\Component\View\ViewFinder */
+    private ?ViewFinder $finder = null;
 
     /** @var string */
-    private $path;
+    private string $path;
 
     /** @var int */
-    private $count = 0;
+    private int $count = 0;
 
     /**
      * {@inheritdoc}
@@ -42,15 +42,7 @@ final class ViewFinderTest extends MockeryTestCase
 
         $this->path = __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture';
 
-        $this->finder = new ViewFinder(
-            [
-                'viserio' => [
-                    'view' => [
-                        'paths' => [$this->path],
-                    ],
-                ],
-            ]
-        );
+        $this->finder = new ViewFinder([$this->path], []);
     }
 
     /**

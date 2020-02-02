@@ -15,8 +15,8 @@ namespace Viserio\Component\Foundation\Container\Provider;
 
 use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Component\Config\Container\Definition\ConfigDefinition;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
-use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
 use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 use Viserio\Contract\Config\RequiresValidatedConfig as RequiresValidatedConfigContract;
@@ -65,7 +65,7 @@ class FoundationServiceProvider implements RequiresComponentConfigContract,
             $container->singleton(ServerRequestInterface::class, [new ReferenceDefinition(ServerRequestFactoryInterface::class, ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE), 'createServerRequest'])
                 ->setArguments([
                     'GET',
-                    new OptionDefinition('url', self::class),
+                    (new ConfigDefinition(self::class))->setKey('url'),
                 ]);
         }
     }

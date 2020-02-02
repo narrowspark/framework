@@ -76,21 +76,15 @@ return [
      */
     protected function prepareContainerBuilder(ContainerBuilder $containerBuilder): void
     {
-        $containerBuilder->bind('config', [
-            'viserio' => [
-                'translation' => [
-                    'locale' => 'en',
-                    'files' => $this->file->url(),
-                    'directories' => [
-                        __DIR__,
-                    ],
+        $containerBuilder->setParameter('viserio', [
+            'translation' => [
+                'locale' => 'en',
+                'files' => $this->file->url(),
+                'directories' => [
+                    __DIR__,
                 ],
             ],
         ]);
-
-        $containerBuilder->setParameter('viserio.container.dumper.inline_factories', true);
-        $containerBuilder->setParameter('viserio.container.dumper.inline_class_loader', false);
-        $containerBuilder->setParameter('viserio.container.dumper.as_files', true);
 
         $containerBuilder->singleton(PsrLoggerInterface::class)
             ->setSynthetic(true);

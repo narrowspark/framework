@@ -110,22 +110,37 @@ abstract class AbstractKernel implements KernelContract
     /**
      * The custom environment path defined by the developer.
      *
-     * @var string
+     * @var null|string
      */
-    protected string $environmentPath;
+    protected ?string $environmentPath = null;
 
     protected EnvironmentContract $environmentDetector;
 
-    protected BootstrapManager $bootstrapManager;
+    /**
+     * A instance of the BootstrapManager.
+     *
+     * @var \Viserio\Component\Foundation\BootstrapManager
+     */
+    protected $bootstrapManager;
 
-    protected ?string $rootDir;
+    protected ?string $rootDir = null;
 
     /** @var array<string, string> */
-    protected ?array $projectDirs;
+    protected ?array $projectDirs = null;
 
-    protected string $environment;
+    /**
+     * The current application environment.
+     *
+     * @var null|string
+     */
+    protected ?string $environment = null;
 
-    protected bool $debug;
+    /**
+     * Check if the application is running in debug mode.
+     *
+     * @var bool
+     */
+    protected bool $debug = false;
 
     /**
      * Create a new kernel instance.
@@ -134,9 +149,6 @@ abstract class AbstractKernel implements KernelContract
      */
     public function __construct()
     {
-        $this->rootDir = null;
-        $this->projectDirs = null;
-
         $this->rootDir = $this->getRootDir();
         $this->projectDirs = $this->initProjectDirs();
 

@@ -65,8 +65,7 @@ final class TwigEngineTest extends MockeryTestCase
             new Environment(
                 new FilesystemLoader($config['viserio']['view']['paths']),
                 $config['viserio']['view']['engines']['twig']['options']
-            ),
-            $config
+            )
         );
 
         $template = $engine->get(['name' => 'twightml.twig.html']);
@@ -99,10 +98,6 @@ final class TwigEngineTest extends MockeryTestCase
                                 'debug' => false,
                                 'cache' => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Cache',
                             ],
-                            'extensions' => [
-                                new StrExtension(),
-                                // @todo use container to find twig extensions
-                            ],
                         ],
                     ],
                 ],
@@ -114,7 +109,10 @@ final class TwigEngineTest extends MockeryTestCase
                 new FilesystemLoader($config['viserio']['view']['paths']),
                 $config['viserio']['view']['engines']['twig']['options']
             ),
-            $config
+            [
+                new StrExtension(),
+                // @todo use container to find twig extensions
+            ]
         );
 
         $template = $engine->get(['name' => 'twightml2.twig.html']);
@@ -150,9 +148,6 @@ final class TwigEngineTest extends MockeryTestCase
                                 'debug' => false,
                                 'cache' => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Cache',
                             ],
-                            'extensions' => [
-                                StrExtension::class,
-                            ],
                         ],
                     ],
                 ],
@@ -164,7 +159,9 @@ final class TwigEngineTest extends MockeryTestCase
                 new FilesystemLoader($config['viserio']['view']['paths']),
                 $config['viserio']['view']['engines']['twig']['options']
             ),
-            $config
+            [
+                StrExtension::class,
+            ]
         );
 
         $engine->get([]);

@@ -32,6 +32,7 @@ use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuil
 use Viserio\Contract\Container\ServiceProvider\ExtendServiceProvider as ExtendServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\PipelineServiceProvider as PipelineServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
+use Viserio\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contract\View\Factory as FactoryContract;
 use Viserio\Contract\View\Finder as FinderContract;
 use Viserio\Provider\Twig\Command\CleanCommand;
@@ -49,93 +50,6 @@ class TwigServiceProvider implements AliasServiceProviderContract,
     RequiresMandatoryConfigContract,
     ServiceProviderContract
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function build(ContainerBuilderContract $container): void
-    {
-        $container->singleton(TwigLoader::class)
-            ->addMethodCall('setExtension', [new ConfigDefinition('engines.twig.file_extension', self::class)]);
-
-        $container->singleton(ChainLoader::class)
-            ->addMethodCall('addLoader', [new ReferenceDefinition(TwigLoader::class)]);
-
-        $container->singleton(RuntimeLoaderInterface::class, ContainerRuntimeLoader::class);
-
-        $container->singleton(TwigEnvironment::class)
-            ->setArguments([new ReferenceDefinition(LoaderInterface::class), new ConfigDefinition('engines.twig.options', self::class)])
-            ->addMethodCall('setLexer', [new ReferenceDefinition(Lexer::class, ReferenceDefinition::IGNORE_ON_UNINITIALIZED_REFERENCE)])
-            ->addMethodCall('addRuntimeLoader', [new ReferenceDefinition(RuntimeLoaderInterface::class, ReferenceDefinition::IGNORE_ON_UNINITIALIZED_REFERENCE)])
-            ->setPublic(true);
-
-        $configDefinition = new ReferenceDefinition('config');
-
-        $container->singleton(TwigEngine::class)
-            ->setArguments([
-                new ReferenceDefinition(TwigEnvironment::class),
-                $configDefinition,
-            ])
-            ->addMethodCall('setContainer')
-            ->addTag('view.engine');
-
-        $container->singleton(CleanCommand::class)
-            ->addArgument($configDefinition)
-            ->addTag(AddConsoleCommandPipe::TAG);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAlias(): array
-    {
-        return [
-            LoaderInterface::class => ChainLoader::class,
-            'twig' => TwigEnvironment::class,
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getExtensions(): array
-    {
-        return [
-            FactoryContract::class => static function (ObjectDefinitionContract $definition): void {
-                $definition->addMethodCall('addExtension', ['twig', 'twig']);
-            },
-            FinderContract::class => static function (ObjectDefinitionContract $definition, ContainerBuilderContract $container): void {
-                $container->singleton(BridgeLintCommand::class, LintCommand::class)
-                    ->setArguments([
-                        new ReferenceDefinition(TwigEnvironment::class),
-                        new ReferenceDefinition(FinderContract::class),
-                        new ReferenceDefinition('config'),
-                    ])
-                    ->addTag(AddConsoleCommandPipe::TAG);
-
-                $container->setAlias(BridgeLintCommand::class, LintCommand::class);
-            },
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPipelines(): array
-    {
-        return [
-            'beforeOptimization' => [
-                [
-                    new TwigLoaderPipe(),
-                ],
-            ],
-            'beforeRemoving' => [
-                [
-                    new RuntimeLoaderPipe(),
-                ],
-            ],
-        ];
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -170,6 +84,104 @@ class TwigServiceProvider implements AliasServiceProviderContract,
             'engines' => [
                 'twig' => [
                     'file_extension' => 'twig',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function build(ContainerBuilderContract $container): void
+    {
+        $container->singleton(TwigLoader::class)
+            ->addMethodCall('setExtension', [
+                (new ConfigDefinition(self::class))
+                    ->setKey('engines.twig.file_extension'),
+            ]);
+
+        $container->singleton(ChainLoader::class)
+            ->addMethodCall('addLoader', [new ReferenceDefinition(TwigLoader::class)]);
+
+        $container->singleton(RuntimeLoaderInterface::class, ContainerRuntimeLoader::class);
+
+        $container->singleton(TwigEnvironment::class)
+            ->setArguments([
+                new ReferenceDefinition(LoaderInterface::class),
+                (new ConfigDefinition(self::class))
+                    ->setKey('engines.twig.options'),
+            ])
+            ->addMethodCall('setLexer', [new ReferenceDefinition(Lexer::class, ReferenceDefinition::IGNORE_ON_UNINITIALIZED_REFERENCE)])
+            ->addMethodCall('addRuntimeLoader', [new ReferenceDefinition(RuntimeLoaderInterface::class, ReferenceDefinition::IGNORE_ON_UNINITIALIZED_REFERENCE)])
+            ->setPublic(true);
+
+        $container->singleton(TwigEngine::class)
+            ->setArguments([
+                new ReferenceDefinition(TwigEnvironment::class),
+                (new ConfigDefinition(TwigEngine::class))
+                    ->setKey('engines.twig.extensions'),
+            ])
+            ->addMethodCall('setContainer')
+            ->addTag('view.engine');
+
+        $container->singleton(CleanCommand::class)
+            ->setArguments([
+                new ReferenceDefinition(FilesystemContract::class),
+                (new ConfigDefinition(CleanCommand::class))
+                    ->setKey('engines.twig.options.cache'),
+            ])
+            ->addTag(AddConsoleCommandPipe::TAG);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAlias(): array
+    {
+        return [
+            LoaderInterface::class => ChainLoader::class,
+            'twig' => TwigEnvironment::class,
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
+    {
+        return [
+            FactoryContract::class => static function (ObjectDefinitionContract $definition): void {
+                $definition->addMethodCall('addExtension', ['twig', 'twig']);
+            },
+            FinderContract::class => static function (ObjectDefinitionContract $definition, ContainerBuilderContract $container): void {
+                $container->singleton(BridgeLintCommand::class, LintCommand::class)
+                    ->setArguments([
+                        new ReferenceDefinition(TwigEnvironment::class),
+                        new ReferenceDefinition(FinderContract::class),
+                        (new ConfigDefinition(LintCommand::class))
+                            ->setKey('engines.twig.file_extension'),
+                    ])
+                    ->addTag(AddConsoleCommandPipe::TAG);
+
+                $container->setAlias(BridgeLintCommand::class, LintCommand::class);
+            },
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPipelines(): array
+    {
+        return [
+            'beforeOptimization' => [
+                [
+                    new TwigLoaderPipe(),
+                ],
+            ],
+            'beforeRemoving' => [
+                [
+                    new RuntimeLoaderPipe(),
                 ],
             ],
         ];

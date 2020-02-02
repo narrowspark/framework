@@ -13,14 +13,17 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Foundation\Tests\Bootstrap;
 
-use Closure;
-use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Throwable;
+use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariablesBootstrap;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
+use Webmozart\Assert\Assert;
 
 /**
  * @internal
+ *
+ * @covers \Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariablesBootstrap
  *
  * @small
  */
@@ -43,113 +46,114 @@ final class LoadEnvironmentVariablesBootstrapTest extends MockeryTestCase
 
     public function testBootstrap(): void
     {
-        $kernel = Mockery::mock(KernelContract::class);
+        $_SERVER['APP_ENV'] = 'prod';
+        $_SERVER['APP_DEBUG'] = true;
 
-        $kernel->shouldReceive('getEnvironmentFile')
+        /** @var \Mockery\MockInterface|\Viserio\Contract\Foundation\Kernel $kernel */
+        $kernel = $this->mock(KernelContract::class);
+
+        $kernel->shouldReceive('detectEnvironment')
             ->once()
-            ->andReturn('.env.local');
-        $kernel->shouldReceive('getEnvironmentPath')
+            ->withArgs(static function ($value) {
+                try {
+                    Assert::same('prod', $value());
+                } catch (Throwable $exception) {
+                    return false;
+                }
+
+                return true;
+            });
+
+        $kernel->shouldReceive('detectDebugMode')
             ->once()
-            ->andReturn(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture');
+            ->withArgs(static function ($value) {
+                try {
+                    Assert::true($value());
+                } catch (Throwable $exception) {
+                    return false;
+                }
 
-        $this->arrangeIsRunningInConsole($kernel);
-
-        $this->arrangeKernelDetect($kernel);
-
-        LoadEnvironmentVariablesBootstrap::bootstrap($kernel);
-    }
-
-    public function testBootstrapWithAppEnv(): void
-    {
-        \putenv('APP_ENV=prod');
-
-        $kernel = Mockery::mock(KernelContract::class);
-
-        $this->arrangeEnvPathToFixtures($kernel);
-
-        $kernel->shouldReceive('getEnvironmentFile')
-            ->twice()
-            ->andReturn('.env');
-        $kernel->shouldReceive('loadEnvironmentFrom')
-            ->once()
-            ->with('.env.prod');
-
-        $this->arrangeKernelDetect($kernel);
-        $this->arrangeIsRunningInConsole($kernel);
+                return true;
+            });
 
         LoadEnvironmentVariablesBootstrap::bootstrap($kernel);
 
-        // remove APP_ENV
+        // remove env
         \putenv('APP_ENV=');
         \putenv('APP_ENV');
+        \putenv('APP_DEBUG=');
+        \putenv('APP_DEBUG');
+    }
+
+    public function testBootstrapDetectEnvironmentThrowsExceptionOnMissingAppEnv(): void
+    {
+        /** @var \Mockery\MockInterface|\Viserio\Contract\Foundation\Kernel $kernel */
+        $kernel = $this->mock(KernelContract::class);
+
+        $kernel->shouldReceive('detectEnvironment')
+            ->once()
+            ->withArgs(static function ($callable) {
+                try {
+                    $callable();
+                } catch (Throwable $exception) {
+                    Assert::same('[APP_ENV] environment variable is not defined.', $exception->getMessage());
+
+                    return true;
+                }
+
+                return false;
+            });
+        $kernel->shouldReceive('detectDebugMode')
+            ->once()
+            ->withArgs(static function ($callable) {
+                try {
+                    $callable();
+                } catch (Throwable $exception) {
+                    Assert::same('[APP_DEBUG] environment variable is not defined.', $exception->getMessage());
+
+                    return true;
+                }
+
+                return false;
+            });
+
+        LoadEnvironmentVariablesBootstrap::bootstrap($kernel);
     }
 
     public function testBootstrapWithArgv(): void
     {
+        $_SERVER['APP_ENV'] = 'prod';
+        $_SERVER['APP_DEBUG'] = true;
+
         $argv = $_SERVER['argv'];
 
         $_SERVER['argv'] = [
             'load',
             '--env=local',
+            '--no-debug',
         ];
 
-        $kernel = Mockery::mock(KernelContract::class);
-
-        $this->arrangeEnvPathToFixtures($kernel);
-
-        $kernel->shouldReceive('getEnvironmentFile')
-            ->twice()
-            ->andReturn('.env');
-
-        $kernel->shouldReceive('loadEnvironmentFrom')
-            ->once()
-            ->with('.env.local');
-        $kernel->shouldReceive('isRunningInConsole')
-            ->once()
-            ->andReturn(true);
-
-        $this->arrangeKernelDetect($kernel);
+        /** @var \Mockery\MockInterface|\Viserio\Contract\Foundation\Kernel $kernel */
+        $kernel = new class() extends AbstractKernel {
+            /**
+             * {@inheritdoc}
+             */
+            protected function getBootstrapLockFileName(): string
+            {
+                return '';
+            }
+        };
 
         LoadEnvironmentVariablesBootstrap::bootstrap($kernel);
 
+        self::assertSame('local', $kernel->getEnvironment());
+        self::assertFalse($kernel->isDebug());
+
         $_SERVER['argv'] = $argv;
-    }
-
-    /**
-     * @param \Mockery\MockInterface|\Viserio\Contract\Foundation\Kernel $kernel
-     *
-     * @return void
-     */
-    private function arrangeEnvPathToFixtures($kernel): void
-    {
-        $kernel->shouldReceive('getEnvironmentPath')
-            ->twice()
-            ->andReturn(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR);
-    }
-
-    /**
-     * @param \Mockery\MockInterface|\Viserio\Contract\Foundation\Kernel $kernel
-     *
-     * @return void
-     */
-    private function arrangeIsRunningInConsole($kernel): void
-    {
-        $kernel->shouldReceive('isRunningInConsole')
-            ->once()
-            ->andReturn(false);
-    }
-
-    /**
-     * @param \Mockery\MockInterface|\Viserio\Contract\Foundation\Kernel $kernel
-     */
-    private function arrangeKernelDetect($kernel): void
-    {
-        $kernel->shouldReceive('detectEnvironment')
-            ->once()
-            ->with(Mockery::type(Closure::class));
-
-        $kernel->shouldReceive('detectDebugMode')
-            ->once()
-            ->with(Mockery::type(Closure::class));
+        // remove env
+        \putenv('APP_ENV=');
+        \putenv('APP_ENV');
+        \putenv('APP_DEBUG=');
+        \putenv('APP_DEBUG');
     }
 }

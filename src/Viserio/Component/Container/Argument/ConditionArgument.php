@@ -19,8 +19,8 @@ use Viserio\Contract\Container\Exception\InvalidArgumentException;
 
 final class ConditionArgument implements ConditionArgumentContract
 {
-    /** @var mixed[] */
-    private $values;
+    /** @var array<int, string|\Viserio\Contract\Container\Definition\ReferenceDefinition> */
+    private array $values = [];
 
     /** @var callable */
     private $callback;
@@ -28,8 +28,8 @@ final class ConditionArgument implements ConditionArgumentContract
     /**
      * Create a new ConditionArgument instance.
      *
-     * @param mixed[]  $values
-     * @param callable $callback
+     * @param array<int, string|\Viserio\Contract\Container\Definition\ReferenceDefinition> $values
+     * @param callable                                                                      $callback
      */
     public function __construct(array $values, callable $callback)
     {
@@ -38,7 +38,7 @@ final class ConditionArgument implements ConditionArgumentContract
     }
 
     /**
-     * @return callable
+     * {@inheritdoc}
      */
     public function getCallback(): callable
     {
@@ -48,7 +48,7 @@ final class ConditionArgument implements ConditionArgumentContract
     /**
      * The values in the set.
      *
-     * @return \Viserio\Contract\Container\Definition\ReferenceDefinition[]
+     * @return array<int, string|\Viserio\Contract\Container\Definition\ReferenceDefinition>
      */
     public function getValue(): array
     {
@@ -58,7 +58,7 @@ final class ConditionArgument implements ConditionArgumentContract
     /**
      * The service references to put in the set.
      *
-     * @param \Viserio\Contract\Container\Definition\ReferenceDefinition[] $values
+     * @param mixed[] $values
      *
      * @return void
      */

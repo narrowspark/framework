@@ -41,14 +41,12 @@ final class ConsoleCommandsServiceProviderTest extends AbstractContainerTestCase
      */
     protected function prepareContainerBuilder(ContainerBuilder $containerBuilder): void
     {
-        $containerBuilder->bind('config', [
-            'viserio' => [
-                'routing' => [
-                    'path' => '',
-                ],
+        $containerBuilder->setParameter('viserio', [
+            'console' => [
+                'name' => 'test',
+                'version' => '1',
             ],
         ]);
-
         $containerBuilder->register(new RoutingServiceProvider());
         $containerBuilder->register(new ConsoleServiceProvider());
         $containerBuilder->register(new ConsoleCommandsServiceProvider());

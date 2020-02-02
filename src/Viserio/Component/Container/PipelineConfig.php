@@ -98,13 +98,13 @@ final class PipelineConfig
         $this->beforeOptimizationPipelines = [
             128 => [
                 new RegisterParameterProcessorsPipe(),
+                new ExtendedDefinitionPipe(),
                 new ResolveParameterPlaceHolderPipe(false, false),
                 new ResolveUndefinedDefinitionPipe(),
                 new CheckDefinitionConditionsPipe(),
             ],
         ];
         $this->optimizationPipelines = [[
-            new ExtendedDefinitionPipe(),
             new ResolveFactoryClassPipe(),
             new DecoratorServicePipe(),
             new AutowirePipe(),

@@ -25,6 +25,8 @@ final class ConfigDefinition
     /** @var null|string */
     private ?string $id;
 
+    private ?string $key = null;
+
     /**
      * Create a new ConfigDefinition instance.
      *
@@ -55,5 +57,25 @@ final class ConfigDefinition
     public function getId(): ?string
     {
         return $this->id;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getKey(): ?string
+    {
+        return $this->key;
+    }
+
+    /**
+     * @param null|string $key
+     *
+     * @return $this
+     */
+    public function setKey(?string $key): self
+    {
+        $this->key = $key;
+
+        return $this;
     }
 }

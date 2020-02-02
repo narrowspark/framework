@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Cookie\Container\Provider;
 
+use Viserio\Component\Config\Container\Definition\ConfigDefinition;
 use Viserio\Component\Cookie\CookieJar;
-use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
 use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
 use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
@@ -38,9 +38,12 @@ class CookieServiceProvider implements AliasServiceProviderContract,
             ->addMethodCall(
                 'setDefaultPathAndDomain',
                 [
-                    new OptionDefinition('path', self::class),
-                    new OptionDefinition('domain', self::class),
-                    new OptionDefinition('secure', self::class),
+                    (new ConfigDefinition(self::class))
+                        ->setKey('path'),
+                    (new ConfigDefinition(self::class))
+                        ->setKey('domain'),
+                    (new ConfigDefinition(self::class))
+                        ->setKey('secure'),
                 ]
             );
     }

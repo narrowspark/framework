@@ -21,6 +21,8 @@ use Viserio\Contract\Container\Exception\InvalidArgumentException;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Argument\ConditionArgument
+ *
  * @small
  */
 final class ConditionArgumentTest extends TestCase
@@ -45,12 +47,12 @@ final class ConditionArgumentTest extends TestCase
     }
 
     /**
-     * @dataProvider provideSetValueCases
+     * @dataProvider provideSetAndGetValueCases
      *
      * @param array $value
      * @param bool  $error
      */
-    public function testSetValue(array $value, bool $error): void
+    public function testSetAndGetValue(array $value, bool $error): void
     {
         if ($error) {
             $this->expectException(InvalidArgumentException::class);
@@ -62,7 +64,7 @@ final class ConditionArgumentTest extends TestCase
         self::assertSame($value, $this->argument->getValue());
     }
 
-    public static function provideSetValueCases(): iterable
+    public static function provideSetAndGetValueCases(): iterable
     {
         return [
             [['string'], false],

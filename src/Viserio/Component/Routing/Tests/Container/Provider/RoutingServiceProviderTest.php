@@ -74,14 +74,6 @@ final class RoutingServiceProviderTest extends AbstractContainerTestCase
      */
     protected function prepareContainerBuilder(ContainerBuilder $containerBuilder): void
     {
-        $containerBuilder->bind('config', [
-            'viserio' => [
-                'routing' => [
-                    'path' => '',
-                ],
-            ],
-        ]);
-
         $containerBuilder->singleton(ServerRequestInterface::class)
             ->setSynthetic(true);
 

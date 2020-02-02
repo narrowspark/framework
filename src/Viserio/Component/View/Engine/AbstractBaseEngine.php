@@ -22,13 +22,6 @@ abstract class AbstractBaseEngine implements EngineContract,
     RequiresMandatoryConfigContract
 {
     /**
-     * Resolved options.
-     *
-     * @var array
-     */
-    protected $resolvedOptions = [];
-
-    /**
      * {@inheritdoc}
      */
     public static function getDimensions(): iterable

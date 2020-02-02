@@ -11,35 +11,31 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Provider\Twig\Tests\Container\Provider;
+namespace Viserio\Provider\Debug\Tests\Container\Provider;
 
-use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
-use Twig\Environment;
-use Twig\Lexer;
-use Twig\Loader\ChainLoader;
-use Twig\Loader\LoaderInterface;
+use Symfony\Component\VarDumper\Cloner\ClonerInterface;
+use Symfony\Component\VarDumper\Cloner\VarCloner;
+use Symfony\Component\VarDumper\Dumper\DataDumperInterface;
+use Symfony\Component\VarDumper\VarDumper;
+use Twig\Environment as TwigEnvironment;
 use Viserio\Bridge\Twig\Container\Provider\TwigBridgeServiceProvider;
+use Viserio\Bridge\Twig\Extension\DumpExtension;
 use Viserio\Component\Config\Container\Provider\ConfigServiceProvider;
-use Viserio\Component\Console\Application;
-use Viserio\Component\Console\Container\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\Filesystem\Container\Provider\FilesystemServiceProvider;
 use Viserio\Component\View\Container\Provider\ViewServiceProvider;
-use Viserio\Contract\View\Factory as FactoryContract;
-use Viserio\Provider\Twig\Command\CleanCommand;
-use Viserio\Provider\Twig\Command\LintCommand;
+use Viserio\Provider\Debug\Container\Provider\DebugServiceProvider;
+use Viserio\Provider\Debug\HtmlDumper;
 use Viserio\Provider\Twig\Container\Provider\TwigServiceProvider;
-use Viserio\Provider\Twig\Engine\TwigEngine;
-use Viserio\Provider\Twig\Loader as TwigLoader;
 
 /**
  * @internal
  *
  * @small
  */
-final class TwigServiceProviderTest extends AbstractContainerTestCase
+final class DebugServiceProviderWithTwigTest extends AbstractContainerTestCase
 {
     use MockeryPHPUnitIntegration;
 
@@ -49,20 +45,16 @@ final class TwigServiceProviderTest extends AbstractContainerTestCase
      */
     public function testProvider(): void
     {
-        $this->container->set(Lexer::class, Mockery::mock(Lexer::class));
+        self::assertInstanceOf(VarDumper::class, $this->container->get(VarDumper::class));
+        self::assertInstanceOf(DataDumperInterface::class, $this->container->get(DataDumperInterface::class));
+        self::assertInstanceOf(DataDumperInterface::class, $this->container->get(HtmlDumper::class));
+        self::assertInstanceOf(ClonerInterface::class, $this->container->get(ClonerInterface::class));
+        self::assertInstanceOf(ClonerInterface::class, $this->container->get(VarCloner::class));
+        self::assertInstanceOf(DumpExtension::class, $this->container->get(DumpExtension::class));
 
-        self::assertInstanceOf(TwigEngine::class, $this->container->get(TwigEngine::class));
-        self::assertInstanceOf(TwigLoader::class, $this->container->get(TwigLoader::class));
-        self::assertInstanceOf(ChainLoader::class, $this->container->get(ChainLoader::class));
-        self::assertInstanceOf(ChainLoader::class, $this->container->get(LoaderInterface::class));
-        self::assertInstanceOf(Environment::class, $this->container->get(Environment::class));
-        self::assertInstanceOf(FactoryContract::class, $this->container->get(FactoryContract::class));
+        $twig = $this->container->get(TwigEnvironment::class);
 
-        /** @var Application $console */
-        $console = $this->container->get(Application::class);
-
-        self::assertTrue($console->has(CleanCommand::getDefaultName()));
-        self::assertTrue($console->has(LintCommand::getDefaultName()));
+        self::assertInstanceOf(DumpExtension::class, $twig->getExtension(DumpExtension::class));
     }
 
     /**
@@ -70,20 +62,14 @@ final class TwigServiceProviderTest extends AbstractContainerTestCase
      */
     protected function prepareContainerBuilder(ContainerBuilder $containerBuilder): void
     {
+        $containerBuilder->register(new ConfigServiceProvider());
+        $containerBuilder->register(new TwigBridgeServiceProvider());
         $containerBuilder->register(new FilesystemServiceProvider());
         $containerBuilder->register(new ViewServiceProvider());
         $containerBuilder->register(new TwigServiceProvider());
-        $containerBuilder->register(new TwigBridgeServiceProvider());
-        $containerBuilder->register(new ConfigServiceProvider());
-        $containerBuilder->register(new ConsoleServiceProvider());
-        $containerBuilder->singleton(Lexer::class)
-            ->setSynthetic(true);
+        $containerBuilder->register(new DebugServiceProvider());
 
         $containerBuilder->setParameter('viserio', [
-            'console' => [
-                'name' => 'test',
-                'version' => '1',
-            ],
             'view' => [
                 'paths' => [
                     \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR,

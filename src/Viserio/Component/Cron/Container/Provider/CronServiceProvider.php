@@ -39,37 +39,6 @@ class CronServiceProvider implements AliasServiceProviderContract,
     /**
      * {@inheritdoc}
      */
-    public function build(ContainerBuilderContract $container): void
-    {
-        $container->singleton(ScheduleContract::class, Schedule::class)
-            ->setArguments([
-                new ConfigDefinition('path', self::class),
-                new ConfigDefinition('console', self::class),
-            ])
-            ->setMethodCalls([
-                ['setCacheItemPool', [new ReferenceDefinition(CacheItemPoolInterface::class, ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE)]],
-                ['setContainer'],
-            ]);
-
-        $container->singleton(CronListCommand::class)
-            ->addTag(AddConsoleCommandPipe::TAG);
-        $container->singleton(ScheduleRunCommand::class)
-            ->addTag(AddConsoleCommandPipe::TAG);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAlias(): array
-    {
-        return [
-            Schedule::class => ScheduleContract::class,
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public static function getDimensions(): iterable
     {
         return ['viserio', 'cron'];
@@ -80,7 +49,10 @@ class CronServiceProvider implements AliasServiceProviderContract,
      */
     public static function getMandatoryConfig(): iterable
     {
-        return ['path'];
+        return [
+            'path',
+            'env',
+        ];
     }
 
     /**
@@ -90,6 +62,7 @@ class CronServiceProvider implements AliasServiceProviderContract,
     {
         return [
             'console' => null,
+            'maintenance' => false,
         ];
     }
 
@@ -99,8 +72,49 @@ class CronServiceProvider implements AliasServiceProviderContract,
     public static function getConfigValidators(): iterable
     {
         return [
+            'env' => ['string'],
+            'maintenance' => ['bool'],
             'path' => ['string'],
             'console' => ['string', 'null'],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function build(ContainerBuilderContract $container): void
+    {
+        $container->singleton(ScheduleContract::class, Schedule::class)
+            ->setArguments([
+                (new ConfigDefinition(self::class))
+                    ->setKey('path'),
+                (new ConfigDefinition(self::class))
+                    ->setKey('console'),
+            ])
+            ->setMethodCalls([
+                ['setCacheItemPool', [new ReferenceDefinition(CacheItemPoolInterface::class, ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE)]],
+                ['setContainer'],
+            ]);
+
+        $container->singleton(CronListCommand::class)
+            ->addTag(AddConsoleCommandPipe::TAG);
+        $container->singleton(ScheduleRunCommand::class)
+            ->setArguments([
+                (new ConfigDefinition(self::class))
+                    ->setKey('env'),
+                (new ConfigDefinition(self::class))
+                    ->setKey('maintenance'),
+            ])
+            ->addTag(AddConsoleCommandPipe::TAG);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAlias(): array
+    {
+        return [
+            Schedule::class => ScheduleContract::class,
         ];
     }
 }

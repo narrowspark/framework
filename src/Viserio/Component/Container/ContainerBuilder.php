@@ -69,35 +69,35 @@ final class ContainerBuilder implements ContainerBuilderContract
      *
      * @var ClosureDefinition[]|DefinitionContract[]|FactoryDefinition[]|IteratorDefinition[]|ObjectDefinition[]|UndefinedDefinition[]
      */
-    private $definitions = [];
+    private array $definitions = [];
 
     /**
      * The container's parameters.
      *
      * @var array
      */
-    private $parameters = [];
+    private array $parameters = [];
 
     /**
      * All of the used tags.
      *
      * @var array
      */
-    private $usedTags = [];
+    private array $usedTags = [];
 
     /**
      * The extension closures for services.
      *
      * @var array
      */
-    private $extenders = [];
+    private array $extenders = [];
 
     /**
      * Whether the container has already been built.
      *
      * @var bool
      */
-    private $locked = false;
+    private bool $locked = false;
 
     /**
      * Removed definition ids.

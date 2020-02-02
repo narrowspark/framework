@@ -109,8 +109,6 @@
         "viserio/manager": "self.version",
         "viserio/manager-contract": "self.version",
         "viserio/monolog-bridge": "self.version",
-        "viserio/config": "self.version",
-        "viserio/config-contract": "self.version",
         "viserio/pagination": "self.version",
         "viserio/pagination-contract": "self.version",
         "viserio/parser": "self.version",

@@ -60,7 +60,7 @@
     },
     "suggest": {
         "psr/http-factory": "Required to use the SetRequestForConsole (^1.0.0).",
-        "viserio/container": "Required to use the ConfigureKernelBootstrap and SyntheticInstancesBootstrap (^1.0@dev)..",
+        "viserio/container": "Required to use the ConfigureKernelBootstrap and SyntheticInstancesBootstrap (^1.0@dev).",
         "viserio/exception": "Required for a better http and console exception output (^1.0@dev)."
     },
     "extra": {

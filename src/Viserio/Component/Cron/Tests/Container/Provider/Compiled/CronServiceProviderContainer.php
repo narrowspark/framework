@@ -15,39 +15,35 @@ final class CronServiceProviderContainer extends \Viserio\Component\Container\Ab
     public function __construct()
     {
         $this->services = $this->privates = [];
+        $this->parameters = [
+            'viserio' => [
+                'console' => [
+                    'name' => 'test',
+                    'version' => '1',
+                ],
+                'cron' => [
+                    'env' => 'test',
+                    'console' => 'cerebro',
+                    'path' => '/var/www/framework/src/Viserio/Component/Cron/Tests/Container',
+                ],
+            ],
+            'console.command.ids' => [],
+        ];
         $this->methodMapping = [
-            \Psr\Cache\CacheItemPoolInterface::class => 'geta5b685927e5b9bb2231acfb11f144d6dad3923af3df18927d2541a017feb40a3',
             \Symfony\Component\Console\CommandLoader\CommandLoaderInterface::class => 'getce817e8bdc75399a693ba45b876c457a0f7fd422258f7d4eabc553987c2fbd31',
+            \Viserio\Component\Config\Command\ConfigDumpCommand::class => 'get88001f5d55ce57598db2e5b80611a49d605be7b037e634e18ca2493683a114ee',
+            \Viserio\Component\Config\Command\ConfigReaderCommand::class => 'get91fd613885c83bb4b00b29ee3e879446444b7ecad7fdd0292ef1df30bdfa3884',
             \Viserio\Component\Console\Application::class => 'get206058a713a7172158e11c9d996f6a067c294ab0356ae6697060f162e057445a',
             \Viserio\Component\Cron\Command\CronListCommand::class => 'get87b164346432352f4ee3e34b1f25c4c1c674833a5bc6a84bc08c6a0f38a7f2fc',
             \Viserio\Component\Cron\Command\ScheduleRunCommand::class => 'getfad3fe2b13bcec06db5de00d5628b79d397c81d4135d8b09f1326c0368b5b805',
-            \Viserio\Component\OptionsResolver\Command\OptionDumpCommand::class => 'get5a73c93dbe469f9f1fae0210ee64ef2ab32ed536467d0570a89353766859bb62',
-            \Viserio\Component\OptionsResolver\Command\OptionReaderCommand::class => 'get51bc2cdf2d87fcaa6a89ede54bc023ccfe784ddb4cc7a7e2be4ab3a7e9204471',
-            \Viserio\Contract\Cache\Manager::class => 'get260317fd547f4a31721d0dc905b1c4de4c5b232dc0efe846a1f027e3dcda5b9f',
             \Viserio\Contract\Cron\Schedule::class => 'get3246b105a9ad528f2d36600a4c377f14d16d2af3372dd5fffa5558ae9a807a62',
-            'config' => 'get34bcaa5afa8745d92e6161e8495be3b939c5c6abb4dc2fd1f5a3cfdaba620256',
-            'console.command.ids' => 'getdbce155f9c0e95dbd4bfbfaadab27eb79915789fa80c6c65068ccf60c9ef9e18',
         ];
         $this->aliases = [
-            \Psr\SimpleCache\CacheInterface::class => \Psr\Cache\CacheItemPoolInterface::class,
             \Symfony\Component\Console\Application::class => \Viserio\Component\Console\Application::class,
-            \Viserio\Component\Cache\CacheManager::class => \Viserio\Contract\Cache\Manager::class,
             \Viserio\Component\Cron\Schedule::class => \Viserio\Contract\Cron\Schedule::class,
-            'cache' => \Viserio\Contract\Cache\Manager::class,
-            'cache.store' => \Psr\Cache\CacheItemPoolInterface::class,
             'cerebro' => \Viserio\Component\Console\Application::class,
             'console' => \Viserio\Component\Console\Application::class,
         ];
-    }
-
-    /**
-     * Returns the public Psr\Cache\CacheItemPoolInterface shared service.
-     *
-     * @return mixed An instance returned by \Viserio\Component\Container\Definition\ReferenceDefinition::getDriver()
-     */
-    protected function geta5b685927e5b9bb2231acfb11f144d6dad3923af3df18927d2541a017feb40a3()
-    {
-        return $this->services[\Psr\Cache\CacheItemPoolInterface::class] = ($this->services[\Viserio\Contract\Cache\Manager::class] ?? $this->get260317fd547f4a31721d0dc905b1c4de4c5b232dc0efe846a1f027e3dcda5b9f())->getDriver();
     }
 
     /**
@@ -60,9 +56,37 @@ final class CronServiceProviderContainer extends \Viserio\Component\Container\Ab
         return $this->services[\Symfony\Component\Console\CommandLoader\CommandLoaderInterface::class] = new \Viserio\Component\Console\CommandLoader\IteratorCommandLoader(new \Viserio\Component\Container\RewindableGenerator(function () {
             yield 'cron:list' => ($this->services[\Viserio\Component\Cron\Command\CronListCommand::class] ?? $this->get87b164346432352f4ee3e34b1f25c4c1c674833a5bc6a84bc08c6a0f38a7f2fc());
             yield 'cron:run' => ($this->services[\Viserio\Component\Cron\Command\ScheduleRunCommand::class] ?? $this->getfad3fe2b13bcec06db5de00d5628b79d397c81d4135d8b09f1326c0368b5b805());
-            yield 'option:dump' => ($this->services[\Viserio\Component\OptionsResolver\Command\OptionDumpCommand::class] ?? $this->get5a73c93dbe469f9f1fae0210ee64ef2ab32ed536467d0570a89353766859bb62());
-            yield 'option:read' => ($this->services[\Viserio\Component\OptionsResolver\Command\OptionReaderCommand::class] ?? $this->get51bc2cdf2d87fcaa6a89ede54bc023ccfe784ddb4cc7a7e2be4ab3a7e9204471());
+            yield 'option:dump' => ($this->services[\Viserio\Component\Config\Command\ConfigDumpCommand::class] ?? $this->get88001f5d55ce57598db2e5b80611a49d605be7b037e634e18ca2493683a114ee());
+            yield 'option:read' => ($this->services[\Viserio\Component\Config\Command\ConfigReaderCommand::class] ?? $this->get91fd613885c83bb4b00b29ee3e879446444b7ecad7fdd0292ef1df30bdfa3884());
         }, 4));
+    }
+
+    /**
+     * Returns the public Viserio\Component\Config\Command\ConfigDumpCommand shared service.
+     *
+     * @return \Viserio\Component\Config\Command\ConfigDumpCommand
+     */
+    protected function get88001f5d55ce57598db2e5b80611a49d605be7b037e634e18ca2493683a114ee(): \Viserio\Component\Config\Command\ConfigDumpCommand
+    {
+        $this->services[\Viserio\Component\Config\Command\ConfigDumpCommand::class] = $instance = new \Viserio\Component\Config\Command\ConfigDumpCommand();
+
+        $instance->setName('option:dump');
+
+        return $instance;
+    }
+
+    /**
+     * Returns the public Viserio\Component\Config\Command\ConfigReaderCommand shared service.
+     *
+     * @return \Viserio\Component\Config\Command\ConfigReaderCommand
+     */
+    protected function get91fd613885c83bb4b00b29ee3e879446444b7ecad7fdd0292ef1df30bdfa3884(): \Viserio\Component\Config\Command\ConfigReaderCommand
+    {
+        $this->services[\Viserio\Component\Config\Command\ConfigReaderCommand::class] = $instance = new \Viserio\Component\Config\Command\ConfigReaderCommand();
+
+        $instance->setName('option:read');
+
+        return $instance;
     }
 
     /**
@@ -72,7 +96,7 @@ final class CronServiceProviderContainer extends \Viserio\Component\Container\Ab
      */
     protected function get206058a713a7172158e11c9d996f6a067c294ab0356ae6697060f162e057445a(): \Viserio\Component\Console\Application
     {
-        $this->services[\Viserio\Component\Console\Application::class] = $instance = new \Viserio\Component\Console\Application();
+        $this->services[\Viserio\Component\Console\Application::class] = $instance = new \Viserio\Component\Console\Application($this->getParameter('viserio.console.version'), $this->getParameter('viserio.console.name'));
 
         $instance->setContainer($this);
         if ($this->has(\Symfony\Component\Console\CommandLoader\CommandLoaderInterface::class)) {
@@ -103,63 +127,9 @@ final class CronServiceProviderContainer extends \Viserio\Component\Container\Ab
      */
     protected function getfad3fe2b13bcec06db5de00d5628b79d397c81d4135d8b09f1326c0368b5b805(): \Viserio\Component\Cron\Command\ScheduleRunCommand
     {
-        $this->services[\Viserio\Component\Cron\Command\ScheduleRunCommand::class] = $instance = new \Viserio\Component\Cron\Command\ScheduleRunCommand();
+        $this->services[\Viserio\Component\Cron\Command\ScheduleRunCommand::class] = $instance = new \Viserio\Component\Cron\Command\ScheduleRunCommand($this->getParameter('viserio.cron.env'), false);
 
         $instance->setName('cron:run');
-
-        return $instance;
-    }
-
-    /**
-     * Returns the public Viserio\Component\Config\Command\ConfigDumpCommand shared service.
-     *
-     * @return \Viserio\Component\Config\Command\ConfigDumpCommand
-     */
-    protected function get5a73c93dbe469f9f1fae0210ee64ef2ab32ed536467d0570a89353766859bb62(): \Viserio\Component\OptionsResolver\Command\OptionDumpCommand
-    {
-        $this->services[\Viserio\Component\OptionsResolver\Command\OptionDumpCommand::class] = $instance = new \Viserio\Component\OptionsResolver\Command\OptionDumpCommand();
-
-        $instance->setName('option:dump');
-
-        return $instance;
-    }
-
-    /**
-     * Returns the public Viserio\Component\Config\Command\ConfigReaderCommand shared service.
-     *
-     * @return \Viserio\Component\Config\Command\ConfigReaderCommand
-     */
-    protected function get51bc2cdf2d87fcaa6a89ede54bc023ccfe784ddb4cc7a7e2be4ab3a7e9204471(): \Viserio\Component\OptionsResolver\Command\OptionReaderCommand
-    {
-        $this->services[\Viserio\Component\OptionsResolver\Command\OptionReaderCommand::class] = $instance = new \Viserio\Component\OptionsResolver\Command\OptionReaderCommand();
-
-        $instance->setName('option:read');
-
-        return $instance;
-    }
-
-    /**
-     * Returns the public Viserio\Contract\Cache\Manager shared service.
-     *
-     * @return \Viserio\Component\Cache\CacheManager
-     */
-    protected function get260317fd547f4a31721d0dc905b1c4de4c5b232dc0efe846a1f027e3dcda5b9f(): \Viserio\Component\Cache\CacheManager
-    {
-        $this->services[\Viserio\Contract\Cache\Manager::class] = $instance = new \Viserio\Component\Cache\CacheManager([
-            'viserio' => [
-                'cache' => [
-                    'default' => 'array',
-                    'drivers' => [],
-                    'namespace' => false,
-                ],
-                'cron' => [
-                    'console' => 'cerebro',
-                    'path' => '/var/www/framework/src/Viserio/Component/Cron/Tests/Container',
-                ],
-            ],
-        ]);
-
-        $instance->setContainer($this);
 
         return $instance;
     }
@@ -171,46 +141,11 @@ final class CronServiceProviderContainer extends \Viserio\Component\Container\Ab
      */
     protected function get3246b105a9ad528f2d36600a4c377f14d16d2af3372dd5fffa5558ae9a807a62(): \Viserio\Component\Cron\Schedule
     {
-        $this->services[\Viserio\Contract\Cron\Schedule::class] = $instance = new \Viserio\Component\Cron\Schedule('/var/www/framework/src/Viserio/Component/Cron/Tests/Container', 'cerebro');
+        $this->services[\Viserio\Contract\Cron\Schedule::class] = $instance = new \Viserio\Component\Cron\Schedule($this->getParameter('viserio.cron.path'), null);
 
-        if ($this->has(\Psr\Cache\CacheItemPoolInterface::class)) {
-            $instance->setCacheItemPool(($this->services[\Psr\Cache\CacheItemPoolInterface::class] ?? $this->geta5b685927e5b9bb2231acfb11f144d6dad3923af3df18927d2541a017feb40a3()));
-        }
         $instance->setContainer($this);
 
         return $instance;
-    }
-
-    /**
-     * Returns the public config service.
-     *
-     * @return array
-     */
-    protected function get34bcaa5afa8745d92e6161e8495be3b939c5c6abb4dc2fd1f5a3cfdaba620256(): array
-    {
-        return [
-            'viserio' => [
-                'cache' => [
-                    'default' => 'array',
-                    'drivers' => [],
-                    'namespace' => false,
-                ],
-                'cron' => [
-                    'console' => 'cerebro',
-                    'path' => '/var/www/framework/src/Viserio/Component/Cron/Tests/Container',
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * Returns the public console.command.ids service.
-     *
-     * @return array
-     */
-    protected function getdbce155f9c0e95dbd4bfbfaadab27eb79915789fa80c6c65068ccf60c9ef9e18(): array
-    {
-        return [];
     }
 
     /**

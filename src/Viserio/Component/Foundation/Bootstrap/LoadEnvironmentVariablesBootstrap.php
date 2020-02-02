@@ -52,8 +52,16 @@ class LoadEnvironmentVariablesBootstrap implements BootstrapContract
                     throw new RuntimeException('[APP_ENV] environment variable is not defined.');
                 }
 
-                return $_ENV['APP_ENV'] = $appEnv;
+                return $appEnv;
             });
+        } catch (RuntimeException $exception) {
+            $output->writeln($exception->getMessage());
+            $output->writeln('You need to define environment variables in your [.env] file to run the Narrowspark Framework.');
+
+            die(1);
+        }
+
+        try {
             $kernel->detectDebugMode(static function (): bool {
                 $_SERVER['APP_DEBUG'] = $_SERVER['APP_DEBUG'] ?? $_ENV['APP_DEBUG'] ?? null;
 
@@ -64,7 +72,7 @@ class LoadEnvironmentVariablesBootstrap implements BootstrapContract
                     throw new RuntimeException('[APP_DEBUG] environment variable is not defined.');
                 }
 
-                return $_ENV['APP_DEBUG'] = $appDebug;
+                return $appDebug;
             });
         } catch (RuntimeException $exception) {
             $output->writeln($exception->getMessage());

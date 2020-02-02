@@ -16,10 +16,10 @@ namespace Viserio\Component\View\Container\Provider;
 use Parsedown;
 use ParsedownExtra;
 use Psr\Container\ContainerInterface;
+use Viserio\Component\Config\Container\Definition\ConfigDefinition;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
 use Viserio\Component\Container\Pipeline\ResolvePreloadPipe;
 use Viserio\Component\Container\PipelineConfig;
-use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
 use Viserio\Component\View\Container\Pipeline\AddViewEnginePipe;
 use Viserio\Component\View\Engine\FileEngine;
 use Viserio\Component\View\Engine\MarkdownEngine;
@@ -79,8 +79,10 @@ class ViewServiceProvider implements AliasServiceProviderContract,
     {
         $container->singleton(FinderContract::class, ViewFinder::class)
             ->setArguments([
-                new OptionDefinition('paths', self::class),
-                new OptionDefinition('extensions', self::class),
+                (new ConfigDefinition(self::class))
+                    ->setKey('paths'),
+                (new ConfigDefinition(self::class))
+                    ->setKey('extensions'),
             ])
             ->addTag(ResolvePreloadPipe::TAG);
         $container->singleton(FactoryContract::class, ViewFactory::class)

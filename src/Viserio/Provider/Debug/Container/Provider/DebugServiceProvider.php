@@ -22,8 +22,8 @@ use Symfony\Component\VarDumper\Dumper\HtmlDumper as SymfonyHtmlDumper;
 use Symfony\Component\VarDumper\VarDumper;
 use Twig\Environment as TwigEnvironment;
 use Viserio\Bridge\Twig\Extension\DumpExtension;
+use Viserio\Component\Config\Container\Definition\ConfigDefinition;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
-use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
 use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
 use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\Container\Definition\ObjectDefinition as ObjectDefinitionContract;
@@ -49,9 +49,18 @@ class DebugServiceProvider implements AliasServiceProviderContract,
         $container->singleton(CliDumper::class);
 
         $container->singleton(ClonerInterface::class, VarCloner::class)
-            ->addMethodCall('setMaxItems', [new OptionDefinition('max_items', self::class)])
-            ->addMethodCall('setMinDepth', [new OptionDefinition('min_depth', self::class)])
-            ->addMethodCall('setMaxString', [new OptionDefinition('max_string_length', self::class)])
+            ->addMethodCall('setMaxItems', [
+                (new ConfigDefinition(self::class))
+                    ->setKey('max_items'),
+            ])
+            ->addMethodCall('setMinDepth', [
+                (new ConfigDefinition(self::class))
+                    ->setKey('min_depth'),
+            ])
+            ->addMethodCall('setMaxString', [
+                (new ConfigDefinition(self::class))
+                    ->setKey('max_string_length'),
+            ])
             ->addMethodCall('addCasters', [ReflectionCaster::UNSET_CLOSURE_FILE_INFO]);
 
         $container->singleton(DataDumperInterface::class, HtmlDumper::class)
@@ -62,7 +71,10 @@ class DebugServiceProvider implements AliasServiceProviderContract,
                     Style::NARROWSPARK_THEME,
                 ]
             )
-            ->addMethodCall('setTheme', [new OptionDefinition('theme', self::class)]);
+            ->addMethodCall('setTheme', [
+                (new ConfigDefinition(self::class))
+                    ->setKey('theme'),
+            ]);
     }
 
     /**

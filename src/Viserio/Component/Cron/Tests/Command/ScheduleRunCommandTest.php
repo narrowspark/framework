@@ -24,6 +24,8 @@ use Viserio\Component\Support\Invoker;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Cron\Command\ScheduleRunCommand
+ *
  * @small
  */
 final class ScheduleRunCommandTest extends MockeryTestCase
@@ -41,7 +43,7 @@ final class ScheduleRunCommandTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $command = new ScheduleRunCommand();
+        $command = new ScheduleRunCommand('test', false);
 
         $this->invoker = new Invoker();
         $this->command = $command;
@@ -58,14 +60,6 @@ final class ScheduleRunCommandTest extends MockeryTestCase
 
         $container = new ArrayContainer([
             Schedule::class => $schedule,
-            'config' => [
-                'viserio' => [
-                    'cron' => [
-                        'env' => 'test',
-                        'maintenance' => false,
-                    ],
-                ],
-            ],
         ]);
 
         $this->arrangeInvoker($container);
@@ -87,14 +81,6 @@ final class ScheduleRunCommandTest extends MockeryTestCase
 
         $container = new ArrayContainer([
             Schedule::class => $schedule,
-            'config' => [
-                'viserio' => [
-                    'cron' => [
-                        'env' => 'test',
-                        'maintenance' => false,
-                    ],
-                ],
-            ],
         ]);
 
         $this->arrangeInvoker($container);
@@ -118,14 +104,6 @@ final class ScheduleRunCommandTest extends MockeryTestCase
 
         $container = new ArrayContainer([
             Schedule::class => $schedule,
-            'config' => [
-                'viserio' => [
-                    'cron' => [
-                        'env' => 'test',
-                        'maintenance' => false,
-                    ],
-                ],
-            ],
         ]);
 
         $this->arrangeInvoker($container);
@@ -143,7 +121,6 @@ final class ScheduleRunCommandTest extends MockeryTestCase
      */
     private function arrangeInvoker(ContainerInterface $container): void
     {
-        $this->command->setContainer($container);
         $this->invoker->setContainer($container)
             ->injectByTypeHint(true)
             ->injectByParameterName(true);

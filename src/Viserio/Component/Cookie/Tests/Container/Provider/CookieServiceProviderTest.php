@@ -36,13 +36,11 @@ final class CookieServiceProviderTest extends AbstractContainerTestCase
      */
     protected function prepareContainerBuilder(ContainerBuilder $containerBuilder): void
     {
-        $containerBuilder->bind('config', [
-            'viserio' => [
-                'cookie' => [
-                    'domain' => '',
-                    'path' => '',
-                    'secure' => true,
-                ],
+        $containerBuilder->setParameter('viserio', [
+            'cookie' => [
+                'domain' => '',
+                'path' => '',
+                'secure' => true,
             ],
         ]);
         $containerBuilder->register(new CookieServiceProvider());

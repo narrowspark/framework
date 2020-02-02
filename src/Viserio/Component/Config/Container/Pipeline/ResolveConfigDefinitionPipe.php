@@ -22,6 +22,7 @@ use Viserio\Component\Config\ConfigurationDimensionsIterator;
 use Viserio\Component\Config\ConfigurationMandatoryIterator;
 use Viserio\Component\Config\ConfigurationValidatorIterator;
 use Viserio\Component\Config\Container\Definition\ConfigDefinition;
+use Viserio\Component\Container\Argument\ParameterArgument;
 use Viserio\Component\Container\Definition\ObjectDefinition;
 use Viserio\Component\Container\Pipeline\AbstractRecursivePipe;
 use Viserio\Contract\Config\DeprecatedConfig as DeprecatedConfigContract;
@@ -34,7 +35,7 @@ use Viserio\Contract\Container\Exception\InvalidArgumentException;
 class ResolveConfigDefinitionPipe extends AbstractRecursivePipe
 {
     /** @var array */
-    private $configResolverCache = [];
+    private array $configResolverCache = [];
 
     /**
      * {@inheritdoc}
@@ -43,12 +44,16 @@ class ResolveConfigDefinitionPipe extends AbstractRecursivePipe
     {
         if ($value instanceof ConfigDefinition) {
             $class = $value->getClass();
+            $configKey = $value->getKey();
+            $indexKey = $class . ($configKey ?? '');
 
-            if (! isset($this->configResolverCache[$class])) {
-                $interfaces = \class_implements($class);
+            if (! \array_key_exists($indexKey, $this->configResolverCache)) {
+                if (! $r = $this->containerBuilder->getClassReflector($class)) {
+                    throw new InvalidArgumentException(\sprintf('Class [%s] used for config definition in service [%s] cannot be found.', $class, $this->currentId));
+                }
 
-                if (! \array_key_exists(RequiresComponentConfigContract::class, $interfaces)) {
-                    throw new InvalidArgumentException('todo.');
+                if (! $r->implementsInterface(RequiresComponentConfigContract::class)) {
+                    throw new InvalidArgumentException(\sprintf('Class [%s] is missing implementation of [%s] interface in service [%s]', $class, RequiresComponentConfigContract::class, $this->currentId));
                 }
 
                 $dimensions = $class::getDimensions();
@@ -76,38 +81,64 @@ class ResolveConfigDefinitionPipe extends AbstractRecursivePipe
 
                 $iterator = new ConfigurationDimensionsIterator($class, $parameters, $value->getId());
 
-                if (\array_key_exists(RequiresMandatoryConfigContract::class, $interfaces)) {
+                if ($r->implementsInterface(RequiresMandatoryConfigContract::class)) {
                     $iterator = new ConfigurationMandatoryIterator($class, $iterator);
                 }
 
-                if (\array_key_exists(RequiresValidatedConfigContract::class, $interfaces)) {
+                if ($r->implementsInterface(RequiresValidatedConfigContract::class)) {
                     $iterator = new ConfigurationValidatorIterator($class, $iterator);
                 }
 
                 $default = [];
 
-                if (\array_key_exists(ProvidesDefaultConfigContract::class, $interfaces)) {
+                if ($r->implementsInterface(ProvidesDefaultConfigContract::class)) {
                     $iterator = new ConfigurationDefaultIterator($class, $iterator);
 
                     $default = $class::getDefaultConfig();
                     $default instanceof Iterator ? \iterator_to_array($default) : (array) $default;
                 }
 
-                if (\array_key_exists(DeprecatedConfigContract::class, $interfaces)) {
+                if ($r->implementsInterface(DeprecatedConfigContract::class)) {
                     new ConfigurationDeprecatedIterator($class, $iterator);
                 }
 
-                $objectDefinition = new ObjectDefinition(\sprintf('%s.config', $class), ConfigBag::class, 3 /* \Viserio\Contract\Container\Definition::PRIVATE */);
-                $objectDefinition->addArgument($default);
+                if ($configKey === null) {
+                    $definition = new ObjectDefinition(\sprintf('%s.config', $class), ConfigBag::class, 3 /* \Viserio\Contract\Container\Definition::PRIVATE */);
+                    $definition->addArgument($default);
 
-                if (\count($dimensions) !== 0 && \iterator_count($parameters) !== 0) {
-                    $objectDefinition->addArgument(\sprintf('{%s}', \implode('.', $dimensions)));
+                    if (\count($dimensions) !== 0 && \iterator_count($parameters) !== 0) {
+                        $definition->addArgument(\sprintf('{%s}', \implode('.', $dimensions)));
+                    }
+
+                    return $this->configResolverCache[$indexKey] = $definition;
                 }
 
-                return $this->configResolverCache[$class] = $objectDefinition;
+                $expression = \sprintf('{%s%s}', \implode('.', $dimensions), '.' . $configKey);
+
+                if (\count($default) !== 0) {
+                    $hasDefaultValue = true;
+
+                    foreach (\explode('.', $configKey) as $segment) {
+                        if (\is_array($default) && (\array_key_exists($segment, $default) || isset($default[$segment]))) {
+                            $default = $default[$segment];
+                        } else {
+                            $hasDefaultValue = false;
+
+                            break;
+                        }
+                    }
+
+                    if ($hasDefaultValue) {
+                        $this->containerBuilder->log($this, \sprintf('No parameter value was found for [%s], falling back to default value found in [%s].', $expression, $class));
+
+                        return $this->configResolverCache[$indexKey] = new ParameterArgument($expression, $default);
+                    }
+                }
+
+                return $this->configResolverCache[$indexKey] = $expression;
             }
 
-            return $this->configResolverCache[$class];
+            return $this->configResolverCache[$indexKey];
         }
 
         return parent::processValue($value, $isRoot);

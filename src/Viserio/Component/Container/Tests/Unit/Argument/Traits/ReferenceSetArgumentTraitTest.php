@@ -23,6 +23,10 @@ use Viserio\Contract\Container\Exception\InvalidArgumentException;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Argument\ArrayArgument
+ * @covers \Viserio\Component\Container\Argument\IteratorArgument
+ * @covers \Viserio\Component\Container\Argument\Traits\ReferenceSetArgumentTrait
+ *
  * @small
  */
 final class ReferenceSetArgumentTraitTest extends TestCase

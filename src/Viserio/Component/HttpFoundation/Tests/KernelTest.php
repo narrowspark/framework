@@ -90,6 +90,7 @@ final class KernelTest extends MockeryTestCase
             ->andReturn($router);
 
         $kernel = $this->getKernel($this->containerMock);
+        $kernel->setEnv('local');
 
         self::assertInstanceOf(ResponseInterface::class, $kernel->handle($serverRequest));
     }
@@ -126,6 +127,7 @@ final class KernelTest extends MockeryTestCase
             ->with(ServerRequestInterface::class, $serverRequest);
 
         $kernel = $this->getKernel($this->containerMock);
+        $kernel->setEnv('local');
 
         self::assertInstanceOf(ResponseInterface::class, $kernel->handle($serverRequest));
     }
@@ -205,6 +207,11 @@ final class KernelTest extends MockeryTestCase
                 }
             }
 
+            public function setEnv(string $env): void
+            {
+                $this->environment = $env;
+            }
+
             /**
              * {@inheritdoc}
              */
@@ -213,15 +220,6 @@ final class KernelTest extends MockeryTestCase
                 return $this->rootDir = __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture';
             }
         };
-
-        $kernel->setKernelConfigurations([
-            'viserio' => [
-                'app' => [
-                    'env' => 'dev',
-                    'debug' => true,
-                ],
-            ],
-        ]);
 
         return $kernel;
     }

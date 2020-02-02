@@ -23,6 +23,8 @@ use Viserio\Component\Support\Invoker;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Cron\Command\CronListCommand
+ *
  * @small
  */
 final class CronListCommandTest extends MockeryTestCase

@@ -53,6 +53,7 @@
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^4.0.0",
         "symfony/var-dumper": "^4.3.8 || ^5.0.0",
+        "viserio/config": "^1.0@dev",
         "viserio/container": "^1.0@dev",
         "viserio/events": "^1.0@dev",
         "viserio/exception": "^1.0@dev",
@@ -62,6 +63,8 @@
     },
     "suggest": {
         "cakephp/chronos": "Required to use CheckForMaintenanceModeMiddleware and DownCommand (^1.0.4)",
+        "viserio/config": "Required to use the service-providers (^1.0@dev).",
+        "viserio/container": "Required to use the service-providers (^1.0@dev).",
         "viserio/events": "Required to use the Http Kernel events (^1.0@dev)",
         "viserio/pipeline": "Required to use psr-15 middleware (^1.0@dev)."
     },

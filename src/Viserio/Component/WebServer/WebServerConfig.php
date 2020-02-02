@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Viserio\Component\WebServer;
 
+use ArrayIterator;
+use Viserio\Component\Config\ConfigurationIterator;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Contract\Config\Exception\InvalidArgumentException as ConfigInvalidArgumentException;
 use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
@@ -68,7 +70,14 @@ final class WebServerConfig implements ProvidesDefaultConfigContract, RequiresCo
             $config['disable-xdebug'] = true;
         }
 
-        $this->resolvedOptions = self::findHostnameAndPort(self::resolveOptions($config));
+        $this->resolvedOptions = self::findHostnameAndPort(
+            \iterator_to_array(
+                new ConfigurationIterator(
+                    self::class,
+                    new ArrayIterator($config)
+                )
+            )
+        );
 
         $_ENV['APP_FRONT_CONTROLLER'] = self::findFrontController(
             $this->resolvedOptions['document_root'],

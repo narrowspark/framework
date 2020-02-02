@@ -25,3 +25,4 @@ composer.lock
 
 /src/Viserio/Component/Foundation/Tests/Fixture/storage
 /src/Viserio/Component/HttpFoundation/Tests/Fixture/storage
+/src/Viserio/Provider/Twig/Tests/Cache

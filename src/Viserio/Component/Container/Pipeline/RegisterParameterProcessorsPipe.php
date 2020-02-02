@@ -101,8 +101,12 @@ final class RegisterParameterProcessorsPipe implements PipeContract
                 }
             }
 
-            $reference = (new ReferenceDefinition($id))
-                ->setType($class);
+            if (($definition->getChange('method_calls') || $definition->getChange('properties') || $definition->getChange('decorated_service'))) {
+                $reference = $definition;
+            } else {
+                $reference = (new ReferenceDefinition($id))
+                    ->setType($class);
+            }
 
             $runtimeProcessorRefs[] = $reference;
 

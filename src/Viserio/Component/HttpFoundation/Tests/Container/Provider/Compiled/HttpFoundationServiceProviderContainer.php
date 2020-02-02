@@ -15,15 +15,55 @@ final class HttpFoundationServiceProviderContainer extends \Viserio\Component\Co
     public function __construct()
     {
         $this->services = $this->privates = [];
+        $this->parameters = [
+            'viserio' => [
+                'app' => [
+                    'charset' => 'UTF-8',
+                ],
+                'console' => [
+                    'name' => 'test',
+                    'version' => '1',
+                ],
+            ],
+            'console.command.ids' => [],
+        ];
         $this->methodMapping = [
+            \Symfony\Component\Console\CommandLoader\CommandLoaderInterface::class => 'getce817e8bdc75399a693ba45b876c457a0f7fd422258f7d4eabc553987c2fbd31',
             \Symfony\Component\VarDumper\Dumper\ContextProvider\ContextProviderInterface::class => 'get02975bf11e2d51ce3abc1bb4691867aaf6f2cc3c9d65d4c91e56cb424c700779',
+            \Viserio\Component\Config\Command\ConfigDumpCommand::class => 'get88001f5d55ce57598db2e5b80611a49d605be7b037e634e18ca2493683a114ee',
+            \Viserio\Component\Config\Command\ConfigReaderCommand::class => 'get91fd613885c83bb4b00b29ee3e879446444b7ecad7fdd0292ef1df30bdfa3884',
+            \Viserio\Component\Console\Application::class => 'get206058a713a7172158e11c9d996f6a067c294ab0356ae6697060f162e057445a',
+            \Viserio\Component\HttpFoundation\Console\Command\DownCommand::class => 'getb08920485c647f2c416bb1b88117c7355a1a8abc321f0d3b68784d23e2fff9ac',
+            \Viserio\Component\HttpFoundation\Console\Command\UpCommand::class => 'get3b766f0ff9bcb43aa21c2b50b6b6ef2b267a5d89a05616df62cc4c9d184b9730',
         ];
         $this->aliases = [
+            \Symfony\Component\Console\Application::class => \Viserio\Component\Console\Application::class,
             \Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider::class => \Symfony\Component\VarDumper\Dumper\ContextProvider\ContextProviderInterface::class,
+            \Viserio\Component\Foundation\AbstractKernel::class => \Viserio\Contract\Foundation\Kernel::class,
+            \Viserio\Component\HttpFoundation\Kernel::class => \Viserio\Contract\Foundation\Kernel::class,
+            \Viserio\Contract\HttpFoundation\HttpKernel::class => \Viserio\Contract\Foundation\Kernel::class,
+            'cerebro' => \Viserio\Component\Console\Application::class,
+            'console' => \Viserio\Component\Console\Application::class,
         ];
         $this->syntheticIds = [
+            \Psr\Http\Message\ServerRequestInterface::class => true,
             \Viserio\Contract\Foundation\Kernel::class => true,
         ];
+    }
+
+    /**
+     * Returns the public Symfony\Component\Console\CommandLoader\CommandLoaderInterface shared service.
+     *
+     * @return \Viserio\Component\Console\CommandLoader\IteratorCommandLoader
+     */
+    protected function getce817e8bdc75399a693ba45b876c457a0f7fd422258f7d4eabc553987c2fbd31(): \Viserio\Component\Console\CommandLoader\IteratorCommandLoader
+    {
+        return $this->services[\Symfony\Component\Console\CommandLoader\CommandLoaderInterface::class] = new \Viserio\Component\Console\CommandLoader\IteratorCommandLoader(new \Viserio\Component\Container\RewindableGenerator(function () {
+            yield 'option:dump' => ($this->services[\Viserio\Component\Config\Command\ConfigDumpCommand::class] ?? $this->get88001f5d55ce57598db2e5b80611a49d605be7b037e634e18ca2493683a114ee());
+            yield 'option:read' => ($this->services[\Viserio\Component\Config\Command\ConfigReaderCommand::class] ?? $this->get91fd613885c83bb4b00b29ee3e879446444b7ecad7fdd0292ef1df30bdfa3884());
+            yield 'app:down' => ($this->services[\Viserio\Component\HttpFoundation\Console\Command\DownCommand::class] ?? $this->getb08920485c647f2c416bb1b88117c7355a1a8abc321f0d3b68784d23e2fff9ac());
+            yield 'app:up' => ($this->services[\Viserio\Component\HttpFoundation\Console\Command\UpCommand::class] ?? $this->get3b766f0ff9bcb43aa21c2b50b6b6ef2b267a5d89a05616df62cc4c9d184b9730());
+        }, 4));
     }
 
     /**
@@ -33,9 +73,80 @@ final class HttpFoundationServiceProviderContainer extends \Viserio\Component\Co
      */
     protected function get02975bf11e2d51ce3abc1bb4691867aaf6f2cc3c9d65d4c91e56cb424c700779(): \Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider
     {
-        $a = ($this->services[\Viserio\Contract\Foundation\Kernel::class] ?? $this->get(\Viserio\Contract\Foundation\Kernel::class));
+        return $this->services[\Symfony\Component\VarDumper\Dumper\ContextProvider\ContextProviderInterface::class] = new \Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider($this->getParameter('viserio.app.charset'), ($this->services[\Viserio\Contract\Foundation\Kernel::class] ?? $this->get(\Viserio\Contract\Foundation\Kernel::class))->getRootDir());
+    }
 
-        return $this->services[\Symfony\Component\VarDumper\Dumper\ContextProvider\ContextProviderInterface::class] = new \Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider($a->getCharset(), $a->getRootDir());
+    /**
+     * Returns the public Viserio\Component\Config\Command\ConfigDumpCommand shared service.
+     *
+     * @return \Viserio\Component\Config\Command\ConfigDumpCommand
+     */
+    protected function get88001f5d55ce57598db2e5b80611a49d605be7b037e634e18ca2493683a114ee(): \Viserio\Component\Config\Command\ConfigDumpCommand
+    {
+        $this->services[\Viserio\Component\Config\Command\ConfigDumpCommand::class] = $instance = new \Viserio\Component\Config\Command\ConfigDumpCommand();
+
+        $instance->setName('option:dump');
+
+        return $instance;
+    }
+
+    /**
+     * Returns the public Viserio\Component\Config\Command\ConfigReaderCommand shared service.
+     *
+     * @return \Viserio\Component\Config\Command\ConfigReaderCommand
+     */
+    protected function get91fd613885c83bb4b00b29ee3e879446444b7ecad7fdd0292ef1df30bdfa3884(): \Viserio\Component\Config\Command\ConfigReaderCommand
+    {
+        $this->services[\Viserio\Component\Config\Command\ConfigReaderCommand::class] = $instance = new \Viserio\Component\Config\Command\ConfigReaderCommand();
+
+        $instance->setName('option:read');
+
+        return $instance;
+    }
+
+    /**
+     * Returns the public Viserio\Component\Console\Application shared service.
+     *
+     * @return \Viserio\Component\Console\Application
+     */
+    protected function get206058a713a7172158e11c9d996f6a067c294ab0356ae6697060f162e057445a(): \Viserio\Component\Console\Application
+    {
+        $this->services[\Viserio\Component\Console\Application::class] = $instance = new \Viserio\Component\Console\Application($this->getParameter('viserio.console.version'), $this->getParameter('viserio.console.name'));
+
+        $instance->setContainer($this);
+        if ($this->has(\Symfony\Component\Console\CommandLoader\CommandLoaderInterface::class)) {
+            $instance->setCommandLoader(($this->services[\Symfony\Component\Console\CommandLoader\CommandLoaderInterface::class] ?? $this->getce817e8bdc75399a693ba45b876c457a0f7fd422258f7d4eabc553987c2fbd31()));
+        }
+
+        return $instance;
+    }
+
+    /**
+     * Returns the public Viserio\Component\HttpFoundation\Console\Command\DownCommand shared service.
+     *
+     * @return \Viserio\Component\HttpFoundation\Console\Command\DownCommand
+     */
+    protected function getb08920485c647f2c416bb1b88117c7355a1a8abc321f0d3b68784d23e2fff9ac(): \Viserio\Component\HttpFoundation\Console\Command\DownCommand
+    {
+        $this->services[\Viserio\Component\HttpFoundation\Console\Command\DownCommand::class] = $instance = new \Viserio\Component\HttpFoundation\Console\Command\DownCommand();
+
+        $instance->setName('app:down');
+
+        return $instance;
+    }
+
+    /**
+     * Returns the public Viserio\Component\HttpFoundation\Console\Command\UpCommand shared service.
+     *
+     * @return \Viserio\Component\HttpFoundation\Console\Command\UpCommand
+     */
+    protected function get3b766f0ff9bcb43aa21c2b50b6b6ef2b267a5d89a05616df62cc4c9d184b9730(): \Viserio\Component\HttpFoundation\Console\Command\UpCommand
+    {
+        $this->services[\Viserio\Component\HttpFoundation\Console\Command\UpCommand::class] = $instance = new \Viserio\Component\HttpFoundation\Console\Command\UpCommand();
+
+        $instance->setName('app:up');
+
+        return $instance;
     }
 
     /**

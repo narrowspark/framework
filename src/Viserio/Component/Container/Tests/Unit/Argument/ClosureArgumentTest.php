@@ -21,6 +21,8 @@ use Viserio\Contract\Container\Exception\InvalidArgumentException;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Argument\ClosureArgument
+ *
  * @small
  */
 final class ClosureArgumentTest extends TestCase

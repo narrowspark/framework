@@ -8,6 +8,6 @@ return [
         'narrowspark',
         'framework',
         'v' . \Viserio\Component\Foundation\AbstractKernel::VERSION,
-        ['Provider: Twig']
+        ['Provider: Framework']
     )
 ];

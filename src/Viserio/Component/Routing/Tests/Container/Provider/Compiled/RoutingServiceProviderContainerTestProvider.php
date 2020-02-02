@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/**
- * This file is part of Narrowspark Framework.
- *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
- *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
- */
-
 namespace Viserio\Component\Routing\Tests\Container\Provider\Compiled;
 
 /**
@@ -25,10 +16,12 @@ final class RoutingServiceProviderContainerTestProvider extends \Viserio\Compone
     {
         $this->services = $this->privates = [];
         $this->methodMapping = [
-            \Viserio\Contract\Routing\Dispatcher::class => 'getdbf0d80bb72faf68b0e64ae28f321f2937bbd0a5641dc6e0e3c14d77ac90cebc',
-            \Viserio\Contract\Routing\Router::class => 'get639eadb41acec5a4682e33d3d5a4fac1a0988b27ef4f45751735b2950eb42b56',
-            \Viserio\Contract\Routing\UrlGenerator::class => 'getf387fe110d8c1067af64a10c2f2c1a778e7e27ed7ee46ada9eb4acfa2cfcd779',
-            'config' => 'get34bcaa5afa8745d92e6161e8495be3b939c5c6abb4dc2fd1f5a3cfdaba620256',
+            \Viserio\Contract\Routing\Dispatcher::class => 'get584908ff464e7559233910f9ef37cbbc81593674d92ff5b6e814b73127f8e05c',
+            \Viserio\Contract\Routing\Router::class => 'get410eb27931e780eeccc23e52a6c17e0e6e2e1827d28f90c4254c8f4111788d4e',
+            \Viserio\Contract\Routing\UrlGenerator::class => 'getc9f84ddda9d00c1b7a3d422c26b92c3f7acb8604c9d7c3c5ca1e13e1367f8e4a',
+        ];
+        $this->uninitializedServices = [
+            \Psr\Http\Message\ServerRequestInterface::class => true,
         ];
         $this->aliases = [
             \Viserio\Component\Routing\Generator\UrlGenerator::class => \Viserio\Contract\Routing\UrlGenerator::class,
@@ -43,25 +36,11 @@ final class RoutingServiceProviderContainerTestProvider extends \Viserio\Compone
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getRemovedIds(): array
-    {
-        return [
-            \Psr\Container\ContainerInterface::class => true,
-            \Viserio\Contract\Container\Factory::class => true,
-            \Viserio\Contract\Container\TaggedContainer::class => true,
-            \Viserio\Contract\Events\EventManager::class => true,
-            'container' => true,
-        ];
-    }
-
-    /**
      * Returns the public Viserio\Contract\Routing\Dispatcher shared service.
      *
      * @return \Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher
      */
-    protected function getdbf0d80bb72faf68b0e64ae28f321f2937bbd0a5641dc6e0e3c14d77ac90cebc(): \Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher
+    protected function get584908ff464e7559233910f9ef37cbbc81593674d92ff5b6e814b73127f8e05c(): \Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher
     {
         return $this->services[\Viserio\Contract\Routing\Dispatcher::class] = new \Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher();
     }
@@ -71,9 +50,9 @@ final class RoutingServiceProviderContainerTestProvider extends \Viserio\Compone
      *
      * @return \Viserio\Component\Routing\Router
      */
-    protected function get639eadb41acec5a4682e33d3d5a4fac1a0988b27ef4f45751735b2950eb42b56(): \Viserio\Component\Routing\Router
+    protected function get410eb27931e780eeccc23e52a6c17e0e6e2e1827d28f90c4254c8f4111788d4e(): \Viserio\Component\Routing\Router
     {
-        $this->services[\Viserio\Contract\Routing\Router::class] = $instance = new \Viserio\Component\Routing\Router(($this->services[\Viserio\Contract\Routing\Dispatcher::class] ?? $this->getdbf0d80bb72faf68b0e64ae28f321f2937bbd0a5641dc6e0e3c14d77ac90cebc()));
+        $this->services[\Viserio\Contract\Routing\Router::class] = $instance = new \Viserio\Component\Routing\Router(($this->services[\Viserio\Contract\Routing\Dispatcher::class] ?? $this->get584908ff464e7559233910f9ef37cbbc81593674d92ff5b6e814b73127f8e05c()));
 
         $instance->setContainer($this);
 
@@ -85,24 +64,22 @@ final class RoutingServiceProviderContainerTestProvider extends \Viserio\Compone
      *
      * @return \Viserio\Component\Routing\Generator\UrlGenerator
      */
-    protected function getf387fe110d8c1067af64a10c2f2c1a778e7e27ed7ee46ada9eb4acfa2cfcd779(): \Viserio\Component\Routing\Generator\UrlGenerator
+    protected function getc9f84ddda9d00c1b7a3d422c26b92c3f7acb8604c9d7c3c5ca1e13e1367f8e4a(): \Viserio\Component\Routing\Generator\UrlGenerator
     {
-        return $this->services[\Viserio\Contract\Routing\UrlGenerator::class] = new \Viserio\Component\Routing\Generator\UrlGenerator(($this->services[\Viserio\Contract\Routing\Router::class] ?? $this->get639eadb41acec5a4682e33d3d5a4fac1a0988b27ef4f45751735b2950eb42b56())->getRoutes(), ($this->services[\Psr\Http\Message\ServerRequestInterface::class] ?? $this->get(\Psr\Http\Message\ServerRequestInterface::class)), ($this->services[\Psr\Http\Message\UriFactoryInterface::class] ?? $this->get(\Psr\Http\Message\UriFactoryInterface::class)));
+        return $this->services[\Viserio\Contract\Routing\UrlGenerator::class] = new \Viserio\Component\Routing\Generator\UrlGenerator(($this->services[\Viserio\Contract\Routing\Router::class] ?? $this->get410eb27931e780eeccc23e52a6c17e0e6e2e1827d28f90c4254c8f4111788d4e())->getRoutes(), ($this->services[\Psr\Http\Message\ServerRequestInterface::class] ?? $this->get(\Psr\Http\Message\ServerRequestInterface::class)), ($this->services[\Psr\Http\Message\UriFactoryInterface::class] ?? $this->get(\Psr\Http\Message\UriFactoryInterface::class)));
     }
 
     /**
-     * Returns the public config service.
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    protected function get34bcaa5afa8745d92e6161e8495be3b939c5c6abb4dc2fd1f5a3cfdaba620256(): array
+    public function getRemovedIds(): array
     {
         return [
-            'viserio' => [
-                'routing' => [
-                    'path' => '',
-                ],
-            ],
+            \Psr\Container\ContainerInterface::class => true,
+            \Viserio\Contract\Container\CompiledContainer::class => true,
+            \Viserio\Contract\Container\Factory::class => true,
+            \Viserio\Contract\Container\TaggedContainer::class => true,
+            'container' => true,
         ];
     }
 }

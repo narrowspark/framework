@@ -18,18 +18,12 @@ use Symfony\Component\VarDumper\Cloner\ClonerInterface;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\DataDumperInterface;
 use Symfony\Component\VarDumper\VarDumper;
-use Twig\Environment as TwigEnvironment;
-use Twig\Loader\ArrayLoader;
-use Viserio\Bridge\Twig\Container\Provider\TwigBridgeServiceProvider;
 use Viserio\Bridge\Twig\Extension\DumpExtension;
 use Viserio\Component\Config\Container\Provider\ConfigServiceProvider;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Test\AbstractContainerTestCase;
-use Viserio\Component\Filesystem\Container\Provider\FilesystemServiceProvider;
-use Viserio\Component\View\Container\Provider\ViewServiceProvider;
 use Viserio\Provider\Debug\Container\Provider\DebugServiceProvider;
 use Viserio\Provider\Debug\HtmlDumper;
-use Viserio\Provider\Twig\Container\Provider\TwigServiceProvider;
 
 /**
  * @internal
@@ -51,11 +45,7 @@ final class DebugServiceProviderTest extends AbstractContainerTestCase
         self::assertInstanceOf(DataDumperInterface::class, $this->container->get(HtmlDumper::class));
         self::assertInstanceOf(ClonerInterface::class, $this->container->get(ClonerInterface::class));
         self::assertInstanceOf(ClonerInterface::class, $this->container->get(VarCloner::class));
-        self::assertInstanceOf(DumpExtension::class, $this->container->get(DumpExtension::class));
-
-        $twig = $this->container->get(TwigEnvironment::class);
-
-        self::assertInstanceOf(DumpExtension::class, $twig->getExtension(DumpExtension::class));
+        self::assertFalse($this->container->has(DumpExtension::class));
     }
 
     /**
@@ -63,42 +53,8 @@ final class DebugServiceProviderTest extends AbstractContainerTestCase
      */
     protected function prepareContainerBuilder(ContainerBuilder $containerBuilder): void
     {
-        $containerBuilder->register(new TwigBridgeServiceProvider());
-        $containerBuilder->register(new FilesystemServiceProvider());
-        $containerBuilder->register(new ViewServiceProvider());
-        $containerBuilder->register(new TwigServiceProvider());
-        $containerBuilder->register(new DebugServiceProvider());
         $containerBuilder->register(new ConfigServiceProvider());
-
-        $containerBuilder->bind('config', [
-            'viserio' => [
-                'view' => [
-                    'paths' => [
-                        \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR,
-                        __DIR__,
-                    ],
-                    'engines' => [
-                        'twig' => [
-                            'options' => [
-                                'debug' => true,
-                                'cache' => '',
-                            ],
-                            'file_extension' => 'html',
-                            'templates' => [
-                                'test.html' => 'tests',
-                            ],
-                            'loaders' => [
-                                new ArrayLoader(['test2.html' => 'testsa']),
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ]);
-
-        $containerBuilder->setParameter('viserio.container.dumper.inline_factories', true);
-        $containerBuilder->setParameter('viserio.container.dumper.inline_class_loader', false);
-        $containerBuilder->setParameter('viserio.container.dumper.as_files', true);
+        $containerBuilder->register(new DebugServiceProvider());
     }
 
     /**

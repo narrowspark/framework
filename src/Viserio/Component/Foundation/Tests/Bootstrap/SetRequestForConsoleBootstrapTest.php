@@ -34,7 +34,7 @@ final class SetRequestForConsoleBootstrapTest extends MockeryTestCase
 {
     public function testGetPriority(): void
     {
-        self::assertSame(64, SetRequestForConsoleBootstrap::getPriority());
+        self::assertSame(128, SetRequestForConsoleBootstrap::getPriority());
     }
 
     public function testBootstrap(): void

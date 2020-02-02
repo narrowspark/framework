@@ -54,7 +54,7 @@ final class ParameterDefinition extends AbstractDefinition
      *
      * {@inheritdoc}
      */
-    public function setPublic(bool $bool): DefinitionContract
+    public function setPublic(bool $bool)
     {
         // cant be changed
 
@@ -74,7 +74,7 @@ final class ParameterDefinition extends AbstractDefinition
      *
      * {@inheritdoc}
      */
-    public function setLazy(bool $bool): DefinitionContract
+    public function setLazy(bool $bool)
     {
         // cant be changed
 

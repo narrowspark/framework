@@ -23,7 +23,7 @@ class EnvironmentDetector implements EnvironmentContract
      *
      * @var null|bool
      */
-    protected $isRunningInConsole;
+    protected ?bool $isRunningInConsole = null;
 
     /**
      * {@inheritdoc}
@@ -31,7 +31,7 @@ class EnvironmentDetector implements EnvironmentContract
     public function isRunningInConsole(): bool
     {
         if ($this->isRunningInConsole === null) {
-            $this->isRunningInConsole = \getenv('APP_RUNNING_IN_CONSOLE') ?? \in_array(\PHP_SAPI, ['cli', 'phpdbg', 'embed'], true);
+            $this->isRunningInConsole = \getenv('APP_RUNNING_IN_CONSOLE') ?: \in_array(\PHP_SAPI, ['cli', 'phpdbg', 'embed'], true);
         }
 
         return $this->isRunningInConsole;

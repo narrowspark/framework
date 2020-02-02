@@ -11,9 +11,8 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
+use Viserio\Component\Foundation\Tests\Fixture\Provider\FixtureServiceProvider;
+
 return [
-    Psr\Container\ContainerInterface::class => true,
-    Viserio\Contract\Container\Factory::class => true,
-    Viserio\Contract\Container\TaggedContainer::class => true,
-    'container' => true,
+    FixtureServiceProvider::class,
 ];
