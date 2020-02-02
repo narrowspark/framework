@@ -47,7 +47,7 @@ class ConnectionDefaultOptionsWithMandatoryConfigurationAndTwoValidator implemen
                     throw new RuntimeException('need to be a string.');
                 }
             },
-            'test' => static function ($value): void {
+            'test1' => static function ($value): void {
                 if (! \is_string($value)) {
                     throw new RuntimeException('need to be a string.');
                 }

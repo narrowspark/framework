@@ -76,7 +76,7 @@ trait ConfigurationValidatorIteratorTestTrait
 
         $this->getConfigurationIterator(
             ConnectionDefaultOptionsWithMandatoryConfigurationAndTwoValidator::class,
-            new ArrayIterator(['driverClass' => 'foo', 'test' => 9000])
+            new ArrayIterator(['driverClass' => 'foo', 'test1' => 9000])
         );
     }
 
