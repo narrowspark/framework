@@ -32,7 +32,6 @@ use Viserio\Component\Exception\Traits\DetermineErrorLevelTrait;
 use Viserio\Component\Exception\Transformer\ClassNotFoundFatalErrorTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedFunctionFatalErrorTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedMethodFatalErrorTransformer;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
 use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\Exception\Handler as HandlerContract;
@@ -43,7 +42,6 @@ class ErrorHandler implements HandlerContract,
     ProvidesDefaultConfigContract,
     RequiresComponentConfigContract
 {
-    use OptionsResolverTrait;
     use LoggerAwareTrait;
     use DetermineErrorLevelTrait;
 
@@ -129,7 +127,7 @@ class ErrorHandler implements HandlerContract,
      */
     public function __construct($config, ?LoggerInterface $logger = null)
     {
-        $this->resolvedOptions = self::resolveOptions($config);
+        $this->resolvedOptions = $config;
         $this->transformers = \array_merge(
             $this->getErrorTransformer(),
             $this->transformArray($this->resolvedOptions['transformers'])

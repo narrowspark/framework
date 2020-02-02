@@ -82,7 +82,7 @@ $config->getFinder()
     ->notPath('src/Viserio/Component/Console/Test/CommandTestCase.php')
 
     ->notPath('src/Viserio/Component/Container/Test/AbstractContainerTestCase.php')
-    ->notPath('src/Viserio/Component/Container/Tests/UnitTest/PhpParser/NodeVisitor/ClosureLocatorVisitorTest.php')
+    ->notPath('src/Viserio/Component/Container/Tests/Unit/PhpParser/NodeVisitor/ClosureLocatorVisitorTest.php')
     ->notPath('src/Viserio/Component/Container/Tests/Fixture/TestFunctions.php')
     ->notPath('src/Viserio/Component/Container/Tests/Fixture/Proxy/proxy-factory.php')
     ->notPath('src/Viserio/Component/Container/Tests/Fixture/Proxy/proxy-implem.php')

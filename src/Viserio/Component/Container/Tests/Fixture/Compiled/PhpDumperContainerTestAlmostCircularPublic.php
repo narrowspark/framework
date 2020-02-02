@@ -592,7 +592,7 @@ final class PhpDumperContainerTestAlmostCircularPublic extends \Viserio\Componen
      */
     protected function createProxy(string $class, \Closure $factory): object
     {
-        \class_exists($class, false) || \class_alias("Viserio\\Component\\Container\\Tests\\IntegrationTest\\Dumper\\Compiled\\{$class}", $class, false);
+        \class_exists($class, false) || \class_alias("Viserio\\Component\\Container\\Tests\\Integration\\Dumper\\Compiled\\{$class}", $class, false);
 
         return $factory();
     }

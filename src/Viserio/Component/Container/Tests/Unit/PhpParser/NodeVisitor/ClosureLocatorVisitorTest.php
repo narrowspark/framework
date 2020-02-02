@@ -2,16 +2,7 @@
 
 declare(strict_types=1);
 
-/**
- * This file is part of Narrowspark Framework.
- *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
- *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
- */
-
-namespace Viserio\Component\Container\Tests\Unit\PhpParser\NodeVisitor;
+namespace Viserio\Component\Container\Tests\UnitTest\PhpParser\NodeVisitor;
 
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Name;
@@ -21,6 +12,7 @@ use PhpParser\Node\Stmt\Trait_;
 use PHPUnit\Framework\TestCase;
 use ReflectionFunction;
 use Viserio\Component\Container\PhpParser\NodeVisitor\ClosureLocatorVisitor;
+use Viserio\Contract\Container\Exception\RuntimeException;
 
 /**
  * @internal
@@ -31,9 +23,7 @@ final class ClosureLocatorVisitorTest extends TestCase
 {
     public function testClosureNodeIsDiscoveredByVisitor(): void
     {
-        $closure = function (): void {
-        };
-        $startLine = __LINE__;
+        $closure = function (): void {}; $startLine = __LINE__;
 
         $reflectedClosure = new ReflectionFunction($closure);
         $closureFinder = new ClosureLocatorVisitor($reflectedClosure);
@@ -45,13 +35,9 @@ final class ClosureLocatorVisitorTest extends TestCase
 
     public function testClosureNodeIsAmbiguousIfMultipleClosuresOnLine(): void
     {
-        $this->expectException('RuntimeException');
+        $this->expectException(RuntimeException::class);
 
-        $closure = function (): void {
-        };
-        function (): void {
-        };
-        $startLine = __LINE__;
+        $closure = function (): void {}; function (): void {}; $startLine     = __LINE__;
 
         $closureFinder = new ClosureLocatorVisitor(new ReflectionFunction($closure));
         $closureFinder->enterNode(new Closure([], ['startLine' => $startLine]));
@@ -60,8 +46,7 @@ final class ClosureLocatorVisitorTest extends TestCase
 
     public function testCalculatesClosureLocation(): void
     {
-        $closure = function (): void {
-        };
+        $closure = function (): void {};
 
         $closureFinder = new ClosureLocatorVisitor(new ReflectionFunction($closure));
 
@@ -88,20 +73,19 @@ final class ClosureLocatorVisitorTest extends TestCase
 
     public function testCanDetermineClassOrTraitInfo(): void
     {
-        $closure = function (): void {
-        };
+        $closure = function (): void {};
 
         $closureFinder = new ClosureLocatorVisitor(new ReflectionFunction($closure));
-        $closureFinder->location['namespace'] = 'Viserio\Component\Container\Tests\Unit\PhpParser\NodeVisitor';
+        $closureFinder->location['namespace'] = 'Viserio\Component\Container\Tests\UnitTest\PhpParser\NodeVisitor';
         $closureFinder->location['class'] = 'FooClass';
         $closureFinder->afterTraverse([]);
 
-        self::assertEquals('Viserio\Component\Container\Tests\Unit\PhpParser\NodeVisitor\FooClass', $closureFinder->location['namespace'] . '\\' . $closureFinder->location['class']);
+        self::assertEquals('Viserio\Component\Container\Tests\UnitTest\PhpParser\NodeVisitor\FooClass', $closureFinder->location['namespace'] . '\\' . $closureFinder->location['class']);
 
         $closureFinder->location['class'] = null;
         $closureFinder->location['trait'] = 'FooTrait';
         $closureFinder->afterTraverse([]);
 
-        self::assertEquals('Viserio\Component\Container\Tests\Unit\PhpParser\NodeVisitor\FooTrait', $closureFinder->location['namespace'] . '\\' . $closureFinder->location['trait']);
+        self::assertEquals('Viserio\Component\Container\Tests\UnitTest\PhpParser\NodeVisitor\FooTrait', $closureFinder->location['namespace'] . '\\' . $closureFinder->location['trait']);
     }
 }

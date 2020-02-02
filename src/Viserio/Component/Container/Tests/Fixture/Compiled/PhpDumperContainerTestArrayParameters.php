@@ -20,7 +20,7 @@ final class PhpDumperContainerTestArrayParameters extends \Viserio\Component\Con
                 0 => 123,
             ],
             'array_2' => [
-                0 => (\dirname(__DIR__, 2).'/IntegrationTest/Dumper'),
+                0 => (\dirname(__DIR__, 2).'/Integration/Dumper'),
             ],
             'viserio.container.dumper.inline_class_loader' => false,
         ];

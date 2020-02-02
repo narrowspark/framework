@@ -17,6 +17,8 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
 use Viserio\Component\Container\Processor\ResolveRuntimeParameterProcessor;
 use Viserio\Contract\Container\CompiledContainer as CompiledContainerContract;
+use Viserio\Contract\Container\Exception\InvalidArgumentException;
+use Viserio\Contract\Container\Exception\ParameterNotFoundException;
 use Viserio\Contract\Container\Exception\RuntimeException;
 
 /**
@@ -70,10 +72,6 @@ final class ResolveParameterProcessorTest extends MockeryTestCase
         self::assertSame('test', $this->processor->process('foo|resolve'));
         self::assertSame('test', $this->processor->process('bar.baz|resolve'));
 
-        $this->containerMock->shouldReceive('hasParameter')
-            ->once()
-            ->with('call')
-            ->andReturn(true);
         $this->containerMock->shouldReceive('getParameter')
             ->once()
             ->with('call')
@@ -82,10 +80,34 @@ final class ResolveParameterProcessorTest extends MockeryTestCase
         self::assertSame('test', $this->processor->process('call|resolve'));
     }
 
-    public function testProcessThrowException(): void
+    public function testProcessThrowExceptionOnMissingParameter(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The dynamic parameter [call] must be defined.');
+
+        $this->containerMock->shouldReceive('getParameters')
+            ->times(1)
+            ->andReturn(
+                [
+                    'foo' => 'test',
+                    'bar' => [
+                        'baz' => 'test',
+                    ],
+                ]
+            );
+
+        $this->containerMock->shouldReceive('getParameter')
+            ->once()
+            ->with('call')
+            ->andThrow(new ParameterNotFoundException('call'));
+
+        self::assertSame('test', $this->processor->process('call|resolve'));
+    }
+
+    public function testProcessThrowExceptionOnInvalidReturnValue(): void
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Parameter [foo] found when resolving env var [foo|resolve] must be scalar, [object] given.');
+        $this->expectExceptionMessage('Parameter [foo] found when resolving [foo|resolve] must be scalar, [object] given.');
 
         $this->containerMock->shouldReceive('getParameters')
             ->andReturn(

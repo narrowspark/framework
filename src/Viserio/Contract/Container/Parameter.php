@@ -20,7 +20,7 @@ interface Parameter
      *
      * @param string $id identifier of the entry to look for
      *
-     * @throws \Viserio\Contract\Container\Exception\NotFoundException
+     * @throws \Viserio\Contract\Container\Exception\ParameterNotFoundException
      *
      * @return mixed
      */

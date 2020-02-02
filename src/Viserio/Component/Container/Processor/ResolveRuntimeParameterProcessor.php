@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Container\Processor;
 
 use Viserio\Contract\Container\CompiledContainer as CompiledContainerContract;
+use Viserio\Contract\Container\Exception\InvalidArgumentException;
+use Viserio\Contract\Container\Exception\ParameterNotFoundException;
 use Viserio\Contract\Container\Exception\RuntimeException;
 
 class ResolveRuntimeParameterProcessor extends AbstractParameterProcessor
@@ -68,12 +70,16 @@ class ResolveRuntimeParameterProcessor extends AbstractParameterProcessor
             $this->container->getParameters()
         );
 
-        if ($value === null && $this->container->hasParameter($key)) {
-            $value = $this->container->getParameter($key);
+        if ($value === null) {
+            try {
+                $value = $this->container->getParameter($key);
+            } catch (ParameterNotFoundException $exception) {
+                throw new InvalidArgumentException(\sprintf('The dynamic parameter [%s] must be defined.', $key));
+            }
         }
 
         if (! \is_scalar($value)) {
-            throw new RuntimeException(\sprintf('Parameter [%s] found when resolving env var [%s] must be scalar, [%s] given.', $key, $parameter, \gettype($value)));
+            throw new RuntimeException(\sprintf('Parameter [%s] found when resolving [%s] must be scalar, [%s] given.', $key, $parameter, \gettype($value)));
         }
 
         return \str_replace($search, $value, $parameter);

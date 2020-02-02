@@ -96,8 +96,6 @@ final class PhpDumperTest extends AbstractContainerTestCase
      */
     protected const SKIP_TEST_PIPE = true;
 
-//    protected const REFRESH_CONTAINER = true;
-
     public function testCompilingToAnInvalidClassNameThrowsAnError(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -771,11 +769,11 @@ final class PhpDumperTest extends AbstractContainerTestCase
     public function testContainerCanBeDumpedWithIteratorAndBindServices(): void
     {
         $this->containerBuilder->singleton('FooClassWithMethodCall', FooClass::class)
-            ->addMethodCall('setBar', ['foo']);
+            ->addMethodCall('setBar', ['55']);
         $this->containerBuilder->singleton(stdClass::class);
         $this->containerBuilder->bind('baz', stdClass::class);
 
-        $this->containerBuilder->singleton('foo', ArrayIterator::class)
+        $this->containerBuilder->singleton('iterator', ArrayIterator::class)
             ->setArgument([
                 new ReferenceDefinition('FooClassWithMethodCall'),
                 new ReferenceDefinition(stdClass::class),
@@ -788,7 +786,7 @@ final class PhpDumperTest extends AbstractContainerTestCase
         $this->assertDumpedContainer(__FUNCTION__);
 
         /** @var ArrayIterator $iterator */
-        $iterator = $this->container->get('foo')->getIterator();
+        $iterator = $this->container->get('iterator')->getIterator();
 
         self::assertInstanceOf(FooClass::class, $iterator->current());
 
@@ -2018,11 +2016,13 @@ final class PhpDumperTest extends AbstractContainerTestCase
             ],
             'view' => [
                 'paths' => [
-                    0 => '{resources|directory}/views',
+                    0 => '{resources|foo}/views',
                 ],
             ],
         ]);
 
+        $this->containerBuilder->singleton(FooParameterProcessor::class)
+            ->addTag(RegisterParameterProcessorsPipe::TAG);
         $this->containerBuilder->singleton(ResolveRuntimeParameterProcessor::class)
             ->addTag(RegisterParameterProcessorsPipe::TAG);
         $this->containerBuilder->singleton(PhpTypeParameterProcessor::class)
@@ -2036,9 +2036,74 @@ final class PhpDumperTest extends AbstractContainerTestCase
 
         $this->containerBuilder->compile();
 
-        $this->dumpContainer(__FUNCTION__);
+        $this->assertDumpedContainer(__FUNCTION__);
 
-        \var_dump($this->container->getParameter('viserio'));
+        self::assertSame([
+            'exception' => [
+                'debug' => true,
+                'env' => 'test',
+            ],
+            'app' => [
+                'url' => 'test2',
+                'directory' => [
+                    'mapper' => [
+                        'app' => [
+                            0 => \Viserio\Component\Container\Tests\Fixture\FooClass::class,
+                            1 => 'getInstance',
+                        ],
+                        'config' => [
+                            0 => \Viserio\Component\Container\Tests\Fixture\FooClass::class,
+                            1 => 'getInstance',
+                        ],
+                        'database' => [
+                            0 => \Viserio\Component\Container\Tests\Fixture\FooClass::class,
+                            1 => 'getInstance',
+                        ],
+                        'public' => [
+                            0 => \Viserio\Component\Container\Tests\Fixture\FooClass::class,
+                            1 => 'getInstance',
+                        ],
+                        'resources' => [
+                            0 => \Viserio\Component\Container\Tests\Fixture\FooClass::class,
+                            1 => 'getInstance',
+                        ],
+                        'routes' => [
+                            0 => \Viserio\Component\Container\Tests\Fixture\FooClass::class,
+                            1 => 'getInstance',
+                        ],
+                        'lang' => [
+                            0 => \Viserio\Component\Container\Tests\Fixture\FooClass::class,
+                            1 => 'getInstance',
+                        ],
+                        'storage' => [
+                            0 => \Viserio\Component\Container\Tests\Fixture\FooClass::class,
+                            1 => 'getInstance',
+                        ],
+                    ],
+                ],
+                'middleware_priority' => [
+                    64 => \Viserio\Component\Container\Tests\Fixture\FooClass::class,
+                ],
+            ],
+            'logging' => [
+                'default' => 'test',
+                'env' => 'test',
+                'path' => 'logs',
+                'channels' => [
+                    'stack' => [
+                        'driver' => 'stack',
+                        'channels' => [
+                            0 => 'daily',
+                        ],
+                    ],
+                ],
+            ],
+            'view' => [
+                'paths' => [
+                    0 => 'foo/views',
+                ],
+            ],
+        ], $this->container->getParameter('viserio'));
     }
 
     /**
@@ -2128,7 +2193,7 @@ final class PhpDumperTest extends AbstractContainerTestCase
             ->setPublic(true);
 
         // parameter
-        $this->containerBuilder->setParameter('baz_class', 'BazClass');
+        $this->containerBuilder->setParameter('baz_class', FooClass::class);
         $this->containerBuilder->setParameter('foo_class', FooClass::class);
         $this->containerBuilder->setParameter('foo', 'bar');
 
@@ -2200,7 +2265,7 @@ final class PhpDumperTest extends AbstractContainerTestCase
             ->setPublic(true);
 
         // multi inline
-        $this->containerBuilder->singleton('config', [])
+        $this->containerBuilder->singleton('config', stdClass::class)
             ->setPublic(true);
         $this->containerBuilder->singleton('doc_factory', FactoryClass::class)
             ->setArguments([

@@ -62,8 +62,8 @@ final class PhpDumperContainerTestCircularDynamicParameter extends \Viserio\Comp
     protected function gete72852784fbbbd62bbac5a8aec7e44d0acb18db0dd6a35a841780313b22837ff(): \Viserio\Component\Container\RewindableGenerator
     {
         return $this->services['viserio.container.runtime.parameter.processors'] = new \Viserio\Component\Container\RewindableGenerator(function () {
-            yield 0 => $this->get97a5042e82056c180e9f609f9d22f762107415e7f5a54aee4d300d58837d927a();
-            yield 1 => $this->getf2b69a4533503376ddade957f0f4242967826e7f25fb7a36e11e0b3441e0735b();
+            yield 0 => ($this->privates[\Viserio\Component\Container\Processor\ResolveRuntimeParameterProcessor::class] ?? $this->get97a5042e82056c180e9f609f9d22f762107415e7f5a54aee4d300d58837d927a());
+            yield 1 => ($this->privates[\Viserio\Component\Container\Processor\EnvParameterProcessor::class] ?? $this->getf2b69a4533503376ddade957f0f4242967826e7f25fb7a36e11e0b3441e0735b());
         }, 2);
     }
 
@@ -74,7 +74,7 @@ final class PhpDumperContainerTestCircularDynamicParameter extends \Viserio\Comp
      */
     protected function getf2b69a4533503376ddade957f0f4242967826e7f25fb7a36e11e0b3441e0735b(): \Viserio\Component\Container\Processor\EnvParameterProcessor
     {
-        return new \Viserio\Component\Container\Processor\EnvParameterProcessor();
+        return $this->privates[\Viserio\Component\Container\Processor\EnvParameterProcessor::class] = new \Viserio\Component\Container\Processor\EnvParameterProcessor();
     }
 
     /**
@@ -84,7 +84,7 @@ final class PhpDumperContainerTestCircularDynamicParameter extends \Viserio\Comp
      */
     protected function get97a5042e82056c180e9f609f9d22f762107415e7f5a54aee4d300d58837d927a(): \Viserio\Component\Container\Processor\ResolveRuntimeParameterProcessor
     {
-        return new \Viserio\Component\Container\Processor\ResolveRuntimeParameterProcessor($this);
+        return $this->privates[\Viserio\Component\Container\Processor\ResolveRuntimeParameterProcessor::class] = new \Viserio\Component\Container\Processor\ResolveRuntimeParameterProcessor($this);
     }
 
     /**

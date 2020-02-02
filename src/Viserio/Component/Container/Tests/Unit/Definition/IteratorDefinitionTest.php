@@ -80,11 +80,11 @@ final class IteratorDefinitionTest extends AbstractDefinitionTest
         return 'test';
     }
 
-    public function testSetAddAndGetParameters(): void
+    public function testSetAddAndGetArguments(): void
     {
         self::assertSame($this->definition, $this->definition->setArgument($this->value), '->setArgument() implements a fluent interface');
 
-        self::assertTrue($this->definition->getChange('arguments'));
-        self::assertCount($this->value, $this->definition->getArgument());
+        self::assertTrue($this->definition->getChange('argument'));
+        self::assertSame($this->value, $this->definition->getArgument());
     }
 }

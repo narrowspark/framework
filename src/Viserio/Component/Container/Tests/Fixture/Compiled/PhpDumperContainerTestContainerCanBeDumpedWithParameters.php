@@ -28,7 +28,7 @@ final class PhpDumperContainerTestContainerCanBeDumpedWithParameters extends \Vi
             'foo' => 'bar',
             'baz' => 'foo is {}foo baz',
             'escape' => '@escapeme',
-            'binary' => 'ï¿½ï¿½ï¿½ï¿½',
+            'binary' => 'ğğğğ',
             'binary-control-char' => 'This is a Bell char ',
             'true2' => 'true',
             'false2' => 'false',

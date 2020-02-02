@@ -421,7 +421,6 @@ final class PhpDumper implements DumperContract
         }
 
         $this->runtimeParameters = $this->removeEmptyValues($this->runtimeParameters);
-        $this->runtimeParametersMapper = $this->removeEmptyValues($this->runtimeParametersMapper);
 
         $proxyClasses = $this->inlineFactories ? $this->generateProxyClasses() : null;
         $servicesContent = $this->addServices();
@@ -944,7 +943,7 @@ final class PhpDumper implements DumperContract
         if (! $isProxyCandidate && $lastWitherIndex === null && ! isset($this->singleUsePrivateIds[$id]) && $definition->isShared()) {
             $instantiation = \sprintf(
                 '$this->%s[%s] = %s',
-                $this->containerBuilder->getDefinition($id)->isPublic() ? 'services' : 'privates',
+                $definition->isPublic() ? 'services' : 'privates',
                 $this->compileValue($id),
                 $isSimpleInstance ? '' : '$instance'
             );
@@ -2537,14 +2536,8 @@ final class PhpDumper implements DumperContract
             foreach ($values as $k => $v) {
                 ($c = $this->getServiceConditionals($v)) ? $operands[] = "(int) ({$c})" : ++$operands[0];
 
-                if (($v instanceof DefinitionContract || $v instanceof ReferenceDefinitionContract) && ($v->getChange('method_calls') || $v->getChange('properties') || $v->getChange('decorated_service'))) {
-                    $message = 'IteratorDefinition only supports simple definitions, please use ReferenceDefinition for more advanced definitions.';
-
-                    if ($v instanceof ReferenceDefinitionContract) {
-                        $message = '';
-                    }
-
-                    throw new RuntimeException($message);
+                if ($v instanceof DefinitionContract && ($v->getChange('method_calls') || $v->getChange('properties') || $v->getChange('decorated_service'))) {
+                    throw new RuntimeException('IteratorDefinition only supports simple definitions, please use ReferenceDefinition for more advanced definitions.');
                 }
 
                 $v = $this->wrapServiceConditionals($v, \sprintf('        yield %s => %s;', $this->export($k), $this->compileValue($v, $interpolate)), true);
@@ -2664,7 +2657,7 @@ final class PhpDumper implements DumperContract
                     $this->uninitializedServices[$id] = true;
                 }
 
-                $code = \sprintf('$this->get(%s)', $this->compileValue($id, $interpolate));
+                $code = \sprintf('$this->get(%s)', $this->export($id));
             } elseif ($uninitialized) {
                 $code = 'null';
 
@@ -2686,7 +2679,7 @@ final class PhpDumper implements DumperContract
             }
 
             if (! isset($this->singleUsePrivateIds[$id]) && $definition->isShared()) {
-                $code = \sprintf('($this->%s[%s] ?? %s)', $definition->isPublic() ? 'services' : 'privates', $this->compileValue($id, $interpolate), $code);
+                $code = \sprintf('($this->%s[%s] ?? %s)', $definition->isPublic() ? 'services' : 'privates', $this->export($id), $code);
             }
 
             return $code;
@@ -2696,7 +2689,7 @@ final class PhpDumper implements DumperContract
             return 'null';
         }
 
-        return \sprintf('($this->services[%s] ?? %s)', $this->compileValue($id), \sprintf('$this->get(%s)', $this->compileValue($id)));
+        return \sprintf('($this->services[%s] ?? %s)', $this->export($id), \sprintf('$this->get(%s)', $this->export($id)));
     }
 
     /**
@@ -3456,6 +3449,6 @@ EOF;
      */
     private function isPreload($definition): bool
     {
-        return self::$preloadCache[$definition->getName()] ?? self::$preloadCache[$definition->getName()] = ($this->preloadTag && $definition->hasTag($this->preloadTag) && ! $definition->isDeprecated());
+        return self::$preloadCache[$definition->getName()] ??= ($this->preloadTag && $definition->hasTag($this->preloadTag) && ! $definition->isDeprecated());
     }
 }
