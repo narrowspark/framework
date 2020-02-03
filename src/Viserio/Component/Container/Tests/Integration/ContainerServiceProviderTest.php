@@ -24,6 +24,8 @@ use Viserio\Component\Container\Tests\Fixture\ServiceProvider\SimpleTaggedServic
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\ContainerBuilder
+ *
  * @small
  */
 final class ContainerServiceProviderTest extends AbstractContainerTestCase

@@ -24,6 +24,8 @@ use Viserio\Contract\Container\Definition\FactoryDefinition;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Pipeline\ResolveFactoryClassPipe
+ *
  * @small
  */
 final class ResolveFactoryClassPipeTest extends TestCase

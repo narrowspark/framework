@@ -11,7 +11,7 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\Container\Tests\Unit;
+namespace Viserio\Component\Container\Tests\Unit\Processor;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
@@ -24,9 +24,12 @@ use Viserio\Contract\Container\Exception\RuntimeException;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Processor\ResolveRuntimeParameterProcessor
+ * @covers \Viserio\Component\Container\Traits\ParameterProcessResolvingTrait
+ *
  * @small
  */
-final class ResolveParameterProcessorTest extends MockeryTestCase
+final class ResolveRuntimeParameterProcessorTest extends MockeryTestCase
 {
     /** @var \Mockery\MockInterface|\Viserio\Contract\Container\CompiledContainer */
     private $containerMock;

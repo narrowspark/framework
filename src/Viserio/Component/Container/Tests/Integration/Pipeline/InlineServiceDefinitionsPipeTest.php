@@ -34,6 +34,10 @@ use Viserio\Contract\Container\Definition\Definition;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Pipeline\AnalyzeServiceDependenciesPipe
+ * @covers \Viserio\Component\Container\Pipeline\AutowirePipe
+ * @covers \Viserio\Component\Container\Pipeline\InlineServiceDefinitionsPipe
+ *
  * @small
  */
 final class InlineServiceDefinitionsPipeTest extends TestCase

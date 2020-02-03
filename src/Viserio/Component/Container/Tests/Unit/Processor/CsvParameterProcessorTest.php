@@ -19,10 +19,10 @@ use Viserio\Component\Container\Processor\CsvParameterProcessor;
 /**
  * @internal
  *
- * @small
- *
  * @covers \Viserio\Component\Container\Processor\AbstractParameterProcessor
  * @covers \Viserio\Component\Container\Processor\CsvParameterProcessor
+ *
+ * @small
  */
 final class CsvParameterProcessorTest extends TestCase
 {

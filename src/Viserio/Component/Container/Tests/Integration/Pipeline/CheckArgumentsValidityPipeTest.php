@@ -24,6 +24,8 @@ use Viserio\Contract\Container\Exception\RuntimeException;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Pipeline\CheckArgumentsValidityPipe
+ *
  * @small
  */
 final class CheckArgumentsValidityPipeTest extends TestCase

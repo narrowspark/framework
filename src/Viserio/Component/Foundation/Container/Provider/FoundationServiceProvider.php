@@ -61,6 +61,7 @@ class FoundationServiceProvider implements RequiresComponentConfigContract,
      */
     public function build(ContainerBuilderContract $container): void
     {
+        // @todo check this again
         if (! $container->has(ServerRequestInterface::class) && (\getenv('APP_RUNNING_IN_CONSOLE') ?? \in_array(\PHP_SAPI, ['cli', 'phpdbg', 'embed'], true))) {
             $container->singleton(ServerRequestInterface::class, [new ReferenceDefinition(ServerRequestFactoryInterface::class, ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE), 'createServerRequest'])
                 ->setArguments([

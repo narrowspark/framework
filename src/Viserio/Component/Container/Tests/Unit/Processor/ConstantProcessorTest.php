@@ -20,10 +20,10 @@ use Viserio\Contract\Container\Exception\InvalidArgumentException;
 /**
  * @internal
  *
- * @small
- *
  * @covers \Viserio\Component\Container\Processor\AbstractParameterProcessor
  * @covers \Viserio\Component\Container\Processor\ConstantProcessor
+ *
+ * @small
  */
 final class ConstantProcessorTest extends TestCase
 {

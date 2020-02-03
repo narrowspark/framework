@@ -20,10 +20,10 @@ use Viserio\Contract\Container\Exception\RuntimeException;
 /**
  * @internal
  *
- * @small
- *
  * @covers \Viserio\Component\Container\Processor\AbstractParameterProcessor
  * @covers \Viserio\Component\Container\Processor\FileParameterProcessor
+ *
+ * @small
  */
 final class FileParameterProcessorTest extends TestCase
 {

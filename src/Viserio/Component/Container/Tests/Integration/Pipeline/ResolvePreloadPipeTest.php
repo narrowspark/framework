@@ -27,6 +27,8 @@ use Viserio\Contract\Container\Definition\TagAwareDefinition;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Pipeline\ResolvePreloadPipe
+ *
  * @small
  */
 final class ResolvePreloadPipeTest extends TestCase

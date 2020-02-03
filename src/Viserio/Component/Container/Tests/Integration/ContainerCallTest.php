@@ -27,6 +27,8 @@ use Viserio\Component\Container\Tests\Fixture\Method\ClassWithMethods;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\ContainerBuilder
+ *
  * @small
  */
 final class ContainerCallTest extends BaseContainerTest

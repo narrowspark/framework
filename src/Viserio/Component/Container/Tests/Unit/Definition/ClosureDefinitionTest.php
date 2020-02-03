@@ -23,6 +23,8 @@ use Viserio\Contract\Container\Definition\Definition as DefinitionContract;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Definition\ClosureDefinition
+ *
  * @property ClosureDefinition $definition
  *
  * @small

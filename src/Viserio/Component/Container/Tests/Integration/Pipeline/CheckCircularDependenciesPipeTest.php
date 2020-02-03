@@ -33,6 +33,9 @@ use Viserio\Contract\Container\Exception\CircularDependencyException;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Pipeline\AnalyzeServiceDependenciesPipe
+ * @covers \Viserio\Component\Container\Pipeline\AutowirePipe
+ *
  * @small
  */
 final class CheckCircularDependenciesPipeTest extends TestCase

@@ -26,6 +26,8 @@ use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Pipeline\AutowireArgumentArrayPipe
+ *
  * @small
  */
 final class AutowireArgumentArrayPipeTest extends TestCase

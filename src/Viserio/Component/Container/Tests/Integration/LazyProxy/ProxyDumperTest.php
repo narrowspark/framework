@@ -37,12 +37,13 @@ use Viserio\Contract\Container\Exception\InvalidArgumentException;
  *
  * @internal
  *
+ * @covers \Viserio\Component\Container\LazyProxy\ProxyDumper
+ *
  * @small
  */
 final class ProxyDumperTest extends TestCase
 {
-    /** @var ProxyDumper */
-    protected $dumper;
+    protected ProxyDumper $dumper;
 
     /**
      * {@inheritdoc}

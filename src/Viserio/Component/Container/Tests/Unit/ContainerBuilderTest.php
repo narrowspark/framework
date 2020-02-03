@@ -28,6 +28,8 @@ use Viserio\Contract\Container\Exception\BindingResolutionException;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\ContainerBuilder
+ *
  * @small
  */
 final class ContainerBuilderTest extends TestCase

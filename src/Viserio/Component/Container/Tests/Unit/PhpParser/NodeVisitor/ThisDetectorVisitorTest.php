@@ -21,6 +21,8 @@ use Viserio\Component\Container\PhpParser\NodeVisitor\ThisDetectorVisitor;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\PhpParser\NodeVisitor\ThisDetectorVisitor
+ *
  * @small
  */
 final class ThisDetectorVisitorTest extends TestCase

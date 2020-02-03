@@ -20,6 +20,8 @@ use Viserio\Contract\Container\Exception\InvalidArgumentException;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Definition\AliasDefinition
+ *
  * @small
  */
 final class AliasDefinitionTest extends TestCase

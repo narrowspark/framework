@@ -29,6 +29,9 @@ use Viserio\Contract\Container\Exception\RuntimeException;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Pipeline\ResolveParameterPlaceHolderPipe
+ * @covers \Viserio\Component\Container\Pipeline\ResolveUndefinedDefinitionPipe
+ *
  * @small
  */
 final class ResolveParameterPlaceHolderPipeTest extends TestCase

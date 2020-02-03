@@ -32,6 +32,8 @@ require __DIR__ . '/../../Fixture/Reflection/ExpandClassInNamespace.php';
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Helper\Reflection
+ *
  * @small
  */
 final class ReflectionTest extends MockeryTestCase

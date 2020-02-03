@@ -38,6 +38,9 @@ use Viserio\Contract\Container\Exception\NotFoundException;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Pipeline\AutowirePipe
+ * @covers \Viserio\Component\Container\Pipeline\DecoratorServicePipe
+ *
  * @small
  */
 final class DecoratorServicePipeTest extends TestCase

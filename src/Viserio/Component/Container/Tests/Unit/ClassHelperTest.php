@@ -22,6 +22,8 @@ use Viserio\Component\Container\Tests\Fixture\EmptyClass;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\ClassHelper
+ *
  * @small
  */
 final class ClassHelperTest extends TestCase

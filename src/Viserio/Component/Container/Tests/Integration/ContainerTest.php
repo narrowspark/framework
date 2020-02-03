@@ -25,6 +25,8 @@ use Viserio\Contract\Support\Resettable;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\AbstractCompiledContainer
+ *
  * @small
  */
 final class ContainerTest extends TestCase

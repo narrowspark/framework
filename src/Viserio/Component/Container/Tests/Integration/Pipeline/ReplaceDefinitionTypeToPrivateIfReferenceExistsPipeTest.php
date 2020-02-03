@@ -24,6 +24,8 @@ use Viserio\Contract\Container\Definition\Definition;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Pipeline\ReplaceDefinitionTypeToPrivateIfReferenceExistsPipe
+ *
  * @small
  */
 final class ReplaceDefinitionTypeToPrivateIfReferenceExistsPipeTest extends TestCase

@@ -21,6 +21,8 @@ use Viserio\Component\Container\Pipeline\UnusedTagsPipe;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Pipeline\UnusedTagsPipe
+ *
  * @small
  */
 final class UnusedTagsPipeTest extends TestCase

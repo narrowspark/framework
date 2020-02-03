@@ -30,6 +30,8 @@ use Viserio\Contract\Container\Exception\OutOfBoundsException;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Definition\FactoryDefinition
+ *
  * @small
  */
 final class FactoryDefinitionTest extends AbstractDefinitionTest

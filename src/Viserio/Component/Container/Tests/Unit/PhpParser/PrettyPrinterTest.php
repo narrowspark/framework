@@ -21,6 +21,8 @@ use Viserio\Component\Container\PhpParser\PrettyPrinter;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\PhpParser\PrettyPrinter
+ *
  * @small
  */
 final class PrettyPrinterTest extends TestCase

@@ -17,6 +17,8 @@ use Viserio\Contract\Container\Exception\RuntimeException;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\PhpParser\NodeVisitor\ClosureLocatorVisitor
+ *
  * @small
  */
 final class ClosureLocatorVisitorTest extends TestCase

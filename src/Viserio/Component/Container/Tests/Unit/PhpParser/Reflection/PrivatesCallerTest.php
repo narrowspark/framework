@@ -20,6 +20,8 @@ use Viserio\Component\Container\Tests\Fixture\Reflection\SomeClassWithPrivateMet
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\PhpParser\Reflection\PrivatesCaller
+ *
  * @small
  */
 final class PrivatesCallerTest extends TestCase

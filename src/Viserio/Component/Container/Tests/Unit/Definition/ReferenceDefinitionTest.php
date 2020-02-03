@@ -21,6 +21,8 @@ use Viserio\Contract\Container\Exception\InvalidArgumentException;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Definition\ReferenceDefinition
+ *
  * @small
  */
 final class ReferenceDefinitionTest extends TestCase

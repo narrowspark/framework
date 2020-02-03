@@ -16,6 +16,8 @@ namespace Viserio\Component\Container\Tests\Integration;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\ContainerBuilder
+ *
  * @small
  */
 final class BuildContainerHasDefinitionTest extends BaseContainerTest

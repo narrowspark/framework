@@ -22,6 +22,8 @@ use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Pipeline\RemovePrivateAliasesPipe
+ *
  * @small
  */
 final class RemovePrivateAliasesPipeTest extends TestCase

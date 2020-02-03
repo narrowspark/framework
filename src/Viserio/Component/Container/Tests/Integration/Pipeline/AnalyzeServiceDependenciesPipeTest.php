@@ -30,6 +30,9 @@ use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Pipeline\AnalyzeServiceDependenciesPipe
+ * @covers \Viserio\Component\Container\Pipeline\AutowirePipe
+ *
  * @small
  */
 final class AnalyzeServiceDependenciesPipeTest extends TestCase

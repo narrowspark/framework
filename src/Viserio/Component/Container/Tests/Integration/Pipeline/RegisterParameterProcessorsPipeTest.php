@@ -25,6 +25,8 @@ use Viserio\Contract\Container\Exception\InvalidArgumentException;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Pipeline\RegisterParameterProcessorsPipe
+ *
  * @small
  */
 final class RegisterParameterProcessorsPipeTest extends TestCase

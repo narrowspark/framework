@@ -64,6 +64,8 @@ use Viserio\Contract\Container\Exception\UnresolvableDependencyException;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Pipeline\AutowirePipe
+ *
  * @small
  */
 final class AutowirePipeTest extends TestCase

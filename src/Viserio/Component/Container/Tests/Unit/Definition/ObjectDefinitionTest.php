@@ -25,6 +25,8 @@ use Viserio\Contract\Container\Definition\Definition as DefinitionContract;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Definition\ObjectDefinition
+ *
  * @small
  */
 final class ObjectDefinitionTest extends AbstractDefinitionTest

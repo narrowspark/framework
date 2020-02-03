@@ -22,6 +22,8 @@ use Viserio\Contract\Container\Definition\Definition as DefinitionContract;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Pipeline\ExtendedDefinitionPipe
+ *
  * @small
  */
 final class ExtendedDefinitionValuePipeTest extends TestCase

@@ -22,6 +22,8 @@ use Viserio\Contract\Container\Exception\InvalidArgumentException;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\PipelineConfig
+ *
  * @small
  */
 final class PipelineConfigTest extends TestCase

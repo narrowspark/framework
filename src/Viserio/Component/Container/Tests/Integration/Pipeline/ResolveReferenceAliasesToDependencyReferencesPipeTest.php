@@ -25,6 +25,9 @@ use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Pipeline\AutowirePipe
+ * @covers \Viserio\Component\Container\Pipeline\ResolveReferenceAliasesToDependencyReferencesPipe
+ *
  * @small
  */
 final class ResolveReferenceAliasesToDependencyReferencesPipeTest extends TestCase

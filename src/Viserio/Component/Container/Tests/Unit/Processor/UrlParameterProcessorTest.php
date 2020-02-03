@@ -20,10 +20,10 @@ use Viserio\Contract\Container\Exception\RuntimeException;
 /**
  * @internal
  *
- * @small
- *
  * @covers \Viserio\Component\Container\Processor\AbstractParameterProcessor
  * @covers \Viserio\Component\Container\Processor\UrlParameterProcessor
+ *
+ * @small
  */
 final class UrlParameterProcessorTest extends TestCase
 {

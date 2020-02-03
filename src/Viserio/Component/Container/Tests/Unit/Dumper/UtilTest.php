@@ -20,6 +20,8 @@ use Viserio\Contract\Container\Exception\RuntimeException;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Dumper\Util
+ *
  * @small
  */
 final class UtilTest extends TestCase

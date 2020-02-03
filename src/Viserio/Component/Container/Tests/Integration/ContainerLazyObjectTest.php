@@ -24,6 +24,8 @@ use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuil
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\ContainerBuilder
+ *
  * @small
  */
 final class ContainerLazyObjectTest extends AbstractContainerTestCase

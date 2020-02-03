@@ -21,6 +21,8 @@ use Viserio\Contract\Container\Exception\InvalidArgumentException;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Definition\ParameterDefinition
+ *
  * @small
  */
 final class ParameterDefinitionTest extends AbstractDefinitionTest

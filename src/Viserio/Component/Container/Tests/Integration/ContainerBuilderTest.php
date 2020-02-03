@@ -23,6 +23,8 @@ use Viserio\Contract\Container\Exception\NotFoundException;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\ContainerBuilder
+ *
  * @small
  */
 final class ContainerBuilderTest extends TestCase

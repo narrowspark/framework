@@ -28,6 +28,9 @@ use Viserio\Contract\Container\Exception\NotFoundException;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Pipeline\DecoratorServicePipe
+ * @covers \Viserio\Component\Container\Pipeline\ResolveInvalidReferencesPipe
+ *
  * @small
  */
 final class ResolveInvalidReferencesPipeTest extends TestCase

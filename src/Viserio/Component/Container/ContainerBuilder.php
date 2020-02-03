@@ -253,7 +253,7 @@ final class ContainerBuilder implements ContainerBuilderContract
     public function setDefinition(string $id, DefinitionContract $definition): void
     {
         if ('' === $id || \strlen($id) !== \strcspn($id, "\0\r\n'")) {
-            throw new InvalidArgumentException(\sprintf('Invalid service id: "%s".', $id));
+            throw new InvalidArgumentException(\sprintf('Invalid service id: [%s].', $id));
         }
 
         unset($this->aliases[$id], $this->removedIds[$id]);

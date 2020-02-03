@@ -35,6 +35,8 @@ use Viserio\Contract\Container\Exception\UnresolvableDependencyException;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\ContainerBuilder
+ *
  * @small
  */
 final class ContainerMakeTest extends MockeryTestCase

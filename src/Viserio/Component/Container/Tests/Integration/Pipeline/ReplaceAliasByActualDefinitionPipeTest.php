@@ -23,6 +23,8 @@ use Viserio\Contract\Container\Exception\LogicException;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Pipeline\ReplaceAliasByActualDefinitionPipe
+ *
  * @small
  */
 final class ReplaceAliasByActualDefinitionPipeTest extends TestCase

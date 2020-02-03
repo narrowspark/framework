@@ -23,6 +23,8 @@ use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Pipeline\RemoveUninitializedReferencesInMethodCallsPipe
+ *
  * @small
  */
 final class RemoveUninitializedReferencesInMethodCallsPipeTest extends TestCase

@@ -20,6 +20,8 @@ use Viserio\Component\Container\PhpParser\NodeVisitor\MagicConstantVisitor;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\PhpParser\NodeVisitor\MagicConstantVisitor
+ *
  * @small
  */
 final class MagicConstantVisitorTest extends MockeryTestCase

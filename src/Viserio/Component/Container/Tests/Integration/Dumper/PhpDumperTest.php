@@ -80,6 +80,11 @@ use Viserio\Contract\Container\Traits\ContainerAwareTrait;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\AbstractCompiledContainer
+ * @covers \Viserio\Component\Container\ContainerBuilder
+ * @covers \Viserio\Component\Container\Dumper\PhpDumper
+ * @covers \Viserio\Component\Container\Traits\ParameterProcessResolvingTrait
+ *
  * @small
  */
 final class PhpDumperTest extends AbstractContainerTestCase

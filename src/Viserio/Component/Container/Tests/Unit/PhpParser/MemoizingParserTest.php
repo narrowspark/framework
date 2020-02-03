@@ -22,6 +22,8 @@ use Viserio\Component\Container\PhpParser\MemoizingParser;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\PhpParser\MemoizingParser
+ *
  * @small
  */
 final class MemoizingParserTest extends MockeryTestCase

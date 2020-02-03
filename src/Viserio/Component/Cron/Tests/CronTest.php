@@ -294,7 +294,7 @@ final class CronTest extends MockeryTestCase
     }
 
     /**
-     * @covers ::ensureCorrectUser
+     * @covers \Viserio\Component\Cron\Cron::ensureCorrectUser
      */
     public function testBuildCommand(): void
     {

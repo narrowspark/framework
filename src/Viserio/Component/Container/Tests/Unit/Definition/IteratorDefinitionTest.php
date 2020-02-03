@@ -22,6 +22,8 @@ use Viserio\Contract\Log\Exception\Exception;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\Definition\IteratorDefinition
+ *
  * @small
  */
 final class IteratorDefinitionTest extends AbstractDefinitionTest

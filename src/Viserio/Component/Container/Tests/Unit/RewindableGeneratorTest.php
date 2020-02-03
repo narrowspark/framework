@@ -15,10 +15,11 @@ namespace Viserio\Component\Container\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Container\RewindableGenerator;
-use function count;
 
 /**
  * @internal
+ *
+ * @covers \Viserio\Component\Container\RewindableGenerator
  *
  * @small
  */

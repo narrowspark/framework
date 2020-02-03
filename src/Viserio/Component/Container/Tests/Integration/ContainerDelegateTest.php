@@ -22,6 +22,8 @@ use Viserio\Component\Container\Test\AbstractContainerTestCase;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Container\ContainerBuilder
+ *
  * @property AbstractCompiledContainer $container
  *
  * @small
