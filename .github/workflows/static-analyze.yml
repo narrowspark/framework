@@ -65,12 +65,12 @@ jobs:
           fetch-depth: 2
 
       - name: "Setup PHP"
-        uses: shivammathur/setup-php@1.8.1
+        uses: shivammathur/setup-php@1.8.2
         with:
           php-version: 7.4
           extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, inotify, pcntl, posix
           pecl: true
-          tools: composer, composer-prefetcher
+          tools: composer, composer-prefetcher, cs2pr
 
       - name: "Configure Container"
         env:
@@ -97,9 +97,6 @@ jobs:
       - name: "Create local composer packages for each patched components and reference them in composer.json when cross-testing components"
         run: php ./build/build-packages.php HEAD^ $(find src/Viserio -mindepth 3 -type f -name composer.json -printf '%h\n' | sort)
 
-      - name: "Install Annotate a Github Pull Request"
-        run: composer global require staabm/annotate-pull-request-from-checkstyle:1.0-beta1 --no-interaction --no-progress --profile --no-suggest --optimize-autoloader
-
       - name: "analyze php code"
         run: |
           cd "${GITHUB_WORKSPACE}/src/Viserio/${{ matrix.dependencies }}"
@@ -108,4 +105,4 @@ jobs:
           $COMPOSER_UP
           echo ::endgroup::
 
-          ./vendor/bin/phpstan analyse -c ./phpstan.neon --memory-limit=-1 --output-format=checkstyle | /home/runner/.composer/vendor/bin/cs2pr
+          ./vendor/bin/phpstan analyse -c ./phpstan.neon --memory-limit=-1 --error-format=checkstyle | cs2pr
