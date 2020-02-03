@@ -54,7 +54,7 @@ final class ParameterDefinition extends AbstractDefinition
      *
      * {@inheritdoc}
      */
-    public function setPublic(bool $bool): DefinitionContract
+    public function setPublic(bool $bool)
     {
         // cant be changed
 
@@ -74,7 +74,7 @@ final class ParameterDefinition extends AbstractDefinition
      *
      * {@inheritdoc}
      */
-    public function setLazy(bool $bool): DefinitionContract
+    public function setLazy(bool $bool)
     {
         // cant be changed
 
@@ -106,8 +106,8 @@ final class ParameterDefinition extends AbstractDefinition
             return;
         }
 
-        if ($value instanceof DefinitionContract || $value instanceof ArgumentContract || \is_object($value) || \is_callable($value)) {
-            throw new InvalidArgumentException('You can´t register a ParameterDefinition with a not supported type, supported types are ["int", "float", "string", "bool", "array", "null", "iterable"].');
+        if (! \is_string($value) && ($value instanceof DefinitionContract || $value instanceof ArgumentContract || \is_object($value) || \is_callable($value))) {
+            throw new InvalidArgumentException(\sprintf('You can´t register a ParameterDefinition [%s] with a not supported type [%s], supported types are ["int", "integer", "float", "string", "bool", "boolean", "array", "null", "array"].', $this->getName(), \is_object($value) ? \get_class($value) : \gettype($value)));
         }
     }
 }

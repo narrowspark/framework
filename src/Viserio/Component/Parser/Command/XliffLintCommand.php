@@ -65,7 +65,11 @@ class XliffLintCommand extends AbstractLintCommand
 
         if ($targetLanguage !== null) {
             $expectedFileExtension = \sprintf('%s.xlf', \str_replace('-', '_', $targetLanguage));
-            $realFileExtension = \explode('.', \basename($file), 2)[1] ?? '';
+            $realFileExtension = '';
+
+            if ($file !== null) {
+                $realFileExtension = \explode('.', \basename($file), 2)[1] ?? '';
+            }
 
             if ($expectedFileExtension !== $realFileExtension) {
                 $errors[] = [
@@ -97,17 +101,23 @@ class XliffLintCommand extends AbstractLintCommand
         $output = $this->getOutput();
 
         foreach ($filesInfo as $info) {
-            if ($displayCorrectFiles && $info['valid']) {
-                $output->comment('<info>OK</info>' . ($info['file'] ? \sprintf(' in %s', $info['file']) : ''));
-            } elseif (! $info['valid']) {
+            /** @var bool $valid */
+            $valid = $info['valid'];
+
+            if ($displayCorrectFiles && $valid) {
+                $output->comment('<info>OK</info>' . (\is_string($info['file']) ? \sprintf(' in %s', $info['file']) : ''));
+            } elseif (! $valid) {
                 $erroredFiles++;
 
-                $output->text('<error>ERROR</error>' . ($info['file'] ? \sprintf(' in %s', $info['file']) : ''));
+                $output->text('<error>ERROR</error>' . (\is_string($info['file']) ? \sprintf(' in %s', $info['file']) : ''));
 
-                $output->listing(\array_map(static function ($error) {
+                /** @var array<string, mixed> $messages */
+                $messages = $info['messages'];
+
+                $output->listing(\array_map(static function (array $error): string {
                     // general document errors have a '-1' line number
                     return $error['line'] === -1 ? $error['message'] : \sprintf('Line %d, Column %d: %s', $error['line'], $error['column'], $error['message']);
-                }, $info['messages']));
+                }, $messages));
             }
         }
 

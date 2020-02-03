@@ -15,4 +15,10 @@ namespace Viserio\Contract\Container\Argument;
 
 interface ConditionArgument extends Argument
 {
+    /**
+     * Returns a callback to manipulate definition.
+     *
+     * @return callable the given function should look like function ($definition) {...}
+     */
+    public function getCallback(): callable;
 }

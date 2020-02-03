@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Parser\Utils;
 
-use DOMComment;
 use DOMDocument;
 use DOMElement;
 use DOMText;
@@ -22,6 +21,7 @@ use Throwable;
 use Viserio\Contract\Parser\Exception\FileNotFoundException;
 use Viserio\Contract\Parser\Exception\InvalidArgumentException;
 use Viserio\Contract\Parser\Exception\ParseException;
+use Viserio\Contract\Parser\Exception\RuntimeException;
 use function key;
 use function simplexml_import_dom;
 
@@ -54,7 +54,7 @@ final class XmlUtils
         $xml = \simplexml_import_dom($dom);
 
         if ($xml === false) {
-            throw new ParseException(['message' => 'A failure happend on importing a DOMDocument.']);
+            throw new ParseException('A failure happend on importing a DOMDocument.');
         }
 
         return $xml;
@@ -68,7 +68,7 @@ final class XmlUtils
      *
      * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException
      *
-     * @return array
+     * @return array<int, array<string, int|string>>
      */
     public static function validateSchema(DOMDocument $dom, string $schema): array
     {
@@ -93,7 +93,9 @@ final class XmlUtils
     }
 
     /**
-     * @param array $xmlErrors
+     * Transforms xml errors to errors string.
+     *
+     * @param array<int, array<string, int|string>> $xmlErrors
      *
      * @return string
      */
@@ -121,7 +123,7 @@ final class XmlUtils
      *
      * @param bool $internalErrors
      *
-     * @return array An array of errors
+     * @return array<int, array<string, int|string>> An array of errors
      */
     public static function getXmlErrors(bool $internalErrors): array
     {
@@ -188,10 +190,10 @@ final class XmlUtils
         $dom = new DOMDocument();
         $dom->validateOnParse = true;
 
-        if (! $dom->loadXML($content, \LIBXML_NONET | (\defined('LIBXML_COMPACT') ? \LIBXML_COMPACT : 0))) {
+        if ($dom->loadXML($content, \LIBXML_NONET | (\defined('LIBXML_COMPACT') ? \LIBXML_COMPACT : 0)) === false) {
             \libxml_disable_entity_loader($disableEntities);
 
-            if ($errors = XliffUtils::validateSchema($dom)) {
+            if (\count($errors = XliffUtils::validateSchema($dom)) !== 0) {
                 throw new InvalidArgumentException(self::getErrorsAsString($errors));
             }
         }
@@ -235,7 +237,7 @@ final class XmlUtils
      * @param DOMElement $element     A \DomElement instance
      * @param bool       $checkPrefix Check prefix in an element or an attribute name
      *
-     * @return null|array|string A PHP array
+     * @return null|array<int|string, mixed>|string A PHP array
      */
     public static function convertDomElementToArray(DOMElement $element, bool $checkPrefix = true)
     {
@@ -260,9 +262,9 @@ final class XmlUtils
                     $nodeValue = \trim($node->nodeValue);
                     $empty = false;
                 }
-            } elseif ($checkPrefix && $prefix !== (string) $node->prefix) {
+            } elseif ($checkPrefix && $prefix !== $node->prefix) {
                 continue;
-            } elseif (! $node instanceof DOMComment) {
+            } elseif ($node instanceof DOMElement) {
                 $value = self::convertDomElementToArray($node, $checkPrefix);
                 $key = $node->localName;
 
@@ -305,36 +307,50 @@ final class XmlUtils
         $value = (string) $value;
         $lowercaseValue = \strtolower($value);
 
-        switch (true) {
-            case 'null' === $lowercaseValue:
-                return;
-            case \ctype_digit($value):
-                return self::transformToNumber($value, 0);
-            case isset($value[1]) && '-' === $value[0] && \ctype_digit(\substr($value, 1)):
-                return self::transformToNumber($value, 1);
-            case 'true' === $lowercaseValue:
-                return true;
-            case 'false' === $lowercaseValue:
-                return false;
-            case isset($value[1]) && '0b' === $value[0] . $value[1]:
-                return \bindec($value);
-            case \is_numeric($value):
-                return '0x' === $value[0] . $value[1] ? \hexdec($value) : (float) $value;
-            case \preg_match('/^0x[0-9a-f]++$/i', $value):
-                return \hexdec($value);
-            case \preg_match('/^(-|\+)?\d+(\.\d+)?$/', $value):
-                return (float) $value;
-
-            default:
-                return $value;
+        if ('null' === $lowercaseValue) {
+            return;
         }
+
+        if (\ctype_digit($value)) {
+            return self::transformToNumber($value, 0);
+        }
+
+        if (isset($value[1]) && '-' === $value[0] && \ctype_digit(\substr($value, 1))) {
+            return self::transformToNumber($value, 1);
+        }
+
+        if ($lowercaseValue === 'true') {
+            return true;
+        }
+
+        if ('false' === $lowercaseValue) {
+            return false;
+        }
+
+        if (isset($value[1]) && '0b' === $value[0] . $value[1]) {
+            return \bindec($value);
+        }
+
+        if (\is_numeric($value)) {
+            return '0x' === $value[0] . $value[1] ? \hexdec($value) : (float) $value;
+        }
+
+        if (\preg_match('/^0x[0-9a-f]++$/i', $value) === 1) {
+            return \hexdec($value);
+        }
+
+        if (\preg_match('/^(-|\+)?\d+(\.\d+)?$/', $value) === 1) {
+            return (float) $value;
+        }
+
+        return $value;
     }
 
     /**
      * Validates DOMDocument against a file or callback.
      *
-     * @param DOMDocument     $dom
-     * @param callable|string $schemaOrCallable
+     * @param \DOMDocument $dom
+     * @param mixed        $schemaOrCallable should be a callable or a string
      *
      * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException
      *
@@ -354,7 +370,16 @@ final class XmlUtils
                 $valid = false;
             }
         } elseif (\is_string($schemaOrCallable) && \is_file($schemaOrCallable)) {
-            $valid = @$dom->schemaValidateSource(\file_get_contents($schemaOrCallable));
+            \error_clear_last();
+            $content = \file_get_contents($schemaOrCallable);
+
+            if ($content === false) {
+                $error = \error_get_last();
+
+                throw new RuntimeException($error['message'] ?? 'An error occured', $error['type'] ?? 1);
+            }
+
+            $valid = @$dom->schemaValidateSource($content);
         } else {
             \libxml_use_internal_errors($internalErrors);
 

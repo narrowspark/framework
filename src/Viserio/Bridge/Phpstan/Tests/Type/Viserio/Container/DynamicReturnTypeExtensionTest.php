@@ -93,7 +93,7 @@ final class DynamicReturnTypeExtensionTest extends AbstractExtensionTestCase
         );
     }
 
-    public function provideGetTypeFromMethodCallCases(): iterable
+    public static function provideGetTypeFromMethodCallCases(): iterable
     {
         return [
             ['$service1', ObjectDefinitionContract::class],

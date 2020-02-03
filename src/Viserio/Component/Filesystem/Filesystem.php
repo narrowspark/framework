@@ -37,6 +37,13 @@ use Viserio\Contract\Filesystem\Watcher\Watcher as WatcherContract;
 class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContract
 {
     /**
+     * List of the default permissions for file end directory.
+     *
+     * @var array<string, array<string, float|int|string>>
+     */
+    protected static $permissions;
+
+    /**
      * Last catch error message.
      *
      * @var null|string
@@ -49,13 +56,6 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
      * @var null|int
      */
     private static $lastType;
-
-    /**
-     * List of the default permissions for file end directory.
-     *
-     * @var array<string, array<string, float|int|string>>
-     */
-    protected static $permissions;
 
     /**
      * Create a new Filesystem instance.
@@ -149,9 +149,19 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
      */
     public function write(string $path, string $content, array $config = []): void
     {
-        $lock = isset($config['lock']) ? \LOCK_EX : 0;
+        $this->delete($path);
 
-        self::box('\file_put_contents', Stream::PROTOCOL . '://' . $path, $content, $lock);
+        $dir = \dirname($path);
+
+        if (! \is_dir($dir)) {
+            $this->createDirectory($dir);
+        }
+
+        if (! \is_writable($dir)) {
+            throw new IOException(\sprintf('Unable to write to the [%s] directory.', $dir), 0, null, $dir);
+        }
+
+        self::box('\file_put_contents', Stream::PROTOCOL . '://' . $path, $content, isset($config['lock']) ? \LOCK_EX : 0);
 
         if (self::$lastError !== null) {
             throw new IOException(\sprintf('Could not write content to the file [%s]: %s', $path, self::$lastError), 0, null, $path, self::$lastType);
@@ -165,6 +175,18 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
      */
     public function writeStream(string $path, $resource, array $config = []): void
     {
+        $this->delete($path);
+
+        $dir = \dirname($path);
+
+        if (! \is_dir($dir)) {
+            $this->createDirectory($dir);
+        }
+
+        if (! \is_writable($dir)) {
+            throw new IOException(\sprintf('Unable to write to the [%s] directory.', $dir), 0, null, $dir);
+        }
+
         $stream = self::box('\fopen', Stream::PROTOCOL . '://' . $path, 'w+b');
 
         if (self::$lastError !== null) {
@@ -253,7 +275,7 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
     /**
      * {@inheritdoc}
      */
-    public function setOwner(string $file, string $user): void
+    public function setOwner(string $file, $user): void
     {
         if (\function_exists('lchown') && \is_link($file)) {
             if (@\lchown($file, $user) !== true) {
@@ -267,7 +289,7 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
     /**
      * {@inheritdoc}
      */
-    public function setGroup(string $file, string $group): void
+    public function setGroup(string $file, $group): void
     {
         if (\function_exists('lchgrp') && \is_link($file)) {
             $result = self::box('\lchgrp', $file, $group);
@@ -925,6 +947,22 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
     }
 
     /**
+     * @internal
+     *
+     * @param int    $type
+     * @param string $msg
+     *
+     * @return bool;
+     */
+    public static function handleError(int $type, string $msg): bool
+    {
+        self::$lastError = $msg;
+        self::$lastType = $type;
+
+        return true;
+    }
+
+    /**
      * @param string $origin
      * @param string $target
      * @param string $linkType Name of the link type, typically 'symbolic' or 'hard'
@@ -1009,22 +1047,6 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
         \restore_error_handler();
 
         throw $e;
-    }
-
-    /**
-     * @internal
-     *
-     * @param int    $type
-     * @param string $msg
-     *
-     * @return bool;
-     */
-    public static function handleError(int $type, string $msg): bool
-    {
-        self::$lastError = $msg;
-        self::$lastType = $type;
-
-        return true;
     }
 
     /**

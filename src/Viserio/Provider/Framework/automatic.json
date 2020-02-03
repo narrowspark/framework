@@ -1,0 +1,75 @@
+{
+    "configurators": {
+        "providers": {
+            "Viserio\\Provider\\Framework\\Container\\Provider\\FrameworkServiceProvider": ["global"]
+        },
+        "bootstrap": {
+            "Viserio\\Provider\\Framework\\Bootstrap\\ConfigurationLoaderBootstrap": ["global"],
+            "Viserio\\Provider\\Framework\\Bootstrap\\ConfigureKernelBootstrap": ["global"],
+            "Viserio\\Provider\\Framework\\Bootstrap\\InitializeContainerBootstrap": ["global"],
+            "Viserio\\Provider\\Framework\\Bootstrap\\InitializeContainerBuilderBootstrap": ["global"],
+            "Viserio\\Provider\\Framework\\Bootstrap\\LoadServiceProviderBootstrap": ["global"],
+            "Viserio\\Provider\\Framework\\Bootstrap\\PrepareContainerBuilderBootstrap": ["global"]
+        },
+        "config": {
+            "global": {
+                "viserio": {
+                    "app": {
+                        "charset": "UTF-8",
+                        "timezone": "UTC",
+                        "directory": {
+                            "mapper": {
+                                "app": [
+                                    "Viserio\\Contract\\Foundation\\Kernel",
+                                    "getAppPath"
+                                ],
+                                "config": [
+                                    "Viserio\\Contract\\Foundation\\Kernel",
+                                    "getConfigPath"
+                                ],
+                                "database": [
+                                    "Viserio\\Contract\\Foundation\\Kernel",
+                                    "getDatabasePath"
+                                ],
+                                "public": [
+                                    "Viserio\\Contract\\Foundation\\Kernel",
+                                    "getPublicPath"
+                                ],
+                                "resources": [
+                                    "Viserio\\Contract\\Foundation\\Kernel",
+                                    "getResourcePath"
+                                ],
+                                "routes": [
+                                    "Viserio\\Contract\\Foundation\\Kernel",
+                                    "getRoutesPath"
+                                ],
+                                "lang": [
+                                    "Viserio\\Contract\\Foundation\\Kernel",
+                                    "getLangPath"
+                                ],
+                                "storage": [
+                                    "Viserio\\Contract\\Foundation\\Kernel",
+                                    "getStoragePath"
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            "testing": {
+                "viserio": {
+                    "app": {
+                        "directory": {
+                            "mapper": {
+                                "tests": [
+                                    "Viserio\\Contract\\Foundation\\Kernel",
+                                    "getTestsPath"
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

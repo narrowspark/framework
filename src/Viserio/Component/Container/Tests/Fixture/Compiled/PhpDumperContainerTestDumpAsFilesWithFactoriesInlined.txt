@@ -6,6 +6,7 @@ return [
     \Psr\Container\ContainerInterface::class => true,
     \Viserio\Component\Container\Tests\Fixture\Autowire\Documentation::class => true,
     \Viserio\Component\Container\Tests\Fixture\EmptyClass::class => true,
+    \Viserio\Contract\Container\CompiledContainer::class => true,
     \Viserio\Contract\Container\Factory::class => true,
     \Viserio\Contract\Container\TaggedContainer::class => true,
     'container' => true,
@@ -49,12 +50,12 @@ final class PhpDumperContainerTestDumpAsFilesWithFactoriesInlined extends \Viser
         $this->targetDir = \dirname($containerDir);
 
         $this->parameters = \array_merge([
-            'baz_class' => 'BazClass',
+            'baz_class' => \Viserio\Component\Container\Tests\Fixture\FooClass::class,
             'foo_class' => \Viserio\Component\Container\Tests\Fixture\FooClass::class,
             'foo' => 'bar',
-            'container.dumper.inline_factories' => true,
-            'container.dumper.inline_class_loader' => true,
-            'container.dumper.as_files' => true,
+            'viserio.container.dumper.inline_factories' => true,
+            'viserio.container.dumper.inline_class_loader' => true,
+            'viserio.container.dumper.as_files' => true,
         ], $buildParameters);
         $this->methodMapping = [
             'BAR' => 'getad640dbf7c1608c6f6a2a6c6157f6917bae4cb465c8345494056c9a6bdb5f0fa',
@@ -137,7 +138,7 @@ final class PhpDumperContainerTestDumpAsFilesWithFactoriesInlined extends \Viser
     {
         include_once $this->targetDir.''.'/FooClass.php';
 
-        return $this->services['bar'] = new \Viserio\Component\Container\Tests\Fixture\FooClass('foo', ($this->services['foo.baz'] ?? $this->getff99b089690198625a3564a7bac09392fbcdf80439a0cd9b69e79c68fb63ba8f()), 'foo_bar');
+        return $this->services['bar'] = new \Viserio\Component\Container\Tests\Fixture\FooClass('foo', ($this->services['foo.baz'] ?? $this->getff99b089690198625a3564a7bac09392fbcdf80439a0cd9b69e79c68fb63ba8f()), $this->getParameter('foo_bar'));
     }
 
     /**
@@ -169,11 +170,11 @@ final class PhpDumperContainerTestDumpAsFilesWithFactoriesInlined extends \Viser
     /**
      * Returns the public config shared service.
      *
-     * @return array
+     * @return \stdClass
      */
-    protected function get34bcaa5afa8745d92e6161e8495be3b939c5c6abb4dc2fd1f5a3cfdaba620256(): array
+    protected function get34bcaa5afa8745d92e6161e8495be3b939c5c6abb4dc2fd1f5a3cfdaba620256(): \stdClass
     {
-        return $this->services['config'] = [];
+        return $this->services['config'] = new \stdClass();
     }
 
     /**
@@ -217,6 +218,8 @@ final class PhpDumperContainerTestDumpAsFilesWithFactoriesInlined extends \Viser
      */
     protected function get80a3af9e0f4cfa1f056ede107225fdf4b9e348c2f93127b7251db5275fb42120()
     {
+        include_once $this->targetDir.''.'/FooClass.php';
+
         return $this->services['factory_service'] = ($this->services['foo.baz'] ?? $this->getff99b089690198625a3564a7bac09392fbcdf80439a0cd9b69e79c68fb63ba8f())->getInstance();
     }
 
@@ -263,14 +266,13 @@ final class PhpDumperContainerTestDumpAsFilesWithFactoriesInlined extends \Viser
     /**
      * Returns the public foo.baz shared service.
      *
-     * @return array
+     * @return mixed An instance returned by \Viserio\Component\Container\Tests\Fixture\FooClass::getInstance()
      */
-    protected function getff99b089690198625a3564a7bac09392fbcdf80439a0cd9b69e79c68fb63ba8f(): array
+    protected function getff99b089690198625a3564a7bac09392fbcdf80439a0cd9b69e79c68fb63ba8f()
     {
-        return $this->services['foo.baz'] = [
-            0 => 'BazClass',
-            1 => 'getInstance',
-        ];
+        include_once $this->targetDir.''.'/FooClass.php';
+
+        return $this->services['foo.baz'] = \Viserio\Component\Container\Tests\Fixture\FooClass::getInstance();
     }
 
     /**
@@ -462,9 +464,9 @@ if (!\class_exists(PhpDumperContainerTestDumpAsFilesWithFactoriesInlined::class,
 }
 
 return new \Container%s\PhpDumperContainerTestDumpAsFilesWithFactoriesInlined([
-    'container.build_hash' => '%s',
-    'container.build_id' => '%s',
-    'container.build_time' => %s,
+    'viserio.container.build_hash' => '%s',
+    'viserio.container.build_id' => '%s',
+    'viserio.container.build_time' => %s,
 ], __DIR__.'/Container%s');
 
 )

@@ -20,26 +20,15 @@ use Psr\Container\ContainerInterface;
 use ReflectionObject;
 use Viserio\Component\Container\AbstractCompiledContainer;
 use Viserio\Component\Container\LazyProxy\ProxyDumper;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\LazyProxy\Dumper as ProxyDumperContract;
 use Viserio\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Contract\Foundation\Environment as EnvironmentContract;
 use Viserio\Contract\Foundation\Exception\RuntimeException;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
-use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
-use Viserio\Contract\OptionsResolver\RequiresValidatedOption as RequiresValidatedOptionContract;
 
-abstract class AbstractKernel implements KernelContract,
-    ProvidesDefaultOptionContract,
-    RequiresComponentConfigContract,
-    RequiresMandatoryOptionContract,
-    RequiresValidatedOptionContract
+abstract class AbstractKernel implements KernelContract
 {
-    use OptionsResolverTrait;
-
     /**
      * The current framework full version.
      *
@@ -95,7 +84,7 @@ abstract class AbstractKernel implements KernelContract,
      *
      * @var array
      */
-    protected static $allowedBootstrapTypes = ['global'];
+    protected static array $allowedBootstrapTypes = ['global'];
 
     /**
      * A Container instance.
@@ -107,58 +96,51 @@ abstract class AbstractKernel implements KernelContract,
     /**
      * A Container Builder instance.
      *
-     * @var null|\Viserio\Contract\Container\ContainerBuilder & \Viserio\Contract\Container\ServiceProvider\ContainerBuilder
+     * @var null|\Viserio\Contract\Container\ContainerBuilder&\Viserio\Contract\Container\ServiceProvider\ContainerBuilder
      */
     protected $containerBuilder;
-
-    /**
-     * A EnvironmentDetector instance.
-     *
-     * @var \Viserio\Contract\Foundation\Environment
-     */
-    protected $environmentDetector;
-
-    /**
-     * The bootstrap manager instance.
-     *
-     * @var \Viserio\Component\Foundation\BootstrapManager
-     */
-    protected $bootstrapManager;
-
-    /**
-     * Project root path.
-     *
-     * @var string
-     */
-    protected $rootDir;
-
-    /**
-     * Project root dirs.
-     *
-     * @var string
-     */
-    protected $projectDirs;
 
     /**
      * The environment file to load during bootstrapping.
      *
      * @var string
      */
-    protected $environmentFile = '.env';
+    protected string $environmentFile = '.env';
 
     /**
      * The custom environment path defined by the developer.
      *
-     * @var string
+     * @var null|string
      */
-    protected $environmentPath;
+    protected ?string $environmentPath = null;
+
+    protected EnvironmentContract $environmentDetector;
 
     /**
-     * Resolved options.
+     * A instance of the BootstrapManager.
      *
-     * @var array
+     * @var \Viserio\Component\Foundation\BootstrapManager
      */
-    protected $resolvedOptions = [];
+    protected $bootstrapManager;
+
+    protected ?string $rootDir = null;
+
+    /** @var array<string, string> */
+    protected ?array $projectDirs = null;
+
+    /**
+     * The current application environment.
+     *
+     * @var null|string
+     */
+    protected ?string $environment = null;
+
+    /**
+     * Check if the application is running in debug mode.
+     *
+     * @var bool
+     */
+    protected bool $debug = false;
 
     /**
      * Create a new kernel instance.
@@ -213,6 +195,22 @@ abstract class AbstractKernel implements KernelContract,
     /**
      * {@inheritdoc}
      */
+    public function getEnvironmentFile(): string
+    {
+        return $this->environmentFile ?: '.env';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEnvironmentPath(): string
+    {
+        return $this->environmentPath ?: $this->rootDir;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getEnvironmentDetector(): EnvironmentContract
     {
         return $this->environmentDetector;
@@ -244,17 +242,17 @@ abstract class AbstractKernel implements KernelContract,
     /**
      * {@inheritdoc}
      */
-    public function getEnvironmentFile(): string
+    public function getEnvironment(): string
     {
-        return $this->environmentFile ?: '.env';
+        return $this->environment;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getEnvironmentPath(): string
+    public function isDebug(): bool
     {
-        return $this->environmentPath ?: $this->rootDir;
+        return $this->debug;
     }
 
     /**
@@ -272,25 +270,6 @@ abstract class AbstractKernel implements KernelContract,
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): array
-    {
-        return ['viserio', 'app'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getDefaultOptions(): array
-    {
-        return [
-            'timezone' => 'UTC',
-            'charset' => 'UTF-8',
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getContainerBaseClass(): string
     {
         return AbstractCompiledContainer::class;
@@ -299,64 +278,9 @@ abstract class AbstractKernel implements KernelContract,
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): array
-    {
-        return [
-            'env',
-            'debug',
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getOptionValidators(): array
-    {
-        // @todo create better validator with messages how to fix this
-        return [
-            'env' => ['string'],
-            'debug' => ['bool'],
-            'timezone' => ['string'],
-            'charset' => ['string'],
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setKernelConfigurations($config): void
-    {
-        $this->resolvedOptions = self::resolveOptions($config);
-
-        \date_default_timezone_set($this->resolvedOptions['timezone']);
-
-        if (\function_exists('mb_internal_encoding')) {
-            \mb_internal_encoding($this->resolvedOptions['charset']);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCharset(): string
-    {
-        return $this->resolvedOptions['charset'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getKernelConfigurations(): array
-    {
-        return $this->resolvedOptions;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function isLocal(): bool
     {
-        return $this->resolvedOptions['env'] === 'local';
+        return $this->environment === 'local';
     }
 
     /**
@@ -364,7 +288,7 @@ abstract class AbstractKernel implements KernelContract,
      */
     public function isRunningUnitTests(): bool
     {
-        return $this->resolvedOptions['env'] === 'testing';
+        return $this->environment === 'testing';
     }
 
     /**
@@ -372,7 +296,7 @@ abstract class AbstractKernel implements KernelContract,
      */
     public function isRunningInConsole(): bool
     {
-        return \in_array(\PHP_SAPI, ['cli', 'phpdbg'], true);
+        return $this->environmentDetector->isRunningInConsole();
     }
 
     /**
@@ -497,27 +421,10 @@ abstract class AbstractKernel implements KernelContract,
     public function detectEnvironment(Closure $callback): string
     {
         $args = $_SERVER['argv'] ?? null;
-        $env = $this->environmentDetector->detect($callback, $args);
 
-        $this->resolvedOptions['env'] = $env;
+        \putenv('APP_ENV=' . $_SERVER['APP_ENV'] = $_ENV['APP_ENV'] = $this->environment = $this->environmentDetector->detect($callback, $args));
 
-        return $env;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getEnvironment(): string
-    {
-        return $this->resolvedOptions['env'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isDebug(): bool
-    {
-        return $this->resolvedOptions['debug'];
+        return $this->environment;
     }
 
     /**
@@ -525,7 +432,11 @@ abstract class AbstractKernel implements KernelContract,
      */
     public function detectDebugMode(Closure $callback): bool
     {
-        return $this->resolvedOptions['debug'] = $callback();
+        $args = $_SERVER['argv'] ?? null;
+
+        \putenv('APP_DEBUG=' . $_SERVER['APP_DEBUG'] = $_ENV['APP_DEBUG'] = $this->debug = $this->environmentDetector->detectDebug($callback, $args));
+
+        return $this->debug;
     }
 
     /**
@@ -597,9 +508,32 @@ abstract class AbstractKernel implements KernelContract,
     }
 
     /**
-     * Merge composer project dir settings with the default narrowspark dir settings.
+     * Returns prepared bootstrap classes, sorted and filtered after static::$allowedBootstrapTypes.
      *
      * @return array
+     */
+    protected function getPreparedBootstraps(): array
+    {
+        $preparedBootstraps = [];
+
+        /** @var \Viserio\Contract\Foundation\Bootstrap $class */
+        foreach ((array) require $this->getConfigPath('bootstrap.php') as $class => $data) {
+            foreach ((array) $data as $type) {
+                if (\in_array($type, static::$allowedBootstrapTypes, true)) {
+                    $preparedBootstraps[$class::getPriority()][] = $class;
+                }
+            }
+        }
+
+        \ksort($preparedBootstraps);
+
+        return $preparedBootstraps;
+    }
+
+    /**
+     * Merge composer project dir settings with the default narrowspark dir settings.
+     *
+     * @return array<string, string>
      */
     protected function initProjectDirs(): array
     {
@@ -631,28 +565,5 @@ abstract class AbstractKernel implements KernelContract,
         }
 
         return $this->projectDirs;
-    }
-
-    /**
-     * Returns prepared bootstrap classes, sorted and filtered after static::$allowedBootstrapTypes.
-     *
-     * @return array
-     */
-    protected function getPreparedBootstraps(): array
-    {
-        $preparedBootstraps = [];
-
-        /** @var \Viserio\Contract\Foundation\Bootstrap $class */
-        foreach ((array) require $this->getConfigPath('bootstrap.php') as $class => $data) {
-            foreach ((array) $data as $type) {
-                if (\in_array($type, static::$allowedBootstrapTypes, true)) {
-                    $preparedBootstraps[$class::getPriority()][] = $class;
-                }
-            }
-        }
-
-        \ksort($preparedBootstraps);
-
-        return $preparedBootstraps;
     }
 }

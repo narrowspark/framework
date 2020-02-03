@@ -29,7 +29,7 @@ if (! \class_exists(SessionServiceProviderContainer::class, false)) {
 }
 
 return new \ContainerD7fc715f00866a89c5767f6bf10439fb876247e2459e2aa431ace706c6e00935\SessionServiceProviderContainer([
-    'container.build_hash' => 'D7fc715f00866a89c5767f6bf10439fb876247e2459e2aa431ace706c6e00935',
-    'container.build_id' => 'd3ca0edf',
-    'container.build_time' => 1565457506,
+    'viserio.container.build_hash' => 'D7fc715f00866a89c5767f6bf10439fb876247e2459e2aa431ace706c6e00935',
+    'viserio.container.build_id' => 'd3ca0edf',
+    'viserio.container.build_time' => 1565457506,
 ], __DIR__ . '/ContainerD7fc715f00866a89c5767f6bf10439fb876247e2459e2aa431ace706c6e00935');

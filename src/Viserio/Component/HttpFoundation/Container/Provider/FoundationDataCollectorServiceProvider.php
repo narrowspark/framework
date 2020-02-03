@@ -15,17 +15,17 @@ declare(strict_types=1);
 // use Psr\Container\ContainerInterface;
 // use Viserio\Contract\Container\ServiceProvider as ServiceProviderContract;
 // use Viserio\Contract\Foundation\Kernel as KernelContract;
-// use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
-// use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+// use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
+// use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 // use Viserio\Contract\Profiler\Profiler as ProfilerContract;
 // use Viserio\Contract\Routing\Router as RouterContract;
 // use Viserio\Component\HttpFoundation\DataCollector\ViserioHttpDataCollector;
-// use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
+// use Viserio\Component\Config\Traits\OptionsResolverTrait;
 //
 // class FoundationDataCollectorServiceProvider implements
 //    ServiceProviderContract,
 //    RequiresComponentConfigContract,
-//    ProvidesDefaultOptionContract
+//    ProvidesDefaultConfigContract
 // {
 //    use OptionsResolverTrait;
 //
@@ -50,7 +50,7 @@ declare(strict_types=1);
 //    /**
 //     * {@inheritdoc}
 //     */
-//    public static function getDimensions(): array
+//    public static function getDimensions(): iterable
 //    {
 //        return ['viserio', 'profiler'];
 //    }

@@ -21,14 +21,12 @@ use Twig\Loader\ArrayLoader;
 use Viserio\Bridge\Twig\Command\DebugCommand;
 use Viserio\Bridge\Twig\Command\LintCommand;
 use Viserio\Bridge\Twig\Container\Provider\TwigBridgeServiceProvider;
-use Viserio\Bridge\Twig\Extension\ConfigExtension;
 use Viserio\Bridge\Twig\Extension\SessionExtension;
 use Viserio\Bridge\Twig\Extension\TranslatorExtension;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Container\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Test\AbstractContainerTestCase;
-use Viserio\Contract\Config\Repository as RepositoryContract;
 use Viserio\Contract\Session\Store as StoreContract;
 use Viserio\Contract\Translation\TranslationManager as TranslationManagerContract;
 
@@ -64,8 +62,6 @@ final class TwigBridgeServiceProviderTest extends AbstractContainerTestCase
     {
         $this->containerBuilder->singleton(StoreContract::class)
             ->setSynthetic(true);
-        $this->containerBuilder->singleton(RepositoryContract::class)
-            ->setSynthetic(true);
         $this->containerBuilder->singleton(TranslationManagerContract::class)
             ->setSynthetic(true);
         $this->containerBuilder->singleton(Lexer::class)
@@ -78,7 +74,6 @@ final class TwigBridgeServiceProviderTest extends AbstractContainerTestCase
         $this->dumpContainer(__FUNCTION__);
 
         $this->container->set(StoreContract::class, Mockery::mock(StoreContract::class));
-        $this->container->set(RepositoryContract::class, Mockery::mock(RepositoryContract::class));
         $this->container->set(TranslationManagerContract::class, Mockery::mock(TranslationManagerContract::class));
         $this->container->set(Lexer::class, Mockery::mock(Lexer::class));
 
@@ -87,7 +82,6 @@ final class TwigBridgeServiceProviderTest extends AbstractContainerTestCase
         self::assertInstanceOf(TwigEnvironment::class, $twig);
         self::assertInstanceOf(SessionExtension::class, $twig->getExtension(SessionExtension::class));
         self::assertInstanceOf(TranslatorExtension::class, $twig->getExtension(TranslatorExtension::class));
-        self::assertInstanceOf(ConfigExtension::class, $twig->getExtension(ConfigExtension::class));
 
         /** @var Application $console */
         $console = $this->container->get(Application::class);

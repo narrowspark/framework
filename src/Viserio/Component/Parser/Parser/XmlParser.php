@@ -28,10 +28,12 @@ class XmlParser implements ParserContract
         try {
             $dom = XmlUtils::loadString($payload);
             // Work around to accept xml input
-            $data = \json_decode(\json_encode((array) \simplexml_import_dom($dom)), true);
+
+            $data = \json_encode((array) \simplexml_import_dom($dom), \JSON_THROW_ON_ERROR);
+            $data = \json_decode($data, true);
             $data = \str_replace([':{}', ':[]'], ':null', $data);
         } catch (InvalidArgumentException $exception) {
-            throw new ParseException(['message' => $exception->getMessage(), 'code' => $exception->getCode(), 'file' => $exception->getFile(), 'line' => $exception->getLine()]);
+            throw ParseException::createFromException($exception->getMessage(), $exception);
         }
 
         return $data;

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Filesystem\Container\Provider;
 
+use Viserio\Component\Container\Pipeline\ResolvePreloadPipe;
 use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Contract\Container\ServiceProvider\AliasServiceProvider as AliasServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
@@ -29,7 +30,7 @@ class FilesystemServiceProvider implements AliasServiceProviderContract, Service
     public function build(ContainerBuilderContract $container): void
     {
         $container->singleton(FilesystemContract::class, Filesystem::class)
-            ->addTag('container.preload');
+            ->addTag(ResolvePreloadPipe::TAG);
     }
 
     /**

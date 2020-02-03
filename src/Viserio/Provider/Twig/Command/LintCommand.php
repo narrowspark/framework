@@ -13,20 +13,16 @@ declare(strict_types=1);
 
 namespace Viserio\Provider\Twig\Command;
 
-use ArrayAccess;
 use SplFileObject;
-use Symfony\Component\Finder\Finder;
 use Twig\Environment;
 use Viserio\Bridge\Twig\Command\LintCommand as BaseLintCommand;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
-use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Finder\Finder;
+use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
+use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\View\Finder as FinderContract;
 
-class LintCommand extends BaseLintCommand implements ProvidesDefaultOptionContract, RequiresComponentConfigContract
+class LintCommand extends BaseLintCommand implements ProvidesDefaultConfigContract, RequiresComponentConfigContract
 {
-    use OptionsResolverTrait;
-
     /**
      * {@inheritdoc}
      */
@@ -43,13 +39,6 @@ class LintCommand extends BaseLintCommand implements ProvidesDefaultOptionContra
     ';
 
     /**
-     * Resolved options.
-     *
-     * @var array
-     */
-    private $resolvedOptions;
-
-    /**
      * A view finder instance.
      *
      * @var \Viserio\Contract\View\Finder
@@ -57,18 +46,47 @@ class LintCommand extends BaseLintCommand implements ProvidesDefaultOptionContra
     private $finder;
 
     /**
+     * Twig file extension name.
+     *
+     * @var string
+     */
+    private string $fileExtension;
+
+    /**
      * Create a DebugCommand instance.
      *
      * @param \Twig\Environment             $environment
      * @param \Viserio\Contract\View\Finder $finder
-     * @param array|ArrayAccess             $config
+     * @param string                        $fileExtension
      */
-    public function __construct(Environment $environment, FinderContract $finder, $config)
+    public function __construct(Environment $environment, FinderContract $finder, string $fileExtension)
     {
         parent::__construct($environment);
 
         $this->finder = $finder;
-        $this->resolvedOptions = self::resolveOptions($config);
+        $this->fileExtension = $fileExtension;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDimensions(): iterable
+    {
+        return ['viserio', 'view'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDefaultConfig(): iterable
+    {
+        return [
+            'engines' => [
+                'twig' => [
+                    'file_extension' => 'twig',
+                ],
+            ],
+        ];
     }
 
     /**
@@ -79,30 +97,8 @@ class LintCommand extends BaseLintCommand implements ProvidesDefaultOptionContra
         return Finder::create()
             ->files()
             ->in($paths)
-            ->name(($file === null ? '*.' : $file . '.') . $this->resolvedOptions['engines']['twig']['file_extension'])
+            ->name(($file === null ? '*.' : $file . '.') . $this->fileExtension)
             ->getIterator();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getDimensions(): array
-    {
-        return ['viserio', 'view'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getDefaultOptions(): array
-    {
-        return [
-            'engines' => [
-                'twig' => [
-                    'file_extension' => 'twig',
-                ],
-            ],
-        ];
     }
 
     /**
@@ -125,7 +121,7 @@ class LintCommand extends BaseLintCommand implements ProvidesDefaultOptionContra
         if (\count($directories) !== 0) {
             foreach ($directories as $directory) {
                 foreach ($paths as $path) {
-                    $path = $path . \DIRECTORY_SEPARATOR . $directory;
+                    $path .= \DIRECTORY_SEPARATOR . $directory;
 
                     if (\is_dir($path)) {
                         $searchDirectories[] = $path;

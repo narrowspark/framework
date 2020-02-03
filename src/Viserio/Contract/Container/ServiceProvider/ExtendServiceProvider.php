@@ -23,7 +23,7 @@ interface ExtendServiceProvider
      *
      * Callable have the following signature:
      *     function (\Viserio\Contract\Container\Definition $definition): \Viserio\Contract\Container\Definition,
-     *     function (\Viserio\Contract\Container\Definition $definition, Viserio\Contract\Container\ServiceProvider\ContainerBuilder $container): \Viserio\Contract\Container\Definition
+     *     function (\Viserio\Contract\Container\Definition $definition, Viserio\Contract\Container\ContainerBuilder $container): \Viserio\Contract\Container\Definition
      *
      * @return callable[]
      */

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Exception\Tests\Provider;
 
-use Viserio\Component\Config\Container\Provider\ConfigServiceProvider;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\Exception\Container\Provider\HttpExceptionServiceProvider;
@@ -60,8 +59,6 @@ final class HttpExceptionServiceProviderTest extends AbstractContainerTestCase
      */
     protected function prepareContainerBuilder(ContainerBuilder $containerBuilder): void
     {
-        $containerBuilder->register(new ConfigServiceProvider());
-
         $containerBuilder->findDefinition('config')
             ->addMethodCall('setArray', [
                 [
@@ -90,9 +87,9 @@ final class HttpExceptionServiceProviderTest extends AbstractContainerTestCase
         $containerBuilder->register(new HttpFactoryServiceProvider());
         $containerBuilder->register(new HttpExceptionServiceProvider());
 
-        $containerBuilder->setParameter('container.dumper.inline_factories', true);
-        $containerBuilder->setParameter('container.dumper.inline_class_loader', false);
-        $containerBuilder->setParameter('container.dumper.as_files', true);
+        $containerBuilder->setParameter('viserio.container.dumper.inline_factories', true);
+        $containerBuilder->setParameter('viserio.container.dumper.inline_class_loader', false);
+        $containerBuilder->setParameter('viserio.container.dumper.as_files', true);
     }
 
     /**

@@ -17,6 +17,7 @@ use FilesystemIterator;
 use Generator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use SplFileInfo;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Contract\Parser\Exception\InvalidArgumentException;
 use Viserio\Contract\Parser\Exception\RuntimeException;
@@ -31,12 +32,15 @@ abstract class AbstractLintCommand extends AbstractCommand
      */
     public function handle(): int
     {
+        /** @var null|string $filename */
         $filename = $this->argument('filename');
+        /** @var string $format */
         $format = $this->option('format');
+
         $displayCorrectFiles = $this->getOutput()->isVerbose();
 
-        if (! $filename) {
-            if (! $stdin = $this->getStdin()) {
+        if ($filename === null || $filename === '') {
+            if (null === $stdin = $this->getStdin()) {
                 throw new RuntimeException('Please provide a filename or pipe file content to STDIN.');
             }
 
@@ -49,8 +53,9 @@ abstract class AbstractLintCommand extends AbstractCommand
 
         $filesInfo = [];
 
+        /** @var string $file */
         foreach ($this->getFiles($filename) as $file) {
-            $filesInfo[] = $this->validate(\file_get_contents($file), $file);
+            $filesInfo[] = $this->validate((string) \file_get_contents($file), $file);
         }
 
         return $this->display($filesInfo, $format, $displayCorrectFiles);
@@ -59,9 +64,9 @@ abstract class AbstractLintCommand extends AbstractCommand
     /**
      * Get display type from format.
      *
-     * @param array  $files
-     * @param string $format
-     * @param bool   $displayCorrectFiles
+     * @param array<int, array<string, null|array<int, array<string, mixed>>|bool|string>> $files
+     * @param string                                                                       $format
+     * @param bool                                                                         $displayCorrectFiles
      *
      * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException
      *
@@ -83,8 +88,8 @@ abstract class AbstractLintCommand extends AbstractCommand
     /**
      * Display errors in txt format.
      *
-     * @param array $filesInfo
-     * @param bool  $displayCorrectFiles
+     * @param array<int, array<string, null|array<int, array<string, mixed>>|bool|string>> $filesInfo
+     * @param bool                                                                         $displayCorrectFiles
      *
      * @return int
      */
@@ -93,7 +98,7 @@ abstract class AbstractLintCommand extends AbstractCommand
     /**
      * Display errors in json format.
      *
-     * @param array $filesInfo
+     * @param array<int, array<string, null|array<int, array<string, mixed>>|bool|string>> $filesInfo
      *
      * @return int
      */
@@ -101,15 +106,17 @@ abstract class AbstractLintCommand extends AbstractCommand
     {
         $errors = 0;
 
-        \array_walk($filesInfo, static function (&$v) use (&$errors): void {
-            $v['file'] = (string) $v['file'];
+        \array_walk($filesInfo, static function (array &$v) use (&$errors): void {
+            if (! \is_string($v['file'])) {
+                $v['file'] = $v['file']->getPathname();
+            }
 
             if (! $v['valid']) {
                 $errors++;
             }
         });
 
-        $this->getOutput()->writeln(\json_encode($filesInfo, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES));
+        $this->getOutput()->writeln(\json_encode($filesInfo, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES | \JSON_THROW_ON_ERROR));
 
         return \min($errors, 1);
     }
@@ -120,7 +127,7 @@ abstract class AbstractLintCommand extends AbstractCommand
      * @param string      $content
      * @param null|string $file
      *
-     * @return array
+     * @return array<string, mixed>
      */
     abstract protected function validate(string $content, ?string $file = null): array;
 
@@ -129,7 +136,7 @@ abstract class AbstractLintCommand extends AbstractCommand
      *
      * @param string $fileOrDirectory
      *
-     * @return Generator
+     * @return Generator<string>
      */
     protected function getFiles(string $fileOrDirectory): Generator
     {
@@ -139,6 +146,7 @@ abstract class AbstractLintCommand extends AbstractCommand
             return;
         }
 
+        /** @var SplFileInfo $file */
         foreach (self::getDirectoryIterator($fileOrDirectory) as $file) {
             if (! \in_array($file->getExtension(), ['xlf', 'xliff'], true)) {
                 continue;
@@ -173,12 +181,12 @@ abstract class AbstractLintCommand extends AbstractCommand
      *
      * @param string $directory
      *
-     * @return RecursiveIteratorIterator
+     * @return RecursiveIteratorIterator<string, SplFileInfo>
      */
     protected static function getDirectoryIterator(string $directory): RecursiveIteratorIterator
     {
         return new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS | FilesystemIterator::FOLLOW_SYMLINKS),
+            new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS | FilesystemIterator::FOLLOW_SYMLINKS | FilesystemIterator::KEY_AS_PATHNAME | FilesystemIterator::CURRENT_AS_FILEINFO),
             RecursiveIteratorIterator::LEAVES_ONLY
         );
     }

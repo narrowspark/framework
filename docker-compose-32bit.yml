@@ -2,9 +2,10 @@ version: '3'
 services:
   php73_32:
     build:
-      context: ./.docker/php/32bit/
+      context: ./.docker/php/
       args:
-        PHP_VERSION: "7.4.0"
+        NAMESPACE: "i386/php"
+        PHP_VERSION: "7.4.2"
         XDEBUG_VERSION: "2.9.0"
         INSTALL_XDEBUG: "false"
     expose:

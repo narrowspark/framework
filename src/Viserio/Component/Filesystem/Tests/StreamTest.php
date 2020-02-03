@@ -161,7 +161,7 @@ final class StreamTest extends TestCase
     /**
      * @return iterable<array<int, bool|int>>
      */
-    public function provideStressCases(): iterable
+    public static function provideStressCases(): iterable
     {
         yield [true, 300];
 
@@ -229,35 +229,6 @@ final class StreamTest extends TestCase
     }
 
     /**
-     * Check if posix_isatty is supported, if not skip the test.
-     *
-     * @return void
-     */
-    private function markAsSkippedIfPosixIsMissing(): void
-    {
-        if (! \function_exists('posix_isatty')) {
-            self::markTestSkipped('Function posix_isatty is required.');
-        }
-    }
-
-    private function generateRandomString(): string
-    {
-        $s = \str_repeat('LaTrine', \mt_rand(100, 20000));
-
-        return \md5($s, true) . $s;
-    }
-
-    /**
-     * @param string $s
-     *
-     * @return bool
-     */
-    private function checkStr(string $s): bool
-    {
-        return \strpos($s, \md5(\substr($s, 16), true)) === 0;
-    }
-
-    /**
      * Get the owner of a file.
      *
      * @param string $filepath
@@ -299,5 +270,34 @@ final class StreamTest extends TestCase
         $data = \posix_getgrgid($infos[5]); // gid
 
         return $data['name'];
+    }
+
+    /**
+     * Check if posix_isatty is supported, if not skip the test.
+     *
+     * @return void
+     */
+    private function markAsSkippedIfPosixIsMissing(): void
+    {
+        if (! \function_exists('posix_isatty')) {
+            self::markTestSkipped('Function posix_isatty is required.');
+        }
+    }
+
+    private function generateRandomString(): string
+    {
+        $s = \str_repeat('LaTrine', \mt_rand(100, 20000));
+
+        return \md5($s, true) . $s;
+    }
+
+    /**
+     * @param string $s
+     *
+     * @return bool
+     */
+    private function checkStr(string $s): bool
+    {
+        return \strpos($s, \md5(\substr($s, 16), true)) === 0;
     }
 }

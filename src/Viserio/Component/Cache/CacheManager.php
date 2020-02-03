@@ -35,11 +35,11 @@ use Psr\Log\NullLogger;
 use Redis;
 use Viserio\Component\Manager\AbstractManager;
 use Viserio\Contract\Cache\Manager as CacheManagerContract;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
+use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
 
 class CacheManager extends AbstractManager implements CacheManagerContract,
     LoggerAwareInterface,
-    ProvidesDefaultOptionContract
+    ProvidesDefaultConfigContract
 {
     use LoggerAwareTrait;
 
@@ -58,7 +58,7 @@ class CacheManager extends AbstractManager implements CacheManagerContract,
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): array
+    public static function getDefaultConfig(): iterable
     {
         return [
             'default' => 'array',

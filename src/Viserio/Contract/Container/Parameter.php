@@ -20,7 +20,7 @@ interface Parameter
      *
      * @param string $id identifier of the entry to look for
      *
-     * @throws \Viserio\Contract\Container\Exception\NotFoundException
+     * @throws \Viserio\Contract\Container\Exception\ParameterNotFoundException
      *
      * @return mixed
      */
@@ -35,4 +35,11 @@ interface Parameter
      * @return bool
      */
     public function hasParameter(string $id): bool;
+
+    /**
+     * Returns all static parameters.
+     *
+     * @return array<int|string, mixed>
+     */
+    public function getParameters(): array;
 }

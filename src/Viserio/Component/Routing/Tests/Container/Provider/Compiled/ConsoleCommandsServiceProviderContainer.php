@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/**
- * This file is part of Narrowspark Framework.
- *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
- *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
- */
-
 namespace Viserio\Component\Routing\Tests\Provider\Compiled;
 
 /**
@@ -24,14 +15,21 @@ final class ConsoleCommandsServiceProviderContainer extends \Viserio\Component\C
     public function __construct()
     {
         $this->services = $this->privates = [];
+        $this->parameters = [
+            'viserio' => [
+                'console' => [
+                    'name' => 'test',
+                    'version' => '1',
+                ],
+            ],
+            'console.command.ids' => [],
+        ];
         $this->methodMapping = [
             \Symfony\Component\Console\CommandLoader\CommandLoaderInterface::class => 'getce817e8bdc75399a693ba45b876c457a0f7fd422258f7d4eabc553987c2fbd31',
             \Viserio\Component\Console\Application::class => 'get206058a713a7172158e11c9d996f6a067c294ab0356ae6697060f162e057445a',
-            \Viserio\Contract\Routing\Dispatcher::class => 'getdbf0d80bb72faf68b0e64ae28f321f2937bbd0a5641dc6e0e3c14d77ac90cebc',
-            \Viserio\Contract\Routing\Router::class => 'get639eadb41acec5a4682e33d3d5a4fac1a0988b27ef4f45751735b2950eb42b56',
             \Viserio\Component\Routing\Command\RouteListCommand::class => 'get5f34d750a5fcad2449cb7b81f89a57492dc2a795006c02d9b865276ad3291746',
-            'config' => 'get34bcaa5afa8745d92e6161e8495be3b939c5c6abb4dc2fd1f5a3cfdaba620256',
-            'console.command.ids' => 'getdbce155f9c0e95dbd4bfbfaadab27eb79915789fa80c6c65068ccf60c9ef9e18',
+            \Viserio\Contract\Routing\Dispatcher::class => 'get584908ff464e7559233910f9ef37cbbc81593674d92ff5b6e814b73127f8e05c',
+            \Viserio\Contract\Routing\Router::class => 'get410eb27931e780eeccc23e52a6c17e0e6e2e1827d28f90c4254c8f4111788d4e',
         ];
         $this->aliases = [
             \Symfony\Component\Console\Application::class => \Viserio\Component\Console\Application::class,
@@ -40,19 +38,6 @@ final class ConsoleCommandsServiceProviderContainer extends \Viserio\Component\C
             'console' => \Viserio\Component\Console\Application::class,
             'route' => \Viserio\Contract\Routing\Router::class,
             'router' => \Viserio\Contract\Routing\Router::class,
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getRemovedIds(): array
-    {
-        return [
-            \Psr\Container\ContainerInterface::class => true,
-            \Viserio\Contract\Container\Factory::class => true,
-            \Viserio\Contract\Container\TaggedContainer::class => true,
-            'container' => true,
         ];
     }
 
@@ -75,37 +60,12 @@ final class ConsoleCommandsServiceProviderContainer extends \Viserio\Component\C
      */
     protected function get206058a713a7172158e11c9d996f6a067c294ab0356ae6697060f162e057445a(): \Viserio\Component\Console\Application
     {
-        $this->services[\Viserio\Component\Console\Application::class] = $instance = new \Viserio\Component\Console\Application();
+        $this->services[\Viserio\Component\Console\Application::class] = $instance = new \Viserio\Component\Console\Application($this->getParameter('viserio.console.version'), $this->getParameter('viserio.console.name'));
 
         $instance->setContainer($this);
-
         if ($this->has(\Symfony\Component\Console\CommandLoader\CommandLoaderInterface::class)) {
             $instance->setCommandLoader(($this->services[\Symfony\Component\Console\CommandLoader\CommandLoaderInterface::class] ?? $this->getce817e8bdc75399a693ba45b876c457a0f7fd422258f7d4eabc553987c2fbd31()));
         }
-
-        return $instance;
-    }
-
-    /**
-     * Returns the public Viserio\Contract\Routing\Dispatcher shared service.
-     *
-     * @return \Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher
-     */
-    protected function getdbf0d80bb72faf68b0e64ae28f321f2937bbd0a5641dc6e0e3c14d77ac90cebc(): \Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher
-    {
-        return $this->services[\Viserio\Contract\Routing\Dispatcher::class] = new \Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher();
-    }
-
-    /**
-     * Returns the public Viserio\Contract\Routing\Router shared service.
-     *
-     * @return \Viserio\Component\Routing\Router
-     */
-    protected function get639eadb41acec5a4682e33d3d5a4fac1a0988b27ef4f45751735b2950eb42b56(): \Viserio\Component\Routing\Router
-    {
-        $this->services[\Viserio\Contract\Routing\Router::class] = $instance = new \Viserio\Component\Routing\Router(($this->services[\Viserio\Contract\Routing\Dispatcher::class] ?? $this->getdbf0d80bb72faf68b0e64ae28f321f2937bbd0a5641dc6e0e3c14d77ac90cebc()));
-
-        $instance->setContainer($this);
 
         return $instance;
     }
@@ -117,7 +77,7 @@ final class ConsoleCommandsServiceProviderContainer extends \Viserio\Component\C
      */
     protected function get5f34d750a5fcad2449cb7b81f89a57492dc2a795006c02d9b865276ad3291746(): \Viserio\Component\Routing\Command\RouteListCommand
     {
-        $this->services[\Viserio\Component\Routing\Command\RouteListCommand::class] = $instance = new \Viserio\Component\Routing\Command\RouteListCommand(($this->services[\Viserio\Contract\Routing\Router::class] ?? $this->get639eadb41acec5a4682e33d3d5a4fac1a0988b27ef4f45751735b2950eb42b56()));
+        $this->services[\Viserio\Component\Routing\Command\RouteListCommand::class] = $instance = new \Viserio\Component\Routing\Command\RouteListCommand(($this->services[\Viserio\Contract\Routing\Router::class] ?? $this->get410eb27931e780eeccc23e52a6c17e0e6e2e1827d28f90c4254c8f4111788d4e()));
 
         $instance->setName('route:table');
 
@@ -125,28 +85,41 @@ final class ConsoleCommandsServiceProviderContainer extends \Viserio\Component\C
     }
 
     /**
-     * Returns the public config service.
+     * Returns the public Viserio\Contract\Routing\Dispatcher shared service.
      *
-     * @return array
+     * @return \Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher
      */
-    protected function get34bcaa5afa8745d92e6161e8495be3b939c5c6abb4dc2fd1f5a3cfdaba620256(): array
+    protected function get584908ff464e7559233910f9ef37cbbc81593674d92ff5b6e814b73127f8e05c(): \Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher
     {
-        return [
-            'viserio' => [
-                'routing' => [
-                    'path' => '',
-                ],
-            ],
-        ];
+        return $this->services[\Viserio\Contract\Routing\Dispatcher::class] = new \Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher();
     }
 
     /**
-     * Returns the public console.command.ids service.
+     * Returns the public Viserio\Contract\Routing\Router shared service.
      *
-     * @return array
+     * @return \Viserio\Component\Routing\Router
      */
-    protected function getdbce155f9c0e95dbd4bfbfaadab27eb79915789fa80c6c65068ccf60c9ef9e18(): array
+    protected function get410eb27931e780eeccc23e52a6c17e0e6e2e1827d28f90c4254c8f4111788d4e(): \Viserio\Component\Routing\Router
     {
-        return [];
+        $this->services[\Viserio\Contract\Routing\Router::class] = $instance = new \Viserio\Component\Routing\Router(($this->services[\Viserio\Contract\Routing\Dispatcher::class] ?? $this->get584908ff464e7559233910f9ef37cbbc81593674d92ff5b6e814b73127f8e05c()));
+
+        $instance->setContainer($this);
+
+        return $instance;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRemovedIds(): array
+    {
+        return [
+            \Psr\Container\ContainerInterface::class => true,
+            \Viserio\Contract\Container\CompiledContainer::class => true,
+            \Viserio\Contract\Container\Factory::class => true,
+            \Viserio\Contract\Container\TaggedContainer::class => true,
+            \Viserio\Contract\Events\EventManager::class => true,
+            'container' => true,
+        ];
     }
 }

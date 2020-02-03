@@ -44,7 +44,7 @@ abstract class AbstractFilesystemTestCase extends TestCase
     /** @var string[] */
     protected $longPathNamesWindows = [];
 
-    /** @var \Viserio\Contract\Filesystem\Filesystem & \Viserio\Contract\Filesystem\LinkSystem */
+    /** @var \Viserio\Contract\Filesystem\Filesystem&\Viserio\Contract\Filesystem\LinkSystem */
     protected $filesystem;
 
     /** @var string */
@@ -140,138 +140,6 @@ abstract class AbstractFilesystemTestCase extends TestCase
         }
 
         \umask($this->umask);
-    }
-
-    /**
-     * Return a file system instance.
-     *
-     * @return \Viserio\Contract\Filesystem\Filesystem & \Viserio\Contract\Filesystem\LinkSystem
-     */
-    protected function getFilesystem()
-    {
-        return new Filesystem();
-    }
-
-    /**
-     * Assert the permission of a file.
-     *
-     * @param int    $expectedFilePerms Expected file permissions as three digits (i.e. 755)
-     * @param string $filePath
-     *
-     * @return void
-     */
-    protected function assertFilePermissions($expectedFilePerms, $filePath): void
-    {
-        $actualFilePerms = (int) \substr(\sprintf('%o', \fileperms($filePath)), -3);
-
-        self::assertEquals(
-            $expectedFilePerms,
-            $actualFilePerms,
-            \sprintf('File permissions for %s must be %s. Actual %s', $filePath, $expectedFilePerms, $actualFilePerms)
-        );
-    }
-
-    /**
-     * Get the owner of a file.
-     *
-     * @param string $filepath
-     *
-     * @return string
-     */
-    protected function getFileOwner(string $filepath): string
-    {
-        $this->markAsSkippedIfPosixIsMissing();
-
-        $infos = \stat($filepath);
-
-        if ($infos === false) {
-            self::markTestSkipped('Unable to retrieve file owner name');
-        }
-
-        $data = \posix_getpwuid($infos[4]); // uid
-
-        return $data['name'];
-    }
-
-    /**
-     * Get the group of a file.
-     *
-     * @param string $filepath
-     *
-     * @return string
-     */
-    protected function getFileGroup(string $filepath): string
-    {
-        $this->markAsSkippedIfPosixIsMissing();
-
-        $infos = \stat($filepath);
-
-        if ($infos === false) {
-            self::markTestSkipped('Unable to retrieve file group name');
-        }
-
-        $data = \posix_getgrgid($infos[5]); // gid
-
-        return $data['name'];
-    }
-
-    /**
-     * Check if link is supported, if not skip the test.
-     *
-     * @return void
-     */
-    protected function markAsSkippedIfLinkIsMissing(): void
-    {
-        if (! \function_exists('link')) {
-            self::markTestSkipped('link is not supported');
-        }
-
-        if (\PHP_OS_FAMILY === 'Windows' && (self::$linkOnWindows === false)) {
-            self::markTestSkipped('link requires "Create hard links" privilege on windows');
-        }
-    }
-
-    /**
-     * Check if symbolic link is supported, if not skip the test.
-     *
-     * @param bool $relative
-     *
-     * @return void
-     */
-    protected function markAsSkippedIfSymlinkIsMissing($relative = false): void
-    {
-        if (\PHP_OS_FAMILY === 'Windows' && self::$symlinkOnWindows === false) {
-            self::markTestSkipped('symlink requires "Create symbolic links" privilege on Windows');
-        }
-
-        // https://bugs.php.net/69473
-        if ($relative && \PHP_OS_FAMILY === 'Windows' && 1 === \PHP_ZTS) {
-            self::markTestSkipped('symlink does not support relative paths on thread safe Windows PHP versions');
-        }
-    }
-
-    /**
-     * Check if chmod is supported, if not skip the test.
-     *
-     * @return void
-     */
-    protected function markAsSkippedIfChmodIsMissing(): void
-    {
-        if (\PHP_OS_FAMILY === 'Windows') {
-            self::markTestSkipped('chmod is not supported on Windows');
-        }
-    }
-
-    /**
-     * Check if posix_isatty is supported, if not skip the test.
-     *
-     * @return void
-     */
-    protected function markAsSkippedIfPosixIsMissing(): void
-    {
-        if (! \function_exists('posix_isatty')) {
-            self::markTestSkipped('Function posix_isatty is required.');
-        }
     }
 
     public function testUpdate(): void
@@ -573,7 +441,7 @@ abstract class AbstractFilesystemTestCase extends TestCase
     /**
      * @return iterable<array<int, float|int|string>>
      */
-    public function provideGetAndSetVisibilityCases(): iterable
+    public static function provideGetAndSetVisibilityCases(): iterable
     {
         yield [400, Permissions::notation('0400'), 753, Permissions::notation('0753')];
 
@@ -653,7 +521,7 @@ abstract class AbstractFilesystemTestCase extends TestCase
     /**
      * @return iterable<array<int, mixed>>
      */
-    public function provideSetVisibilityToThrowInvalidArgumentExceptionCases(): iterable
+    public static function provideSetVisibilityToThrowInvalidArgumentExceptionCases(): iterable
     {
         yield ['exception'];
 
@@ -952,10 +820,40 @@ abstract class AbstractFilesystemTestCase extends TestCase
         self::assertSame('write new', $this->filesystem->read($file));
     }
 
+    public function testWriteCanOverwriteExistingFile(): void
+    {
+        if (\array_key_exists(__FUNCTION__, $this->skippedTests)) {
+            self::markTestSkipped($this->skippedTests[__FUNCTION__]);
+        }
+
+        $dir = $this->createDir(__FUNCTION__);
+        $file = $dir . \DIRECTORY_SEPARATOR . 'foo';
+
+        $this->filesystem->write($file, 'write old');
+
+        $this->filesystem->write($file, 'write new');
+
+        self::assertSame('write new', $this->filesystem->read($file));
+    }
+
+    public function testWriteCanCreateFolderIfItNotExist(): void
+    {
+        if (\array_key_exists(__FUNCTION__, $this->skippedTests)) {
+            self::markTestSkipped($this->skippedTests[__FUNCTION__]);
+        }
+
+        $dir = $this->createDir(__FUNCTION__);
+        $file = $dir . \DIRECTORY_SEPARATOR . 'NotFound' . \DIRECTORY_SEPARATOR . 'foo';
+
+        $this->filesystem->write($file, 'write new');
+
+        self::assertSame('write new', $this->filesystem->read($file));
+    }
+
     /**
      * @return iterable<array<int, int>>
      */
-    public function providePermissionCases(): iterable
+    public static function providePermissionCases(): iterable
     {
         //    chmod  umask expected
         yield [0644, 0, 644];
@@ -1087,6 +985,62 @@ abstract class AbstractFilesystemTestCase extends TestCase
 
         self::assertCount(1, $array);
         self::assertSame('dummy', $array[0]);
+    }
+
+    public function testWriteStreamCanOverwriteExistingFile(): void
+    {
+        if (\array_key_exists(__FUNCTION__, $this->skippedTests)) {
+            self::markTestSkipped($this->skippedTests[__FUNCTION__]);
+        }
+
+        $dir = $this->createDir(__FUNCTION__);
+        $file = $dir . \DIRECTORY_SEPARATOR . __FUNCTION__;
+
+        /** @var resource $temp */
+        $temp = \tmpfile();
+
+        \fwrite($temp, 'dummy');
+        \rewind($temp);
+
+        $this->filesystem->writeStream($file, $temp);
+
+        /** @var resource $temp */
+        $temp = \tmpfile();
+
+        \fwrite($temp, 'dummy2');
+        \rewind($temp);
+
+        $this->filesystem->writeStream($file, $temp);
+
+        self::assertSame('dummy2', $this->filesystem->read($file));
+    }
+
+    public function testWriteStreamCanCreateFolderIfItNotExist(): void
+    {
+        if (\array_key_exists(__FUNCTION__, $this->skippedTests)) {
+            self::markTestSkipped($this->skippedTests[__FUNCTION__]);
+        }
+
+        $dir = $this->createDir(__FUNCTION__);
+        $file = $dir . \DIRECTORY_SEPARATOR . 'NotFound' . \DIRECTORY_SEPARATOR . __FUNCTION__;
+
+        /** @var resource $temp */
+        $temp = \tmpfile();
+
+        \fwrite($temp, 'dummy');
+        \rewind($temp);
+
+        $this->filesystem->writeStream($file, $temp);
+
+        /** @var resource $temp */
+        $temp = \tmpfile();
+
+        \fwrite($temp, 'dummy2');
+        \rewind($temp);
+
+        $this->filesystem->writeStream($file, $temp);
+
+        self::assertSame('dummy2', $this->filesystem->read($file));
     }
 
     public function testAppend(): void
@@ -1431,7 +1385,7 @@ abstract class AbstractFilesystemTestCase extends TestCase
         self::assertTrue($this->filesystem->isFile($file));
     }
 
-    public function testSetOwner(): void
+    public function testSetOwnerByName(): void
     {
         if (\array_key_exists(__FUNCTION__, $this->skippedTests)) {
             self::markTestSkipped($this->skippedTests[__FUNCTION__]);
@@ -1448,7 +1402,24 @@ abstract class AbstractFilesystemTestCase extends TestCase
         self::assertSame($owner, $this->getFileOwner($dir));
     }
 
-    public function testSetGroup(): void
+    public function testChownById(): void
+    {
+        if (\array_key_exists(__FUNCTION__, $this->skippedTests)) {
+            self::markTestSkipped($this->skippedTests[__FUNCTION__]);
+        }
+
+        $this->markAsSkippedIfPosixIsMissing();
+
+        $dir = $this->createDir(__FUNCTION__);
+
+        $ownerId = $this->getFileOwnerId($dir);
+
+        $this->filesystem->setOwner($dir, $ownerId);
+
+        self::assertSame($ownerId, $this->getFileOwnerId($dir));
+    }
+
+    public function testSetGroupByName(): void
     {
         if (\array_key_exists(__FUNCTION__, $this->skippedTests)) {
             self::markTestSkipped($this->skippedTests[__FUNCTION__]);
@@ -1465,7 +1436,24 @@ abstract class AbstractFilesystemTestCase extends TestCase
         self::assertSame($group, $this->getFileGroup($dir));
     }
 
-    public function testSetGroupSymlink(): void
+    public function testSetGroupById(): void
+    {
+        if (\array_key_exists(__FUNCTION__, $this->skippedTests)) {
+            self::markTestSkipped($this->skippedTests[__FUNCTION__]);
+        }
+
+        $this->markAsSkippedIfPosixIsMissing();
+
+        $dir = $this->createDir(__FUNCTION__);
+
+        $groupId = $this->getFileGroupId($dir);
+
+        $this->filesystem->setGroup($dir, $groupId);
+
+        self::assertSame($groupId, $this->getFileGroupId($dir));
+    }
+
+    public function testSetGroupSymlinkByName(): void
     {
         if (\array_key_exists(__FUNCTION__, $this->skippedTests)) {
             self::markTestSkipped($this->skippedTests[__FUNCTION__]);
@@ -1483,6 +1471,26 @@ abstract class AbstractFilesystemTestCase extends TestCase
         $this->filesystem->setGroup($link, $group);
 
         self::assertSame($group, $this->getFileGroup($link));
+    }
+
+    public function testSetGroupSymlinkById(): void
+    {
+        if (\array_key_exists(__FUNCTION__, $this->skippedTests)) {
+            self::markTestSkipped($this->skippedTests[__FUNCTION__]);
+        }
+
+        $this->markAsSkippedIfSymlinkIsMissing();
+
+        $file = $this->createFile('file');
+        $link = $this->createDir('root') . \DIRECTORY_SEPARATOR . 'link';
+
+        $this->filesystem->symlink($file, $link);
+
+        $groupId = $this->getFileGroupId($link);
+
+        $this->filesystem->setGroup($link, $groupId);
+
+        self::assertSame($groupId, $this->getFileGroupId($link));
     }
 
     public function testSetGroupLink(): void
@@ -2136,6 +2144,56 @@ abstract class AbstractFilesystemTestCase extends TestCase
     }
 
     /**
+     * Return a file system instance.
+     *
+     * @return \Viserio\Contract\Filesystem\Filesystem&\Viserio\Contract\Filesystem\LinkSystem
+     */
+    protected function getFilesystem()
+    {
+        return new Filesystem();
+    }
+
+    /**
+     * Get the owner uid of a file.
+     *
+     * @param string $filepath
+     *
+     * @return int
+     */
+    protected function getFileOwnerId(string $filepath): int
+    {
+        $this->markAsSkippedIfPosixIsMissing();
+
+        $infos = \stat($filepath);
+
+        if ($infos === false) {
+            self::markTestSkipped('Unable to retrieve file owner name');
+        }
+
+        return $infos[4]; // uid
+    }
+
+    /**
+     * Get the group uid of a file.
+     *
+     * @param string $filepath
+     *
+     * @return int
+     */
+    protected function getFileGroupId(string $filepath): int
+    {
+        $this->markAsSkippedIfPosixIsMissing();
+
+        $infos = \stat($filepath);
+
+        if ($infos === false) {
+            self::markTestSkipped('Unable to retrieve file group name');
+        }
+
+        return $infos[5]; // gid
+    }
+
+    /**
      * @param string      $name
      * @param null|string $content
      * @param null|string $at
@@ -2169,6 +2227,112 @@ abstract class AbstractFilesystemTestCase extends TestCase
      * @return string
      */
     abstract protected function createFileContent(int $size): string;
+
+    /**
+     * Assert the permission of a file.
+     *
+     * @param int    $expectedFilePerms Expected file permissions as three digits (i.e. 755)
+     * @param string $filePath
+     *
+     * @return void
+     */
+    private function assertFilePermissions($expectedFilePerms, $filePath): void
+    {
+        $actualFilePerms = (int) \substr(\sprintf('%o', \fileperms($filePath)), -3);
+
+        self::assertEquals(
+            $expectedFilePerms,
+            $actualFilePerms,
+            \sprintf('File permissions for %s must be %s. Actual %s', $filePath, $expectedFilePerms, $actualFilePerms)
+        );
+    }
+
+    /**
+     * Get the owner of a file.
+     *
+     * @param string $filepath
+     *
+     * @return string
+     */
+    private function getFileOwner(string $filepath): string
+    {
+        $data = \posix_getpwuid($this->getFileOwnerId($filepath));
+
+        return $data['name'];
+    }
+
+    /**
+     * Get the group of a file.
+     *
+     * @param string $filepath
+     *
+     * @return string
+     */
+    private function getFileGroup(string $filepath): string
+    {
+        $data = \posix_getgrgid($this->getFileGroupId($filepath));
+
+        return $data['name'];
+    }
+
+    /**
+     * Check if link is supported, if not skip the test.
+     *
+     * @return void
+     */
+    private function markAsSkippedIfLinkIsMissing(): void
+    {
+        if (! \function_exists('link')) {
+            self::markTestSkipped('link is not supported');
+        }
+
+        if (\PHP_OS_FAMILY === 'Windows' && (self::$linkOnWindows === false)) {
+            self::markTestSkipped('link requires "Create hard links" privilege on windows');
+        }
+    }
+
+    /**
+     * Check if symbolic link is supported, if not skip the test.
+     *
+     * @param bool $relative
+     *
+     * @return void
+     */
+    private function markAsSkippedIfSymlinkIsMissing($relative = false): void
+    {
+        if (\PHP_OS_FAMILY === 'Windows' && self::$symlinkOnWindows === false) {
+            self::markTestSkipped('symlink requires "Create symbolic links" privilege on Windows');
+        }
+
+        // https://bugs.php.net/69473
+        if ($relative && \PHP_OS_FAMILY === 'Windows' && 1 === \PHP_ZTS) {
+            self::markTestSkipped('symlink does not support relative paths on thread safe Windows PHP versions');
+        }
+    }
+
+    /**
+     * Check if chmod is supported, if not skip the test.
+     *
+     * @return void
+     */
+    private function markAsSkippedIfChmodIsMissing(): void
+    {
+        if (\PHP_OS_FAMILY === 'Windows') {
+            self::markTestSkipped('chmod is not supported on Windows');
+        }
+    }
+
+    /**
+     * Check if posix_isatty is supported, if not skip the test.
+     *
+     * @return void
+     */
+    private function markAsSkippedIfPosixIsMissing(): void
+    {
+        if (! \function_exists('posix_isatty')) {
+            self::markTestSkipped('Function posix_isatty is required.');
+        }
+    }
 
     /**
      * Normalize the given path (transform each blackslash into a real directory separator).

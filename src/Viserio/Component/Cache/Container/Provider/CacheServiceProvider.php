@@ -17,6 +17,7 @@ use Psr\Cache\CacheItemPoolInterface;
 use Psr\SimpleCache\CacheInterface;
 use Viserio\Component\Cache\CacheManager;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
+use Viserio\Component\Container\Pipeline\ResolvePreloadPipe;
 use Viserio\Contract\Cache\Manager as CacheManagerContract;
 use Viserio\Contract\Container\ServiceProvider\AliasServiceProvider as AliasServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
@@ -32,7 +33,7 @@ class CacheServiceProvider implements AliasServiceProviderContract, ServiceProvi
         $container->singleton(CacheManagerContract::class, CacheManager::class)
             ->setArgument(0, new ReferenceDefinition('config'))
             ->addMethodCall('setContainer')
-            ->addTag('container.preload');
+            ->addTag(ResolvePreloadPipe::TAG);
 
         $container->singleton(
             CacheItemPoolInterface::class,

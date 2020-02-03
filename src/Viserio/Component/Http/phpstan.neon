@@ -37,10 +37,10 @@ parameters:
     level: max
     inferPrivatePropertyTypeFromConstructor: true
     paths:
-        - %rootDir%/../../..
+        - ./
 
     autoload_directories:
-        - %rootDir%/../../..
+        - ./
 
     excludes_analyse:
         - vendor/
@@ -213,7 +213,7 @@ parameters:
             count: 1
             path: AbstractMessage.php
 
-        # Needed for class functioality
+        # needed for class functioality
         -
             message: "#^In method \"Viserio\\\\Component\\\\Http\\\\ServerRequestBuilder\\:\\:createFromGlobals\", you should not use the \\$_COOKIE superglobal\\. You should instead rely on your framework that provides you with a \"request\" object \\(for instance a PSR\\-7 RequestInterface or a Symfony Request\\)\\. More info\\: http\\://bit\\.ly/nosuperglobals$#"
             count: 1

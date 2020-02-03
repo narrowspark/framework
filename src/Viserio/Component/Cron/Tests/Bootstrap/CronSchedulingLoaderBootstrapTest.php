@@ -15,12 +15,12 @@ namespace Viserio\Component\Cron\Tests\Bootstrap;
 
 use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Container\Bootstrap\InitializeContainerBootstrap;
 use Viserio\Component\Cron\Bootstrap\CronSchedulingLoaderBootstrap;
 use Viserio\Contract\Container\CompiledContainer as CompiledContainerContract;
 use Viserio\Contract\Cron\Schedule as ScheduleContract;
 use Viserio\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
+use Viserio\Provider\Framework\Bootstrap\InitializeContainerBootstrap;
 
 /**
  * @internal

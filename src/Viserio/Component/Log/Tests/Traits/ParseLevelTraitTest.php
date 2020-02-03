@@ -46,7 +46,7 @@ final class ParseLevelTraitTest extends TestCase
         self::parseLevel('test');
     }
 
-    public function provideParseLevelCases(): iterable
+    public static function provideParseLevelCases(): iterable
     {
         return [
             ['debug', MonologLogger::DEBUG],

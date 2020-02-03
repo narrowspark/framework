@@ -17,7 +17,6 @@ jobs:
       matrix:
         operating-system: [ubuntu-latest]
         dependencies: [
-          "src/Viserio/Bridge/Dotenv:git@github.com:viserio/dotenv-bridge.git",
           "src/Viserio/Bridge/Monolog:git@github.com:viserio/monolog-bridge.git",
           "src/Viserio/Bridge/Phpstan:git@github.com:viserio/phpstan-bridge.git",
           "src/Viserio/Bridge/Twig:git@github.com:viserio/twig-bridge.git",
@@ -39,7 +38,6 @@ jobs:
           "src/Viserio/Component/Log:git@github.com:viserio/log.git",
           "src/Viserio/Component/Mail:git@github.com:viserio/mail.git",
           "src/Viserio/Component/Manager:git@github.com:viserio/manager.git",
-          "src/Viserio/Component/OptionsResolver:git@github.com:viserio/options-resolver.git",
           "src/Viserio/Component/Pagination:git@github.com:viserio/pagination.git",
           "src/Viserio/Component/Parser:git@github.com:viserio/parser.git",
           "src/Viserio/Component/Path:git@github.com:viserio/filesystem-path.git",
@@ -54,6 +52,7 @@ jobs:
           "src/Viserio/Component/View:git@github.com:viserio/view.git",
           "src/Viserio/Component/WebServer:git@github.com:viserio/web-server.git",
           "src/Viserio/Provider/Debug:git@github.com:viserio/debug-provider.git",
+          "src/Viserio/Provider/Framework:git@github.com:viserio/framework-provider.git",
           "src/Viserio/Provider/Twig:git@github.com:viserio/twig-provider.git",
           "src/Viserio/Contract:git@github.com:viserio/contract.git",
           "src/Viserio/Contract/Bus:git@github.com:viserio/bus-contract.git",
@@ -74,7 +73,6 @@ jobs:
           "src/Viserio/Contract/Log:git@github.com:viserio/log-contract.git",
           "src/Viserio/Contract/Mail:git@github.com:viserio/mail-contract.git",
           "src/Viserio/Contract/Manager:git@github.com:viserio/manager-contract.git",
-          "src/Viserio/Contract/OptionsResolver:git@github.com:viserio/options-resolver-contract.git",
           "src/Viserio/Contract/Pagination:git@github.com:viserio/pagination-contract.git",
           "src/Viserio/Contract/Parser:git@github.com:viserio/parser-contract.git",
           "src/Viserio/Contract/Pipeline:git@github.com:viserio/pipeline-contract.git",
@@ -91,6 +89,8 @@ jobs:
     name: "Split ${{ matrix.dependencies }}"
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
 
       - name: "git-bash"
         uses: fnkr/github-action-git-bash@v1.1

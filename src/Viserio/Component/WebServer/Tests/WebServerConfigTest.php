@@ -17,7 +17,7 @@ use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\WebServer\WebServerConfig;
-use Viserio\Contract\OptionsResolver\Exception\InvalidArgumentException as OptionsResolverInvalidArgumentException;
+use Viserio\Contract\Config\Exception\InvalidArgumentException as ConfigInvalidArgumentException;
 use Viserio\Contract\WebServer\Exception\InvalidArgumentException;
 
 /**
@@ -113,7 +113,7 @@ final class WebServerConfigTest extends MockeryTestCase
 
     public function testConfigDocumentRootValidatorThrowsExceptionOnWrongDir(): void
     {
-        $this->expectException(OptionsResolverInvalidArgumentException::class);
+        $this->expectException(ConfigInvalidArgumentException::class);
         $this->expectExceptionMessage('The document root directory [test] does not exist.');
 
         new WebServerConfig('test', '', $this->arrangeAbstractCommandOptions());
@@ -121,7 +121,7 @@ final class WebServerConfigTest extends MockeryTestCase
 
     public function testConfigRouterValidatorThrowsExceptionOnWrongType(): void
     {
-        $this->expectException(OptionsResolverInvalidArgumentException::class);
+        $this->expectException(ConfigInvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid configuration value provided for [router]; Expected [string], but got [NULL], in [Viserio\Component\WebServer\WebServerConfig].');
 
         new WebServerConfig(__DIR__, 'dev', $this->arrangeAbstractCommandOptions(null));
@@ -129,7 +129,7 @@ final class WebServerConfigTest extends MockeryTestCase
 
     public function testConfigRouterValidatorThrowsExceptionOnWrongFile(): void
     {
-        $this->expectException(OptionsResolverInvalidArgumentException::class);
+        $this->expectException(ConfigInvalidArgumentException::class);
         $this->expectExceptionMessage('Router script [test] does not exist.');
 
         new WebServerConfig(__DIR__, 'dev', $this->arrangeAbstractCommandOptions('test'));

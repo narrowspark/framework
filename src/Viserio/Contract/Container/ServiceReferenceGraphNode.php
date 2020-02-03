@@ -20,9 +20,9 @@ interface ServiceReferenceGraphNode extends ResettableContract
     /**
      * Returns the identifier.
      *
-     * @return string
+     * @return int|string
      */
-    public function getId(): string;
+    public function getId();
 
     /**
      * Returns the in edges.

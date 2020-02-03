@@ -1,10 +1,10 @@
 {
     "name": "viserio/config-contract",
     "type": "library",
-    "description": "The Viserio Config Contract package.",
+    "description": "The Viserio Options Resolver Contract package.",
     "keywords": [
         "abstractions",
-        "contracts",
+        "Contract",
         "decoupling",
         "interfaces",
         "interoperability",

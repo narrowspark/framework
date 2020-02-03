@@ -80,6 +80,22 @@ final class Gitignore
     }
 
     /**
+     * @internal
+     *
+     * @param int    $type
+     * @param string $msg
+     *
+     * @return bool;
+     */
+    public static function handleError(int $type, string $msg): bool
+    {
+        self::$lastError = $msg;
+        self::$lastType = $type;
+
+        return true;
+    }
+
+    /**
      * @param string $gitignorePattern
      *
      * @return string
@@ -168,21 +184,5 @@ final class Gitignore
         \restore_error_handler();
 
         throw $e;
-    }
-
-    /**
-     * @internal
-     *
-     * @param int    $type
-     * @param string $msg
-     *
-     * @return bool;
-     */
-    public static function handleError(int $type, string $msg): bool
-    {
-        self::$lastError = $msg;
-        self::$lastType = $type;
-
-        return true;
     }
 }

@@ -51,18 +51,18 @@ class XliffParser implements ParserContract
 
             return $this->extractXliffVersion1($dom);
         } catch (InvalidArgumentException $exception) {
-            throw new ParseException(['message' => $exception->getMessage(), 'code' => $exception->getCode(), 'file' => $exception->getFile(), 'line' => $exception->getLine()]);
+            throw ParseException::createFromException($exception->getMessage(), $exception);
         }
     }
 
     /**
      * Extract messages and metadata from DOMDocument into a MessageCatalogue.
      *
-     * @param DOMDocument $dom
+     * @param \DOMDocument $dom
      *
      * @throws \Viserio\Contract\Parser\Exception\ParseException
      *
-     * @return array
+     * @return array<int|string, mixed>
      */
     private function extractXliffVersion1(DOMDocument $dom): array
     {
@@ -75,14 +75,17 @@ class XliffParser implements ParserContract
             'target-language' => '',
         ];
 
-        foreach ($xml->file->attributes() as $key => $value) {
-            if ($key === 'source-language' || $key === 'target-language') {
-                $datas[$key] = (string) $value;
+        if (($attributes = $xml->file->attributes()) !== null) {
+            foreach ($attributes as $key => $value) {
+                if ($key === 'source-language' || $key === 'target-language') {
+                    $datas[$key] = (string) $value;
+                }
             }
         }
 
         $xml->registerXPathNamespace('xliff', 'urn:oasis:names:tc:xliff:document:1.2');
 
+        /** @var \SimpleXMLElement $trans */
         foreach ((array) $xml->xpath('//xliff:trans-unit') as $trans) {
             $attributes = $trans->attributes();
             $id = (string) ($attributes['resname'] ?? $trans->source ?? '');
@@ -107,7 +110,7 @@ class XliffParser implements ParserContract
                 $datas[$id]['notes'] = self::parseNotes($trans->note, $encoding);
             }
 
-            if (isset($trans->target) && ($attributes = $trans->target->attributes())) {
+            if (isset($trans->target) && ($attributes = $trans->target->attributes()) !== null && \count($attributes) !== 0) {
                 $datas[$id]['target-attributes'] = [];
 
                 foreach ($attributes as $key => $value) {
@@ -125,7 +128,7 @@ class XliffParser implements ParserContract
      * @param SimpleXMLElement $noteElement
      * @param null|string      $encoding
      *
-     * @return array
+     * @return array<int|string, mixed>
      */
     private static function parseNotes(SimpleXMLElement $noteElement, ?string $encoding = null): array
     {
@@ -157,7 +160,7 @@ class XliffParser implements ParserContract
      *
      * @throws \Viserio\Contract\Parser\Exception\ParseException
      *
-     * @return array
+     * @return array<int|string, mixed>
      */
     private function extractXliffVersion2(DOMDocument $dom): array
     {
@@ -170,50 +173,57 @@ class XliffParser implements ParserContract
             'trgLang' => '',
         ];
 
-        foreach ($xml->attributes() as $key => $value) {
-            if ($key === 'srcLang' || $key === 'trgLang') {
-                $datas[$key] = (string) $value;
+        if (($attributes = $xml->attributes()) !== null) {
+            foreach ($attributes as $key => $value) {
+                if ($key === 'srcLang' || $key === 'trgLang') {
+                    $datas[$key] = (string) $value;
+                }
             }
         }
 
         $xml->registerXPathNamespace('xliff', 'urn:oasis:names:tc:xliff:document:2.0');
 
+        /** @var \SimpleXMLElement $unit */
         foreach ((array) $xml->xpath('//xliff:unit') as $unit) {
             $unitAttr = (array) $unit->attributes();
             $unitAttr = \reset($unitAttr);
-            $source = (string) $unit->segment->source;
-            $target = null;
-            $id = $unitAttr['id'];
 
-            if (isset($unit->segment->target)) {
-                $target = self::utf8ToCharset((string) $unit->segment->target, $encoding);
-            }
+            foreach ($unit->segment as $segment) {
+                $source = (string) $segment->source;
+                $target = null;
 
-            $datas[$id] = [
-                'source' => $source,
-                // If the xlf file has another encoding specified, try to convert it because
-                // simple_xml will always return utf-8 encoded values
-                'target' => $target,
-            ];
+                $id = $unitAttr['id'];
 
-            if ($target !== null && $unit->segment->target->attributes()) {
-                $datas[$id]['target-attributes'] = [];
-
-                foreach ($unit->segment->target->attributes() as $key => $value) {
-                    $datas[$id]['target-attributes'][$key] = (string) $value;
+                if (isset($segment->target)) {
+                    $target = self::utf8ToCharset((string) $segment->target, $encoding);
                 }
-            }
 
-            if (isset($unit->notes)) {
-                foreach ($unit->notes->note as $noteNode) {
-                    $note = [];
+                $datas[$id] = [
+                    'source' => $source,
+                    // If the xlf file has another encoding specified, try to convert it because
+                    // simple_xml will always return utf-8 encoded values
+                    'target' => $target,
+                ];
 
-                    foreach ($noteNode->attributes() as $key => $value) {
-                        $note[$key] = (string) $value;
+                if ($target !== null && isset($segment->target) && \count($attributes = $segment->target->attributes()) !== 0) {
+                    $datas[$id]['target-attributes'] = [];
+
+                    foreach ($attributes as $key => $value) {
+                        $datas[$id]['target-attributes'][$key] = (string) $value;
                     }
+                }
 
-                    $note['content'] = (string) $noteNode;
-                    $datas[$id]['notes'][] = $note;
+                if (isset($unit->notes)) {
+                    foreach ($unit->notes->note as $noteNode) {
+                        $note = [];
+
+                        foreach ($noteNode->attributes() as $key => $value) {
+                            $note[$key] = (string) $value;
+                        }
+
+                        $note['content'] = (string) $noteNode;
+                        $datas[$id]['notes'][] = $note;
+                    }
                 }
             }
         }

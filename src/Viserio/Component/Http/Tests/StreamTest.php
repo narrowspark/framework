@@ -365,7 +365,7 @@ final class StreamTest extends MockeryTestCase
     /**
      * @return array<int, array<int, bool|string>>
      */
-    public function provideForReadableStreamsCases(): iterable
+    public static function provideForReadableStreamsCases(): iterable
     {
         return [
             ['r', 'fopen', true],
@@ -479,7 +479,7 @@ final class StreamTest extends MockeryTestCase
     /**
      * @return array<int, array<int, bool|string>>
      */
-    public function provideForWritableStreamsCases(): iterable
+    public static function provideForWritableStreamsCases(): iterable
     {
         return [
             ['w', 'fopen'],
@@ -660,6 +660,26 @@ final class StreamTest extends MockeryTestCase
         $contents = \trim($stream->getContents());
 
         self::assertSame('Could not open input file: StreamTest.php', $contents);
+    }
+
+    public function testConvertsToStringNonSeekableStream(): void
+    {
+        $handle = \popen('echo foo', 'r');
+        $stream = new Stream($handle);
+
+        self::assertFalse($stream->isSeekable());
+        self::assertSame('foo', \trim((string) $stream));
+    }
+
+    public function testConvertsToStringNonSeekablePartiallyReadStream(): void
+    {
+        $handle = \popen('echo bar', 'r');
+        $stream = new Stream($handle);
+        $firstLetter = $stream->read(1);
+
+        self::assertFalse($stream->isSeekable());
+        self::assertSame('b', $firstLetter);
+        self::assertSame('ar', \trim((string) $stream));
     }
 
     /**

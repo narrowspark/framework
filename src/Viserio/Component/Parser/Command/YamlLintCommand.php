@@ -55,25 +55,11 @@ class YamlLintCommand extends AbstractLintCommand
     private $parser;
 
     /**
-     * Get a parser instance.
-     *
-     * @return \Symfony\Component\Yaml\Parser
-     */
-    private function getParser(): Parser
-    {
-        if ($this->parser === null) {
-            $this->parser = new Parser();
-        }
-
-        return $this->parser;
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function validate(string $content, ?string $file = null): array
     {
-        $prevErrorHandler = \set_error_handler(function ($level, $message, $file, $line) use (&$prevErrorHandler): bool {
+        $prevErrorHandler = \set_error_handler(function (int $level, string $message, string $file, int $line) use (&$prevErrorHandler): bool {
             if ($level === \E_USER_DEPRECATED) {
                 throw new ParseException($message, $this->getParser()->getRealCurrentLineNb() + 1);
             }
@@ -81,7 +67,7 @@ class YamlLintCommand extends AbstractLintCommand
             return $prevErrorHandler !== null ? $prevErrorHandler($level, $message, $file, $line) : false;
         });
 
-        $flags = $this->option('parse-tags') ? Yaml::PARSE_CUSTOM_TAGS : 0;
+        $flags = $this->option('parse-tags') !== null ? Yaml::PARSE_CUSTOM_TAGS : 0;
 
         try {
             $this->getParser()->parse($content, Yaml::PARSE_CONSTANT | $flags);
@@ -104,13 +90,20 @@ class YamlLintCommand extends AbstractLintCommand
         $output = $this->getOutput();
 
         foreach ($filesInfo as $info) {
-            if ($displayCorrectFiles && $info['valid']) {
-                $output->comment('<info>OK</info>' . ($info['file'] ? \sprintf(' in %s', $info['file']) : ''));
-            } elseif (! $info['valid']) {
+            /** @var bool $valid */
+            $valid = $info['valid'];
+
+            if ($displayCorrectFiles && $valid) {
+                $output->comment('<info>OK</info>' . (\is_string($info['file']) ? \sprintf(' in %s', $info['file']) : ''));
+            } elseif (! $valid) {
                 $erroredFiles++;
 
-                $output->text('<error>ERROR</error>' . ($info['file'] ? \sprintf(' in %s', $info['file']) : ''));
-                $output->text(\sprintf('<error> >> %s</error>', $info['message']));
+                $output->text('<error>ERROR</error>' . (\is_string($info['file']) ? \sprintf(' in %s', $info['file']) : ''));
+
+                /** @var string $message */
+                $message = $info['message'];
+
+                $output->text(\sprintf('<error> >> %s</error>', $message));
             }
         }
 
@@ -121,5 +114,19 @@ class YamlLintCommand extends AbstractLintCommand
         }
 
         return \min($erroredFiles, 1);
+    }
+
+    /**
+     * Get a parser instance.
+     *
+     * @return \Symfony\Component\Yaml\Parser
+     */
+    private function getParser(): Parser
+    {
+        if ($this->parser === null) {
+            $this->parser = new Parser();
+        }
+
+        return $this->parser;
     }
 }

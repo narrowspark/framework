@@ -15,36 +15,53 @@ namespace Viserio\Component\Foundation\Bootstrap;
 
 use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Component\Config\Container\Definition\ConfigDefinition;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
-use Viserio\Component\Foundation\Console\Kernel;
-use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
-use Viserio\Contract\Foundation\BootstrapState as BootstrapStateContract;
+use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
+use Viserio\Contract\Config\RequiresValidatedConfig as RequiresValidatedConfigContract;
+use Viserio\Contract\Foundation\Bootstrap as BootstrapContract;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
 
-class SetRequestForConsoleBootstrap implements BootstrapStateContract
+class SetRequestForConsoleBootstrap implements BootstrapContract,
+    RequiresComponentConfigContract,
+    RequiresMandatoryConfigContract,
+    RequiresValidatedConfigContract
 {
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDimensions(): iterable
+    {
+        return ['viserio', 'app'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getMandatoryConfig(): iterable
+    {
+        return [
+            'url',
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getConfigValidators(): iterable
+    {
+        return [
+            'url' => ['string'],
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
     public static function getPriority(): int
     {
-        return 64;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getType(): string
-    {
-        return BootstrapStateContract::TYPE_AFTER;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getBootstrapper(): string
-    {
-        return LoadServiceProviderBootstrap::class;
+        return 128;
     }
 
     /**
@@ -66,10 +83,10 @@ class SetRequestForConsoleBootstrap implements BootstrapStateContract
 
         $containerBuilder = $kernel->getContainerBuilder();
 
-        $containerBuilder->singleton(ServerRequestInterface::class, [new ReferenceDefinition(ServerRequestFactoryInterface::class), 'createServerRequest'])
+        $containerBuilder->singleton(ServerRequestInterface::class, [new ReferenceDefinition(ServerRequestFactoryInterface::class, ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE), 'createServerRequest'])
             ->setArguments([
                 'GET',
-                new OptionDefinition('url', Kernel::class),
+                (new ConfigDefinition(self::class))->setKey('url'),
             ]);
     }
 }

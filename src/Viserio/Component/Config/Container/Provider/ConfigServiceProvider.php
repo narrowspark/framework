@@ -13,23 +13,17 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Config\Container\Provider;
 
-use Viserio\Bridge\Dotenv\Env;
-use Viserio\Component\Config\Command\ConfigCacheCommand;
-use Viserio\Component\Config\Command\ConfigClearCommand;
-use Viserio\Component\Config\Container\Pipeline\ResolveOptionDefinitionPipe;
-use Viserio\Component\Config\ParameterProcessor\EnvParameterProcessor;
-use Viserio\Component\Config\Repository;
-use Viserio\Component\Container\Definition\ReferenceDefinition;
+use Viserio\Component\Config\Command\ConfigDumpCommand;
+use Viserio\Component\Config\Command\ConfigReaderCommand;
+use Viserio\Component\Config\Container\Pipeline\ResolveConfigDefinitionPipe;
+use Viserio\Component\Console\Command\AbstractCommand;
+use Viserio\Component\Console\Container\Pipeline\AddConsoleCommandPipe;
 use Viserio\Component\Container\PipelineConfig;
-use Viserio\Contract\Config\Repository as RepositoryContract;
-use Viserio\Contract\Container\ServiceProvider\AliasServiceProvider as AliasServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\ServiceProvider\PipelineServiceProvider as PipelineServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
-use Viserio\Contract\Parser\Loader as LoaderContract;
 
-class ConfigServiceProvider implements AliasServiceProviderContract,
-    PipelineServiceProviderContract,
+class ConfigServiceProvider implements PipelineServiceProviderContract,
     ServiceProviderContract
 {
     /**
@@ -37,30 +31,12 @@ class ConfigServiceProvider implements AliasServiceProviderContract,
      */
     public function build(ContainerBuilderContract $container): void
     {
-        $definition = $container->singleton(RepositoryContract::class, Repository::class)
-            ->addMethodCall('setLoader', [new ReferenceDefinition(LoaderContract::class, ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE)])
-            ->addTag('container.preload')
-            ->setPublic(true);
-
-        if (class_exists(Env::class)) {
-            $definition->addMethodCall('addParameterProcessor', [new EnvParameterProcessor()]);
+        if (\class_exists(AbstractCommand::class)) {
+            $container->singleton(ConfigDumpCommand::class)
+                ->addTag(AddConsoleCommandPipe::TAG);
+            $container->singleton(ConfigReaderCommand::class)
+                ->addTag(AddConsoleCommandPipe::TAG);
         }
-
-        $container->singleton(ConfigCacheCommand::class)
-            ->addTag('console.command');
-        $container->singleton(ConfigClearCommand::class)
-            ->addTag('console.command');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAlias(): array
-    {
-        return [
-            Repository::class => RepositoryContract::class,
-            'config' => [RepositoryContract::class, true],
-        ];
     }
 
     /**
@@ -71,7 +47,7 @@ class ConfigServiceProvider implements AliasServiceProviderContract,
         return [
             PipelineConfig::TYPE_BEFORE_OPTIMIZATION => [
                 [
-                    new ResolveOptionDefinitionPipe(),
+                    new ResolveConfigDefinitionPipe(),
                 ],
             ],
         ];

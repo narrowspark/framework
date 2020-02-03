@@ -26,6 +26,65 @@ trait TypeNotFoundMessageCreatorTrait
     protected $ambiguousServiceTypes;
 
     /**
+     * Populates the list of available types.
+     *
+     * @return void
+     */
+    abstract protected function populateAvailableTypes(): void;
+
+    /**
+     * Populates the list of available types for a given definition.
+     *
+     * @param string $id
+     * @param string $value
+     *
+     * @return void
+     */
+    protected function populateAvailableType(string $id, string $value): void
+    {
+        $reflectionClass = $this->getClassReflector($value, false);
+
+        if ($reflectionClass === null) {
+            return;
+        }
+
+        foreach ($reflectionClass->getInterfaces() as $reflectionInterface) {
+            $this->setType($reflectionInterface->getName(), $id);
+        }
+
+        do {
+            $this->setType($reflectionClass->getName(), $id);
+        } while ($reflectionClass = $reflectionClass->getParentClass());
+    }
+
+    /**
+     * Get the reflection object for the object or class name.
+     *
+     * @param string $class
+     * @param bool   $throw
+     *
+     * @throws ReflectionException
+     *
+     * @return null|ReflectionClass
+     */
+    abstract protected function getClassReflector(string $class, bool $throw = true): ?ReflectionClass;
+
+    /**
+     * @return array
+     */
+    abstract protected function getServicesAndAliases(): array;
+
+    /**
+     * Returns true if the container can return an entry for the given identifier.
+     * Returns false otherwise.
+     *
+     * @param string $id identifier of the entry to look for
+     *
+     * @return bool
+     */
+    abstract protected function has(string $id): bool;
+
+    /**
      * Generate a error message for not found classes or interfaces.
      *
      * @param string $type
@@ -134,38 +193,6 @@ trait TypeNotFoundMessageCreatorTrait
     }
 
     /**
-     * Populates the list of available types.
-     *
-     * @return void
-     */
-    abstract protected function populateAvailableTypes(): void;
-
-    /**
-     * Populates the list of available types for a given definition.
-     *
-     * @param string $id
-     * @param string $value
-     *
-     * @return void
-     */
-    protected function populateAvailableType(string $id, string $value): void
-    {
-        $reflectionClass = $this->getClassReflector($value, false);
-
-        if ($reflectionClass === null) {
-            return;
-        }
-
-        foreach ($reflectionClass->getInterfaces() as $reflectionInterface) {
-            $this->setType($reflectionInterface->getName(), $id);
-        }
-
-        do {
-            $this->setType($reflectionClass->getName(), $id);
-        } while ($reflectionClass = $reflectionClass->getParentClass());
-    }
-
-    /**
      * Associates a type and a service id if applicable.
      *
      * @param string $type
@@ -198,31 +225,4 @@ trait TypeNotFoundMessageCreatorTrait
 
         $this->ambiguousServiceTypes[$type][] = $id;
     }
-
-    /**
-     * Get the reflection object for the object or class name.
-     *
-     * @param string $class
-     * @param bool   $throw
-     *
-     * @throws ReflectionException
-     *
-     * @return null|ReflectionClass
-     */
-    abstract protected function getClassReflector(string $class, bool $throw = true): ?ReflectionClass;
-
-    /**
-     * @return array
-     */
-    abstract protected function getServicesAndAliases(): array;
-
-    /**
-     * Returns true if the container can return an entry for the given identifier.
-     * Returns false otherwise.
-     *
-     * @param string $id identifier of the entry to look for
-     *
-     * @return bool
-     */
-    abstract protected function has(string $id): bool;
 }

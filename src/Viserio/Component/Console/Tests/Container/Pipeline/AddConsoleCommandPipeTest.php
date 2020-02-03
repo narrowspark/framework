@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Console\Tests\Container\Pipeline;
 
-use SplObjectStorage;
+use stdClass;
 use Symfony\Component\Console\Input\StringInput;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Container\Pipeline\AddConsoleCommandPipe;
@@ -50,9 +50,9 @@ final class AddConsoleCommandPipeTest extends AbstractContainerTestCase
     {
         $this->containerBuilder->singleton(LazyWhiner::class, LazyWhiner::class);
         $this->containerBuilder->singleton(HelloCommand::class, HelloCommand::class)
-            ->addTag('console.command');
+            ->addTag(AddConsoleCommandPipe::TAG);
         $this->containerBuilder->singleton(GoodbyeCommand::class, GoodbyeCommand::class)
-            ->addTag('console.command');
+            ->addTag(AddConsoleCommandPipe::TAG);
 
         $this->containerBuilder->register(new ConsoleServiceProvider());
 
@@ -91,13 +91,13 @@ Viserio\Component\Console\Tests\Fixture\GoodbyeCommand made me do work! :-(
     public function testProcessThrowAnExceptionIfTheServiceIsNotASubclassOfCommand(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The service [SplObjectStorage] tagged [console.command] must be a subclass of [Symfony\\Component\\Console\\Command\\Command].');
+        $this->expectExceptionMessage(\sprintf('The service [stdClass] tagged [%s] must be a subclass of [Symfony\\Component\\Console\\Command\\Command].', AddConsoleCommandPipe::TAG));
 
         $container = $this->containerBuilder;
 
         $container->getPipelineConfig()->addPipe(new AddConsoleCommandPipe(), PipelineConfig::TYPE_BEFORE_OPTIMIZATION);
-        $container->singleton(SplObjectStorage::class)
-            ->addTag('console.command');
+        $container->singleton(stdClass::class)
+            ->addTag(AddConsoleCommandPipe::TAG);
 
         $container->compile();
     }
@@ -107,9 +107,9 @@ Viserio\Component\Console\Tests\Fixture\GoodbyeCommand made me do work! :-(
         $container = $this->containerBuilder;
 
         $container->singleton('my-command1', SymfonyCommand::class)
-            ->addTag('console.command');
+            ->addTag(AddConsoleCommandPipe::TAG);
         $container->singleton('my-command2', SymfonyCommand::class)
-            ->addTag('console.command');
+            ->addTag(AddConsoleCommandPipe::TAG);
 
         (new AddConsoleCommandPipe())->process($container);
 

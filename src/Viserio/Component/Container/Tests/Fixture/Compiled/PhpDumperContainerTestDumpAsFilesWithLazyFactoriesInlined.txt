@@ -4,6 +4,7 @@ Array
 
 return [
     \Psr\Container\ContainerInterface::class => true,
+    \Viserio\Contract\Container\CompiledContainer::class => true,
     \Viserio\Contract\Container\Factory::class => true,
     \Viserio\Contract\Container\TaggedContainer::class => true,
     'container' => true,
@@ -40,9 +41,9 @@ final class PhpDumperContainerTestDumpAsFilesWithLazyFactoriesInlined extends \V
         $this->targetDir = \dirname($containerDir);
 
         $this->parameters = \array_merge([
-            'container.dumper.inline_factories' => true,
-            'container.dumper.inline_class_loader' => true,
-            'container.dumper.as_files' => true,
+            'viserio.container.dumper.inline_factories' => true,
+            'viserio.container.dumper.inline_class_loader' => true,
+            'viserio.container.dumper.as_files' => true,
         ], $buildParameters);
         $this->methodMapping = [
             'lazy_foo' => 'get8a2d90256f7c58ef2f4a04c99be9f8cb01ddb5600b82e4da9cb2c25b8e63f3f0',
@@ -309,9 +310,9 @@ if (!\class_exists(PhpDumperContainerTestDumpAsFilesWithLazyFactoriesInlined::cl
 }
 
 return new \Container%s\PhpDumperContainerTestDumpAsFilesWithLazyFactoriesInlined([
-    'container.build_hash' => '%s',
-    'container.build_id' => '%s',
-    'container.build_time' => %s,
+    'viserio.container.build_hash' => '%s',
+    'viserio.container.build_id' => '%s',
+    'viserio.container.build_time' => %s,
 ], __DIR__.'/Container%s');
 
 )

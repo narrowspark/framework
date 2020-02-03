@@ -51,8 +51,8 @@ final class SessionServiceProviderContainer extends \Viserio\Component\Container
 
         $this->containerDir = $containerDir;
         $this->parameters = \array_merge([
-            'container.dumper.inline_factories' => true,
-            'container.dumper.inline_class_loader' => false,
+            'viserio.container.dumper.inline_factories' => true,
+            'viserio.container.dumper.inline_class_loader' => false,
         ], $buildParameters);
         $this->methodMapping = [
             \Viserio\Contract\Session\Store::class => 'get32ef88687b15979f29861973a95a1e536e56b7c4f1158fd70a7dcba6de01d10f',

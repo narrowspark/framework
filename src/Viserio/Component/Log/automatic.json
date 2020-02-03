@@ -12,13 +12,13 @@
                 "testing"
             ]
         },
-        "options": {
+        "config": {
             "global": {
                 "viserio": {
                     "logging": {
-                        "default": "%env:LOG_CHANNEL%",
-                        "env": "%env:APP_ENV%",
-                        "path": "%directory:storage%/logs",
+                        "default": "{LOG_CHANNEL|env}",
+                        "env": "{APP_ENV|env}",
+                        "path": "{storage|directory}/logs",
                         "channels": {
                             "stack": {
                                 "driver": "stack",
@@ -33,7 +33,7 @@
             "testing": {
                 "viserio": {
                     "logging": {
-                        "default": "%env:LOG_CHANNEL%",
+                        "default": "{LOG_CHANNEL|env}",
                         "env": "testing",
                         "channels": {
                             "stack": {

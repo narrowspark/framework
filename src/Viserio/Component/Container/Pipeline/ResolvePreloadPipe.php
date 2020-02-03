@@ -22,17 +22,18 @@ use Viserio\Contract\Container\Definition\TagAwareDefinition as TagAwareDefiniti
 class ResolvePreloadPipe extends AbstractRecursivePipe
 {
     /** @var string */
-    private $tagName;
+    public const TAG = 'viserio.container.preload';
 
-    /** @var array */
-    private $resolvedIds = [];
+    private string $tagName;
+
+    private array $resolvedIds = [];
 
     /**
-     * ResolvePreloadPipe constructor.
+     * Create a new ResolvePreloadPipe instance.
      *
      * @param string $tagName
      */
-    public function __construct($tagName = 'container.preload')
+    public function __construct(string $tagName = self::TAG)
     {
         $this->tagName = $tagName;
     }

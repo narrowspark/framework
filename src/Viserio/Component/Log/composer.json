@@ -36,22 +36,22 @@
     },
     "require-dev": {
         "mockery/mockery": "^1.2.4",
-        "narrowspark/coding-standard": "^3.3.0",
+        "narrowspark/coding-standard": "^3.4.0",
         "narrowspark/testing-helper": "^8.0.2",
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^4.0.0",
+        "viserio/config": "^1.0@dev",
         "viserio/container": "^1.0@dev",
         "viserio/events": "^1.0@dev",
         "viserio/monolog-bridge": "^1.0@dev",
-        "viserio/options-resolver": "^1.0@dev",
         "viserio/phpstan-bridge": "^1.0@dev",
         "viserio/profiler": "^1.0@dev"
     },
     "suggest": {
+        "viserio/config": "Required to use service-provider (^1.0@dev).",
         "viserio/container": "Required to use service-provider (^1.0@dev).",
         "viserio/events": "Required for log messages in logger (^1.0@dev).",
-        "viserio/monolog-bridge": "Has some helpful handlers, formatters and processors for monolog (^1.0@dev).",
-        "viserio/options-resolver": "Required to use service-provider (^1.0@dev)."
+        "viserio/monolog-bridge": "Has some helpful handlers, formatters and processors for monolog (^1.0@dev)."
     },
     "extra": {
         "branch-alias": {

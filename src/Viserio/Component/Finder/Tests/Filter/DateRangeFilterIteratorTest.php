@@ -57,7 +57,7 @@ final class DateRangeFilterIteratorTest extends AbstractRealIteratorTestCase
     /**
      * @return iterable<array<int, array<string|\Viserio\Component\Finder\Comparator\DateComparator>|string>>
      */
-    public function provideAcceptCases(): iterable
+    public static function provideAcceptCases(): iterable
     {
         $since20YearsAgo = [
             '.git',

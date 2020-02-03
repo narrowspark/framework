@@ -248,7 +248,7 @@ final class LoggerTest extends MockeryTestCase
         self::assertEquals($expected, $this->getLogs());
     }
 
-    public function provideLogsAtAllLevelsCases(): iterable
+    public static function provideLogsAtAllLevelsCases(): iterable
     {
         return [
             LogLevel::EMERGENCY => [LogLevel::EMERGENCY, 'message of level emergency with context: {user}'],

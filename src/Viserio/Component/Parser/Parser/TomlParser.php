@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Parser\Parser;
 
 use Viserio\Contract\Parser\Exception\ParseException;
-use Viserio\Contract\Parser\Exception\RuntimeException;
 use Viserio\Contract\Parser\Parser as ParserContract;
+use Viserio\Contract\Support\Exception\MissingPackageException;
 use Yosymfony\Toml\Exception\ParseException as TomlParseException;
 use Yosymfony\Toml\Toml as YosymfonyToml;
 
@@ -24,14 +24,14 @@ class TomlParser implements ParserContract
     /**
      * Create a new Toml parser.
      *
-     * @throws \Viserio\Contract\Parser\Exception\RuntimeException
+     * @throws \Viserio\Contract\Support\Exception\MissingPackageException
      *
      * @codeCoverageIgnore
      */
     public function __construct()
     {
         if (! \class_exists(YosymfonyToml::class)) {
-            throw new RuntimeException('Unable to read toml, the Toml Parser is not installed.');
+            throw new MissingPackageException(['yosymfony/toml'], self::class);
         }
     }
 
@@ -43,7 +43,7 @@ class TomlParser implements ParserContract
         try {
             return YosymfonyToml::parse($payload);
         } catch (TomlParseException $exception) {
-            throw new ParseException(['message' => 'Unable to parse the TOML string.', 'line' => $exception->getParsedLine()]);
+            throw ParseException::createFromException('Unable to parse the TOML string.', $exception);
         }
     }
 }

@@ -25,12 +25,12 @@ use Viserio\Component\Session\Handler\MigratingSessionHandler;
 use Viserio\Component\Session\Handler\NullSessionHandler;
 use Viserio\Contract\Cache\Manager as CacheManagerContract;
 use Viserio\Contract\Cache\Traits\CacheManagerAwareTrait;
+use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
 use Viserio\Contract\Cookie\QueueingFactory as JarContract;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\Session\Exception\RuntimeException;
 use Viserio\Contract\Session\Store as StoreContract;
 
-class SessionManager extends AbstractManager implements ProvidesDefaultOptionContract
+class SessionManager extends AbstractManager implements ProvidesDefaultConfigContract
 {
     use CacheManagerAwareTrait;
 
@@ -89,7 +89,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionCon
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): array
+    public static function getDefaultConfig(): iterable
     {
         return [
             'default' => 'array',
@@ -112,7 +112,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionCon
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): array
+    public static function getMandatoryConfig(): iterable
     {
         return [
             'key_path',

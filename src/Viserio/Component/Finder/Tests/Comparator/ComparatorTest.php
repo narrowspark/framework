@@ -74,7 +74,7 @@ final class ComparatorTest extends TestCase
     /**
      * @return iterable<array<int, array<int, string>|string>>
      */
-    public function provideTestCases(): iterable
+    public static function provideTestCases(): iterable
     {
         yield ['<', '1000', ['500', '999'], ['1000', '1500']];
     }

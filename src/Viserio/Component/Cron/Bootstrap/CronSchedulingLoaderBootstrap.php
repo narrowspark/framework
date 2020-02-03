@@ -14,14 +14,13 @@ declare(strict_types=1);
 namespace Viserio\Component\Cron\Bootstrap;
 
 use Closure;
-use Viserio\Component\Container\Bootstrap\InitializeContainerBootstrap;
-use Viserio\Component\Foundation\Bootstrap\AbstractFilesLoaderBootstrap;
 use Viserio\Contract\Cron\CronJob as CronJobContract;
 use Viserio\Contract\Cron\Schedule as ScheduleContract;
 use Viserio\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
+use Viserio\Provider\Framework\Bootstrap\InitializeContainerBootstrap;
 
-class CronSchedulingLoaderBootstrap extends AbstractFilesLoaderBootstrap implements BootstrapStateContract
+class CronSchedulingLoaderBootstrap implements BootstrapStateContract
 {
     /**
      * {@inheritdoc}

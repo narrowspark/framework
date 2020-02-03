@@ -95,7 +95,7 @@ final class UtilTest extends TestCase
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
             'X-Foo-Bar' => 'FOOBAR',
-            'Content-Md5' => 'CONTENT-MD5',
+            'Content-MD5' => 'CONTENT-MD5',
             'Content-Length' => 'UNSPECIFIED',
         ];
 
@@ -144,22 +144,24 @@ final class UtilTest extends TestCase
      */
     public function testGetAllHeaders(string $testType, array $expected, array $server): void
     {
-        foreach ($server as $key => $val) {
-            $_SERVER[$key] = $val;
-        }
+        try {
+            foreach ($server as $key => $val) {
+                $_SERVER[$key] = $val;
+            }
 
-        self::assertSame($expected, Util::getAllHeaders($_SERVER), "Error testing {$testType} works.");
-
-        // Clean up.
-        foreach ($server as $key => $val) {
-            unset($_SERVER[$key]);
+            self::assertSame($expected, Util::getAllHeaders($_SERVER), "Error testing {$testType} works.");
+        } finally {
+            // Clean up.
+            foreach ($server as $key => $val) {
+                unset($_SERVER[$key]);
+            }
         }
     }
 
     /**
      * @return iterable<array<int, array<string, string>|string>>
      */
-    public function provideGetAllHeadersCases(): iterable
+    public static function provideGetAllHeadersCases(): iterable
     {
         yield [
             'normal case',
@@ -210,7 +212,7 @@ final class UtilTest extends TestCase
         yield [
             'Content-MD5',
             [
-                'Content-Md5' => 'aef123',
+                'Content-MD5' => 'aef123',
             ],
             [
                 'CONTENT_MD5' => 'aef123',
@@ -221,7 +223,7 @@ final class UtilTest extends TestCase
         yield [
             'Content-MD5 (HTTP_CONTENT_MD5 only)',
             [
-                'Content-Md5' => 'f123',
+                'Content-MD5' => 'f123',
             ],
             [
                 'HTTP_CONTENT_MD5' => 'f123',
@@ -478,7 +480,7 @@ final class UtilTest extends TestCase
     /**
      * @return array<string, array<int, array<string, array<int|string, array<int|string, array<int, string>|string|\Viserio\Component\Http\UploadedFile>|string|\Viserio\Component\Http\UploadedFile>|\Viserio\Component\Http\UploadedFile>>>
      */
-    public function provideNormalizeFilesCases(): iterable
+    public static function provideNormalizeFilesCases(): iterable
     {
         return [
             'Single file' => [

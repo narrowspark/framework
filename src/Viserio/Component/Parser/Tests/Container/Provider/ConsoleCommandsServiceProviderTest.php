@@ -36,8 +36,8 @@ final class ConsoleCommandsServiceProviderTest extends AbstractContainerTestCase
         /** @var Application $console */
         $console = $this->container->get(Application::class);
 
-        self::assertTrue($console->has(XliffLintCommand::getDefaultName()));
-        self::assertTrue($console->has(YamlLintCommand::getDefaultName()));
+        self::assertTrue($console->has('lint:xliff'));
+        self::assertTrue($console->has('lint:yaml'));
     }
 
     /**

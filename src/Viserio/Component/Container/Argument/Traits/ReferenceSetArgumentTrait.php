@@ -19,7 +19,7 @@ use Viserio\Contract\Container\Exception\InvalidArgumentException;
 trait ReferenceSetArgumentTrait
 {
     /** @var \Viserio\Contract\Container\Definition\ReferenceDefinition[] */
-    private $values;
+    private array $values = [];
 
     /**
      * @param \Viserio\Contract\Container\Definition\ReferenceDefinition[] $values

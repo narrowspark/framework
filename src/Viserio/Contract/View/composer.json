@@ -4,7 +4,7 @@
     "description": "The Viserio View Contract package.",
     "keywords": [
         "abstractions",
-        "contracts",
+        "Contract",
         "decoupling",
         "interfaces",
         "interoperability",

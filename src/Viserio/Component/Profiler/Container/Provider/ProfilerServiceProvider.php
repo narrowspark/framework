@@ -27,22 +27,22 @@ use Viserio\Component\Profiler\DataCollector\MemoryDataCollector;
 use Viserio\Component\Profiler\DataCollector\PhpInfoDataCollector;
 use Viserio\Component\Profiler\DataCollector\TimeDataCollector;
 use Viserio\Component\Profiler\Profiler;
+use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
+use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 use Viserio\Contract\Container\ServiceProvider\AliasServiceProvider as AliasServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
 use Viserio\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Contract\HttpFoundation\Terminable as TerminableContract;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
-use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
 use Viserio\Contract\Profiler\Profiler as ProfilerContract;
 use Viserio\Contract\Routing\Router as RouterContract;
 use Viserio\Contract\Routing\UrlGenerator as UrlGeneratorContract;
 
 class ProfilerServiceProvider implements AliasServiceProviderContract,
-    ProvidesDefaultOptionContract,
+    ProvidesDefaultConfigContract,
     RequiresComponentConfigContract,
-    RequiresMandatoryOptionContract,
+    RequiresMandatoryConfigContract,
     ServiceProviderContract
 {
     /**
@@ -77,7 +77,7 @@ class ProfilerServiceProvider implements AliasServiceProviderContract,
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): array
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'profiler'];
     }
@@ -85,7 +85,7 @@ class ProfilerServiceProvider implements AliasServiceProviderContract,
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): array
+    public static function getMandatoryConfig(): iterable
     {
         return [
             'enable',
@@ -95,7 +95,7 @@ class ProfilerServiceProvider implements AliasServiceProviderContract,
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): array
+    public static function getDefaultConfig(): iterable
     {
         return [
             'collector' => [

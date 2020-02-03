@@ -34,14 +34,14 @@ abstract class AbstractDefinition implements DefinitionContract, TagAwareDefinit
      *
      * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * The hash of this definition.
      *
      * @var string
      */
-    protected $hash;
+    protected string $hash;
 
     /**
      * The service value.
@@ -55,49 +55,49 @@ abstract class AbstractDefinition implements DefinitionContract, TagAwareDefinit
      *
      * @var bool
      */
-    protected $isLazy = false;
+    protected bool $isLazy = false;
 
     /**
      * Check if the service is public.
      *
      * @var bool
      */
-    protected $isPublic = false;
+    protected bool $isPublic = false;
 
     /**
      * Check if the service is a internal php class or function.
      *
      * @var bool
      */
-    protected $isInternal = false;
+    protected bool $isInternal = false;
 
     /**
      * The service type.
      *
      * @var int
      */
-    protected $type;
+    protected int $type;
 
     /**
      * Check if the value is added on runtime.
      *
      * @var bool
      */
-    protected $synthetic = false;
+    protected bool $synthetic = false;
 
     /**
      * Returns the list of tags.
      *
      * @var array
      */
-    protected $tags = [];
+    protected array $tags = [];
 
     /**
      * List of definition conditions.
      *
      * @var array
      */
-    protected $conditions = [];
+    protected array $conditions = [];
 
     /**
      * Extend this class to create new Definitions.
@@ -123,7 +123,7 @@ abstract class AbstractDefinition implements DefinitionContract, TagAwareDefinit
     /**
      * {@inheritdoc}
      */
-    public function setName(string $id): DefinitionContract
+    public function setName(string $id)
     {
         $this->name = $id;
 
@@ -151,7 +151,7 @@ abstract class AbstractDefinition implements DefinitionContract, TagAwareDefinit
     /**
      * {@inheritdoc}
      */
-    public function setValue($value): DefinitionContract
+    public function setValue($value)
     {
         $this->value = $value;
 
@@ -213,7 +213,7 @@ abstract class AbstractDefinition implements DefinitionContract, TagAwareDefinit
     /**
      * {@inheritdoc}
      */
-    public function setSynthetic(bool $boolean): DefinitionContract
+    public function setSynthetic(bool $boolean)
     {
         $this->synthetic = $boolean;
 
@@ -259,7 +259,7 @@ abstract class AbstractDefinition implements DefinitionContract, TagAwareDefinit
     /**
      * {@inheritdoc}
      */
-    public function setConditions(array $conditions): DefinitionContract
+    public function setConditions(array $conditions)
     {
         $this->conditions = [];
 
@@ -297,7 +297,7 @@ abstract class AbstractDefinition implements DefinitionContract, TagAwareDefinit
     /**
      * {@inheritdoc}
      */
-    public function setLazy(bool $bool): DefinitionContract
+    public function setLazy(bool $bool)
     {
         $this->isLazy = $bool;
 
@@ -307,7 +307,7 @@ abstract class AbstractDefinition implements DefinitionContract, TagAwareDefinit
     /**
      * {@inheritdoc}
      */
-    public function setPublic(bool $bool): DefinitionContract
+    public function setPublic(bool $bool)
     {
         $this->isPublic = $bool;
 

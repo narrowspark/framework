@@ -29,7 +29,7 @@ if (! \class_exists(MailServiceProviderContainerTestProvider::class, false)) {
 }
 
 return new \Container87cf0c2ab6a3a5d7053e59fc09878bbf23c39430e36ea06e35bd7179c880bbe9\MailServiceProviderContainerTestProvider([
-    'container.build_hash' => '87cf0c2ab6a3a5d7053e59fc09878bbf23c39430e36ea06e35bd7179c880bbe9',
-    'container.build_id' => 'a4b9fa7f',
-    'container.build_time' => 1565483972,
+    'viserio.container.build_hash' => '87cf0c2ab6a3a5d7053e59fc09878bbf23c39430e36ea06e35bd7179c880bbe9',
+    'viserio.container.build_id' => 'a4b9fa7f',
+    'viserio.container.build_time' => 1565483972,
 ], __DIR__ . '/Container87cf0c2ab6a3a5d7053e59fc09878bbf23c39430e36ea06e35bd7179c880bbe9');

@@ -131,7 +131,7 @@ final class RequestTest extends AbstractMessageTest
     /**
      * @return iterable<array<string, string>>
      */
-    public function provideValidWithRequestTargetCases(): iterable
+    public static function provideValidWithRequestTargetCases(): iterable
     {
         yield [
             // Description => [request target],
@@ -161,7 +161,7 @@ final class RequestTest extends AbstractMessageTest
     /**
      * @return array<string, array<int, string>>
      */
-    public function provideValidWithMethodCases(): iterable
+    public static function provideValidWithMethodCases(): iterable
     {
         return [
             // Description => [request method],
@@ -367,7 +367,7 @@ final class RequestTest extends AbstractMessageTest
 
     public function testHostHeaderNotSetFromUriOnCreationIfHostHeaderSpecified(): void
     {
-        $request = new Request('http://www.example.com', null, ['Host' => 'www.test.com'], 'php://memory');
+        $request = new Request('http://www.example.com', 'GET', ['Host' => 'www.test.com'], 'php://memory');
 
         self::assertEquals('www.test.com', $request->getHeaderLine('host'));
     }
@@ -417,7 +417,7 @@ final class RequestTest extends AbstractMessageTest
     /**
      * @return array<string, array<int, string>>
      */
-    public function provideAllowsCustomRequestMethodsThatFollowSpecCases(): iterable
+    public static function provideAllowsCustomRequestMethodsThatFollowSpecCases(): iterable
     {
         return [
             // WebDAV methods
@@ -593,7 +593,7 @@ final class RequestTest extends AbstractMessageTest
     /**
      * @return array<string, array<int, string>>
      */
-    public function provideWithUriAndNoPreserveHostWillOverwriteHostHeaderRegardlessOfOriginalCaseCases(): iterable
+    public static function provideWithUriAndNoPreserveHostWillOverwriteHostHeaderRegardlessOfOriginalCaseCases(): iterable
     {
         return [
             'lowercase' => ['host'],

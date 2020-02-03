@@ -17,16 +17,15 @@ use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Twig\Environment;
 use Twig\Lexer;
-use Twig\Loader\ArrayLoader;
 use Twig\Loader\ChainLoader;
 use Twig\Loader\LoaderInterface;
 use Viserio\Bridge\Twig\Container\Provider\TwigBridgeServiceProvider;
+use Viserio\Component\Config\Container\Provider\ConfigServiceProvider;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Container\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\Filesystem\Container\Provider\FilesystemServiceProvider;
-use Viserio\Component\OptionsResolver\Container\Provider\OptionsResolverServiceProvider;
 use Viserio\Component\View\Container\Provider\ViewServiceProvider;
 use Viserio\Contract\View\Factory as FactoryContract;
 use Viserio\Provider\Twig\Command\CleanCommand;
@@ -75,40 +74,35 @@ final class TwigServiceProviderTest extends AbstractContainerTestCase
         $containerBuilder->register(new ViewServiceProvider());
         $containerBuilder->register(new TwigServiceProvider());
         $containerBuilder->register(new TwigBridgeServiceProvider());
-        $containerBuilder->register(new OptionsResolverServiceProvider());
+        $containerBuilder->register(new ConfigServiceProvider());
         $containerBuilder->register(new ConsoleServiceProvider());
         $containerBuilder->singleton(Lexer::class)
             ->setSynthetic(true);
 
-        $containerBuilder->bind('config', [
-            'viserio' => [
-                'view' => [
-                    'paths' => [
-                        \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR,
-                        __DIR__,
-                    ],
-                    'engines' => [
-                        'twig' => [
-                            'options' => [
-                                'debug' => true,
-                                'cache' => '',
-                            ],
-                            'file_extension' => 'html',
-                            'templates' => [
-                                'test.html' => 'tests',
-                            ],
-                            'loaders' => [
-                                new ArrayLoader(['test2.html' => 'testsa']),
-                            ],
+        $containerBuilder->setParameter('viserio', [
+            'console' => [
+                'name' => 'test',
+                'version' => '1',
+            ],
+            'view' => [
+                'paths' => [
+                    \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR,
+                    __DIR__,
+                ],
+                'engines' => [
+                    'twig' => [
+                        'options' => [
+                            'debug' => true,
+                            'cache' => '',
+                        ],
+                        'file_extension' => 'html',
+                        'templates' => [
+                            'test.html' => 'tests',
                         ],
                     ],
                 ],
             ],
         ]);
-
-        $containerBuilder->setParameter('container.dumper.inline_factories', true);
-        $containerBuilder->setParameter('container.dumper.inline_class_loader', false);
-        $containerBuilder->setParameter('container.dumper.as_files', true);
     }
 
     /**

@@ -5,7 +5,7 @@
                 "global"
             ]
         },
-        "options": {
+        "config": {
             "global": {
                 "viserio": {
                     "app": {
@@ -15,7 +15,7 @@
                     },
                     "view": {
                         "paths": [
-                            "%directory:resources%/views"
+                            "{resources|directory}/views"
                         ]
                     }
                 }

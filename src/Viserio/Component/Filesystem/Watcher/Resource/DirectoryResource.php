@@ -41,27 +41,6 @@ final class DirectoryResource implements ResourceContract
     }
 
     /**
-     * Returns found files in directory.
-     *
-     * @return \Viserio\Component\Filesystem\Watcher\Resource\FileResource[]
-     */
-    private function getFiles(): array
-    {
-        $files = [];
-
-        /** @var SplFileInfo $file */
-        foreach (new RecursiveDirectoryIterator($this->dir, RecursiveDirectoryIterator::SKIP_DOTS) as $file) {
-            $realpath = $file->getRealPath();
-
-            $path = $realpath !== false ? $realpath : $file->getPathname();
-
-            $files[$path] = new FileResource($path);
-        }
-
-        return $files;
-    }
-
-    /**
      * {@inheritdoc}
      *
      * @return \Viserio\Component\Filesystem\Watcher\Event\FileChangeEvent[]
@@ -98,5 +77,26 @@ final class DirectoryResource implements ResourceContract
         }
 
         return $events;
+    }
+
+    /**
+     * Returns found files in directory.
+     *
+     * @return \Viserio\Component\Filesystem\Watcher\Resource\FileResource[]
+     */
+    private function getFiles(): array
+    {
+        $files = [];
+
+        /** @var SplFileInfo $file */
+        foreach (new RecursiveDirectoryIterator($this->dir, RecursiveDirectoryIterator::SKIP_DOTS) as $file) {
+            $realpath = $file->getRealPath();
+
+            $path = $realpath !== false ? $realpath : $file->getPathname();
+
+            $files[$path] = new FileResource($path);
+        }
+
+        return $files;
     }
 }

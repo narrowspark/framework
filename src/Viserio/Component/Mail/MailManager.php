@@ -19,14 +19,14 @@ use Swift_Mailer;
 use Swift_Transport;
 use Viserio\Component\Manager\AbstractConnectionManager;
 use Viserio\Component\Support\Str;
+use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
 use Viserio\Contract\Events\Traits\EventManagerAwareTrait;
 use Viserio\Contract\Mail\Mailer as MailerContract;
 use Viserio\Contract\Manager\Exception\InvalidArgumentException;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\Queue\QueueConnector as QueueContract;
 use Viserio\Contract\View\Traits\ViewAwareTrait;
 
-class MailManager extends AbstractConnectionManager implements ProvidesDefaultOptionContract
+class MailManager extends AbstractConnectionManager implements ProvidesDefaultConfigContract
 {
     use EventManagerAwareTrait;
     use ViewAwareTrait;
@@ -69,7 +69,7 @@ class MailManager extends AbstractConnectionManager implements ProvidesDefaultOp
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): array
+    public static function getDefaultConfig(): iterable
     {
         return [
             'default' => 'array',

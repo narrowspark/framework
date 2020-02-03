@@ -20,17 +20,19 @@ use Twig\Loader\LoaderInterface;
 use Twig\RuntimeLoader\ContainerRuntimeLoader;
 use Twig\RuntimeLoader\RuntimeLoaderInterface;
 use Viserio\Bridge\Twig\Command\LintCommand as BridgeLintCommand;
+use Viserio\Component\Config\Container\Definition\ConfigDefinition;
+use Viserio\Component\Console\Container\Pipeline\AddConsoleCommandPipe;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
-use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
+use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
+use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 use Viserio\Contract\Container\Definition\ObjectDefinition as ObjectDefinitionContract;
 use Viserio\Contract\Container\ServiceProvider\AliasServiceProvider as AliasServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\ServiceProvider\ExtendServiceProvider as ExtendServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\PipelineServiceProvider as PipelineServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
-use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
+use Viserio\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contract\View\Factory as FactoryContract;
 use Viserio\Contract\View\Finder as FinderContract;
 use Viserio\Provider\Twig\Command\CleanCommand;
@@ -43,18 +45,60 @@ use Viserio\Provider\Twig\Loader as TwigLoader;
 class TwigServiceProvider implements AliasServiceProviderContract,
     ExtendServiceProviderContract,
     PipelineServiceProviderContract,
-    ProvidesDefaultOptionContract,
+    ProvidesDefaultConfigContract,
     RequiresComponentConfigContract,
-    RequiresMandatoryOptionContract,
+    RequiresMandatoryConfigContract,
     ServiceProviderContract
 {
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDimensions(): iterable
+    {
+        return ['viserio', 'view'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getMandatoryConfig(): iterable
+    {
+        return [
+            'paths',
+            'engines' => [
+                'twig' => [
+                    'options' => [
+                        'debug',
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDefaultConfig(): iterable
+    {
+        return [
+            'engines' => [
+                'twig' => [
+                    'file_extension' => 'twig',
+                ],
+            ],
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
     public function build(ContainerBuilderContract $container): void
     {
         $container->singleton(TwigLoader::class)
-            ->addMethodCall('setExtension', [new OptionDefinition('engines.twig.file_extension', self::class)]);
+            ->addMethodCall('setExtension', [
+                (new ConfigDefinition(self::class))
+                    ->setKey('engines.twig.file_extension'),
+            ]);
 
         $container->singleton(ChainLoader::class)
             ->addMethodCall('addLoader', [new ReferenceDefinition(TwigLoader::class)]);
@@ -62,24 +106,31 @@ class TwigServiceProvider implements AliasServiceProviderContract,
         $container->singleton(RuntimeLoaderInterface::class, ContainerRuntimeLoader::class);
 
         $container->singleton(TwigEnvironment::class)
-            ->setArguments([new ReferenceDefinition(LoaderInterface::class), new OptionDefinition('engines.twig.options', self::class)])
+            ->setArguments([
+                new ReferenceDefinition(LoaderInterface::class),
+                (new ConfigDefinition(self::class))
+                    ->setKey('engines.twig.options'),
+            ])
             ->addMethodCall('setLexer', [new ReferenceDefinition(Lexer::class, ReferenceDefinition::IGNORE_ON_UNINITIALIZED_REFERENCE)])
             ->addMethodCall('addRuntimeLoader', [new ReferenceDefinition(RuntimeLoaderInterface::class, ReferenceDefinition::IGNORE_ON_UNINITIALIZED_REFERENCE)])
             ->setPublic(true);
 
-        $configDefinition = new ReferenceDefinition('config');
-
         $container->singleton(TwigEngine::class)
             ->setArguments([
                 new ReferenceDefinition(TwigEnvironment::class),
-                $configDefinition,
+                (new ConfigDefinition(TwigEngine::class))
+                    ->setKey('engines.twig.extensions'),
             ])
             ->addMethodCall('setContainer')
             ->addTag('view.engine');
 
         $container->singleton(CleanCommand::class)
-            ->addArgument($configDefinition)
-            ->addTag('console.command');
+            ->setArguments([
+                new ReferenceDefinition(FilesystemContract::class),
+                (new ConfigDefinition(CleanCommand::class))
+                    ->setKey('engines.twig.options.cache'),
+            ])
+            ->addTag(AddConsoleCommandPipe::TAG);
     }
 
     /**
@@ -107,9 +158,10 @@ class TwigServiceProvider implements AliasServiceProviderContract,
                     ->setArguments([
                         new ReferenceDefinition(TwigEnvironment::class),
                         new ReferenceDefinition(FinderContract::class),
-                        new ReferenceDefinition('config'),
+                        (new ConfigDefinition(LintCommand::class))
+                            ->setKey('engines.twig.file_extension'),
                     ])
-                    ->addTag('console.command');
+                    ->addTag(AddConsoleCommandPipe::TAG);
 
                 $container->setAlias(BridgeLintCommand::class, LintCommand::class);
             },
@@ -130,45 +182,6 @@ class TwigServiceProvider implements AliasServiceProviderContract,
             'beforeRemoving' => [
                 [
                     new RuntimeLoaderPipe(),
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getDimensions(): array
-    {
-        return ['viserio', 'view'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getMandatoryOptions(): array
-    {
-        return [
-            'paths',
-            'engines' => [
-                'twig' => [
-                    'options' => [
-                        'debug',
-                    ],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getDefaultOptions(): array
-    {
-        return [
-            'engines' => [
-                'twig' => [
-                    'file_extension' => 'twig',
                 ],
             ],
         ];

@@ -53,8 +53,8 @@ final class HttpExceptionServiceProviderContainer extends \Viserio\Component\Con
 
         $this->containerDir = $containerDir;
         $this->parameters = \array_merge([
-            'container.dumper.inline_factories' => true,
-            'container.dumper.inline_class_loader' => false,
+            'viserio.container.dumper.inline_factories' => true,
+            'viserio.container.dumper.inline_class_loader' => false,
         ], $buildParameters);
         $this->methodMapping = [
             \Psr\Http\Message\RequestFactoryInterface::class => 'getef97f0bcda07c062701f26c9b3469bc1cc5d4e690f06f38d62089dcd523e5878',
@@ -218,7 +218,7 @@ final class HttpExceptionServiceProviderContainer extends \Viserio\Component\Con
     {
         $this->services[\Viserio\Contract\Config\Repository::class] = $instance = new \Viserio\Component\Config\Repository();
 
-        $instance->addParameterProcessor(new \Viserio\Component\Config\ParameterProcessor\EnvParameterProcessor());
+        $instance->addParameterProcessor(new \Viserio\Component\Config\Processor\EnvParameterProcessor());
         $instance->setArray([
             'viserio' => [
                 'exception' => [

@@ -14,27 +14,71 @@ declare(strict_types=1);
 namespace Viserio\Component\Cron\Container\Provider;
 
 use Psr\Cache\CacheItemPoolInterface;
+use Viserio\Component\Config\Container\Definition\ConfigDefinition;
+use Viserio\Component\Console\Container\Pipeline\AddConsoleCommandPipe;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
 use Viserio\Component\Cron\Command\CronListCommand;
 use Viserio\Component\Cron\Command\ScheduleRunCommand;
 use Viserio\Component\Cron\Schedule;
-use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
+use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
+use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
+use Viserio\Contract\Config\RequiresValidatedConfig as RequiresValidatedConfigContract;
 use Viserio\Contract\Container\ServiceProvider\AliasServiceProvider as AliasServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
 use Viserio\Contract\Cron\Schedule as ScheduleContract;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
-use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
-use Viserio\Contract\OptionsResolver\RequiresValidatedOption as RequiresValidatedOptionContract;
 
 class CronServiceProvider implements AliasServiceProviderContract,
-    ProvidesDefaultOptionContract,
+    ProvidesDefaultConfigContract,
     RequiresComponentConfigContract,
-    RequiresMandatoryOptionContract,
-    RequiresValidatedOptionContract,
+    RequiresMandatoryConfigContract,
+    RequiresValidatedConfigContract,
     ServiceProviderContract
 {
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDimensions(): iterable
+    {
+        return ['viserio', 'cron'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getMandatoryConfig(): iterable
+    {
+        return [
+            'path',
+            'env',
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDefaultConfig(): iterable
+    {
+        return [
+            'console' => null,
+            'maintenance' => false,
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getConfigValidators(): iterable
+    {
+        return [
+            'env' => ['string'],
+            'maintenance' => ['bool'],
+            'path' => ['string'],
+            'console' => ['string', 'null'],
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -42,8 +86,10 @@ class CronServiceProvider implements AliasServiceProviderContract,
     {
         $container->singleton(ScheduleContract::class, Schedule::class)
             ->setArguments([
-                new OptionDefinition('path', self::class),
-                new OptionDefinition('console', self::class),
+                (new ConfigDefinition(self::class))
+                    ->setKey('path'),
+                (new ConfigDefinition(self::class))
+                    ->setKey('console'),
             ])
             ->setMethodCalls([
                 ['setCacheItemPool', [new ReferenceDefinition(CacheItemPoolInterface::class, ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE)]],
@@ -51,9 +97,15 @@ class CronServiceProvider implements AliasServiceProviderContract,
             ]);
 
         $container->singleton(CronListCommand::class)
-            ->addTag('console.command');
+            ->addTag(AddConsoleCommandPipe::TAG);
         $container->singleton(ScheduleRunCommand::class)
-            ->addTag('console.command');
+            ->setArguments([
+                (new ConfigDefinition(self::class))
+                    ->setKey('env'),
+                (new ConfigDefinition(self::class))
+                    ->setKey('maintenance'),
+            ])
+            ->addTag(AddConsoleCommandPipe::TAG);
     }
 
     /**
@@ -63,43 +115,6 @@ class CronServiceProvider implements AliasServiceProviderContract,
     {
         return [
             Schedule::class => ScheduleContract::class,
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getDimensions(): array
-    {
-        return ['viserio', 'cron'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getMandatoryOptions(): array
-    {
-        return ['path'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getDefaultOptions(): array
-    {
-        return [
-            'console' => null,
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getOptionValidators(): array
-    {
-        return [
-            'path' => ['string'],
-            'console' => ['string', 'null'],
         ];
     }
 }

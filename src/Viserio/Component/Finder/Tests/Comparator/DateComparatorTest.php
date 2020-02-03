@@ -39,7 +39,7 @@ final class DateComparatorTest extends TestCase
     /**
      * @return iterable<array<int, string>>
      */
-    public function provideConstructorCases(): iterable
+    public static function provideConstructorCases(): iterable
     {
         yield ['foobar'];
 
@@ -69,7 +69,7 @@ final class DateComparatorTest extends TestCase
     /**
      * @return iterable<array<int, array<int, int>|string>>
      */
-    public function provideTestCases(): iterable
+    public static function provideTestCases(): iterable
     {
         yield ['< 2005-10-10', [\strtotime('2005-10-09')], [\strtotime('2005-10-15')]];
 

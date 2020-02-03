@@ -113,7 +113,7 @@ final class XliffTest extends TestCase
     {
         $datas = $this->parseFile($this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'xliffv2.xlf');
 
-        self::assertSame(\unserialize(\file_get_contents($this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'output_xliffv2.xlf')), $datas);
+        self::assertSame(\unserialize((string) \file_get_contents($this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'output_xliffv2.xlf')), $datas);
     }
 
     public function testParseEncodingV1(): void
@@ -347,10 +347,10 @@ final class XliffTest extends TestCase
      *
      * @throws \Viserio\Contract\Parser\Exception\ParseException
      *
-     * @return array
+     * @return array<int|string, mixed>
      */
     private function parseFile(string $path): array
     {
-        return (new XliffParser())->parse(\file_get_contents($path));
+        return (new XliffParser())->parse((string) \file_get_contents($path));
     }
 }

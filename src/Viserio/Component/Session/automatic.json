@@ -9,7 +9,7 @@
                 "global"
             ]
         },
-        "options": {
+        "config": {
             "global": {
                 "viserio": {
                     "app": {

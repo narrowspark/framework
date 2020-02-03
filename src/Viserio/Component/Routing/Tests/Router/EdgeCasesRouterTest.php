@@ -28,7 +28,7 @@ final class EdgeCasesRouterTest extends AbstractRouterBaseTest
     use TestRouter404Trait;
     use TestRouter405Trait;
 
-    public function provideRouterCases(): iterable
+    public static function provideRouterCases(): iterable
     {
         return [
             ['GET', '/abc/a/bar', 'name = middle-param | param = a'],
@@ -47,14 +47,14 @@ final class EdgeCasesRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    public function provideRouter404Cases(): iterable
+    public static function provideRouter404Cases(): iterable
     {
         return [
             ['GET', '/abc//bar'],
         ];
     }
 
-    public function provideRouter405Cases(): iterable
+    public static function provideRouter405Cases(): iterable
     {
         return [
             ['GET', '/allowed-methods/bar'],

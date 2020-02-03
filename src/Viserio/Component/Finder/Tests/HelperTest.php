@@ -46,7 +46,7 @@ final class HelperTest extends TestCase
     /**
      * @return iterable<array<array<string>|string>>
      */
-    public function provideGlobStreamWrapperCases(): iterable
+    public static function provideGlobStreamWrapperCases(): iterable
     {
         yield [
             'globtest:///*.css',

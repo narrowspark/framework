@@ -13,20 +13,20 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Cookie\Container\Provider;
 
+use Viserio\Component\Config\Container\Definition\ConfigDefinition;
 use Viserio\Component\Cookie\CookieJar;
-use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
+use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
+use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 use Viserio\Contract\Container\ServiceProvider\AliasServiceProvider as AliasServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
 use Viserio\Contract\Cookie\QueueingFactory as JarContract;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
-use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
 
 class CookieServiceProvider implements AliasServiceProviderContract,
-    ProvidesDefaultOptionContract,
+    ProvidesDefaultConfigContract,
     RequiresComponentConfigContract,
-    RequiresMandatoryOptionContract,
+    RequiresMandatoryConfigContract,
     ServiceProviderContract
 {
     /**
@@ -38,9 +38,12 @@ class CookieServiceProvider implements AliasServiceProviderContract,
             ->addMethodCall(
                 'setDefaultPathAndDomain',
                 [
-                    new OptionDefinition('path', self::class),
-                    new OptionDefinition('domain', self::class),
-                    new OptionDefinition('secure', self::class),
+                    (new ConfigDefinition(self::class))
+                        ->setKey('path'),
+                    (new ConfigDefinition(self::class))
+                        ->setKey('domain'),
+                    (new ConfigDefinition(self::class))
+                        ->setKey('secure'),
                 ]
             );
     }
@@ -59,7 +62,7 @@ class CookieServiceProvider implements AliasServiceProviderContract,
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): array
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'cookie'];
     }
@@ -67,7 +70,7 @@ class CookieServiceProvider implements AliasServiceProviderContract,
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): array
+    public static function getMandatoryConfig(): iterable
     {
         return ['path', 'domain'];
     }
@@ -75,7 +78,7 @@ class CookieServiceProvider implements AliasServiceProviderContract,
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): array
+    public static function getDefaultConfig(): iterable
     {
         return [
             'secure' => true,

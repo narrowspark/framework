@@ -22,11 +22,11 @@ use Symfony\Component\VarDumper\Server\Connection;
 use Symfony\Component\VarDumper\Server\DumpServer;
 use Symfony\Component\VarDumper\VarDumper;
 use Viserio\Bridge\Monolog\Formatter\ConsoleFormatter;
-use Viserio\Component\Console\Application;
+use Viserio\Component\Config\Container\Definition\ConfigDefinition;
 use Viserio\Component\Console\ConsoleEvents;
+use Viserio\Component\Console\Container\Pipeline\AddConsoleCommandPipe;
 use Viserio\Component\Container\Argument\ArrayArgument;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
-use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
 use Viserio\Component\WebServer\Command\ServerDumpCommand;
 use Viserio\Component\WebServer\Command\ServerLogCommand;
 use Viserio\Component\WebServer\Command\ServerServeCommand;
@@ -35,21 +35,21 @@ use Viserio\Component\WebServer\Command\ServerStatusCommand;
 use Viserio\Component\WebServer\Command\ServerStopCommand;
 use Viserio\Component\WebServer\Event\DumpListenerEvent;
 use Viserio\Component\WebServer\RequestContextProvider;
+use Viserio\Contract\Config\Exception\InvalidArgumentException;
+use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
+use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Contract\Config\RequiresValidatedConfig as RequiresValidatedConfigContract;
 use Viserio\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Contract\Container\Definition\ObjectDefinition as ObjectDefinitionContract;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\ServiceProvider\ExtendServiceProvider as ExtendServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
 use Viserio\Contract\Events\EventManager;
-use Viserio\Contract\OptionsResolver\Exception\InvalidArgumentException;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
-use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresValidatedOption as RequiresValidatedOptionContract;
 
 class WebServerServiceProvider implements ExtendServiceProviderContract,
-    ProvidesDefaultOptionContract,
+    ProvidesDefaultConfigContract,
     RequiresComponentConfigContract,
-    RequiresValidatedOptionContract,
+    RequiresValidatedConfigContract,
     ServiceProviderContract
 {
     /**
@@ -59,13 +59,14 @@ class WebServerServiceProvider implements ExtendServiceProviderContract,
     {
         if (\class_exists(ConsoleFormatter::class) && \interface_exists(FormatterInterface::class)) {
             $container->singleton(ServerLogCommand::class)
-                ->addTag('console.command');
+                ->addTag(AddConsoleCommandPipe::TAG);
         }
 
         if (\class_exists(VarDumper::class)) {
             $container->singleton(Connection::class)
                 ->setArguments([
-                    new OptionDefinition('debug_server.host', self::class),
+                    (new ConfigDefinition(self::class))
+                        ->setKey('debug_server.host'),
                     new ArrayArgument([
                         'request' => new ReferenceDefinition(RequestContextProvider::class, ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE),
                         'source' => new ReferenceDefinition(SourceContextProvider::class, ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE),
@@ -74,19 +75,34 @@ class WebServerServiceProvider implements ExtendServiceProviderContract,
 
             $container->singleton(DumpServer::class)
                 ->setArguments([
-                    new OptionDefinition('debug_server.host', self::class),
+                    (new ConfigDefinition(self::class))
+                        ->setKey('debug_server.host'),
                     new ReferenceDefinition(LoggerInterface::class, ReferenceDefinition::NULL_ON_INVALID_REFERENCE),
                 ]);
 
             $container->singleton(DumpListenerEvent::class);
             $container->singleton(ServerDumpCommand::class)
-                ->addTag('console.command');
+                ->addTag(AddConsoleCommandPipe::TAG);
         }
 
         $container->singleton(ServerStatusCommand::class)
-            ->addTag('console.command');
+            ->addTag(AddConsoleCommandPipe::TAG);
         $container->singleton(ServerStopCommand::class)
-            ->addTag('console.command');
+            ->addTag(AddConsoleCommandPipe::TAG);
+
+        $arguments = [
+            (new ConfigDefinition(self::class))
+                ->setKey('web_folder'),
+            (new ConfigDefinition(self::class))
+                ->setKey('env'),
+        ];
+
+        $container->singleton(ServerServeCommand::class)
+            ->setArguments($arguments)
+            ->addTag(AddConsoleCommandPipe::TAG);
+        $container->singleton(ServerStartCommand::class)
+            ->setArguments($arguments)
+            ->addTag(AddConsoleCommandPipe::TAG);
     }
 
     /**
@@ -111,21 +127,18 @@ class WebServerServiceProvider implements ExtendServiceProviderContract,
                 // Register early to have a working dump() as early as possible
                 $definition->addMethodCall('attach', [ConsoleEvents::COMMAND, [new ReferenceDefinition(DumpListenerEvent::class), 'configure'], 1024]);
             },
-            Application::class => static function (ObjectDefinitionContract $definition, ContainerBuilderContract $container): void {
-                $arguments = $container->has(ConsoleKernelContract::class) ? [
-                    (new ReferenceDefinition(ConsoleKernelContract::class))->addMethodCall('getPublicPath'),
-                    (new ReferenceDefinition(ConsoleKernelContract::class))->addMethodCall('getEnvironment'),
-                ] : [
-                    new OptionDefinition('web_folder', self::class),
-                    new OptionDefinition('env', self::class),
+            ConsoleKernelContract::class => static function ($definition, ContainerBuilderContract $container): void {
+                $arguments = [
+                    (new ReferenceDefinition(ConsoleKernelContract::class))
+                        ->addMethodCall('getPublicPath'),
+                    (new ReferenceDefinition(ConsoleKernelContract::class))
+                        ->addMethodCall('getEnvironment'),
                 ];
 
-                $container->singleton(ServerServeCommand::class)
-                    ->setArguments($arguments)
-                    ->addTag('console.command');
-                $container->singleton(ServerStartCommand::class)
-                    ->setArguments($arguments)
-                    ->addTag('console.command');
+                $container->getDefinition(ServerServeCommand::class)
+                    ->setArguments($arguments);
+                $container->getDefinition(ServerStartCommand::class)
+                    ->setArguments($arguments);
             },
         ];
     }
@@ -133,7 +146,7 @@ class WebServerServiceProvider implements ExtendServiceProviderContract,
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): array
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'webserver'];
     }
@@ -141,7 +154,7 @@ class WebServerServiceProvider implements ExtendServiceProviderContract,
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): array
+    public static function getDefaultConfig(): iterable
     {
         return [
             'debug_server' => [
@@ -153,7 +166,7 @@ class WebServerServiceProvider implements ExtendServiceProviderContract,
     /**
      * {@inheritdoc}
      */
-    public static function getOptionValidators(): array
+    public static function getConfigValidators(): iterable
     {
         return [
             'debug_server' => static function ($optionValue, $optionsKey): void {

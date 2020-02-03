@@ -15,12 +15,7 @@ namespace Viserio\Component\Container;
 
 class Variable
 {
-    /**
-     * Variable name.
-     *
-     * @var string
-     */
-    private $name;
+    private string $name;
 
     /**
      * Create a new variable instance.

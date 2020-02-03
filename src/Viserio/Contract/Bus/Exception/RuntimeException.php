@@ -15,6 +15,6 @@ namespace Viserio\Contract\Bus\Exception;
 
 use RuntimeException as BaseRuntimeException;
 
-class RuntimeException extends BaseRuntimeException
+class RuntimeException extends BaseRuntimeException implements Exception
 {
 }

@@ -22,7 +22,6 @@ use Viserio\Contract\Container\CompiledContainer as CompiledContainerContract;
 /**
  * @internal
  *
- * @runTestsInSeparateProcesses
  * @preserveGlobalState disabled
  *
  * @small
@@ -45,39 +44,20 @@ final class KernelTest extends MockeryTestCase
     public function testIsLocal(): void
     {
         $kernel = $this->getKernel($this->containerMock);
-        $kernel->setKernelConfigurations($this->arrangeKernelConfig());
 
         self::assertFalse($kernel->isLocal());
-    }
-
-    public function testGetKernelConfigurations(): void
-    {
-        $kernel = $this->getKernel($this->containerMock);
-        $kernel->setKernelConfigurations($this->arrangeKernelConfig());
-
-        self::assertSame(
-            [
-                'timezone' => 'UTC',
-                'charset' => 'UTF-8',
-                'env' => 'prod',
-                'debug' => true,
-            ],
-            $kernel->getKernelConfigurations()
-        );
     }
 
     public function testIsDebug(): void
     {
         $kernel = $this->getKernel($this->containerMock);
-        $kernel->setKernelConfigurations($this->arrangeKernelConfig());
 
-        self::assertTrue($kernel->isDebug());
+        self::assertFalse($kernel->isDebug());
     }
 
     public function testIsRunningUnitTests(): void
     {
         $kernel = $this->getKernel($this->containerMock);
-        $kernel->setKernelConfigurations($this->arrangeKernelConfig());
 
         self::assertFalse($kernel->isRunningUnitTests());
     }
@@ -188,14 +168,7 @@ final class KernelTest extends MockeryTestCase
     public function testGetRegisteredServiceProviders(): void
     {
         $kernel = $this->getKernel($this->containerMock);
-        $kernel->setKernelConfigurations([
-            'viserio' => [
-                'app' => [
-                    'env' => 'prod',
-                    'debug' => false,
-                ],
-            ],
-        ]);
+        $kernel->setEnv('local');
 
         self::assertSame([], $kernel->getRegisteredServiceProviders());
 
@@ -207,30 +180,32 @@ final class KernelTest extends MockeryTestCase
     public function testDetectEnvironment(): void
     {
         $kernel = $this->getKernel($this->containerMock);
-        $kernel->setKernelConfigurations([
-            'viserio' => [
-                'app' => [
-                    'env' => 'prod',
-                    'debug' => false,
-                ],
-            ],
-        ]);
 
         self::assertSame('prod', $kernel->detectEnvironment(static function () {
             return 'prod';
         }));
     }
 
-    protected function getKernel($container)
+    /**
+     * @param \Viserio\Contract\Container\CompiledContainer $container
+     *
+     * @return AbstractKernel
+     */
+    protected function getKernel(CompiledContainerContract $container): AbstractKernel
     {
         return new class($container) extends AbstractKernel {
-            private $configPath;
+            private ?string $configPath = null;
 
             public function __construct($container)
             {
                 $this->container = $container;
 
                 parent::__construct();
+            }
+
+            public function setEnv(string $env): void
+            {
+                $this->environment = $env;
             }
 
             public function setConfigPath(string $path): void
@@ -264,20 +239,5 @@ final class KernelTest extends MockeryTestCase
                 return 'test.lock';
             }
         };
-    }
-
-    /**
-     * @return array
-     */
-    private function arrangeKernelConfig(): array
-    {
-        return [
-            'viserio' => [
-                'app' => [
-                    'env' => 'prod',
-                    'debug' => true,
-                ],
-            ],
-        ];
     }
 }

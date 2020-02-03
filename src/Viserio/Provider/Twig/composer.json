@@ -25,26 +25,29 @@
     "require": {
         "php": "^7.4",
         "twig/twig": "^2.11.0 || ^3.0.0",
+        "viserio/config-contract": "^1.0@dev",
         "viserio/filesystem": "^1.0@dev",
-        "viserio/options-resolver-contract": "^1.0@dev",
         "viserio/view": "^1.0@dev"
     },
     "require-dev": {
         "mockery/mockery": "^1.2.4",
-        "narrowspark/coding-standard": "^3.3.0",
+        "narrowspark/coding-standard": "^3.4.0",
         "narrowspark/testing-helper": "^8.0.2",
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^4.0.0",
-        "viserio/config-contract": "^1.0@dev",
+        "viserio/config": "^1.0@dev",
         "viserio/console": "^1.0@dev",
         "viserio/container": "^1.0@dev",
+        "viserio/finder": "^1.0@dev",
         "viserio/phpstan-bridge": "^1.0@dev",
         "viserio/twig-bridge": "^1.0@dev",
         "voku/stringy": "^5.2.0"
     },
     "suggest": {
+        "viserio/config": "Required to use service-provider (^1.0@dev).",
         "viserio/console": "Required to use the commands (^1.0@dev).",
         "viserio/container": "Required to use service-provider (^1.0@dev).",
+        "viserio/finder": "Required to use the commands (^1.0@dev).",
         "viserio/twig-bridge": "Required to use the twig extensions, commands for lint and debug (^1.0@dev)."
     },
     "extra": {

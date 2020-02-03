@@ -38,7 +38,7 @@ final class ValidateLocaleTraitTest extends TestCase
         self::assertValidLocale($locale);
     }
 
-    public function provideAssertValidLocaleToThrowExceptionCases(): iterable
+    public static function provideAssertValidLocaleToThrowExceptionCases(): iterable
     {
         return [
             ['?0'],

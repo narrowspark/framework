@@ -68,8 +68,8 @@ class PoParser implements ParserContract
 
         for ($n = \count($lines); $i < $n; $i++) {
             $line = \trim($lines[$i]);
-            $splitLine = \preg_split('/\s+/', $line, 2);
-            $key = $splitLine[0];
+            $splitLine = (array) \preg_split('/\s+/', $line, 2);
+            $key = (string) $splitLine[0];
 
             if ($line === '' || ($key === 'msgid' && isset($entry['msgid']))) {
                 // Two consecutive blank lines
@@ -101,7 +101,7 @@ class PoParser implements ParserContract
                 $justNewEntry = false;
             }
 
-            $data = $splitLine[1] ?? '';
+            $data = (string) ($splitLine[1] ?? '');
 
             switch ($key) {
                 case '#': // # Translator comments
@@ -211,7 +211,7 @@ class PoParser implements ParserContract
             return '';
         }
 
-        if ($value[0] === '"') {
+        if (\strpos($value, '"') === 0) {
             $value = \substr($value, 1, -1);
         }
 
@@ -234,7 +234,7 @@ class PoParser implements ParserContract
     /**
      * Checks if entry is a header.
      *
-     * @param array $entry
+     * @param array<int|string, mixed> $entry
      *
      * @return bool
      */
@@ -281,16 +281,17 @@ class PoParser implements ParserContract
     /**
      * Export reference infos.
      *
-     * @param string $data
-     * @param array  $entry
+     * @param string                   $data
+     * @param array<int|string, mixed> $entry
      *
-     * @return array
+     * @return array<int|string, mixed>
      */
     private static function addReferences(string $data, array $entry): array
     {
-        foreach (\preg_split('/#:\s+/', \trim($data)) as $value) {
-            if (\count(\preg_split('/\s+/', $value)) >= 2) {
-                if (\preg_match_all('/([.\/a-zA-Z]+)(:(\d*))/', ' ' . $value, $matches, \PREG_SET_ORDER, 1)) {
+        /** @var string $value */
+        foreach ((array) \preg_split('/#:\s+/', \trim($data)) as $value) {
+            if (\count((array) \preg_split('/\s+/', $value)) >= 2) {
+                if (\preg_match_all('/([.\/a-zA-Z]+)(:(\d*))/', ' ' . $value, $matches, \PREG_SET_ORDER, 1) !== false) {
                     $key = '';
                     $values = [];
 
@@ -305,7 +306,7 @@ class PoParser implements ParserContract
                     $entry['references'][\trim($key)] = $values;
                 }
             } else {
-                if (\preg_match('/^(.+)(:(\d*))?$/U', $value, $matches)) {
+                if (\preg_match('/^(.+)(:(\d*))?$/U', $value, $matches) === 1) {
                     $filename = $matches[1];
                     $line = $matches[3] ?? null;
                     $key = \sprintf('{%s}:{%s}', $filename, $line);
@@ -321,12 +322,12 @@ class PoParser implements ParserContract
     /**
      * Export obsolete entries.
      *
-     * @param null|string $lastPreviousKey
-     * @param null|string $tmpKey
-     * @param string      $str
-     * @param array       $entry
+     * @param null|string              $lastPreviousKey
+     * @param null|string              $tmpKey
+     * @param string                   $str
+     * @param array<int|string, mixed> $entry
      *
-     * @return array
+     * @return array<int|string, mixed>
      */
     private static function processObsoleteEntry(
         ?string $lastPreviousKey,
@@ -359,13 +360,13 @@ class PoParser implements ParserContract
     /**
      * Export previous entries.
      *
-     * @param null|string $lastPreviousKey
-     * @param null|string $tmpKey
-     * @param string      $str
-     * @param array       $entry
-     * @param string      $key
+     * @param null|string              $lastPreviousKey
+     * @param null|string              $tmpKey
+     * @param string                   $str
+     * @param array<int|string, mixed> $entry
+     * @param string                   $key
      *
-     * @return array
+     * @return array<int|string, mixed>
      */
     private static function processPreviousEntry(
         ?string $lastPreviousKey,
@@ -396,15 +397,15 @@ class PoParser implements ParserContract
      * Export multi-lines from given line.
      * Throws a exception if state is not found or broken comment is given.
      *
-     * @param null|string $state
-     * @param array       $entry
-     * @param string      $line
-     * @param string      $key
-     * @param int         $i
+     * @param null|string              $state
+     * @param array<int|string, mixed> $entry
+     * @param string                   $line
+     * @param string                   $key
+     * @param int                      $i
      *
      * @throws \Viserio\Contract\Parser\Exception\ParseException
      *
-     * @return array
+     * @return array<int|string, mixed>
      */
     private static function extractMultiLines(
         ?string $state,
@@ -415,7 +416,7 @@ class PoParser implements ParserContract
     ): array {
         $addEntry = static function (array $entry, ?string $state, string $line): array {
             if (! isset($entry[$state])) {
-                throw new ParseException(['message' => \sprintf('Parse error! Missing state: [%s].', $state)]);
+                throw new ParseException(\sprintf('Parse error! Missing state: [%s].', $state));
             }
 
             // Convert it to array
@@ -444,9 +445,9 @@ class PoParser implements ParserContract
                 if ($state !== null && (\strpos($state, 'msgstr[') !== false)) {
                     $entry = $addEntry($entry, $state, $line);
                 } elseif ($key[0] === '#' && $key[1] !== ' ') {
-                    throw new ParseException(['message' => \sprintf('Parse error! Comments must have a space after them on line: [%s].', $i)]);
+                    throw new ParseException(\sprintf('Parse error! Comments must have a space after them on line: [%s].', $i));
                 } else {
-                    throw new ParseException(['message' => \sprintf('Parse error! Unknown key [%s] on line: [%s].', $key, $i), 'line' => $i]);
+                    throw new ParseException(\sprintf('Parse error! Unknown key [%s] on line: [%s].', $key, $i), 0, __FILE__, $i);
                 }
         }
 
@@ -456,10 +457,10 @@ class PoParser implements ParserContract
     /**
      * Add the headers found to the translations instance.
      *
-     * @param array $headers
-     * @param array $entries
+     * @param array<int|string, mixed> $headers
+     * @param array<int|string, mixed> $entries
      *
-     * @return array
+     * @return array<int|string, mixed>
      */
     private static function extractHeaders(array $headers, array $entries): array
     {

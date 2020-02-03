@@ -30,7 +30,7 @@ class Dumper
     /**
      * Supported mime type formats.
      *
-     * @var array
+     * @var string[]
      */
     private static $supportedMimeTypes = [
         // XML
@@ -57,7 +57,7 @@ class Dumper
     /**
      * All supported dumper.
      *
-     * @var array
+     * @var array<string, string|\Viserio\Contract\Parser\Dumper>
      */
     private static $supportedDumper = [
         'ini' => IniDumper::class,
@@ -100,8 +100,8 @@ class Dumper
     /**
      * Dump data in your choosing format.
      *
-     * @param array  $data
-     * @param string $format
+     * @param array<int|string, mixed> $data
+     * @param string                   $format
      *
      * @throws \Viserio\Contract\Parser\Exception\DumpException
      * @throws \Viserio\Contract\Parser\Exception\NotSupportedException
@@ -133,11 +133,11 @@ class Dumper
         if (isset(self::$supportedMimeTypes[$type])) {
             $class = self::$supportedDumper[self::$supportedMimeTypes[$type]];
 
-            if (\is_object($class) && $class instanceof DumperContract) {
-                return $class;
+            if (\is_string($class)) {
+                return new $class();
             }
 
-            return new $class();
+            return $class;
         }
 
         throw new NotSupportedException(\sprintf('Given extension or mime type [%s] is not supported.', $type));

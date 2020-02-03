@@ -156,7 +156,7 @@ final class HeaderSecurity
     public static function assertValidName($name): void
     {
         if (\preg_match('/^[a-zA-Z0-9\'`#$%&*+.^_|~!-]+$/', $name) !== 1) {
-            throw new InvalidArgumentException(\sprintf('[%s] is not valid header name', $name));
+            throw new InvalidArgumentException(\sprintf('[%s] is not a valid HTTP header field name.', $name));
         }
     }
 }

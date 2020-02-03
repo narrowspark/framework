@@ -132,6 +132,7 @@ final class StreamFactoryTest extends TestCase
     public function testCreateStreamFromNonExistingFile(): void
     {
         $filename = $this->createTemporaryFile();
+
         \unlink($filename);
 
         $this->expectException(RuntimeException::class);

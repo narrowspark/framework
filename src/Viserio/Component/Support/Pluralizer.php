@@ -103,18 +103,6 @@ class Pluralizer
     }
 
     /**
-     * Determine if the given value is uncountable.
-     *
-     * @param string $value
-     *
-     * @return bool
-     */
-    protected static function uncountable(string $value): bool
-    {
-        return \in_array(\mb_strtolower($value), static::$uncountable, true);
-    }
-
-    /**
      * Get the plural form of an English word.
      *
      * @param string $value
@@ -145,6 +133,18 @@ class Pluralizer
         $singular = Inflector::singularize($value);
 
         return static::matchCase($singular, $value);
+    }
+
+    /**
+     * Determine if the given value is uncountable.
+     *
+     * @param string $value
+     *
+     * @return bool
+     */
+    protected static function uncountable(string $value): bool
+    {
+        return \in_array(\mb_strtolower($value), static::$uncountable, true);
     }
 
     /**

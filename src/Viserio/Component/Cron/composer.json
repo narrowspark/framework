@@ -36,22 +36,21 @@
     },
     "require-dev": {
         "mockery/mockery": "^1.2.4",
-        "narrowspark/coding-standard": "^3.3.0",
+        "narrowspark/coding-standard": "^3.4.0",
         "narrowspark/testing-helper": "^8.0.2",
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^4.0.0",
-        "viserio/cache": "^1.0@dev",
+        "viserio/config": "^1.0@dev",
         "viserio/console": "^1.0@dev",
         "viserio/container": "^1.0@dev",
         "viserio/foundation": "^1.0@dev",
-        "viserio/options-resolver": "^1.0@dev",
         "viserio/phpstan-bridge": "^1.0@dev"
     },
     "suggest": {
         "psr/cache": "WithoutOverlapping requires a cache component (^1.0.1).",
+        "viserio/config": "Required to use service-provider and commands (^1.0@dev).",
         "viserio/console": "Required to use commands (^1.0@dev).",
-        "viserio/container": "Required to use service-provider (^1.0@dev).",
-        "viserio/options-resolver": "Required to use service-provider and commands (^1.0@dev)."
+        "viserio/container": "Required to use service-provider (^1.0@dev)."
     },
     "extra": {
         "branch-alias": {

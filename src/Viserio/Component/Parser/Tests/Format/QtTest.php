@@ -24,7 +24,7 @@ use Viserio\Component\Parser\Parser\QtParser;
  */
 final class QtTest extends TestCase
 {
-    /** @var array */
+    /** @var array<string, mixed> */
     private $data;
 
     /**
@@ -74,7 +74,7 @@ final class QtTest extends TestCase
     {
         self::assertSame(
             $this->data,
-            (new QtParser())->parse(\file_get_contents(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'qt' . \DIRECTORY_SEPARATOR . 'resources.ts'))
+            (new QtParser())->parse((string) \file_get_contents(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'qt' . \DIRECTORY_SEPARATOR . 'resources.ts'))
         );
     }
 

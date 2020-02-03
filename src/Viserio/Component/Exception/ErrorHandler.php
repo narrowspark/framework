@@ -32,18 +32,16 @@ use Viserio\Component\Exception\Traits\DetermineErrorLevelTrait;
 use Viserio\Component\Exception\Transformer\ClassNotFoundFatalErrorTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedFunctionFatalErrorTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedMethodFatalErrorTransformer;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
+use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
+use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\Exception\Handler as HandlerContract;
 use Viserio\Contract\Exception\Transformer as TransformerContract;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
-use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 
 class ErrorHandler implements HandlerContract,
     LoggerAwareInterface,
-    ProvidesDefaultOptionContract,
+    ProvidesDefaultConfigContract,
     RequiresComponentConfigContract
 {
-    use OptionsResolverTrait;
     use LoggerAwareTrait;
     use DetermineErrorLevelTrait;
 
@@ -129,7 +127,7 @@ class ErrorHandler implements HandlerContract,
      */
     public function __construct($config, ?LoggerInterface $logger = null)
     {
-        $this->resolvedOptions = self::resolveOptions($config);
+        $this->resolvedOptions = $config;
         $this->transformers = \array_merge(
             $this->getErrorTransformer(),
             $this->transformArray($this->resolvedOptions['transformers'])
@@ -152,7 +150,7 @@ class ErrorHandler implements HandlerContract,
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): array
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'exception'];
     }
@@ -160,7 +158,7 @@ class ErrorHandler implements HandlerContract,
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): array
+    public static function getDefaultConfig(): iterable
     {
         return [
             // A list of the exception types that should not be reported.

@@ -70,7 +70,7 @@ female {She avoids bugs} }', 'en', [1]));
         self::assertEquals($expected, \trim((new IntlMessageFormatter())->format($message, 'en', $arguments)));
     }
 
-    public function provideFormatCases(): iterable
+    public static function provideFormatCases(): iterable
     {
         return [
             [

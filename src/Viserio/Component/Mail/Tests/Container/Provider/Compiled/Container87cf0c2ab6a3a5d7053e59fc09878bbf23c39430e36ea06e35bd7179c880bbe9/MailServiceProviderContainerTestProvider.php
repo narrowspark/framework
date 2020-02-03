@@ -38,8 +38,8 @@ final class MailServiceProviderContainerTestProvider extends \Viserio\Component\
         $this->services = $this->privates = [];
         $this->containerDir = $containerDir;
         $this->parameters = \array_merge([
-            'container.dumper.inline_factories' => true,
-            'container.dumper.inline_class_loader' => false,
+            'viserio.container.dumper.inline_factories' => true,
+            'viserio.container.dumper.inline_class_loader' => false,
         ], $buildParameters);
         $this->methodMapping = [
             \Viserio\Contract\Events\EventManager::class => 'getd89597e6b0951303b9c81d9663646ce16e63e5d0cf7daeed45f04779b8a60c3b',

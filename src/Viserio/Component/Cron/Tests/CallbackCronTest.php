@@ -24,6 +24,8 @@ use Viserio\Component\Cron\CallbackCron;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Cron\CallbackCron
+ *
  * @small
  */
 final class CallbackCronTest extends MockeryTestCase

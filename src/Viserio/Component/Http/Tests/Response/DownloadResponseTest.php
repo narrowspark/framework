@@ -96,7 +96,7 @@ EOF;
     /**
      * @return array<int, array<string>>
      */
-    public function provideConstructorDoesNotAllowsOverridingDownloadHeadersWhenSendingDownloadResponseCases(): iterable
+    public static function provideConstructorDoesNotAllowsOverridingDownloadHeadersWhenSendingDownloadResponseCases(): iterable
     {
         return [
             ['cache-control', 'must-revalidate'],

@@ -16,7 +16,9 @@ namespace Viserio\Component\View\Container\Provider;
 use Parsedown;
 use ParsedownExtra;
 use Psr\Container\ContainerInterface;
+use Viserio\Component\Config\Container\Definition\ConfigDefinition;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
+use Viserio\Component\Container\Pipeline\ResolvePreloadPipe;
 use Viserio\Component\Container\PipelineConfig;
 use Viserio\Component\View\Container\Pipeline\AddViewEnginePipe;
 use Viserio\Component\View\Engine\FileEngine;
@@ -24,6 +26,9 @@ use Viserio\Component\View\Engine\MarkdownEngine;
 use Viserio\Component\View\Engine\PhpEngine;
 use Viserio\Component\View\ViewFactory;
 use Viserio\Component\View\ViewFinder;
+use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
+use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 use Viserio\Contract\Container\ServiceProvider\AliasServiceProvider as AliasServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\ServiceProvider\PipelineServiceProvider as PipelineServiceProviderContract;
@@ -34,19 +39,57 @@ use Viserio\Contract\View\Finder as FinderContract;
 
 class ViewServiceProvider implements AliasServiceProviderContract,
     PipelineServiceProviderContract,
+    ProvidesDefaultConfigContract,
+    RequiresComponentConfigContract,
+    RequiresMandatoryConfigContract,
     ServiceProviderContract
 {
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDimensions(): iterable
+    {
+        return ['viserio', 'view'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getMandatoryConfig(): iterable
+    {
+        return [
+            'paths',
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDefaultConfig(): iterable
+    {
+        return [
+            'extensions' => [],
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
     public function build(ContainerBuilderContract $container): void
     {
         $container->singleton(FinderContract::class, ViewFinder::class)
-            ->setArguments([new ReferenceDefinition('config')]);
+            ->setArguments([
+                (new ConfigDefinition(self::class))
+                    ->setKey('paths'),
+                (new ConfigDefinition(self::class))
+                    ->setKey('extensions'),
+            ])
+            ->addTag(ResolvePreloadPipe::TAG);
         $container->singleton(FactoryContract::class, ViewFactory::class)
             ->setArguments([new ReferenceDefinition(EngineResolverContract::class), new ReferenceDefinition(FinderContract::class)])
             ->addMethodCall('share', ['app', new ReferenceDefinition(ContainerInterface::class)])
-            ->setPublic(true);
+            ->setPublic(true)
+            ->addTag(ResolvePreloadPipe::TAG);
 
         $container->singleton(FileEngine::class)
             ->addTag('view.engine');

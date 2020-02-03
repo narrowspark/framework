@@ -42,7 +42,7 @@ final class FilenameFilterIteratorTest extends AbstractIteratorTestCase
     /**
      * @return iterable<array<array<string>>>
      */
-    public function provideAcceptCases(): iterable
+    public static function provideAcceptCases(): iterable
     {
         yield [['test.*'], [], ['test.php', 'test.py']];
 

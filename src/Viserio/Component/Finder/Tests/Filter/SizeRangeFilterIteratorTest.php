@@ -42,7 +42,7 @@ final class SizeRangeFilterIteratorTest extends AbstractRealIteratorTestCase
     /**
      * @return iterable<array<int, array<string|\Viserio\Component\Finder\Comparator\NumberComparator>|string>>
      */
-    public function provideAcceptCases(): iterable
+    public static function provideAcceptCases(): iterable
     {
         $lessThan1KGreaterThan05K = [
             '.foo',

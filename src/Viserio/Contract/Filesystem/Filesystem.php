@@ -172,26 +172,26 @@ interface Filesystem extends DirectorySystem
     /**
      * Change the owner of a file or directory.
      *
-     * @param string $file
-     * @param string $user
+     * @param string     $file
+     * @param int|string $user A user name or number
      *
      * @throws \Viserio\Contract\Filesystem\Exception\IOException When the change fails
      *
      * @return void
      */
-    public function setOwner(string $file, string $user): void;
+    public function setOwner(string $file, $user): void;
 
     /**
      * Change the group of an array of files or directories.
      *
-     * @param string $file
-     * @param string $group
+     * @param string     $file
+     * @param int|string $group A group name or number
      *
      * @throws \Viserio\Contract\Filesystem\Exception\IOException When the change fails
      *
      * @return void
      */
-    public function setGroup(string $file, string $group): void;
+    public function setGroup(string $file, $group): void;
 
     /**
      * Get the visibility for the given path.

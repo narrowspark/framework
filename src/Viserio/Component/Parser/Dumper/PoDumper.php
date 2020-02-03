@@ -48,8 +48,8 @@ class PoDumper implements DumperContract
      * {@inheritdoc}
      *
      * array[]
-     *     ['headers']        array  If a multi-line header is provided
-     *                               than the value is a array else a string (optional)
+     *     ['headers']          array  If a multi-line header is provided
+     *                                 than the value is a array else a string (optional)
      *     array[]
      *         ['msgid']        array  ID of the message.
      *         ['msgstr']       array  Message translation.
@@ -69,6 +69,7 @@ class PoDumper implements DumperContract
      */
     public function dump(array $data): string
     {
+        /** @var string $output */
         $output = '';
 
         [$data, $output] = $this->addHeaderToOutput($data, $output);
@@ -130,7 +131,8 @@ class PoDumper implements DumperContract
         ];
 
         $string = \str_replace(\array_keys($replaces), \array_values($replaces), $string);
-        $po = '"' . \implode('$' . "\n" . '"' . $this->eol . '"', \explode($this->eol, $string)) . '"';
+
+        $po = '"' . \implode("\$\n\"" . $this->eol . '"', (array) \explode($this->eol, $string)) . '"';
 
         // remove empty strings
         return \str_replace($this->eol . '""', '', $po);
@@ -139,10 +141,10 @@ class PoDumper implements DumperContract
     /**
      * Adds tcomment to the output.
      *
-     * @param array  $entry
-     * @param string $output
+     * @param array<string, mixed> $entry
+     * @param string               $output
      *
-     * @return array
+     * @return array<int, mixed>
      */
     private function addTCommentToOutput(array $entry, string $output): array
     {
@@ -158,10 +160,10 @@ class PoDumper implements DumperContract
     /**
      * Adds ccomment to the output.
      *
-     * @param array  $entry
-     * @param string $output
+     * @param array<string, mixed> $entry
+     * @param string               $output
      *
-     * @return array
+     * @return array<int, mixed>
      */
     private function addCcommentToOutput($entry, string $output): array
     {
@@ -177,10 +179,10 @@ class PoDumper implements DumperContract
     /**
      * Adds reference to the output.
      *
-     * @param array  $entry
-     * @param string $output
+     * @param array<string, mixed> $entry
+     * @param string               $output
      *
-     * @return array
+     * @return array<int, mixed>
      */
     private function addReferencesToOutput(array $entry, string $output): array
     {
@@ -196,10 +198,10 @@ class PoDumper implements DumperContract
     /**
      * Adds flags infos to the output.
      *
-     * @param array  $entry
-     * @param string $output
+     * @param array<string, mixed> $entry
+     * @param string               $output
      *
-     * @return array
+     * @return array<int, mixed>
      */
     private function addFlagsToOutput(array $entry, string $output): array
     {
@@ -213,10 +215,10 @@ class PoDumper implements DumperContract
     /**
      * Adds previous info to the output.
      *
-     * @param array  $entry
-     * @param string $output
+     * @param array<string, mixed> $entry
+     * @param string               $output
      *
-     * @return array
+     * @return array<int, mixed>
      */
     private function addPreviousToOutput(array $entry, string $output): array
     {
@@ -238,13 +240,13 @@ class PoDumper implements DumperContract
     /**
      * Adds msgid to the output.
      *
-     * @param array  $entry
-     * @param string $output
-     * @param bool   $isObsolete
+     * @param array<string, mixed> $entry
+     * @param string               $output
+     * @param bool                 $isObsolete
      *
      * @throws \Viserio\Contract\Parser\Exception\DumpException
      *
-     * @return array
+     * @return array<int, mixed>
      */
     private function addMsgidToOutput(array $entry, string $output, bool $isObsolete): array
     {
@@ -275,12 +277,12 @@ class PoDumper implements DumperContract
     /**
      * Add msgid_plural to the output.
      *
-     * @param array  $entry
-     * @param string $output
+     * @param array<string, mixed> $entry
+     * @param string               $output
      *
      * @throws \Viserio\Contract\Parser\Exception\DumpException
      *
-     * @return array
+     * @return array<int, mixed>
      */
     private function addMsgidPluralToOutput(array $entry, string $output): array
     {
@@ -307,10 +309,10 @@ class PoDumper implements DumperContract
     /**
      * Adds key with msgstr to the output.
      *
-     * @param array  $entry
-     * @param bool   $isPlural
-     * @param string $output
-     * @param bool   $isObsolete
+     * @param array<string, mixed> $entry
+     * @param bool                 $isPlural
+     * @param string               $output
+     * @param bool                 $isObsolete
      *
      * @return string
      */
@@ -359,12 +361,12 @@ class PoDumper implements DumperContract
     /**
      * Adds a header to the output.
      *
-     * @param array  $data
-     * @param string $output
+     * @param array<int|string, mixed> $data
+     * @param string                   $output
      *
      * @throws \Viserio\Contract\Parser\Exception\DumpException
      *
-     * @return array
+     * @return array<int, mixed>
      */
     private function addHeaderToOutput(array $data, string $output): array
     {

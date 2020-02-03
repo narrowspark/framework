@@ -13,15 +13,10 @@ declare(strict_types=1);
 
 namespace Viserio\Provider\Twig\Tests\Engine;
 
-use Mockery;
-use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Symfony\Component\Filesystem\Filesystem;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
-use Viserio\Bridge\Twig\Extension\ConfigExtension;
 use Viserio\Bridge\Twig\Extension\StrExtension;
-use Viserio\Contract\Config\Repository as RepositoryContract;
 use Viserio\Contract\View\Exception\RuntimeException;
 use Viserio\Provider\Twig\Engine\TwigEngine;
 
@@ -35,11 +30,14 @@ final class TwigEngineTest extends MockeryTestCase
     protected function tearDown(): void
     {
         parent::tearDown();
+
         $dir = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Cache';
 
-        if (\is_dir($dir)) {
-            (new Filesystem())->remove($dir);
-        }
+        \array_map(static function ($value): void {
+            @\unlink($value);
+        }, \glob($dir . \DIRECTORY_SEPARATOR . '*', \GLOB_NOSORT));
+
+        @\rmdir($dir);
     }
 
     public function testGet(): void
@@ -67,8 +65,7 @@ final class TwigEngineTest extends MockeryTestCase
             new Environment(
                 new FilesystemLoader($config['viserio']['view']['paths']),
                 $config['viserio']['view']['engines']['twig']['options']
-            ),
-            $config
+            )
         );
 
         $template = $engine->get(['name' => 'twightml.twig.html']);
@@ -89,11 +86,6 @@ final class TwigEngineTest extends MockeryTestCase
 
     public function testAddTwigExtensions(): void
     {
-        $repository = Mockery::mock(RepositoryContract::class);
-        $repository->shouldReceive('has')
-            ->once()
-            ->with('view')
-            ->andReturn(true);
         $config = [
             'viserio' => [
                 'view' => [
@@ -106,10 +98,6 @@ final class TwigEngineTest extends MockeryTestCase
                                 'debug' => false,
                                 'cache' => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Cache',
                             ],
-                            'extensions' => [
-                                new StrExtension(),
-                                ConfigExtension::class,
-                            ],
                         ],
                     ],
                 ],
@@ -121,11 +109,11 @@ final class TwigEngineTest extends MockeryTestCase
                 new FilesystemLoader($config['viserio']['view']['paths']),
                 $config['viserio']['view']['engines']['twig']['options']
             ),
-            $config
+            [
+                new StrExtension(),
+                // @todo use container to find twig extensions
+            ]
         );
-        $engine->setContainer(new ArrayContainer([
-            ConfigExtension::class => new ConfigExtension($repository),
-        ]));
 
         $template = $engine->get(['name' => 'twightml2.twig.html']);
 
@@ -139,7 +127,6 @@ final class TwigEngineTest extends MockeryTestCase
 </head>
 <body>
     test_t_e_s_t
-    OK
 </body>
 </html>'), \trim($template));
     }
@@ -147,7 +134,7 @@ final class TwigEngineTest extends MockeryTestCase
     public function testTwigExtensionsToThrowException(): void
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Twig extension [Viserio\\Bridge\\Twig\\Extension\\ConfigExtension] is not a object.');
+        $this->expectExceptionMessage('Twig extension [Viserio\\Bridge\\Twig\\Extension\\StrExtension] is not a object.');
 
         $config = [
             'viserio' => [
@@ -161,9 +148,6 @@ final class TwigEngineTest extends MockeryTestCase
                                 'debug' => false,
                                 'cache' => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Cache',
                             ],
-                            'extensions' => [
-                                ConfigExtension::class,
-                            ],
                         ],
                     ],
                 ],
@@ -175,7 +159,9 @@ final class TwigEngineTest extends MockeryTestCase
                 new FilesystemLoader($config['viserio']['view']['paths']),
                 $config['viserio']['view']['engines']['twig']['options']
             ),
-            $config
+            [
+                StrExtension::class,
+            ]
         );
 
         $engine->get([]);

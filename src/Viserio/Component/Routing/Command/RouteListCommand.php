@@ -67,6 +67,22 @@ class RouteListCommand extends AbstractCommand
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function handle(): int
+    {
+        if (\count($this->routes) === 0) {
+            $this->error("Your application doesn't have any routes.");
+
+            return 1;
+        }
+
+        $this->table(self::$headers, $this->getRoutes());
+
+        return 0;
+    }
+
+    /**
      * Compile the routes into a displayable format.
      *
      * @return array
@@ -92,22 +108,6 @@ class RouteListCommand extends AbstractCommand
         }
 
         return \array_filter($routes);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function handle(): int
-    {
-        if (\count($this->routes) === 0) {
-            $this->error("Your application doesn't have any routes.");
-
-            return 1;
-        }
-
-        $this->table(self::$headers, $this->getRoutes());
-
-        return 0;
     }
 
     /**

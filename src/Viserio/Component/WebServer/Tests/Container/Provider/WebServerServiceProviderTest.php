@@ -19,12 +19,12 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\VarDumper\Server\Connection;
 use Symfony\Component\VarDumper\Server\DumpServer;
+use Viserio\Component\Config\Container\Provider\ConfigServiceProvider;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Container\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\Http\ServerRequest;
-use Viserio\Component\OptionsResolver\Container\Provider\OptionsResolverServiceProvider;
 use Viserio\Component\WebServer\Command\ServerDumpCommand;
 use Viserio\Component\WebServer\Command\ServerLogCommand;
 use Viserio\Component\WebServer\Command\ServerServeCommand;
@@ -102,7 +102,7 @@ final class WebServerServiceProviderTest extends AbstractContainerTestCase
                     'host' => 'tcp://127.0.0.1:9912',
                 ],
             ],
-            WebServerServiceProvider::getDefaultOptions()
+            WebServerServiceProvider::getDefaultConfig()
         );
     }
 
@@ -111,10 +111,15 @@ final class WebServerServiceProviderTest extends AbstractContainerTestCase
      */
     protected function prepareContainerBuilder(ContainerBuilder $containerBuilder): void
     {
-        $containerBuilder->bind('config', ['viserio' => []]);
+        $containerBuilder->setParameter('viserio', [
+            'console' => [
+                'name' => 'test',
+                'version' => '1',
+            ],
+        ]);
         $containerBuilder->register(new ConsoleServiceProvider());
         $containerBuilder->register(new DebugServiceProvider());
-        $containerBuilder->register(new OptionsResolverServiceProvider());
+        $containerBuilder->register(new ConfigServiceProvider());
         $containerBuilder->register(new WebServerServiceProvider());
 
         $containerBuilder->singleton(ServerRequestInterface::class)

@@ -13,15 +13,14 @@ declare(strict_types=1);
 
 namespace Viserio\Provider\Twig\Engine;
 
-use ArrayAccess;
 use Twig\Environment;
 use Twig\Extension\ExtensionInterface;
 use Viserio\Component\View\Engine\AbstractBaseEngine;
+use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
 use Viserio\Contract\Container\Traits\ContainerAwareTrait;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\View\Exception\RuntimeException;
 
-class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionContract
+class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultConfigContract
 {
     use ContainerAwareTrait;
 
@@ -30,27 +29,44 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionCont
      *
      * @var \Twig\Environment
      */
-    protected $twig;
+    protected Environment $twig;
+
+    /**
+     * List of twig extensions.
+     *
+     * @var array<int, object|string>
+     */
+    protected array $extensions;
 
     /**
      * Create a new engine instance.
      *
-     * @param \Twig\Environment $twig
-     * @param array|ArrayAccess $config
+     * @param \Twig\Environment         $twig
+     * @param array<int, object|string> $extensions
      */
-    public function __construct(Environment $twig, $config)
+    public function __construct(Environment $twig, array $extensions = [])
     {
-        $this->resolvedOptions = self::resolveOptions($config);
+        $this->extensions = $extensions;
         $this->twig = $twig;
+    }
+
+    /**
+     * Returns the engine names.
+     *
+     * @return array
+     */
+    public static function getDefaultNames(): array
+    {
+        return ['twig', 'html.twig'];
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): array
+    public static function getMandatoryConfig(): iterable
     {
         return \array_merge(
-            parent::getMandatoryOptions(),
+            parent::getMandatoryConfig(),
             [
                 'engines' => [
                     'twig' => [
@@ -67,7 +83,7 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionCont
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): array
+    public static function getDefaultConfig(): iterable
     {
         return [
             'engines' => [
@@ -75,6 +91,7 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionCont
                     'options' => [
                         'file_extension' => 'twig',
                     ],
+                    'extensions' => [],
                 ],
             ],
         ];
@@ -90,45 +107,16 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionCont
      */
     public function get(array $fileInfo, array $data = []): string
     {
-        $twig = $this->addExtensions($this->twig, $this->resolvedOptions['engines']['twig']);
-
-        return $twig->render($fileInfo['name'] ?? '', $data);
-    }
-
-    /**
-     * Returns the engine names.
-     *
-     * @return array
-     */
-    public static function getDefaultNames(): array
-    {
-        return ['twig', 'html.twig'];
-    }
-
-    /**
-     * Add extensions to twig environment.
-     *
-     * @param \Twig\Environment $twig
-     * @param array             $config
-     *
-     * @throws \Viserio\Contract\View\Exception\RuntimeException
-     *
-     * @return \Twig\Environment
-     */
-    protected function addExtensions(Environment $twig, array $config): Environment
-    {
-        if (isset($config['extensions']) && \is_array($config['extensions'])) {
-            foreach ($config['extensions'] as $extension) {
-                if ($this->container !== null && \is_string($extension) && $this->container->has($extension)) {
-                    $twig->addExtension($this->container->get($extension));
-                } elseif (\is_object($extension) && $extension instanceof ExtensionInterface) {
-                    $twig->addExtension($extension);
-                } else {
-                    throw new RuntimeException(\sprintf('Twig extension [%s] is not a object.', $extension));
-                }
+        foreach ($this->extensions as $extension) {
+            if ($this->container !== null && \is_string($extension) && $this->container->has($extension)) {
+                $this->twig->addExtension($this->container->get($extension));
+            } elseif (\is_object($extension) && $extension instanceof ExtensionInterface) {
+                $this->twig->addExtension($extension);
+            } else {
+                throw new RuntimeException(\sprintf('Twig extension [%s] is not a object.', $extension));
             }
         }
 
-        return $twig;
+        return $this->twig->render($fileInfo['name'] ?? '', $data);
     }
 }

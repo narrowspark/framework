@@ -17,8 +17,13 @@ use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Symfony\Component\VarDumper\Dumper\ContextProvider\ContextProviderInterface;
 use Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider;
+use Viserio\Component\Config\Container\Provider\ConfigServiceProvider;
+use Viserio\Component\Console\Application;
+use Viserio\Component\Console\Container\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Test\AbstractContainerTestCase;
+use Viserio\Component\HttpFoundation\Console\Command\DownCommand;
+use Viserio\Component\HttpFoundation\Console\Command\UpCommand;
 use Viserio\Component\HttpFoundation\Container\Provider\HttpFoundationServiceProvider;
 use Viserio\Contract\Foundation\Kernel as ContractKernel;
 
@@ -31,12 +36,9 @@ final class HttpFoundationServiceProviderTest extends AbstractContainerTestCase
 {
     use MockeryPHPUnitIntegration;
 
-    public function testGetExtensions(): void
+    public function testProvider(): void
     {
         $kernel = Mockery::mock(ContractKernel::class);
-        $kernel->shouldReceive('getCharset')
-            ->once()
-            ->andReturn('UTF-8');
         $kernel->shouldReceive('getRootDir')
             ->once()
             ->andReturn(__DIR__);
@@ -45,6 +47,12 @@ final class HttpFoundationServiceProviderTest extends AbstractContainerTestCase
 
         self::assertInstanceOf(SourceContextProvider::class, $this->container->get(SourceContextProvider::class));
         self::assertInstanceOf(SourceContextProvider::class, $this->container->get(ContextProviderInterface::class));
+
+        /** @var Application $console */
+        $console = $this->container->get(Application::class);
+
+        self::assertTrue($console->has(UpCommand::getDefaultName()));
+        self::assertTrue($console->has(DownCommand::getDefaultName()));
     }
 
     /**
@@ -52,8 +60,20 @@ final class HttpFoundationServiceProviderTest extends AbstractContainerTestCase
      */
     protected function prepareContainerBuilder(ContainerBuilder $containerBuilder): void
     {
+        $containerBuilder->setParameter('viserio', [
+            'app' => [
+                'charset' => 'UTF-8',
+            ],
+            'console' => [
+                'name' => 'test',
+                'version' => '1',
+            ],
+        ]);
+
         $containerBuilder->singleton(ContractKernel::class)
             ->setSynthetic(true);
+        $containerBuilder->register(new ConfigServiceProvider());
+        $containerBuilder->register(new ConsoleServiceProvider());
         $containerBuilder->register(new HttpFoundationServiceProvider());
     }
 

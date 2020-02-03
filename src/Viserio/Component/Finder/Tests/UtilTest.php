@@ -55,7 +55,7 @@ final class UtilTest extends TestCase
     /**
      * @return iterable<array<int, int|string>>
      */
-    public function provideToRegExCases(): iterable
+    public static function provideToRegExCases(): iterable
     {
         return [
             // The method assumes that the path is already consolidated
@@ -74,7 +74,7 @@ final class UtilTest extends TestCase
     /**
      * @return iterable<array<int, int|string>>
      */
-    public function provideToRegExDoubleWildcardCases(): iterable
+    public static function provideToRegExDoubleWildcardCases(): iterable
     {
         return [
             ['/bar/baz.js~', 0],
@@ -472,7 +472,7 @@ final class UtilTest extends TestCase
     /**
      * @return iterable<array<int, string>>
      */
-    public function provideGetStaticPrefixCases(): iterable
+    public static function provideGetStaticPrefixCases(): iterable
     {
         return [
             // The method assumes that the path is already consolidated
@@ -533,7 +533,7 @@ final class UtilTest extends TestCase
     /**
      * @return iterable<array<int, string>>
      */
-    public function provideBasePaths(): iterable
+    public static function provideBasePaths(): iterable
     {
         return [
             // The method assumes that the path is already consolidated
@@ -568,7 +568,7 @@ final class UtilTest extends TestCase
     /**
      * @return iterable<array<int, array<int, string>|string>>
      */
-    public function providePatternsCases(): iterable
+    public static function providePatternsCases(): iterable
     {
         yield [
             '{{,*.}alph,{,*.}bet}a',

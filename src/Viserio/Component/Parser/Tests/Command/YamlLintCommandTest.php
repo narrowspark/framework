@@ -38,7 +38,7 @@ final class YamlLintCommandTest extends TestCase
     /** @var \Viserio\Component\Parser\Command\YamlLintCommand */
     private $command;
 
-    /** @var array */
+    /** @var array<int|string, string> */
     private $files;
 
     /** @var string */

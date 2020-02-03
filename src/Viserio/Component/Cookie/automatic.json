@@ -5,7 +5,7 @@
                 "global"
             ]
         },
-        "options": {
+        "config": {
             "global": {
                 "viserio": {
                     "cookie": {

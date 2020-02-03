@@ -107,7 +107,7 @@ final class ClientIp
             foreach (\explode(';', $headerValue) as $headerPart) {
                 if (\stripos($headerPart, 'for=') === 0) {
                     $for = \explode(']', $headerPart);
-                    $headerValue = \trim(\substr(\reset($for), 4), " \t\n\r\0\x0B" . '"[]');
+                    $headerValue = \trim(\substr(\reset($for), 4), " \t\n\r\0\x0B\"[]");
 
                     break;
                 }

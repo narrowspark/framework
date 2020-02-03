@@ -86,7 +86,7 @@ final class ScalarStringTest extends TestCase
         );
     }
 
-    public function provideParseEscapeSequencesCases(): iterable
+    public static function provideParseEscapeSequencesCases(): iterable
     {
         return [
             ['"',              '\\"',              '"'],

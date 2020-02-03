@@ -1,7 +1,0 @@
-{
-    "configurators": {
-        "bootstrap": {
-            "Viserio\\Component\\Container\\Bootstrap\\InitializeContainerBootstrap": ["global"]
-        }
-    }
-}

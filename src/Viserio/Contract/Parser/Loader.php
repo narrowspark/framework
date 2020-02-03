@@ -18,7 +18,7 @@ interface Loader
     /**
      * Set directories.
      *
-     * @param array $directories
+     * @param array<int|string, string> $directories
      *
      * @return self
      */
@@ -27,7 +27,7 @@ interface Loader
     /**
      * Get directories.
      *
-     * @return array
+     * @return array<int|string, string>
      */
     public function getDirectories(): array;
 
@@ -43,13 +43,14 @@ interface Loader
     /**
      * Load the given file path.
      *
-     * @param string     $file
-     * @param null|array $options
+     * @param string                     $file
+     * @param null|array<string, string> $options
      *
      * @throws \Viserio\Contract\Parser\Exception\RuntimeException      if wrong options are given
      * @throws \Viserio\Contract\Parser\Exception\FileNotFoundException
+     * @throws \Viserio\Contract\Parser\Exception\NotSupportedException if a option is not supported
      *
-     * @return array
+     * @return array<int|string, mixed>
      */
     public function load(string $file, ?array $options = null): array;
 

@@ -15,17 +15,14 @@ namespace Viserio\Component\Exception\Displayer;
 
 use ArrayAccess;
 use Psr\Http\Message\ResponseFactoryInterface;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
-use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
+use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 use Whoops\Handler\Handler;
 use Whoops\Handler\PrettyPageHandler;
 
-class WhoopsPrettyDisplayer extends AbstractWhoopsDisplayer implements ProvidesDefaultOptionContract,
+class WhoopsPrettyDisplayer extends AbstractWhoopsDisplayer implements ProvidesDefaultConfigContract,
     RequiresComponentConfigContract
 {
-    use OptionsResolverTrait;
-
     /**
      * Configurations list for whoops.
      *
@@ -49,7 +46,7 @@ class WhoopsPrettyDisplayer extends AbstractWhoopsDisplayer implements ProvidesD
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): array
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'exception', 'http', 'whoops'];
     }
@@ -57,7 +54,7 @@ class WhoopsPrettyDisplayer extends AbstractWhoopsDisplayer implements ProvidesD
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): array
+    public static function getDefaultConfig(): iterable
     {
         return [
             'blacklist' => [],

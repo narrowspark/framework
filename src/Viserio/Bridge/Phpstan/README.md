@@ -1,4 +1,4 @@
-<h1 align="center">Viserio DotEnv Bridge</h1>
+<h1 align="center">Viserio PHPStan Bridge</h1>
 <p align="center">
     <a href="https://github.com/narrowspark/framework/releases"><img src="https://img.shields.io/packagist/v/narrowspark/framework.svg?style=flat-square"></a>
     <a href="https://php.net/"><img src="https://img.shields.io/badge/php-%5E7.4.0-8892BF.svg?style=flat-square"></a>
@@ -16,7 +16,7 @@ Installation
 Use [Composer](https://getcomposer.org/) to install this package:
 
 ```sh
-composer require viserio/dotenv-bridge
+composer require viserio/phpstan-bridge
 ```
 
 Official Documentation

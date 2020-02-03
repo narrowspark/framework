@@ -45,7 +45,7 @@ final class PathFilterIteratorTest extends AbstractIteratorTestCase
     /**
      * @return iterable<array<int, array<int, string>|\Viserio\Component\Finder\Tests\Fixture\MockFileListIterator>>
      */
-    public function provideFilterCases(): iterable
+    public static function provideFilterCases(): iterable
     {
         $inner = new MockFileListIterator();
 

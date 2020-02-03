@@ -154,35 +154,13 @@ final class LintCommandTest extends MockeryTestCase
      */
     private function createCommandTester($path = null): CommandTester
     {
-        $config = $this->arrangeConfig($path);
-
-        $finder = new ViewFinder($config['config']);
+        $finder = new ViewFinder([$path ?? $this->fixturePath . \DIRECTORY_SEPARATOR]);
         $loader = new Loader($finder, new Filesystem());
 
-        $command = new LintCommand(new Environment($loader), $finder, $config['config']);
+        $command = new LintCommand(new Environment($loader), $finder, 'twig');
         $command->setContainer(new ArrayContainer([]));
         $command->setInvoker(new Invoker());
 
         return new CommandTester($command);
-    }
-
-    /**
-     * @param null|string $path
-     *
-     * @return array
-     */
-    private function arrangeConfig(?string $path = null): array
-    {
-        return [
-            'config' => [
-                'viserio' => [
-                    'view' => [
-                        'paths' => [
-                            $path ?? $this->fixturePath . \DIRECTORY_SEPARATOR,
-                        ],
-                    ],
-                ],
-            ],
-        ];
     }
 }

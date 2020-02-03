@@ -39,7 +39,7 @@ final class RouteParserTest extends TestCase
         self::assertEquals($expectedSegments, RouteParser::parse($pattern, $conditions));
     }
 
-    public function provideRouteParserCases(): iterable
+    public static function provideRouteParserCases(): iterable
     {
         return [
             [
@@ -160,7 +160,7 @@ final class RouteParserTest extends TestCase
         RouteParser::parse($uri, []);
     }
 
-    public function provideInvalidRouteParsingCases(): iterable
+    public static function provideInvalidRouteParsingCases(): iterable
     {
         return [
             [

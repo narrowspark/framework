@@ -20,9 +20,9 @@ use Viserio\Contract\Container\Definition\AliasDefinition as AliasDefinitionCont
 use Viserio\Contract\Container\Definition\ArgumentAwareDefinition as ArgumentAwareDefinitionContract;
 use Viserio\Contract\Container\Definition\Definition as DefinitionContract;
 use Viserio\Contract\Container\Definition\FactoryDefinition as FactoryDefinitionContract;
-use Viserio\Contract\Container\Definition\MethodCallsAwareDefinition as PropertiesAwareDefinitionContract;
+use Viserio\Contract\Container\Definition\MethodCallsAwareDefinition as MethodCallsAwareDefinitionContract;
 use Viserio\Contract\Container\Definition\ObjectDefinition as ObjectDefinitionContract;
-use Viserio\Contract\Container\Definition\PropertiesAwareDefinition as MethodCallsAwareDefinitionContract;
+use Viserio\Contract\Container\Definition\PropertiesAwareDefinition as PropertiesAwareDefinitionContract;
 use Viserio\Contract\Container\Definition\ReferenceDefinition as ReferenceDefinitionContract;
 
 /**
@@ -39,28 +39,28 @@ final class AnalyzeServiceDependenciesPipe extends AbstractRecursivePipe
      *
      * @var bool
      */
-    private $onlyConstructorArguments;
+    private bool $onlyConstructorArguments;
 
     /**
      * Check if proxy dumper is used.
      *
      * @var bool
      */
-    private $hasProxyDumper;
+    private bool $hasProxyDumper;
 
     /**
      * Check if value is lazy.
      *
      * @var bool
      */
-    private $lazy;
+    private bool $lazy;
 
     /**
      * Check if it was run by constructor parameters.
      *
      * @var bool
      */
-    private $byConstructor;
+    private bool $byConstructor;
 
     /**
      * The current definition.
@@ -81,14 +81,14 @@ final class AnalyzeServiceDependenciesPipe extends AbstractRecursivePipe
      *
      * @var \Viserio\Contract\Container\Definition\AliasDefinition[]
      */
-    private $aliases = [];
+    private array $aliases = [];
 
     /**
      * The container's definitions.
      *
      * @var \Viserio\Contract\Container\Definition\Definition[]
      */
-    private $definitions = [];
+    private array $definitions = [];
 
     /**
      * Create a new analyze service dependencies instance.

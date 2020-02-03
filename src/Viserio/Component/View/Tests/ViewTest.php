@@ -37,7 +37,7 @@ final class ViewTest extends MockeryTestCase
     private $engineMock;
 
     /** @var \Viserio\Component\View\View */
-    private $view;
+    private View $view;
 
     /**
      * {@inheritdoc}

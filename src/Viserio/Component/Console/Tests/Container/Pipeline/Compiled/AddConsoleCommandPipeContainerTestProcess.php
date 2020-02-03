@@ -40,6 +40,19 @@ final class AddConsoleCommandPipeContainerTestProcess extends \Viserio\Component
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getRemovedIds(): array
+    {
+        return [
+            \Psr\Container\ContainerInterface::class => true,
+            \Viserio\Contract\Container\Factory::class => true,
+            \Viserio\Contract\Container\TaggedContainer::class => true,
+            'container' => true,
+        ];
+    }
+
+    /**
      * Returns the public Symfony\Component\Console\CommandLoader\CommandLoaderInterface shared service.
      *
      * @return \Viserio\Component\Console\CommandLoader\IteratorCommandLoader
@@ -117,18 +130,5 @@ final class AddConsoleCommandPipeContainerTestProcess extends \Viserio\Component
     protected function getdbce155f9c0e95dbd4bfbfaadab27eb79915789fa80c6c65068ccf60c9ef9e18(): array
     {
         return [];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getRemovedIds(): array
-    {
-        return [
-            \Psr\Container\ContainerInterface::class => true,
-            \Viserio\Contract\Container\Factory::class => true,
-            \Viserio\Contract\Container\TaggedContainer::class => true,
-            'container' => true,
-        ];
     }
 }

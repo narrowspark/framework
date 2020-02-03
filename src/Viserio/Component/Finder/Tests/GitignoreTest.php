@@ -53,7 +53,7 @@ final class GitignoreTest extends TestCase
      *                                            ],
      *                                            ]
      */
-    public function provideCasesCases(): iterable
+    public static function provideCasesCases(): iterable
     {
         return [
             [

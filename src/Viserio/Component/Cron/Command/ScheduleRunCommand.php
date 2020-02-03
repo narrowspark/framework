@@ -16,15 +16,9 @@ namespace Viserio\Component\Cron\Command;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Cron\Cron;
 use Viserio\Component\Cron\Schedule;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
 
-class ScheduleRunCommand extends AbstractCommand implements RequiresComponentConfigContract,
-    RequiresMandatoryOptionContract
+class ScheduleRunCommand extends AbstractCommand
 {
-    use OptionsResolverTrait;
-
     /**
      * {@inheritdoc}
      */
@@ -35,23 +29,21 @@ class ScheduleRunCommand extends AbstractCommand implements RequiresComponentCon
      */
     protected $description = 'Run Cron jobs';
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function getDimensions(): array
-    {
-        return ['viserio', 'cron'];
-    }
+    /** @var string */
+    private string $env;
+
+    /** @var bool */
+    private bool $maintenance;
 
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): array
+    public function __construct(string $env, bool $maintenance)
     {
-        return [
-            'env',
-            'maintenance',
-        ];
+        parent::__construct();
+
+        $this->env = $env;
+        $this->maintenance = $maintenance;
     }
 
     /**
@@ -61,11 +53,7 @@ class ScheduleRunCommand extends AbstractCommand implements RequiresComponentCon
      */
     public function handle(Schedule $schedule): int
     {
-        $options = self::resolveOptions($this->getContainer()->get('config'));
-        $cronJobs = $schedule->dueCronJobs(
-            $options['env'],
-            $options['maintenance']
-        );
+        $cronJobs = $schedule->dueCronJobs($this->env, $this->maintenance);
 
         $cronJobsRan = 0;
 
@@ -82,7 +70,7 @@ class ScheduleRunCommand extends AbstractCommand implements RequiresComponentCon
             $cronJobsRan++;
         }
 
-        if (\count($cronJobs) === 0 || $cronJobsRan === 0) {
+        if ($cronJobsRan === 0 || \count($cronJobs) === 0) {
             $this->info('No scheduled commands are ready to run.');
         }
 

@@ -23,7 +23,7 @@ final class ServiceReferenceGraphNode implements ServiceReferenceGraphNodeContra
     /**
      * The node identifier.
      *
-     * @var string
+     * @var int|string
      */
     private $id;
 
@@ -51,10 +51,10 @@ final class ServiceReferenceGraphNode implements ServiceReferenceGraphNodeContra
     /**
      * Create a new ServiceReferenceGraphNode instance.
      *
-     * @param string $id
-     * @param mixed  $value
+     * @param int|string $id
+     * @param mixed      $value
      */
-    public function __construct(string $id, $value)
+    public function __construct($id, $value)
     {
         $this->id = $id;
         $this->value = $value;
@@ -63,7 +63,7 @@ final class ServiceReferenceGraphNode implements ServiceReferenceGraphNodeContra
     /**
      * {@inheritdoc}
      */
-    public function getId(): string
+    public function getId()
     {
         return $this->id;
     }

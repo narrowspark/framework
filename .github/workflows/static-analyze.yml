@@ -18,7 +18,6 @@ jobs:
       matrix:
         operating-system: [ubuntu-latest]
         dependencies: [
-          "Bridge/Dotenv",
           "Bridge/Monolog",
           "Bridge/Phpstan",
           "Bridge/Twig",
@@ -40,7 +39,6 @@ jobs:
           "Component/Log",
           "Component/Mail",
           "Component/Manager",
-          "Component/OptionsResolver",
           "Component/Pagination",
           "Component/Parser",
           "Component/Path",
@@ -55,6 +53,7 @@ jobs:
           "Component/View",
           "Component/WebServer",
           "Provider/Debug",
+          "Provider/Framework",
           "Provider/Twig",
           "Contract"
         ]
@@ -66,12 +65,12 @@ jobs:
           fetch-depth: 2
 
       - name: "Setup PHP"
-        uses: shivammathur/setup-php@1.7.0
+        uses: shivammathur/setup-php@1.8.2
         with:
           php-version: 7.4
           extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, inotify, pcntl, posix
           pecl: true
-          tools: composer
+          tools: composer, composer-prefetcher, cs2pr
 
       - name: "Configure Container"
         env:
@@ -95,9 +94,6 @@ jobs:
       - name: "List all php extensions with versions"
         run: php -r 'foreach (get_loaded_extensions() as $extension) echo $extension . " " . phpversion($extension) . PHP_EOL;'
 
-      - name: "Install Automatic Composer Prefetcher"
-        run: composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic-composer-prefetcher:dev-master
-
       - name: "Create local composer packages for each patched components and reference them in composer.json when cross-testing components"
         run: php ./build/build-packages.php HEAD^ $(find src/Viserio -mindepth 3 -type f -name composer.json -printf '%h\n' | sort)
 
@@ -109,4 +105,4 @@ jobs:
           $COMPOSER_UP
           echo ::endgroup::
 
-          ./vendor/bin/phpstan analyse -c ./phpstan.neon --memory-limit=-1
+          ./vendor/bin/phpstan analyse -c ./phpstan.neon --memory-limit=-1 --error-format=checkstyle | cs2pr

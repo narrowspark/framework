@@ -40,6 +40,7 @@ use Viserio\Contract\Container\Exception\BindingResolutionException;
 use Viserio\Contract\Container\Exception\CircularDependencyException;
 use Viserio\Contract\Container\Exception\InvalidArgumentException;
 use Viserio\Contract\Container\Exception\NotFoundException;
+use Viserio\Contract\Container\Exception\ParameterNotFoundException;
 use Viserio\Contract\Container\Exception\UnresolvableDependencyException;
 use Viserio\Contract\Support\Resettable as ResettableContract;
 
@@ -54,65 +55,89 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
     /**
      * The stack of concretions currently being built.
      *
-     * @var array
+     * @var array<string, bool>
      */
-    protected $compiledBuildStack = [];
+    protected array $compiledBuildStack = [];
 
     /**
      * The container's shared services.
      *
-     * @var array
+     * @var array<string, mixed>
      */
-    protected $services = [];
+    protected array $services = [];
 
     /**
      * Private services are directly used in the compiled method.
      *
-     * @var array
+     * @var array<string, mixed>
      */
-    protected $privates = [];
+    protected array $privates = [];
 
     /**
      * List of mapped id names to method names.
      *
-     * @var array
+     * @var array<string, string>
      */
-    protected $methodMapping = [];
+    protected array $methodMapping = [];
 
     /**
      * List of synthetic ids.
      *
-     * @var array
+     * @var array<string, mixed>
      */
-    protected $syntheticIds = [];
+    protected array $syntheticIds = [];
 
     /**
      * List of uninitialized references.
      *
-     * @var array
+     * @var array<string, mixed>
      */
-    protected $uninitializedServices = [];
+    protected array $uninitializedServices = [];
 
     /**
      * List of generated files.
      *
-     * @var array
+     * @var array<string, string>
      */
-    protected $fileMap = [];
+    protected array $fileMap = [];
 
     /**
      * The collection of parameters.
      *
-     * @var array
+     * @var array<string, mixed>
      */
-    protected $parameters = [];
+    protected array $parameters = [];
+
+    /**
+     * Cache for all defined dynamic parameters.
+     *
+     * @var array<string, bool>
+     */
+    protected array $loadedDynamicParameters = [];
+
+    /**
+     * Collection of processed dynamic parameters.
+     *
+     * @var array<string, mixed>
+     */
+    protected array $dynamicParameters = [];
+
+    /** @var array<string, mixed> */
+    protected array $dynamicParameterMapper = [];
+
+    /**
+     * Value collection of cached dotted parameter key calls.
+     *
+     * @var array<string, mixed>
+     */
+    protected array $dottedKeyCache = [];
 
     /**
      * The registered type aliases.
      *
      * @var string[]
      */
-    protected $aliases = [];
+    protected array $aliases = [];
 
     /** @var null|\Invoker\InvokerInterface */
     protected $invoker;
@@ -122,7 +147,7 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
      *
      * @var \Psr\Container\ContainerInterface[]
      */
-    protected $delegates = [];
+    protected array $delegates = [];
 
     /**
      * Clone method.
@@ -136,24 +161,11 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
     }
 
     /**
-     * Configured invoker.
-     *
-     * @return \Invoker\InvokerInterface
+     * {@inheritdoc}
      */
-    private function getInvoker(): InvokerInterface
+    public function getParameters(): array
     {
-        if (! $this->invoker) {
-            $parameterResolver = new ResolverChain([
-                new NumericArrayResolver(),
-                new AssociativeArrayResolver(),
-                new TypeHintContainerResolver($this),
-                new ParameterNameContainerResolver($this),
-                new DefaultValueResolver(),
-            ]);
-            $this->invoker = new Invoker($parameterResolver, $this);
-        }
-
-        return $this->invoker;
+        return $this->parameters;
     }
 
     /**
@@ -252,52 +264,9 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
     /**
      * {@inheritdoc}
      */
-    public function getParameter(string $name)
+    public function getParameter(string $id)
     {
-        if (! \array_key_exists($name, $this->parameters)) {
-            if ($name === '') {
-                throw new InvalidArgumentException('You called getParameter with a empty argument.');
-            }
-
-            $alternatives = [];
-
-            foreach ($this->parameters as $key => $parameterValue) {
-                $lev = \levenshtein($name, $key);
-
-                if ($lev <= \strlen($name) / 3 || false !== \strpos($key, $name)) {
-                    $alternatives[] = $key;
-                }
-            }
-
-            $nonNestedAlternative = null;
-
-            if (\count($alternatives) === 0 && \strpos($name, '.') !== false) {
-                $namePartsLength = \array_map('\strlen', \explode('.', $name));
-                $key = \substr($name, 0, (int) (-1 * (1 + \array_pop($namePartsLength))));
-
-                while (\count($namePartsLength)) {
-                    if ($this->hasParameter($key)) {
-                        if (\is_array($this->getParameter($key))) {
-                            $nonNestedAlternative = $key;
-                        }
-
-                        break;
-                    }
-
-                    $key = \substr($key, 0, (int) (-1 * (1 + \array_pop($namePartsLength))));
-                }
-            }
-
-            $message = \sprintf('You have requested a non-existent parameter [%s].', $name);
-
-            if ($nonNestedAlternative !== null) {
-                $message .= ' You cannot access nested array items, do you want to inject [' . $nonNestedAlternative . '] instead?';
-            }
-
-            throw new NotFoundException($name, null, null, $alternatives, $message);
-        }
-
-        return $this->parameters[$name];
+        return $this->parameters[$id] ?? $this->dottedKeyCache[$id] ?? $this->dynamicParameters[$id] ?? ([$this, 'doGetParameter'])($id);
     }
 
     /**
@@ -305,7 +274,19 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
      */
     public function hasParameter(string $id): bool
     {
-        return \array_key_exists($id, $this->parameters);
+        if (\array_key_exists($id, $this->parameters)) {
+            return true;
+        }
+
+        $value = \array_reduce(
+            \explode('.', $id),
+            static function ($value, $key) {
+                return $value[$key] ?? null;
+            },
+            $this->parameters
+        );
+
+        return $value !== null;
     }
 
     /**
@@ -339,7 +320,13 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
     {
         $services = \array_merge($this->services, $this->privates);
 
-        $this->services = $this->delegates = $this->privates = $this->parameters = [];
+        $this->services = $this->delegates = $this->privates = [];
+        $this->parameters = $this->dottedKeyCache = [];
+        $this->dynamicParameters = [];
+
+        foreach ($this->loadedDynamicParameters as $key => $value) {
+            $this->loadedDynamicParameters[$key] = false;
+        }
 
         foreach ($services as $service) {
             try {
@@ -539,9 +526,9 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
 
             throw new NotFoundException($id, null, null, [], $message);
         }
-        // @todo show if the alternative is a parameter or binding
+
         $alternatives = [];
-        $ids = \array_unique(\array_merge(\array_keys($this->parameters), \array_keys($this->methodMapping), \array_keys($this->fileMap)));
+        $ids = \array_unique(\array_merge(\array_keys($this->methodMapping), \array_keys($this->fileMap)));
 
         foreach ($ids as $knownId) {
             if ('' === $knownId || '.' === $knownId[0]) {
@@ -570,6 +557,120 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
     protected function load(string $file): object
     {
         return require $file;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getServicesAndAliases(): array
+    {
+        return \array_unique(
+            \array_merge(
+                \array_keys($this->aliases),
+                \array_keys($this->methodMapping),
+                \array_keys($this->fileMap)
+            )
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function populateAvailableTypes(): void
+    {
+        $this->types = [];
+        $this->ambiguousServiceTypes = [];
+
+        foreach ($this->methodMapping as $id => $method) {
+            $value = $this->get($id);
+
+            if (! \is_object($value) || $value instanceof Closure) {
+                return;
+            }
+
+            $this->populateAvailableType($id, \get_class($value));
+        }
+    }
+
+    /**
+     * As a separate method to allow "getParameter()" to use the really fast `??` operator.
+     * And a helper function to extend getParameter with dynamic parameter loading if needed.
+     *
+     * @param string $id
+     *
+     * @throws \Viserio\Contract\Container\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Container\Exception\NotFoundException
+     *
+     * @return mixed
+     */
+    protected function doGetParameter(string $id)
+    {
+        if ($id === '') {
+            throw new InvalidArgumentException('You called getParameter with a empty argument.');
+        }
+
+        if ($this->hasParameter($id)) {
+            return $this->dottedKeyCache[$id] = \array_reduce(
+                \explode('.', $id),
+                static function (array $value, $key) {
+                    return $value[$key];
+                },
+                $this->getParameters()
+            );
+        }
+
+        $alternatives = [];
+
+        foreach (\array_keys(\array_merge($this->parameters, $this->loadedDynamicParameters)) as $key) {
+            $lev = \levenshtein($id, $key);
+
+            if ($lev <= \strlen($id) / 3 || false !== \strpos($key, $id)) {
+                $alternatives[] = $key;
+            }
+        }
+
+        $nonNestedAlternative = null;
+
+        if (\count($alternatives) === 0 && \strpos($id, '.') !== false) {
+            $namePartsLength = \array_map('\strlen', \explode('.', $id));
+
+            $key = \substr($id, 0, (int) (-1 * (1 + \array_pop($namePartsLength))));
+
+            while (\count($namePartsLength)) {
+                if ($this->hasParameter($key)) {
+                    if (\is_array($this->getParameter($key))) {
+                        $nonNestedAlternative = $key;
+                    }
+
+                    break;
+                }
+
+                $key = \substr($key, 0, (int) (-1 * (1 + \array_pop($namePartsLength))));
+            }
+        }
+
+        throw new ParameterNotFoundException($id, null, null, null, $alternatives, $nonNestedAlternative);
+    }
+
+    /**
+     * Configured invoker.
+     *
+     * @return \Invoker\InvokerInterface
+     */
+    private function getInvoker(): InvokerInterface
+    {
+        if (! $this->invoker) {
+            $parameterResolver = new ResolverChain([
+                new NumericArrayResolver(),
+                new AssociativeArrayResolver(),
+                new TypeHintContainerResolver($this),
+                new ParameterNameContainerResolver($this),
+                new DefaultValueResolver(),
+            ]);
+            $this->invoker = new Invoker($parameterResolver, $this);
+        }
+
+        return $this->invoker;
     }
 
     /**
@@ -672,38 +773,5 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
         \ksort($arguments);
 
         return $arguments;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getServicesAndAliases(): array
-    {
-        return \array_unique(
-            \array_merge(
-                \array_keys($this->aliases),
-                \array_keys($this->methodMapping),
-                \array_keys($this->fileMap)
-            )
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function populateAvailableTypes(): void
-    {
-        $this->types = [];
-        $this->ambiguousServiceTypes = [];
-
-        foreach ($this->methodMapping as $id => $method) {
-            $value = $this->get($id);
-
-            if (! \is_object($value) || $value instanceof Closure) {
-                return;
-            }
-
-            $this->populateAvailableType($id, \get_class($value));
-        }
     }
 }

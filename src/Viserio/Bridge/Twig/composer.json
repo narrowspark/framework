@@ -29,14 +29,13 @@
     },
     "require-dev": {
         "mockery/mockery": "^1.2.4",
-        "narrowspark/coding-standard": "^3.3.0",
+        "narrowspark/coding-standard": "^3.4.0",
         "narrowspark/testing-helper": "^8.0.2",
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^4.0.0",
         "viserio/config": "^1.0@dev",
         "viserio/console": "^1.0@dev",
         "viserio/container": "^1.0@dev",
-        "viserio/options-resolver": "^1.0@dev",
         "viserio/phpstan-bridge": "^1.0@dev",
         "viserio/profiler": "^1.0@dev",
         "viserio/session": "^1.0@dev",
@@ -45,10 +44,9 @@
         "voku/stringy": "^5.2.0"
     },
     "suggest": {
-        "viserio/config": "Required to use config extension (^1.0@dev).",
+        "viserio/config": "Required to use the service-provider (^1.0@dev).",
         "viserio/console": "Required to use lint and debug command (^1.0@dev).",
         "viserio/container": "Required to use service-provider (^1.0@dev).",
-        "viserio/options-resolver": "Required to use the service-provider (^1.0@dev).",
         "viserio/profiler": "Required to use data collector (^1.0@dev).",
         "viserio/session": "Required to use session extension (^1.0@dev).",
         "viserio/support": "Required to use str extension (^1.0@dev).",

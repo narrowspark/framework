@@ -18,7 +18,6 @@ use Psr\Http\Message\UploadedFileInterface;
 use Viserio\Component\Http\Stream\LazyOpenStream;
 use Viserio\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Contract\Http\Exception\RuntimeException;
-use function move_uploaded_file;
 
 class UploadedFile implements UploadedFileInterface
 {
@@ -45,63 +44,53 @@ class UploadedFile implements UploadedFileInterface
      *
      * @var null|string
      */
-    public $file;
+    public ?string $file;
 
     /**
      * The client-provided file name.
      *
      * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * The client-provided media type of the file.
      *
      * @var string
      */
-    protected $type;
+    protected string $type;
 
     /**
      * The size of the file in bytes.
      *
      * @var int
      */
-    protected $size;
+    protected int $size;
 
     /**
      * A valid PHP UPLOAD_ERR_xxx code for the file upload.
      *
      * @var int
      */
-    protected $error;
+    protected int $error;
 
     /**
      * An optional StreamInterface wrapping the file resource.
      *
      * @var null|\Psr\Http\Message\StreamInterface
      */
-    protected $stream;
+    protected ?StreamInterface $stream;
 
     /**
      * Indicates if the uploaded file has already been moved.
      *
      * @var bool
      */
-    protected $moved = false;
+    protected bool $moved = false;
 
-    /**
-     * Client media type of a file.
-     *
-     * @var null|string
-     */
-    protected $clientMediaType;
+    protected ?string $clientMediaType;
 
-    /**
-     * Client filename.
-     *
-     * @var null|string
-     */
-    protected $clientFilename;
+    protected ?string $clientFilename;
 
     /**
      * Help textes for upload error.
@@ -137,6 +126,9 @@ class UploadedFile implements UploadedFileInterface
         ?string $clientFilename = null,
         ?string $clientMediaType = null
     ) {
+        $this->stream = null;
+        $this->file = null;
+
         $this->setError($errorStatus);
         $this->size = $size;
         $this->clientFilename = $clientFilename;
@@ -167,24 +159,6 @@ class UploadedFile implements UploadedFileInterface
     public function getError(): int
     {
         return $this->error;
-    }
-
-    /**
-     * Check if error is a int or a array, then set it.
-     *
-     * @param int $error
-     *
-     * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException
-     *
-     * @return void
-     */
-    private function setError(int $error): void
-    {
-        if (! \in_array($error, self::ERRORS, true)) {
-            throw new InvalidArgumentException('Invalid error status for UploadedFile.');
-        }
-
-        $this->error = $error;
     }
 
     /**
@@ -269,6 +243,24 @@ class UploadedFile implements UploadedFileInterface
         if ($this->moved === false) {
             throw new RuntimeException(\sprintf('Uploaded file could not be moved to %s.', $targetPath));
         }
+    }
+
+    /**
+     * Check if error is a int or a array, then set it.
+     *
+     * @param int $error
+     *
+     * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException
+     *
+     * @return void
+     */
+    private function setError(int $error): void
+    {
+        if (! \in_array($error, self::ERRORS, true)) {
+            throw new InvalidArgumentException('Invalid error status for UploadedFile.');
+        }
+
+        $this->error = $error;
     }
 
     /**

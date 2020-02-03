@@ -29,7 +29,7 @@ if (! \class_exists(HttpExceptionServiceProviderContainer::class, false)) {
 }
 
 return new \Container739e609bece4abe5487ae03b6cccaedded684317c476955347c4fabd1fa62276\HttpExceptionServiceProviderContainer([
-    'container.build_hash' => '739e609bece4abe5487ae03b6cccaedded684317c476955347c4fabd1fa62276',
-    'container.build_id' => '00edc77b',
-    'container.build_time' => 1565512489,
+    'viserio.container.build_hash' => '739e609bece4abe5487ae03b6cccaedded684317c476955347c4fabd1fa62276',
+    'viserio.container.build_id' => '00edc77b',
+    'viserio.container.build_time' => 1565512489,
 ], __DIR__ . '/Container739e609bece4abe5487ae03b6cccaedded684317c476955347c4fabd1fa62276');

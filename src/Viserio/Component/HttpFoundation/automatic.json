@@ -7,14 +7,7 @@
       "Viserio\\Component\\HttpFoundation\\Provider\\FoundationDataCollectorServiceProvider": [
         "local",
         "testing"
-      ],
-      "Viserio\\Component\\HttpFoundation\\Container\\Provider\\WebServerServiceProvider": [
-        "local",
-        "testing"
       ]
-    },
-    "bootstrap": {
-        "Viserio\\Component\\HttpFoundation\\Bootstrap\\PrepareContainerBuilderBootstrap": ["global"]
     }
   },
   "post-install-output": [

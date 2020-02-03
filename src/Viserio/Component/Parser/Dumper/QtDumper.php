@@ -43,7 +43,7 @@ class QtDumper implements DumperContract
 
         foreach ($data as $name => $groups) {
             $context = $ts->appendChild($dom->createElement('context'));
-            $context->appendChild($dom->createElement('name', $name));
+            $context->appendChild($dom->createElement('name', (string) $name));
 
             foreach ($groups as $key => $value) {
                 $message = $context->appendChild($dom->createElement('message'));

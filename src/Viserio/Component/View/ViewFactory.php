@@ -31,28 +31,21 @@ class ViewFactory implements FactoryContract
      *
      * @var array
      */
-    protected $aliases = [];
+    protected array $aliases = [];
 
     /**
      * All of the registered view names.
      *
      * @var array
      */
-    protected $names = [];
-
-    /**
-     * Debug.
-     *
-     * @var string
-     */
-    protected $debug;
+    protected array $names = [];
 
     /**
      * Register a view extension.
      *
      * @var array
      */
-    protected static $extensions = [
+    protected static array $extensions = [
         'php' => 'php',
         'phtml' => 'php',
         'css' => 'file',
@@ -65,7 +58,7 @@ class ViewFactory implements FactoryContract
      *
      * @var array
      */
-    protected $shared = [];
+    protected array $shared = [];
 
     /**
      * The engines instance.

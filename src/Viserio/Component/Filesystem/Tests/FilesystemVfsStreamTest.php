@@ -28,15 +28,13 @@ final class FilesystemVfsStreamTest extends AbstractFilesystemTestCase
 {
     use AssertArrayTrait;
 
-    /** @var \org\bovigo\vfs\vfsStreamDirectory */
-    private $root;
-
     /**
      * {@inheritdoc}
      */
     protected $skippedTests = [
         'testCopyDirectoryMovesEntireDirectory' => 'realpath dont support stream wrappers',
-        'testSetGroupSymlink' => 'symlink dont support stream wrappers',
+        'testSetGroupSymlinkByName' => 'symlink dont support stream wrappers',
+        'testSetGroupSymlinkById' => 'symlink dont support stream wrappers',
         'testSetGroupLink' => 'symlink dont support stream wrappers',
         'testSymlink' => 'symlink dont support stream wrappers',
         'testSymlinkIsOverwrittenIfPointsToDifferentTarget' => 'symlink dont support stream wrappers',
@@ -55,11 +53,16 @@ final class FilesystemVfsStreamTest extends AbstractFilesystemTestCase
         'testMirrorContentsWithSameNameAsSourceOrTargetWithoutDeleteOption' => 'chdir dont support stream wrappers',
         'testMirrorContentsWithSameNameAsSourceOrTargetWithDeleteOption' => 'chdir dont support stream wrappers',
         'testMirrorAvoidCopyingTargetDirectoryIfInSourceDirectory' => 'symlink dont support stream wrappers',
-        'testSetGroup' => 'chgrp dont support stream wrappers', // @todo check this'
+        'testSetGroupByName' => 'chgrp dont support stream wrappers', // @todo check this'
+        'testSetGroupById' => 'chgrp dont support stream wrappers', // @todo check this'
         'testCopyDoesNotOverrideExistingFileByDefault' => 'setting modification time is not working',
         'testHasThrowException' => '',
-        'testSetOwner' => 'chown dont support stream wrappers',
+        'testSetOwnerByName' => 'chown dont support stream wrappers',
+        'testSetOwnerById' => 'chown dont support stream wrappers',
     ];
+
+    /** @var \org\bovigo\vfs\vfsStreamDirectory */
+    private $root;
 
     /**
      * {@inheritdoc}

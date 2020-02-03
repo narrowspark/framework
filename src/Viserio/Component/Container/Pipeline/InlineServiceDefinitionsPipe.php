@@ -32,16 +32,16 @@ use Viserio\Contract\Container\Exception\CircularDependencyException;
 final class InlineServiceDefinitionsPipe extends AbstractRecursivePipe
 {
     /** @var array */
-    private $cloningIds = [];
+    private array $cloningIds = [];
 
     /** @var array */
-    private $connectedIds = [];
+    private array $connectedIds = [];
 
     /** @var array */
-    private $notInlinedIds = [];
+    private array $notInlinedIds = [];
 
     /** @var array<string, bool> */
-    private $inlinedIds = [];
+    private array $inlinedIds = [];
 
     /**
      * A dependency graph instance.
@@ -51,7 +51,7 @@ final class InlineServiceDefinitionsPipe extends AbstractRecursivePipe
     private $dependencyGraph;
 
     /** @var null|\Viserio\Component\Container\Pipeline\AnalyzeServiceDependenciesPipe */
-    private $analyzingPipe;
+    private ?AnalyzeServiceDependenciesPipe $analyzingPipe;
 
     /**
      * Create a new InlineServiceDefinitionsPipe instance.
@@ -282,7 +282,7 @@ final class InlineServiceDefinitionsPipe extends AbstractRecursivePipe
             $containerDefinition = $this->containerBuilder->getDefinition($srcId);
         }
 
-        if ($isReferencedByConstructor && $containerDefinition !== null && $definition instanceof ObjectDefinitionContract && $containerDefinition->isLazy() && \count($definition->getProperties()) !== 0 && \count($definition->getMethodCalls()) !== 0) {
+        if ($isReferencedByConstructor && $containerDefinition !== null && $definition instanceof ObjectDefinitionContract && \count($definition->getProperties()) !== 0 && \count($definition->getMethodCalls()) !== 0 && $containerDefinition->isLazy()) {
             return false;
         }
 

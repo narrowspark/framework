@@ -1373,7 +1373,7 @@ final class FinderTest extends AbstractRealIteratorTestCase
     /**
      * @return iterable<array<array<string>|string>>
      */
-    public function provideContainsCases(): iterable
+    public static function provideContainsCases(): iterable
     {
         yield ['', '', []];
 
@@ -1403,7 +1403,7 @@ final class FinderTest extends AbstractRealIteratorTestCase
     /**
      * @return iterable<array<array<string>|string>>
      */
-    public function provideRegexNameCases(): iterable
+    public static function provideRegexNameCases(): iterable
     {
         yield [['test.php', 'test.py'], '~.*t\\.p.+~i'];
 
@@ -1429,7 +1429,7 @@ final class FinderTest extends AbstractRealIteratorTestCase
     /**
      * @return iterable<array<array<string>|string>>
      */
-    public function providePathCases(): iterable
+    public static function providePathCases(): iterable
     {
         yield ['', '', []];
 

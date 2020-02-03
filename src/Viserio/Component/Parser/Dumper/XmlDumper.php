@@ -75,9 +75,9 @@ class XmlDumper implements DumperContract
     /**
      * Parse individual element.
      *
-     * @param DOMDocument        $document
-     * @param DOMElement|DOMNode $element
-     * @param array|string       $value
+     * @param \DOMDocument                        $document
+     * @param \DOMElement|DOMNode                 $element
+     * @param array<int|string, mixed>|int|string $value
      *
      * @throws DOMException
      *
@@ -88,14 +88,14 @@ class XmlDumper implements DumperContract
         $sequential = self::isArrayAllKeySequential($value);
 
         if (! \is_array($value)) {
-            $element->nodeValue = \htmlspecialchars((string) $value);
+            $element->nodeValue = \is_int($value) ? (string) $value : \htmlspecialchars($value);
 
             return;
         }
 
         foreach ($value as $key => $data) {
             if (! $sequential) {
-                if (($key === '_attributes') || ($key === '@attributes')) {
+                if ((($key === '_attributes') || ($key === '@attributes')) && $element instanceof DOMElement) {
                     foreach ($data as $attrKey => $attrVal) {
                         $element->setAttribute($attrKey, (string) $attrVal);
                     }
@@ -121,10 +121,10 @@ class XmlDumper implements DumperContract
     /**
      * Add node.
      *
-     * @param DOMDocument        $document
-     * @param DOMElement|DOMNode $element
-     * @param string             $key
-     * @param string|string[]    $value
+     * @param \DOMDocument        $document
+     * @param \DOMElement|DOMNode $element
+     * @param string              $key
+     * @param string|string[]     $value
      *
      * @throws DOMException
      *
@@ -144,9 +144,9 @@ class XmlDumper implements DumperContract
     /**
      * Add collection node.
      *
-     * @param DOMDocument        $document
-     * @param DOMElement|DOMNode $element
-     * @param string|string[]    $value
+     * @param \DOMDocument        $document
+     * @param \DOMElement|DOMNode $element
+     * @param string|string[]     $value
      *
      * @throws DOMException
      *
@@ -159,8 +159,9 @@ class XmlDumper implements DumperContract
         }
 
         $child = $element->cloneNode();
-
-        $element->parentNode->appendChild($child);
+        /** @var DOMNode $parentNode */
+        $parentNode = $element->parentNode;
+        $parentNode->appendChild($child);
 
         $this->convertElement($document, $child, $value);
     }
@@ -168,12 +169,12 @@ class XmlDumper implements DumperContract
     /**
      * Add sequential node.
      *
-     * @param DOMElement|DOMNode $element
-     * @param string|string[]    $value
+     * @param \DOMElement|DOMNode $element
+     * @param string              $value
      *
      * @return void
      */
-    private function addSequentialNode($element, $value): void
+    private function addSequentialNode($element, string $value): void
     {
         if ($element->nodeValue === '' || $element->nodeValue === null) {
             $element->nodeValue = \htmlspecialchars($value);
@@ -184,23 +185,26 @@ class XmlDumper implements DumperContract
         $child = $element->cloneNode();
         $child->nodeValue = \htmlspecialchars($value);
 
-        $element->parentNode->appendChild($child);
+        /** @var DOMNode $parentNode */
+        $parentNode = $element->parentNode;
+        $parentNode->appendChild($child);
     }
 
     /**
      * Create the root element.
      *
-     * @param DOMDocument  $document
-     * @param array|string $rootElement
+     * @param DOMDocument                                 $document
+     * @param array<string, array<string, string>>|string $rootElement
      *
      * @return DOMElement
      */
     private function createRootElement(DOMDocument $document, $rootElement): DOMElement
     {
         if (\is_string($rootElement)) {
-            return $document->createElement($rootElement ?: 'root');
+            return $document->createElement($rootElement !== '' ? $rootElement : 'root');
         }
 
+        /** @var string $rootElementName */
         $rootElementName = $rootElement['rootElementName'] ?? 'root';
         $element = $document->createElement($rootElementName);
 
@@ -220,7 +224,7 @@ class XmlDumper implements DumperContract
     /**
      * Check if array are all sequential.
      *
-     * @param array|string $value
+     * @param mixed $value
      *
      * @return bool
      */

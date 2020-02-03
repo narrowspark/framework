@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Parser;
 
 use finfo;
-use RuntimeException;
 use Viserio\Component\Parser\Parser\IniParser;
 use Viserio\Component\Parser\Parser\JsonParser;
 use Viserio\Component\Parser\Parser\PhpArrayParser;
@@ -27,15 +26,15 @@ use Viserio\Component\Parser\Parser\XliffParser;
 use Viserio\Component\Parser\Parser\XmlParser;
 use Viserio\Component\Parser\Parser\YamlParser;
 use Viserio\Contract\Parser\Exception\NotSupportedException;
+use Viserio\Contract\Parser\Exception\RuntimeException;
 use Viserio\Contract\Parser\Parser as ParserContract;
-use function pathinfo;
 
 class Parser
 {
     /**
      * Supported mime type formats.
      *
-     * @var array
+     * @var array<string, string>
      */
     private static $supportedMimeTypes = [
         // XML
@@ -62,7 +61,7 @@ class Parser
     /**
      * All supported parser.
      *
-     * @var array
+     * @var array<string, string|\Viserio\Contract\Parser\Parser>
      */
     private static $supportedParsers = [
         'ini' => IniParser::class,
@@ -76,6 +75,7 @@ class Parser
         'xml' => XmlParser::class,
         'xlf' => XliffParser::class,
         'yaml' => YamlParser::class,
+        'yml' => YamlParser::class,
     ];
 
     /**
@@ -109,10 +109,11 @@ class Parser
      *
      * @param string $payload
      *
+     * @throws \Viserio\Contract\Parser\Exception\RuntimeException      if an error occurred during reading
+     * @throws \Viserio\Contract\Parser\Exception\NotSupportedException if a mime type is not supported
      * @throws \Viserio\Contract\Parser\Exception\ParseException
-     * @throws RuntimeException                                  if an error occurred during reading
      *
-     * @return array
+     * @return array<int|string, mixed>
      */
     public function parse(string $payload): array
     {
@@ -151,11 +152,11 @@ class Parser
         if (isset(self::$supportedMimeTypes[$type])) {
             $class = self::$supportedParsers[self::$supportedMimeTypes[$type]];
 
-            if (\is_object($class) && $class instanceof ParserContract) {
-                return $class;
+            if (\is_string($class)) {
+                return new $class();
             }
 
-            return new $class();
+            return $class;
         }
 
         throw new NotSupportedException(\sprintf('Given extension or mime type [%s] is not supported.', $type));
@@ -170,11 +171,9 @@ class Parser
      */
     protected function getFormat(string $payload): string
     {
-        $format = '';
-
         if (\is_file($file = $payload)) {
             $format = \pathinfo($file, \PATHINFO_EXTENSION);
-        } elseif (\is_string($payload)) {
+        } else {
             // try if content is json
             \json_decode($payload);
 
@@ -185,6 +184,6 @@ class Parser
             $format = (new finfo(\FILEINFO_MIME_TYPE))->buffer($payload);
         }
 
-        return self::$supportedMimeTypes[$format] ?? $format;
+        return self::$supportedMimeTypes[$format] ?? (string) $format;
     }
 }

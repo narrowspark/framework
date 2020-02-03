@@ -193,6 +193,52 @@ final class AutowirePipe extends AbstractRecursivePipe
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function has(string $id): bool
+    {
+        return $this->containerBuilder->has($id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function populateAvailableTypes(): void
+    {
+        $this->types = [];
+        $this->ambiguousServiceTypes = [];
+
+        foreach ($this->containerBuilder->getDefinitions() as $id => $definition) {
+            if (! $definition instanceof ObjectDefinitionContract || $definition->isDeprecated()) {
+                return;
+            }
+
+            $this->populateAvailableType($id, $definition->getClass());
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getClassReflector(string $class, bool $throw = true): ?ReflectionClass
+    {
+        return $this->containerBuilder->getClassReflector($class, $throw);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getServicesAndAliases(): array
+    {
+        return \array_unique(
+            \array_merge(
+                \array_keys($this->containerBuilder->getDefinitions()),
+                \array_keys($this->containerBuilder->getAliases())
+            )
+        );
+    }
+
+    /**
      * Resolve methods calls.
      *
      * @param ReflectionClass $reflectionClass
@@ -446,51 +492,5 @@ final class AutowirePipe extends AbstractRecursivePipe
         }
 
         return null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function has(string $id): bool
-    {
-        return $this->containerBuilder->has($id);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function populateAvailableTypes(): void
-    {
-        $this->types = [];
-        $this->ambiguousServiceTypes = [];
-
-        foreach ($this->containerBuilder->getDefinitions() as $id => $definition) {
-            if (! $definition instanceof ObjectDefinitionContract || $definition->isDeprecated()) {
-                return;
-            }
-
-            $this->populateAvailableType($id, $definition->getClass());
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getClassReflector(string $class, bool $throw = true): ?ReflectionClass
-    {
-        return $this->containerBuilder->getClassReflector($class, $throw);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getServicesAndAliases(): array
-    {
-        return \array_unique(
-            \array_merge(
-                \array_keys($this->containerBuilder->getDefinitions()),
-                \array_keys($this->containerBuilder->getAliases())
-            )
-        );
     }
 }

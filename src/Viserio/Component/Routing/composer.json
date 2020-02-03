@@ -48,16 +48,16 @@
     "require-dev": {
         "doctrine/inflector": "^1.3",
         "mockery/mockery": "^1.2.4",
-        "narrowspark/coding-standard": "^3.3.0",
+        "narrowspark/coding-standard": "^3.4.0",
         "narrowspark/testing-helper": "^8.0.2",
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^4.0.0",
+        "viserio/config": "^1.0@dev",
         "viserio/console": "^1.0@dev",
         "viserio/container": "^1.0@dev",
         "viserio/events": "^1.0@dev",
         "viserio/http": "^1.0@dev",
         "viserio/http-factory": "^1.0@dev",
-        "viserio/options-resolver": "^1.0@dev",
         "viserio/phpstan-bridge": "^1.0@dev",
         "viserio/pipeline": "^1.0@dev",
         "viserio/profiler": "^1.0@dev"
@@ -65,6 +65,7 @@
     "suggest": {
         "doctrine/inflector": "Required to use the Resource routes (^1.3.0).",
         "psr/http-factory": "Required to use the UrlGenerator (^1.0.0).",
+        "viserio/config": "Required to use service-provider (^1.0@dev).",
         "viserio/container": "Required to use service-provider (^1.0@dev).",
         "viserio/pipeline": "Required to use psr-15 middleware (^1.0@dev).",
         "viserio/profiler": "Required to use the data collector (^1.0@dev)."

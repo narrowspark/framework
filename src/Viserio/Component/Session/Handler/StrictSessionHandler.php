@@ -50,16 +50,6 @@ class StrictSessionHandler extends AbstractSessionHandler
     /**
      * {@inheritdoc}
      */
-    protected function doDestroy($sessionId): bool
-    {
-        $this->doDestroy = false;
-
-        return $this->handler->destroy($sessionId);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function open($savePath, $sessionName): bool
     {
         parent::open($savePath, $sessionName);
@@ -112,6 +102,16 @@ class StrictSessionHandler extends AbstractSessionHandler
     public function gc($maxlifetime): bool
     {
         return $this->handler->gc($maxlifetime);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function doDestroy($sessionId): bool
+    {
+        $this->doDestroy = false;
+
+        return $this->handler->destroy($sessionId);
     }
 
     /**

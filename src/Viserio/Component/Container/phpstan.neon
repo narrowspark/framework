@@ -26,13 +26,13 @@ parameters:
         - Tests/Fixture/
         - Tests/Container/Provider/Compiled
 
-        - Tests/IntegrationTest/ContainerLazyObjectTest.php
+        - Tests/Integration/ContainerLazyObjectTest.php
         - Pipeline/InlineServiceDefinitionsPipe.php
 
     ignoreErrors:
-        # Tests/IntegrationTest/LazyProxy/ProxyDumperTest
+        # Tests/Integration/LazyProxy/ProxyDumperTest
         - '#Access to an undefined property Viserio\\Component\\Container\\Tests\\Fixture\\Proxy\\FinalDummyClass::\$dynamicProp#'
-        # Tests/IntegrationTest/Dumper/PhpDumperTest
+        # Tests/Integration/Dumper/PhpDumperTest
         - '#Access to an undefined property object::\$test#'
         # Pipeline/AutowirePipe.php
         - '#Access to an undefined property Viserio\\Contract\\Container\\Definition\\Definition::\$innerServiceId#'

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\Foundation;
 
-use ArrayAccess;
 use Closure;
 use Psr\Container\ContainerInterface;
 use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
@@ -22,13 +21,6 @@ use Viserio\Contract\Foundation\Environment as EnvironmentContract;
 
 interface Kernel
 {
-    /**
-     * Gets the charset of the application.
-     *
-     * @return string The charset
-     */
-    public function getCharset(): string;
-
     /**
      * Get a Environment Detector instance.
      *
@@ -39,14 +31,14 @@ interface Kernel
     /**
      * Get the container builder instance.
      *
-     * @return \Viserio\Contract\Container\ContainerBuilder & \Viserio\Contract\Container\ServiceProvider\ContainerBuilder
+     * @return \Viserio\Contract\Container\ContainerBuilder&\Viserio\Contract\Container\ServiceProvider\ContainerBuilder
      */
     public function getContainerBuilder(): ContainerBuilderContract;
 
     /**
      * Set a container builder instance.
      *
-     * @param \Viserio\Contract\Container\ContainerBuilder & \Viserio\Contract\Container\ServiceProvider\ContainerBuilder $containerBuilder
+     * @param \Viserio\Contract\Container\ContainerBuilder&\Viserio\Contract\Container\ServiceProvider\ContainerBuilder $containerBuilder
      *
      * @return static
      */
@@ -71,7 +63,7 @@ interface Kernel
     /**
      * Set a container instance.
      *
-     * @param \Viserio\Contract\Container\CompiledContainer & \Psr\Container\ContainerInterface $container
+     * @param \Viserio\Contract\Container\CompiledContainer&\Psr\Container\ContainerInterface $container
      *
      * @return static
      */
@@ -80,25 +72,9 @@ interface Kernel
     /**
      * Get the container instance.
      *
-     * @return \Viserio\Contract\Container\CompiledContainer & \Psr\Container\ContainerInterface
+     * @return \Viserio\Contract\Container\CompiledContainer&\Psr\Container\ContainerInterface
      */
     public function getContainer(): ContainerInterface;
-
-    /**
-     * Set the kernel configuration.
-     *
-     * @param array|ArrayAccess $config
-     *
-     * @return void
-     */
-    public function setKernelConfigurations($config): void;
-
-    /**
-     * Get the kernel configuration.
-     *
-     * @return array
-     */
-    public function getKernelConfigurations(): array;
 
     /**
      * Bootstrap the kernel.

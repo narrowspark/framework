@@ -48,7 +48,7 @@ final class XmlTest extends TestCase
             '
         )->at($this->root);
 
-        $parsed = (new XmlParser())->parse(\file_get_contents($file->url()));
+        $parsed = (new XmlParser())->parse((string) \file_get_contents($file->url()));
 
         self::assertSame(['to' => 'Tove', 'from' => 'Jani', 'heading' => 'Reminder'], $parsed);
     }
@@ -80,7 +80,7 @@ final class XmlTest extends TestCase
 
         $dump = vfsStream::newFile('dump.xml')->withContent((new XmlDumper())->dump($array))->at($this->root);
 
-        self::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
+        self::assertEquals(\str_replace("\r\n", '', (string) \file_get_contents($file->url())), \str_replace("\r\n", '', (string) \file_get_contents($dump->url())));
     }
 
     public function testItCanHandleAnEmptyArray(): void
@@ -224,7 +224,7 @@ final class XmlTest extends TestCase
 
         $dump = vfsStream::newFile('dump.xml')->withContent((new XmlDumper())->dump($array))->at($this->root);
 
-        self::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
+        self::assertEquals(\str_replace("\r\n", '', (string) \file_get_contents($file->url())), \str_replace("\r\n", '', (string) \file_get_contents($dump->url())));
     }
 
     public function testItCanHandleAttributesAsCollection(): void
@@ -252,7 +252,7 @@ final class XmlTest extends TestCase
 
         $dump = vfsStream::newFile('dump.xml')->withContent((new XmlDumper())->dump($array))->at($this->root);
 
-        self::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
+        self::assertEquals(\str_replace("\r\n", '', (string) \file_get_contents($file->url())), \str_replace("\r\n", '', (string) \file_get_contents($dump->url())));
     }
 
     public function testItCanConvertAttributesToXmlInSimpleXmlElementStyle(): void
@@ -275,7 +275,7 @@ final class XmlTest extends TestCase
 
         $dump = vfsStream::newFile('dump.xml')->withContent((new XmlDumper())->dump($array))->at($this->root);
 
-        self::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
+        self::assertEquals(\str_replace("\r\n", '', (string) \file_get_contents($file->url())), \str_replace("\r\n", '', (string) \file_get_contents($dump->url())));
     }
 
     public function testItCanHandleAttributesAsCollectionInSimpleXmlElementStyle(): void
@@ -303,7 +303,7 @@ final class XmlTest extends TestCase
 
         $dump = vfsStream::newFile('dump.xml')->withContent((new XmlDumper())->dump($array))->at($this->root);
 
-        self::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
+        self::assertEquals(\str_replace("\r\n", '', (string) \file_get_contents($file->url())), \str_replace("\r\n", '', (string) \file_get_contents($dump->url())));
     }
 
     public function testItCanHandleValuesSetWithAttributesWithSpecialCharactersAndWithSimpleXmlElementStyle(): void
@@ -331,7 +331,7 @@ final class XmlTest extends TestCase
 
         $dump = vfsStream::newFile('dump.xml')->withContent((new XmlDumper())->dump($array))->at($this->root);
 
-        self::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
+        self::assertEquals(\str_replace("\r\n", '', (string) \file_get_contents($file->url())), \str_replace("\r\n", '', (string) \file_get_contents($dump->url())));
     }
 
     public function testItCanHandlValuesSetAsCdataAndWithSimpleXmlElementStyle(): void
@@ -359,6 +359,6 @@ final class XmlTest extends TestCase
 
         $dump = vfsStream::newFile('dump.xml')->withContent((new XmlDumper())->dump($array))->at($this->root);
 
-        self::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
+        self::assertEquals(\str_replace("\r\n", '', (string) \file_get_contents($file->url())), \str_replace("\r\n", '', (string) \file_get_contents($dump->url())));
     }
 }

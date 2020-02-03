@@ -38,7 +38,7 @@ final class NormalizeNameTraitTest extends TestCase
         self::assertSame($validated, $validatedName);
     }
 
-    public function provideNormalizeNameCases(): iterable
+    public static function provideNormalizeNameCases(): iterable
     {
         return [
             ['test/foo', 'test.foo'],

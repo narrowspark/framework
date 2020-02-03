@@ -41,7 +41,7 @@ class GroupParser extends Parser
      */
     public function parse(string $payload): array
     {
-        if (! $this->groupKey) {
+        if ($this->groupKey === null) {
             return parent::parse($payload);
         }
 

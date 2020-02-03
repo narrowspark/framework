@@ -19,7 +19,6 @@ use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Viserio\Component\Console\Application as Cerebro;
 use Viserio\Component\Console\Command\ClosureCommand;
-use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Console\Kernel;
 use Viserio\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Contract\Console\Terminable as TerminableContract;
@@ -36,6 +35,31 @@ use Viserio\Contract\Exception\ConsoleHandler as ConsoleHandlerContract;
  */
 final class KernelTest extends MockeryTestCase
 {
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $_SERVER['APP_ENV'] = 'prod';
+        $_SERVER['APP_DEBUG'] = true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        // remove env
+        \putenv('APP_ENV=');
+        \putenv('APP_ENV');
+        \putenv('APP_DEBUG=');
+        \putenv('APP_DEBUG');
+    }
+
     public function testIfClassHasConsoleAndTerminableContract(): void
     {
         $interfaces = \class_implements(new Kernel());
@@ -62,7 +86,7 @@ final class KernelTest extends MockeryTestCase
             ->with(ConsoleHandlerContract::class)
             ->andReturn($handler);
 
-        $cerebro = $this->arrangeConsoleNameAndVersion();
+        $cerebro = $this->mock(Cerebro::class);
         $cerebro->shouldReceive('run')
             ->once()
             ->andReturn(0);
@@ -100,7 +124,7 @@ final class KernelTest extends MockeryTestCase
             ->with(ConsoleHandlerContract::class)
             ->andReturn($handler);
 
-        $cerebro = $this->arrangeConsoleNameAndVersion();
+        $cerebro = $this->mock(Cerebro::class);
         $cerebro->shouldReceive('add')
             ->never();
 
@@ -119,7 +143,7 @@ final class KernelTest extends MockeryTestCase
         $argv = new ArgvInput();
         $container = Mockery::mock(CompiledContainerContract::class);
 
-        $cerebro = $this->arrangeConsoleNameAndVersion();
+        $cerebro = $this->mock(Cerebro::class);
         $cerebro->shouldReceive('run')
             ->once()
             ->andReturn(0);
@@ -146,7 +170,7 @@ final class KernelTest extends MockeryTestCase
     {
         $container = Mockery::mock(CompiledContainerContract::class);
 
-        $cerebro = $this->arrangeConsoleNameAndVersion();
+        $cerebro = $this->mock(Cerebro::class);
         $cerebro->shouldReceive('add')
             ->never();
         $cerebro->shouldReceive('renderException')
@@ -171,7 +195,7 @@ final class KernelTest extends MockeryTestCase
     {
         $container = Mockery::mock(CompiledContainerContract::class);
 
-        $cerebro = $this->arrangeConsoleNameAndVersion();
+        $cerebro = $this->mock(Cerebro::class);
         $cerebro->shouldReceive('add')
             ->never();
         $cerebro->shouldReceive('renderException')
@@ -194,7 +218,7 @@ final class KernelTest extends MockeryTestCase
     {
         $container = Mockery::mock(CompiledContainerContract::class);
 
-        $cerebro = $this->arrangeConsoleNameAndVersion();
+        $cerebro = $this->mock(Cerebro::class);
         $cerebro->shouldReceive('add')
             ->never();
         $cerebro->shouldReceive('renderException')
@@ -222,7 +246,7 @@ final class KernelTest extends MockeryTestCase
             return 'true';
         });
 
-        $cerebro = $this->arrangeConsoleNameAndVersion();
+        $cerebro = $this->mock(Cerebro::class);
         $cerebro->shouldReceive('add')
             ->once()
             ->with($command);
@@ -268,31 +292,6 @@ final class KernelTest extends MockeryTestCase
             }
         };
 
-        $kernel->setKernelConfigurations([
-            'viserio' => [
-                'app' => [
-                    'env' => 'dev',
-                    'debug' => true,
-                ],
-            ],
-        ]);
-
         return $kernel;
-    }
-
-    /**
-     * @return \Mockery\MockInterface|\Viserio\Component\Console\Application
-     */
-    private function arrangeConsoleNameAndVersion()
-    {
-        $cerebro = Mockery::mock(Cerebro::class);
-        $cerebro->shouldReceive('setVersion')
-            ->once()
-            ->with(AbstractKernel::VERSION);
-        $cerebro->shouldReceive('setName')
-            ->once()
-            ->with('Cerebro');
-
-        return $cerebro;
     }
 }

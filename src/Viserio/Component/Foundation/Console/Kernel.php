@@ -48,7 +48,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      *
      * @var array
      */
-    protected static $allowedBootstrapTypes = ['global', 'console'];
+    protected static array $allowedBootstrapTypes = ['global', 'console'];
 
     /**
      * Create a new console kernel instance.
@@ -73,39 +73,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
         $this->bootstrap();
 
         return $this->getConsole()->{$method}(...$arguments);
-    }
-
-    /**
-     * Get the cerebro application instance.
-     *
-     * @return \Viserio\Component\Console\Application
-     */
-    protected function getConsole(): Cerebro
-    {
-        if ($this->console === null) {
-            $console = $this->getContainer()->get(Cerebro::class);
-
-            $console->setVersion($this->resolvedOptions['version']);
-            $console->setName($this->resolvedOptions['console_name']);
-
-            return $this->console = $console;
-        }
-
-        return $this->console;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getDefaultOptions(): array
-    {
-        $options = [
-            'url' => 'http://localhost',
-            'version' => self::VERSION,
-            'console_name' => 'Cerebro',
-        ];
-
-        return \array_merge(parent::getDefaultOptions(), $options);
     }
 
     /**
@@ -169,6 +136,20 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
         $this->bootstrap();
 
         $this->getConsole()->add($command);
+    }
+
+    /**
+     * Get the cerebro application instance.
+     *
+     * @return \Viserio\Component\Console\Application
+     */
+    protected function getConsole(): Cerebro
+    {
+        if ($this->console === null) {
+            return $this->console = $this->getContainer()->get(Cerebro::class);
+        }
+
+        return $this->console;
     }
 
     /**

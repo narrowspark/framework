@@ -4,14 +4,6 @@
             "Viserio\\Component\\Config\\Container\\Provider\\ConfigServiceProvider": [
                 "global"
             ]
-        },
-        "bootstrap": {
-            "Viserio\\Component\\Config\\Bootstrap\\LoadServiceProviderOptionsBootstrap": [
-                "global"
-            ],
-            "Viserio\\Component\\Config\\Bootstrap\\ConfigurationLoaderBootstrap": [
-                "global"
-            ]
         }
     }
 }

@@ -82,6 +82,11 @@ final class Util
 
                 if (! \array_key_exists($key, $_SERVER)) {
                     $name = \str_replace(' ', '-', \ucwords(\strtolower(\str_replace('_', ' ', $key))));
+
+                    if (\strpos($name, 'Md5') !== 0) {
+                        $name = \str_replace('Md5', 'MD5', $name);
+                    }
+
                     $headers[$name] = $value;
                 }
 
@@ -90,6 +95,11 @@ final class Util
 
             if (\strpos($key, 'CONTENT_') === 0) {
                 $name = \str_replace(' ', '-', \ucwords(\strtolower(\str_replace('_', ' ', $key))));
+
+                if (\strpos($name, 'Md5') !== 0) {
+                    $name = \str_replace('Md5', 'MD5', $name);
+                }
+
                 $headers[$name] = $value;
             }
         }

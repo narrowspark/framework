@@ -101,7 +101,7 @@ final class FileLoaderTest extends TestCase
     public function testLoadWithWrongOption(): void
     {
         $this->expectException(NotSupportedException::class);
-        $this->expectExceptionMessage('Only the options "tag" and "group" are supported.');
+        $this->expectExceptionMessage('Only the options [tag] and [group] are supported.');
 
         $file = vfsStream::newFile('temp.json')->withContent('')->at($this->root);
 

@@ -52,7 +52,7 @@ final class JsonTest extends TestCase
             '
         )->at($this->root);
 
-        $parsed = (new JsonParser())->parse(\file_get_contents($file->url()));
+        $parsed = (new JsonParser())->parse((string) \file_get_contents($file->url()));
 
         self::assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $parsed);
     }
@@ -102,7 +102,7 @@ final class JsonTest extends TestCase
     public function testSetDepthAndOptionsOnJsonDumper(): void
     {
         $this->expectException(DumpException::class);
-        $this->expectExceptionMessage('JSON dumping failed: Maximum stack depth exceeded.');
+        $this->expectExceptionMessage('Maximum stack depth exceeded.');
 
         $book = [
             'title' => [

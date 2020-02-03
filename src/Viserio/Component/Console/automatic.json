@@ -4,6 +4,19 @@
             "Viserio\\Component\\Console\\Container\\Provider\\ConsoleServiceProvider": [
                 "global"
             ]
+        },
+        "config": {
+            "global": {
+                "viserio": {
+                    "console": {
+                        "name": "Cerebro",
+                        "version": "{APP_VERSION|env|string}"
+                    }
+                }
+            }
+        },
+        "env": {
+            "APP_VERSION": "0.0.0"
         }
     },
     "script-extenders": [

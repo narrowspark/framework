@@ -13,28 +13,18 @@ declare(strict_types=1);
 
 namespace Viserio\Component\View\Engine;
 
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
+use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 use Viserio\Contract\View\Engine as EngineContract;
 
 abstract class AbstractBaseEngine implements EngineContract,
     RequiresComponentConfigContract,
-    RequiresMandatoryOptionContract
+    RequiresMandatoryConfigContract
 {
-    use OptionsResolverTrait;
-
-    /**
-     * Resolved options.
-     *
-     * @var array
-     */
-    protected $resolvedOptions = [];
-
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): array
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'view'];
     }
@@ -42,7 +32,7 @@ abstract class AbstractBaseEngine implements EngineContract,
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): array
+    public static function getMandatoryConfig(): iterable
     {
         return [
             'paths',

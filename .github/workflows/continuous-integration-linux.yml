@@ -26,14 +26,14 @@ jobs:
           fetch-depth: 2
 
       - name: "Setup PHP"
-        uses: shivammathur/setup-php@1.7.0
+        uses: shivammathur/setup-php@1.8.2
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl, pdo, pdo_sqlite, inotify, pcntl, posix
           ini-values: post_max_size=256M, date.timezone=Europe/Berlin, opcache.enable_cli=1, serialize_precision=14
           pecl: true
           coverage: none
-          tools: composer
+          tools: composer, composer-prefetcher
 
       - name: "Configure Container"
         env:
@@ -60,9 +60,6 @@ jobs:
 
       - name: "List all php extensions with versions"
         run: php -r 'foreach (get_loaded_extensions() as $extension) echo $extension . " " . phpversion($extension) . PHP_EOL;'
-
-      - name: "Install Automatic Composer Prefetcher"
-        run: composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic-composer-prefetcher:dev-master
 
       - name: "Create local composer packages for each patched components and reference them in composer.json when cross-testing components"
         run: php ./build/build-packages.php HEAD^ $(find src/Viserio -mindepth 3 -type f -name composer.json -printf '%h\n' | sort)

@@ -21,9 +21,9 @@ use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Component\Cron\Cron;
 
 /**
- * @coversDefaultClass \Viserio\Component\Cron\Cron
- *
  * @internal
+ *
+ * @covers \Viserio\Component\Cron\Cron
  *
  * @small
  */
@@ -294,7 +294,7 @@ final class CronTest extends MockeryTestCase
     }
 
     /**
-     * @covers ::ensureCorrectUser
+     * @covers \Viserio\Component\Cron\Cron::ensureCorrectUser
      */
     public function testBuildCommand(): void
     {

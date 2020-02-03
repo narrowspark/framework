@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\View\Tests\Provider;
 
+use Viserio\Component\Config\Container\Provider\ConfigServiceProvider;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\View\Container\Provider\ViewServiceProvider;
@@ -41,22 +42,17 @@ final class ViewServiceProviderTest extends AbstractContainerTestCase
      */
     protected function prepareContainerBuilder(ContainerBuilder $containerBuilder): void
     {
-        $containerBuilder->register(new ViewServiceProvider());
-        $containerBuilder->bind('config', [
-            'viserio' => [
-                'view' => [
-                    'paths' => [
-                        \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR,
-                        __DIR__,
-                    ],
-                    'extensions' => ['phtml', 'php'],
+        $containerBuilder->setParameter('viserio', [
+            'view' => [
+                'paths' => [
+                    \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR,
+                    __DIR__,
                 ],
+                'extensions' => ['phtml', 'php'],
             ],
         ]);
-
-        $containerBuilder->setParameter('container.dumper.inline_factories', true);
-        $containerBuilder->setParameter('container.dumper.inline_class_loader', false);
-        $containerBuilder->setParameter('container.dumper.as_files', true);
+        $containerBuilder->register(new ConfigServiceProvider());
+        $containerBuilder->register(new ViewServiceProvider());
     }
 
     /**

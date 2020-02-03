@@ -81,9 +81,9 @@ final class SessionServiceProviderTest extends AbstractContainerTestCase
             ],
         ]);
 
-        $containerBuilder->setParameter('container.dumper.inline_factories', true);
-        $containerBuilder->setParameter('container.dumper.inline_class_loader', false);
-        $containerBuilder->setParameter('container.dumper.as_files', true);
+        $containerBuilder->setParameter('viserio.container.dumper.inline_factories', true);
+        $containerBuilder->setParameter('viserio.container.dumper.inline_class_loader', false);
+        $containerBuilder->setParameter('viserio.container.dumper.as_files', true);
 
         $containerBuilder->register(new SessionServiceProvider());
     }

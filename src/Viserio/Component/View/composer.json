@@ -26,7 +26,7 @@
         "php": "^7.4",
         "psr/container": "^1.0.0",
         "symfony/polyfill-mbstring": "^1.8.0",
-        "viserio/options-resolver": "^1.0@dev",
+        "viserio/config-contract": "^1.0@dev",
         "viserio/support": "^1.0@dev",
         "viserio/view-contract": "^1.0@dev"
     },
@@ -37,7 +37,7 @@
         "erusev/parsedown": "^1.7.3",
         "erusev/parsedown-extra": "^0.7.1",
         "mockery/mockery": "^1.2.4",
-        "narrowspark/coding-standard": "^3.3.0",
+        "narrowspark/coding-standard": "^3.4.0",
         "narrowspark/testing-helper": "^8.0.2",
         "phpunit/phpunit": "8.2.*",
         "psr/http-server-middleware": "^1.0.0",
@@ -50,6 +50,7 @@
     },
     "suggest": {
         "psr/http-server-middleware": "Required to use middleware (^1.0).",
+        "viserio/config": "Required to use service-provider (^1.0@dev).",
         "viserio/container": "Required to use service-provider (^1.0@dev).",
         "viserio/http-factory": "Required to use the Proxy View::createResponseView (^0.3)."
     },

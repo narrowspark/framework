@@ -18,6 +18,7 @@ use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Yaml\Yaml;
 use Viserio\Component\Parser\Parser\YamlParser;
+use Viserio\Contract\Parser\Exception\ParseException;
 
 /**
  * @internal
@@ -63,14 +64,14 @@ linting: true
             '
         )->at($this->root);
 
-        $parsed = (new YamlParser())->parse(\file_get_contents($file->url()));
+        $parsed = (new YamlParser())->parse((string) \file_get_contents($file->url()));
 
         self::assertSame(['preset' => 'psr2', 'risky' => false, 'linting' => true], $parsed);
     }
 
     public function testParseToThrowException(): void
     {
-        $this->expectException(\Viserio\Contract\Parser\Exception\ParseException::class);
+        $this->expectException(ParseException::class);
         $this->expectExceptionMessage('Unable to parse at line 3 (near "  foo: bar").');
 
         $file = vfsStream::newFile('temp.yaml')->withContent(
@@ -81,6 +82,6 @@ collection:
             '
         )->at($this->root);
 
-        (new YamlParser())->parse(\file_get_contents($file->url()));
+        (new YamlParser())->parse((string) \file_get_contents($file->url()));
     }
 }

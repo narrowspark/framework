@@ -39,7 +39,7 @@ final class MultiplePcreFilterIteratorTest extends TestCase
     /**
      * @return iterable<array<bool|string>>
      */
-    public function provideIsRegexCases(): iterable
+    public static function provideIsRegexCases(): iterable
     {
         yield ['foo', false, 'string'];
 

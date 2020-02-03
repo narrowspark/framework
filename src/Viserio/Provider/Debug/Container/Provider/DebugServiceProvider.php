@@ -22,21 +22,21 @@ use Symfony\Component\VarDumper\Dumper\HtmlDumper as SymfonyHtmlDumper;
 use Symfony\Component\VarDumper\VarDumper;
 use Twig\Environment as TwigEnvironment;
 use Viserio\Bridge\Twig\Extension\DumpExtension;
+use Viserio\Component\Config\Container\Definition\ConfigDefinition;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
-use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
+use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
+use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\Container\Definition\ObjectDefinition as ObjectDefinitionContract;
 use Viserio\Contract\Container\ServiceProvider\AliasServiceProvider as AliasServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\ServiceProvider\ExtendServiceProvider as ExtendServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
-use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Provider\Debug\HtmlDumper;
 use Viserio\Provider\Debug\Style;
 
 class DebugServiceProvider implements AliasServiceProviderContract,
     ExtendServiceProviderContract,
-    ProvidesDefaultOptionContract,
+    ProvidesDefaultConfigContract,
     RequiresComponentConfigContract,
     ServiceProviderContract
 {
@@ -49,9 +49,18 @@ class DebugServiceProvider implements AliasServiceProviderContract,
         $container->singleton(CliDumper::class);
 
         $container->singleton(ClonerInterface::class, VarCloner::class)
-            ->addMethodCall('setMaxItems', [new OptionDefinition('max_items', self::class)])
-            ->addMethodCall('setMinDepth', [new OptionDefinition('min_depth', self::class)])
-            ->addMethodCall('setMaxString', [new OptionDefinition('max_string_length', self::class)])
+            ->addMethodCall('setMaxItems', [
+                (new ConfigDefinition(self::class))
+                    ->setKey('max_items'),
+            ])
+            ->addMethodCall('setMinDepth', [
+                (new ConfigDefinition(self::class))
+                    ->setKey('min_depth'),
+            ])
+            ->addMethodCall('setMaxString', [
+                (new ConfigDefinition(self::class))
+                    ->setKey('max_string_length'),
+            ])
             ->addMethodCall('addCasters', [ReflectionCaster::UNSET_CLOSURE_FILE_INFO]);
 
         $container->singleton(DataDumperInterface::class, HtmlDumper::class)
@@ -62,7 +71,10 @@ class DebugServiceProvider implements AliasServiceProviderContract,
                     Style::NARROWSPARK_THEME,
                 ]
             )
-            ->addMethodCall('setTheme', [new OptionDefinition('theme', self::class)]);
+            ->addMethodCall('setTheme', [
+                (new ConfigDefinition(self::class))
+                    ->setKey('theme'),
+            ]);
     }
 
     /**
@@ -92,7 +104,7 @@ class DebugServiceProvider implements AliasServiceProviderContract,
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): array
+    public static function getDimensions(): iterable
     {
         return ['viserio', 'debug'];
     }
@@ -100,7 +112,7 @@ class DebugServiceProvider implements AliasServiceProviderContract,
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): array
+    public static function getDefaultConfig(): iterable
     {
         return [
             'max_items' => 2500,

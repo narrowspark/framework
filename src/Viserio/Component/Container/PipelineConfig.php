@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Container;
 
 use Viserio\Component\Container\Pipeline\AnalyzeServiceDependenciesPipe;
-use Viserio\Component\Container\Pipeline\AutowireArrayParameterCompilerPipe;
+use Viserio\Component\Container\Pipeline\AutowireArgumentArrayPipe;
 use Viserio\Component\Container\Pipeline\AutowirePipe;
 use Viserio\Component\Container\Pipeline\CheckArgumentsValidityPipe;
 use Viserio\Component\Container\Pipeline\CheckCircularReferencesPipe;
@@ -22,6 +22,7 @@ use Viserio\Component\Container\Pipeline\CheckDefinitionConditionsPipe;
 use Viserio\Component\Container\Pipeline\DecoratorServicePipe;
 use Viserio\Component\Container\Pipeline\ExtendedDefinitionPipe;
 use Viserio\Component\Container\Pipeline\InlineServiceDefinitionsPipe;
+use Viserio\Component\Container\Pipeline\RegisterParameterProcessorsPipe;
 use Viserio\Component\Container\Pipeline\RemovePrivateAliasesPipe;
 use Viserio\Component\Container\Pipeline\RemoveUninitializedReferencesInMethodCallsPipe;
 use Viserio\Component\Container\Pipeline\RemoveUnusedDefinitionsPipe;
@@ -29,7 +30,8 @@ use Viserio\Component\Container\Pipeline\ReplaceAliasByActualDefinitionPipe;
 use Viserio\Component\Container\Pipeline\ReplaceDefinitionTypeToPrivateIfReferenceExistsPipe;
 use Viserio\Component\Container\Pipeline\ResolveFactoryClassPipe;
 use Viserio\Component\Container\Pipeline\ResolveInvalidReferencesPipe;
-use Viserio\Component\Container\Pipeline\ResolveParameterPlaceHoldersPipe;
+use Viserio\Component\Container\Pipeline\ResolveParameterPlaceHolderPipe;
+use Viserio\Component\Container\Pipeline\ResolveParameterProcessorPlaceHolderPipe;
 use Viserio\Component\Container\Pipeline\ResolvePreloadPipe;
 use Viserio\Component\Container\Pipeline\ResolveReferenceAliasesToDependencyReferencesPipe;
 use Viserio\Component\Container\Pipeline\ResolveUndefinedDefinitionPipe;
@@ -58,35 +60,35 @@ final class PipelineConfig
      *
      * @var array
      */
-    private $afterRemovingPipelines = [];
+    private array $afterRemovingPipelines = [];
 
     /**
      * List of the before optimization pipelines.
      *
      * @var array
      */
-    private $beforeOptimizationPipelines = [];
+    private array $beforeOptimizationPipelines = [];
 
     /**
      * List of the before removing pipelines.
      *
      * @var array
      */
-    private $beforeRemovingPipelines = [];
+    private array $beforeRemovingPipelines = [];
 
     /**
      * List of the optimization pipelines.
      *
      * @var array
      */
-    private $optimizationPipelines = [];
+    private array $optimizationPipelines = [];
 
     /**
      * List of the removing pipelines.
      *
      * @var array
      */
-    private $removingPipelines = [];
+    private array $removingPipelines = [];
 
     /**
      * Create a new Pipeline Config instance.
@@ -94,18 +96,19 @@ final class PipelineConfig
     public function __construct()
     {
         $this->beforeOptimizationPipelines = [
-            32 => [
+            128 => [
+                new RegisterParameterProcessorsPipe(),
                 new ExtendedDefinitionPipe(),
-                new ResolveParameterPlaceHoldersPipe(),
+                new ResolveParameterPlaceHolderPipe(false, false),
                 new ResolveUndefinedDefinitionPipe(),
+                new CheckDefinitionConditionsPipe(),
             ],
         ];
         $this->optimizationPipelines = [[
-            new CheckDefinitionConditionsPipe(),
             new ResolveFactoryClassPipe(),
             new DecoratorServicePipe(),
             new AutowirePipe(),
-            new AutowireArrayParameterCompilerPipe(),
+            new AutowireArgumentArrayPipe(),
             new ResolveReferenceAliasesToDependencyReferencesPipe(),
             new ResolveInvalidReferencesPipe(),
             new AnalyzeServiceDependenciesPipe(true),
@@ -121,9 +124,12 @@ final class PipelineConfig
             new ReplaceDefinitionTypeToPrivateIfReferenceExistsPipe(),
             new AnalyzeServiceDependenciesPipe(),
         ]];
-        $this->afterRemovingPipelines = [[
-            new ResolvePreloadPipe(),
-        ]];
+        $this->afterRemovingPipelines = [
+            -1024 => [
+                new ResolveParameterProcessorPlaceHolderPipe(),
+            ],
+            [new ResolvePreloadPipe()],
+        ];
     }
 
     /**

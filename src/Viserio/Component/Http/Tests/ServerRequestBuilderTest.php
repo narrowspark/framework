@@ -290,7 +290,7 @@ final class ServerRequestBuilderTest extends TestCase
     /**
      * @return array<int, array<int, array<string, string>>>
      */
-    public function provideCreateFromGlobalsCases(): iterable
+    public static function provideCreateFromGlobalsCases(): iterable
     {
         $data = [];
         $methods = [
@@ -463,7 +463,7 @@ final class ServerRequestBuilderTest extends TestCase
                 'Cookie' => ['COOKIE'],
                 'Content-Type' => ['application/json'],
                 'Accept' => ['application/json'],
-                'Content-Md5' => ['CONTENT-MD5'],
+                'Content-MD5' => ['CONTENT-MD5'],
                 'Content-Length' => ['UNSPECIFIED'],
             ],
             $serverRequest->getHeaders()

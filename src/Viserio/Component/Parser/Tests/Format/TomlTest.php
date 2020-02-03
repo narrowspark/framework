@@ -44,7 +44,7 @@ final class TomlTest extends TestCase
             "
         )->at($this->root);
 
-        $parsed = (new TomlParser())->parse(\file_get_contents($file->url()));
+        $parsed = (new TomlParser())->parse((string) \file_get_contents($file->url()));
 
         self::assertSame(['backspace' => 'This string has a \b backspace character.'], $parsed);
     }
@@ -62,8 +62,8 @@ final class TomlTest extends TestCase
         $file = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'dumped.toml';
 
         self::assertSame(
-            \str_replace("\r", '', \file_get_contents($file)),
-            (new TomlDumper())->dump((new TomlParser())->parse(\file_get_contents($file)))
+            \str_replace("\r", '', (string) \file_get_contents($file)),
+            (new TomlDumper())->dump((new TomlParser())->parse((string) \file_get_contents($file)))
         );
     }
 
