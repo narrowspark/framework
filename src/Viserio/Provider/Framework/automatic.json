@@ -5,8 +5,7 @@
         },
         "bootstrap": {
             "Viserio\\Provider\\Framework\\Bootstrap\\ConfigurationLoaderBootstrap": ["global"],
-            "Viserio\\Component\\Framework\\Bootstrap\\ConfigureKernelBootstrap": ["global"],
-            "Viserio\\Component\\Framework\\Bootstrap\\CronScheduling": ["console"],
+            "Viserio\\Provider\\Framework\\Bootstrap\\ConfigureKernelBootstrap": ["global"],
             "Viserio\\Provider\\Framework\\Bootstrap\\InitializeContainerBootstrap": ["global"],
             "Viserio\\Provider\\Framework\\Bootstrap\\InitializeContainerBuilderBootstrap": ["global"],
             "Viserio\\Provider\\Framework\\Bootstrap\\LoadServiceProviderBootstrap": ["global"],

@@ -31,6 +31,9 @@
             "Viserio\\Component\\Foundation\\Bootstrap\\LoadEnvironmentVariablesBootstrap": [
                 "global"
             ],
+            "Viserio\\Component\\Foundation\\Bootstrap\\SetRequestForConsoleBootstrap": [
+                "console"
+            ],
             "Viserio\\Component\\Foundation\\Bootstrap\\ShellVerbosityBootstrap": [
                 "console"
             ]

@@ -5,6 +5,9 @@
                 "global"
             ]
         },
+        "bootstrap": {
+            "Viserio\\Component\\Cron\\Bootstrap\\CronSchedulingLoaderBootstrap": ["console"]
+        },
         "config": {
             "global": {
                 "viserio": {
