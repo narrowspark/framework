@@ -168,7 +168,7 @@ trait ConfigurationMandatoryIteratorTestTrait
      */
     public function testMandatoryConfigResolvingShouldReturnDataWithProvidedDefaultConfigPart1($config): void
     {
-        $defaultOptions = ConnectionComponentDefaultConfigMandatoryContainedIdConfiguration::getDefaultConfig();
+        $defaultConfig = ConnectionComponentDefaultConfigMandatoryContainedIdConfiguration::getDefaultConfig();
 
         unset($config['doctrine']['connection']['orm_default']['params']['host'], $config['doctrine']['connection']['orm_default']['params']['port']);
 
@@ -182,8 +182,8 @@ trait ConfigurationMandatoryIteratorTestTrait
 
         self::assertCount(2, $array);
         self::assertArrayHasKey('params', $array);
-        self::assertSame($array['params']['host'], $defaultOptions['params']['host']);
-        self::assertSame($array['params']['port'], $defaultOptions['params']['port']);
+        self::assertSame($array['params']['host'], $defaultConfig['params']['host']);
+        self::assertSame($array['params']['port'], $defaultConfig['params']['port']);
         self::assertSame(
             $array['params']['user'],
             $config['doctrine']['connection']['orm_default']['params']['user']
@@ -197,7 +197,7 @@ trait ConfigurationMandatoryIteratorTestTrait
      */
     public function testMandatoryConfigResolvingShouldReturnDataWithProvidedDefaultConfigPart2($config): void
     {
-        $defaultOptions = ConnectionComponentDefaultConfigMandatoryContainedIdConfiguration::getDefaultConfig();
+        $defaultConfig = ConnectionComponentDefaultConfigMandatoryContainedIdConfiguration::getDefaultConfig();
 
         // remove main index key
         unset($config['doctrine']['connection']['orm_default']['params']);
@@ -212,8 +212,8 @@ trait ConfigurationMandatoryIteratorTestTrait
 
         self::assertCount(2, $array);
         self::assertArrayHasKey('params', $array);
-        self::assertSame($array['params']['host'], $defaultOptions['params']['host']);
-        self::assertSame($array['params']['port'], $defaultOptions['params']['port']);
+        self::assertSame($array['params']['host'], $defaultConfig['params']['host']);
+        self::assertSame($array['params']['port'], $defaultConfig['params']['port']);
     }
 
     /**

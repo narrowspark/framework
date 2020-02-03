@@ -154,26 +154,26 @@ class ConfigDumpCommand extends AbstractCommand
             }
 
             /**
-             * Read the mandatory options and ask for the value.
+             * Read the mandatory config and ask for the value.
              *
              * @param string $className
              * @param array  $dimensions
-             * @param array  $mandatoryOptions
+             * @param array  $mandatoryConfig
              *
              * @return array
              */
-            protected function readMandatoryOption(string $className, array $dimensions, array $mandatoryOptions): array
+            protected function readMandatoryOption(string $className, array $dimensions, array $mandatoryConfig): array
             {
-                $options = [];
+                $config = [];
 
-                foreach ($mandatoryOptions as $key => $mandatoryOption) {
+                foreach ($mandatoryConfig as $key => $mandatoryOption) {
                     if (! \is_scalar($mandatoryOption)) {
-                        $options[$key] = $this->readMandatoryOption($className, $dimensions, $mandatoryOptions[$key]);
+                        $config[$key] = $this->readMandatoryOption($className, $dimensions, $mandatoryConfig[$key]);
 
                         continue;
                     }
 
-                    $options[$mandatoryOption] = $this->command->ask(
+                    $config[$mandatoryOption] = $this->command->ask(
                         \sprintf(
                             '%s: Please enter the following mandatory value for [%s]',
                             $className,
@@ -182,7 +182,7 @@ class ConfigDumpCommand extends AbstractCommand
                     );
                 }
 
-                return $options;
+                return $config;
             }
         };
     }

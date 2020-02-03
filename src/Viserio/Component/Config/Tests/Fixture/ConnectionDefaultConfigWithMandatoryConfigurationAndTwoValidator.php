@@ -19,7 +19,7 @@ use Viserio\Contract\Config\RequiresConfig as RequiresConfigContract;
 use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 use Viserio\Contract\Config\RequiresValidatedConfig as RequiresValidatedConfigContract;
 
-class ConnectionDefaultOptionsWithMandatoryConfigurationAndTwoValidator implements ProvidesDefaultConfigContract,
+class ConnectionDefaultConfigWithMandatoryConfigurationAndTwoValidator implements ProvidesDefaultConfigContract,
     RequiresConfigContract,
     RequiresMandatoryConfigContract,
     RequiresValidatedConfigContract

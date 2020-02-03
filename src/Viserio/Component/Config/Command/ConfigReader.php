@@ -32,7 +32,7 @@ class ConfigReader
 
         if (isset($interfaces[RequiresConfigContract::class])) {
             $dimensions = [];
-            $defaultOptions = [];
+            $defaultConfig = [];
             $key = null;
             $class = $reflectionClass->getName();
 
@@ -42,16 +42,16 @@ class ConfigReader
             }
 
             if (isset($interfaces[ProvidesDefaultConfigContract::class])) {
-                $defaultOptions = $class::getDefaultConfig();
+                $defaultConfig = $class::getDefaultConfig();
             }
 
             if (isset($interfaces[RequiresMandatoryConfigContract::class])) {
                 $config = \array_merge_recursive(
-                    $defaultOptions,
+                    $defaultConfig,
                     $this->readMandatoryOption($class, $dimensions, $class::getMandatoryConfig())
                 );
             } else {
-                $config = $defaultOptions;
+                $config = $defaultConfig;
             }
 
             if (\count($dimensions) !== 0) {
@@ -69,29 +69,29 @@ class ConfigReader
     }
 
     /**
-     * Read the mandatory options.
+     * Read the mandatory config.
      *
      * @param string $className
      * @param array  $dimensions
-     * @param array  $mandatoryOptions
+     * @param array  $mandatoryConfig
      *
      * @return array
      */
-    protected function readMandatoryOption(string $className, array $dimensions, array $mandatoryOptions): array
+    protected function readMandatoryOption(string $className, array $dimensions, array $mandatoryConfig): array
     {
-        $options = [];
+        $config = [];
 
-        foreach ($mandatoryOptions as $key => $mandatoryOption) {
+        foreach ($mandatoryConfig as $key => $mandatoryOption) {
             if (! \is_scalar($mandatoryOption)) {
-                $options[$key] = $this->readMandatoryOption($className, $dimensions, $mandatoryOptions[$key]);
+                $config[$key] = $this->readMandatoryOption($className, $dimensions, $mandatoryConfig[$key]);
 
                 continue;
             }
 
-            $options[$mandatoryOption] = null;
+            $config[$mandatoryOption] = null;
         }
 
-        return $options;
+        return $config;
     }
 
     /**

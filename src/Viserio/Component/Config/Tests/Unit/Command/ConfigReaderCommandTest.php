@@ -19,7 +19,7 @@ use Viserio\Component\Config\Tests\Fixture\ConnectionComponentConfiguration;
 use Viserio\Component\Config\Tests\Fixture\ConnectionComponentDefaultConfigConfiguration;
 use Viserio\Component\Config\Tests\Fixture\ConnectionComponentDefaultConfigMandatoryContainedIdConfiguration;
 use Viserio\Component\Config\Tests\Fixture\ConnectionDefaultConfigConfiguration;
-use Viserio\Component\Config\Tests\Fixture\ConnectionDefaultOptionsWithMandatoryConfigurationAndTwoLevelArrayValidator;
+use Viserio\Component\Config\Tests\Fixture\ConnectionDefaultConfigWithMandatoryConfigurationAndTwoLevelArrayValidator;
 use Viserio\Component\Console\Tester\CommandTestCase;
 
 /**
@@ -101,7 +101,7 @@ final class ConfigReaderCommandTest extends CommandTestCase
                 [],
             ],
             [
-                ConnectionDefaultOptionsWithMandatoryConfigurationAndTwoLevelArrayValidator::class,
+                ConnectionDefaultConfigWithMandatoryConfigurationAndTwoLevelArrayValidator::class,
                 [
                     'params' => [
                         'host' => 'awesomehost',

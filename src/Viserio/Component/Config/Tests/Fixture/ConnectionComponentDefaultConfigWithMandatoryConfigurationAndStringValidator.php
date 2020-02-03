@@ -13,24 +13,19 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Config\Tests\Fixture;
 
-use RuntimeException;
 use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
-use Viserio\Contract\Config\RequiresConfig as RequiresConfigContract;
+use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 use Viserio\Contract\Config\RequiresValidatedConfig as RequiresValidatedConfigContract;
 
-class ConnectionDefaultOptionsWithMandatoryConfigurationAndTwoLevelArrayValidator implements ProvidesDefaultConfigContract,
-    RequiresConfigContract,
+class ConnectionComponentDefaultConfigWithMandatoryConfigurationAndStringValidator implements ProvidesDefaultConfigContract,
+    RequiresComponentConfigContract,
     RequiresMandatoryConfigContract,
     RequiresValidatedConfigContract
 {
     public static function getMandatoryConfig(): iterable
     {
-        return [
-            'driverClass' => [
-                'connection',
-            ],
-        ];
+        return ['driverClass'];
     }
 
     public static function getDefaultConfig(): iterable
@@ -46,13 +41,15 @@ class ConnectionDefaultOptionsWithMandatoryConfigurationAndTwoLevelArrayValidato
     public static function getConfigValidators(): iterable
     {
         return [
-            'driverClass' => [
-                'connection' => static function ($value): void {
-                    if (! \is_string($value)) {
-                        throw new RuntimeException('need to be a string.');
-                    }
-                },
-            ],
+            'driverClass' => ['string'],
         ];
+    }
+
+    /**
+     * {@inheritdoc}.
+     */
+    public static function getDimensions(): iterable
+    {
+        return ['vendor', 'package'];
     }
 }

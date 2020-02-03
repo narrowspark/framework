@@ -26,7 +26,7 @@ jobs:
           extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo
           tools: composer, composer-prefetcher, cs2pr
 
-      - name: "Install Narrowspark coding standard and Annotate a Github Pull Request"
+      - name: "Install Narrowspark coding standard"
         run: composer global require narrowspark/coding-standard:3.4.0 --no-interaction --no-progress --profile --no-suggest --optimize-autoloader
 
       - name: "lint php code"

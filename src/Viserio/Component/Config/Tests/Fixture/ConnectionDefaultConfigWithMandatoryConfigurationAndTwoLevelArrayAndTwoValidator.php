@@ -19,14 +19,21 @@ use Viserio\Contract\Config\RequiresConfig as RequiresConfigContract;
 use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigContract;
 use Viserio\Contract\Config\RequiresValidatedConfig as RequiresValidatedConfigContract;
 
-class ConnectionDefaultOptionsWithMandatoryConfigurationAndValidator implements ProvidesDefaultConfigContract,
+class ConnectionDefaultConfigWithMandatoryConfigurationAndTwoLevelArrayAndTwoValidator implements ProvidesDefaultConfigContract,
     RequiresConfigContract,
     RequiresMandatoryConfigContract,
     RequiresValidatedConfigContract
 {
     public static function getMandatoryConfig(): iterable
     {
-        return ['driverClass'];
+        return [
+            'driverClass' => [
+                'connection',
+            ],
+            'orm' => [
+                'default_connection',
+            ],
+        ];
     }
 
     public static function getDefaultConfig(): iterable
@@ -42,11 +49,20 @@ class ConnectionDefaultOptionsWithMandatoryConfigurationAndValidator implements 
     public static function getConfigValidators(): iterable
     {
         return [
-            'driverClass' => static function ($value): void {
-                if (! \is_string($value)) {
-                    throw new RuntimeException('need to be a string.');
-                }
-            },
+            'driverClass' => [
+                'connection' => static function ($value): void {
+                    if (! \is_string($value)) {
+                        throw new RuntimeException('need to be a string.');
+                    }
+                },
+            ],
+            'orm' => [
+                'default_connection' => static function ($value): void {
+                    if (! \is_string($value)) {
+                        throw new RuntimeException('need to be a string.');
+                    }
+                },
+            ],
         ];
     }
 }

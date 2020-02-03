@@ -37,34 +37,6 @@ class IniParser implements ParserContract
     private $nestSeparator = '.';
 
     /**
-     * Get nest separator.
-     *
-     * @return string
-     */
-    public function getNestSeparator(): string
-    {
-        return $this->nestSeparator;
-    }
-
-    /**
-     * Set nest separator.
-     *
-     * @param string $separator
-     *
-     * @return self
-     */
-    public function setNestSeparator(string $separator): self
-    {
-        if ($separator === '') {
-            throw new InvalidArgumentException('A empty string cant be set as a separator.');
-        }
-
-        $this->nestSeparator = $separator;
-
-        return $this;
-    }
-
-    /**
      * Get if sections should be processed
      * When sections are not processed,section names are stripped and section
      * values are merged.
@@ -92,6 +64,34 @@ class IniParser implements ParserContract
     public function setProcessSections(bool $processSections): self
     {
         $this->processSections = $processSections;
+
+        return $this;
+    }
+
+    /**
+     * Get nest separator.
+     *
+     * @return string
+     */
+    public function getNestSeparator(): string
+    {
+        return $this->nestSeparator;
+    }
+
+    /**
+     * Set nest separator.
+     *
+     * @param string $separator
+     *
+     * @return self
+     */
+    public function setNestSeparator(string $separator): self
+    {
+        if ($separator === '') {
+            throw new InvalidArgumentException('A empty string cant be set as a separator.');
+        }
+
+        $this->nestSeparator = $separator;
 
         return $this;
     }

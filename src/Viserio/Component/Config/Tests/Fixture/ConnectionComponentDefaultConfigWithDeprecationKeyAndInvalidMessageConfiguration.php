@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Config\Tests\Fixture;
 
-use Viserio\Contract\Config\DeprecatedConfig as DeprecatedOptionsContract;
+use Viserio\Contract\Config\DeprecatedConfig as DeprecatedConfigContract;
 use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
 use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
 
-class ConnectionComponentDefaultConfigWithDeprecationKeyAndInvalidMessageConfiguration implements DeprecatedOptionsContract, ProvidesDefaultConfigContract, RequiresComponentConfigContract
+class ConnectionComponentDefaultConfigWithDeprecationKeyAndInvalidMessageConfiguration implements DeprecatedConfigContract, ProvidesDefaultConfigContract, RequiresComponentConfigContract
 {
     /**
      * {@inheritdoc}.

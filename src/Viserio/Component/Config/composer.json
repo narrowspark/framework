@@ -1,12 +1,11 @@
 {
     "name": "viserio/config",
     "type": "library",
-    "description": "The Viserio Options Resolver package.",
+    "description": "The Viserio Config package.",
     "keywords": [
         "narrowspark",
         "viserio",
-        "options",
-        "option",
+        "config",
         "component",
         "resolver",
         "configuration"

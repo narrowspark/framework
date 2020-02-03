@@ -35,7 +35,7 @@ class ConfigReaderCommand extends AbstractCommand
     /**
      * {@inheritdoc}
      */
-    protected $description = 'Reads the provided configuration file and displays options for the provided class name.';
+    protected $description = 'Reads the provided configuration file and displays config for the provided class name.';
 
     /**
      * {@inheritdoc}

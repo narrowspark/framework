@@ -26,13 +26,13 @@ class UniversalContainerIdComponentConfiguration implements ProvidesDefaultConfi
     ];
 
     /** @var array */
-    private static $getMandatoryOptions = [
+    private static $getMandatoryConfig = [
         'params' => ['user', 'dbname'],
         'driverClass',
     ];
 
     /** @var array */
-    private static $getDefaultOptions = [
+    private static $getDefaultConfig = [
         'params' => [
             'host' => 'awesomehost',
             'port' => '4444',
@@ -46,12 +46,12 @@ class UniversalContainerIdComponentConfiguration implements ProvidesDefaultConfi
 
     public static function getMandatoryConfig(): iterable
     {
-        return self::getData('getMandatoryOptions');
+        return self::getData('getMandatoryConfig');
     }
 
     public static function getDefaultConfig(): iterable
     {
-        return self::getData('getDefaultOptions');
+        return self::getData('getDefaultConfig');
     }
 
     private static function getData($name)
