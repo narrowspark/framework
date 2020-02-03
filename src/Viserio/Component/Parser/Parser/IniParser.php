@@ -21,13 +21,6 @@ use Viserio\Contract\Parser\Parser as ParserContract;
 class IniParser implements ParserContract
 {
     /**
-     * Separator for nesting levels of configuration data identifiers.
-     *
-     * @var string
-     */
-    private $nestSeparator = '.';
-
-    /**
      * Flag which determines whether sections are processed or not.
      *
      * @see https://www.php.net/parse_ini_file
@@ -35,6 +28,13 @@ class IniParser implements ParserContract
      * @var bool
      */
     protected $processSections = true;
+
+    /**
+     * Separator for nesting levels of configuration data identifiers.
+     *
+     * @var string
+     */
+    private $nestSeparator = '.';
 
     /**
      * Get nest separator.
@@ -145,28 +145,6 @@ class IniParser implements ParserContract
     }
 
     /**
-     * Process a nested section.
-     *
-     * @param array<int|string, mixed> $sections
-     * @param mixed                    $value
-     *
-     * @return array<int|string, mixed>
-     */
-    private function buildNestedSection(array $sections, $value): array
-    {
-        if (\count($sections) === 0) {
-            return $this->processSection($value);
-        }
-
-        $nestedSection = [];
-
-        $first = \array_shift($sections);
-        $nestedSection[$first] = $this->buildNestedSection($sections, $value);
-
-        return $nestedSection;
-    }
-
-    /**
      * Process a section.
      *
      * @param array<int|string, mixed> $section
@@ -217,6 +195,28 @@ class IniParser implements ParserContract
         } else {
             $config[$key] = $this->normalize($value);
         }
+    }
+
+    /**
+     * Process a nested section.
+     *
+     * @param array<int|string, mixed> $sections
+     * @param mixed                    $value
+     *
+     * @return array<int|string, mixed>
+     */
+    private function buildNestedSection(array $sections, $value): array
+    {
+        if (\count($sections) === 0) {
+            return $this->processSection($value);
+        }
+
+        $nestedSection = [];
+
+        $first = \array_shift($sections);
+        $nestedSection[$first] = $this->buildNestedSection($sections, $value);
+
+        return $nestedSection;
     }
 
     /**

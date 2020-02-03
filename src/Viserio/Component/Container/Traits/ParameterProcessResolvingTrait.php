@@ -27,6 +27,11 @@ trait ParameterProcessResolvingTrait
     protected array $cache = [];
 
     /**
+     * @return iterable
+     */
+    abstract protected function getProcessors(): iterable;
+
+    /**
      * Resolves parameters inside a string.
      *
      * @param string $expression
@@ -78,9 +83,4 @@ trait ParameterProcessResolvingTrait
 
         return $value;
     }
-
-    /**
-     * @return iterable
-     */
-    abstract protected function getProcessors(): iterable;
 }

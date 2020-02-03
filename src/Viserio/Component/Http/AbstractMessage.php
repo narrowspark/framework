@@ -91,44 +91,6 @@ abstract class AbstractMessage implements MessageInterface
     }
 
     /**
-     * Set validated headers.
-     *
-     * @param array<int|string, mixed> $headers
-     *
-     * @return void
-     */
-    protected function setHeaders(array $headers): void
-    {
-        if (\count($headers) === 0) {
-            return;
-        }
-
-        $this->headerNames = $this->headers = [];
-
-        // Numeric array keys are converted to int by PHP but having a header name '123' is not forbidden by the spec
-        // and also allowed in withHeader().
-        foreach ($headers as $header => $value) {
-            $this->assertHeader($header);
-
-            $value = $this->filterHeaderValue($value);
-
-            $normalized = $header;
-
-            if (! \is_int($header)) {
-                $normalized = \strtr($header, Util::UPPER_CASE, Util::LOWER_CASE);
-            }
-
-            if (\array_key_exists($normalized, $this->headerNames)) {
-                $header = (string) $this->headerNames[$normalized];
-                $this->headers[$header] += $value;
-            } else {
-                $this->headerNames[$normalized] = $header;
-                $this->headers[$header] = $value;
-            }
-        }
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function withProtocolVersion($version)
@@ -349,6 +311,44 @@ abstract class AbstractMessage implements MessageInterface
         $new->stream = $body;
 
         return $new;
+    }
+
+    /**
+     * Set validated headers.
+     *
+     * @param array<int|string, mixed> $headers
+     *
+     * @return void
+     */
+    protected function setHeaders(array $headers): void
+    {
+        if (\count($headers) === 0) {
+            return;
+        }
+
+        $this->headerNames = $this->headers = [];
+
+        // Numeric array keys are converted to int by PHP but having a header name '123' is not forbidden by the spec
+        // and also allowed in withHeader().
+        foreach ($headers as $header => $value) {
+            $this->assertHeader($header);
+
+            $value = $this->filterHeaderValue($value);
+
+            $normalized = $header;
+
+            if (! \is_int($header)) {
+                $normalized = \strtr($header, Util::UPPER_CASE, Util::LOWER_CASE);
+            }
+
+            if (\array_key_exists($normalized, $this->headerNames)) {
+                $header = (string) $this->headerNames[$normalized];
+                $this->headers[$header] += $value;
+            } else {
+                $this->headerNames[$normalized] = $header;
+                $this->headers[$header] = $value;
+            }
+        }
     }
 
     /**

@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Viserio\Provider\Framework\Tests\Container\Provider;
 
 use Viserio\Component\Container\ContainerBuilder;
+use Viserio\Component\Container\Pipeline\RegisterParameterProcessorsPipe;
+use Viserio\Component\Container\Processor\EnvParameterProcessor;
 use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Contract\Container\Processor\ParameterProcessor as ParameterProcessorContract;
 use Viserio\Provider\Framework\Container\Provider\FrameworkServiceProvider;
@@ -30,7 +32,7 @@ final class FrameworkServiceProviderTest extends AbstractContainerTestCase
         self::assertInstanceOf(ParameterProcessorContract::class, $this->container->get(EnvParameterProcessor::class));
 
         /** @var \Viserio\Component\Container\RewindableGenerator $processors */
-        $processors = $this->container->get('viserio.container.parameter.processors');
+        $processors = $this->container->get(RegisterParameterProcessorsPipe::RUNTIME_PROCESSORS_KEY);
 
         self::assertInstanceOf(ParameterProcessorContract::class, $processors->getIterator()->current());
     }

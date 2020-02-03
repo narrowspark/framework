@@ -76,20 +76,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     }
 
     /**
-     * Get the cerebro application instance.
-     *
-     * @return \Viserio\Component\Console\Application
-     */
-    protected function getConsole(): Cerebro
-    {
-        if ($this->console === null) {
-            return $this->console = $this->getContainer()->get(Cerebro::class);
-        }
-
-        return $this->console;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function handle(InputInterface $input, ?OutputInterface $output = null): int
@@ -150,6 +136,20 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
         $this->bootstrap();
 
         $this->getConsole()->add($command);
+    }
+
+    /**
+     * Get the cerebro application instance.
+     *
+     * @return \Viserio\Component\Console\Application
+     */
+    protected function getConsole(): Cerebro
+    {
+        if ($this->console === null) {
+            return $this->console = $this->getContainer()->get(Cerebro::class);
+        }
+
+        return $this->console;
     }
 
     /**

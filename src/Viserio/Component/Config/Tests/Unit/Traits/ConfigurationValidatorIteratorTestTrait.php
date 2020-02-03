@@ -233,7 +233,7 @@ trait ConfigurationValidatorIteratorTestTrait
     public function testValidatorResolvingShouldThrowExceptionOnInvalidValidator(): void
     {
         $this->expectException(InvalidValidatorException::class);
-        $this->expectExceptionMessage('The validator must be of type callable or string[]; [string] given, in [Viserio\Component\Config\Tests\Fixture\InvalidValidatedComponentConfigurationFixture].');
+        $this->expectExceptionMessage('The validator must be of type callable or array<string|object, string>; [string] given, in [Viserio\Component\Config\Tests\Fixture\InvalidValidatedComponentConfigurationFixture].');
 
         $this->getConfigurationIterator(
             InvalidValidatedComponentConfigurationFixture::class,

@@ -19,18 +19,18 @@ use Viserio\Contract\Container\Definition\IteratorDefinition as IteratorDefiniti
 final class IteratorDefinition extends AbstractDefinition implements IteratorDefinitionContract
 {
     /**
-     * List of parameter to pass when calling the class.
-     *
-     * @var null|array<int|string, mixed>
-     */
-    private ?array $argument = null;
-
-    /**
      * Default deprecation template.
      *
      * @var string
      */
     protected $defaultDeprecationTemplate = 'The [%s] service is deprecated. You should stop using it, as it will be removed in the future.';
+
+    /**
+     * List of parameter to pass when calling the class.
+     *
+     * @var null|array<int|string, mixed>
+     */
+    private ?array $argument = null;
 
     /**
      * Create a new Iterator Definition instance.
@@ -61,7 +61,7 @@ final class IteratorDefinition extends AbstractDefinition implements IteratorDef
     /**
      * {@inheritdoc}
      */
-    public function setArgument(array $argument): IteratorDefinitionContract
+    public function setArgument(array $argument)
     {
         $this->changes['argument'] = true;
 

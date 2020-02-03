@@ -74,6 +74,10 @@ class ConfigurationValidatorIterator extends IteratorIterator
                 continue;
             }
 
+            if (! \is_array($values) && ! \is_callable($values)) {
+                throw new InvalidValidatorException(\sprintf('The validator must be of type callable or array<string|object, string>; [%s] given, in [%s].', \is_object($values) ? \get_class($values) : \gettype($values), $class));
+            }
+
             if (\is_array($values) && isset($values[0]) && \is_string($values[0])) {
                 $hasError = false;
 
@@ -94,10 +98,6 @@ class ConfigurationValidatorIterator extends IteratorIterator
                 $values($config[$key], $key);
 
                 continue;
-            }
-
-            if (! \is_array($values) && ! \is_callable($values)) {
-                throw new InvalidValidatorException(\sprintf('The validator must be of type callable or string[]; [%s] given, in [%s].', \is_object($values) ? \get_class($values) : \gettype($values), $class));
             }
 
             $this->validateConfig($class, (array) $values, $config[$key]);

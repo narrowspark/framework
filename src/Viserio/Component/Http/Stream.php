@@ -249,28 +249,6 @@ class Stream implements StreamInterface
     }
 
     /**
-     * Returns whether or not the stream is a pipe.
-     *
-     * @return bool
-     */
-    private function isPipe(): bool
-    {
-        if ($this->isPipe === null) {
-            $this->isPipe = false;
-
-            if (\is_resource($this->stream)) {
-                $stats = \fstat($this->stream);
-
-                if ($stats !== false) {
-                    $this->isPipe = ($stats['mode'] & self::FSTAT_MODE_S_IFIFO) !== 0;
-                }
-            }
-        }
-
-        return $this->isPipe;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getContents(): string
@@ -455,5 +433,27 @@ class Stream implements StreamInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Returns whether or not the stream is a pipe.
+     *
+     * @return bool
+     */
+    private function isPipe(): bool
+    {
+        if ($this->isPipe === null) {
+            $this->isPipe = false;
+
+            if (\is_resource($this->stream)) {
+                $stats = \fstat($this->stream);
+
+                if ($stats !== false) {
+                    $this->isPipe = ($stats['mode'] & self::FSTAT_MODE_S_IFIFO) !== 0;
+                }
+            }
+        }
+
+        return $this->isPipe;
     }
 }

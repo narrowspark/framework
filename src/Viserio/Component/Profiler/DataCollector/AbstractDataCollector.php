@@ -76,26 +76,6 @@ abstract class AbstractDataCollector implements DataCollectorContract
     }
 
     /**
-     * Get the cloner used for dumping variables.
-     *
-     * @return \Symfony\Component\VarDumper\Cloner\AbstractCloner
-     */
-    private static function getCloner(): AbstractCloner
-    {
-        if (self::$cloner === null) {
-            self::$cloner = new VarCloner();
-            self::$cloner->setMaxItems(250);
-            self::$cloner->addCasters([
-                Stub::class => static function (Stub $v, array $a, Stub $s, $isNested) {
-                    return $isNested ? $a : StubCaster::castStub($v, $a, $s, true);
-                },
-            ]);
-        }
-
-        return self::$cloner;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getMenuPosition(): string
@@ -354,6 +334,26 @@ abstract class AbstractDataCollector implements DataCollectorContract
         self::$htmlDumperOutput->reset();
 
         return $output;
+    }
+
+    /**
+     * Get the cloner used for dumping variables.
+     *
+     * @return \Symfony\Component\VarDumper\Cloner\AbstractCloner
+     */
+    private static function getCloner(): AbstractCloner
+    {
+        if (self::$cloner === null) {
+            self::$cloner = new VarCloner();
+            self::$cloner->setMaxItems(250);
+            self::$cloner->addCasters([
+                Stub::class => static function (Stub $v, array $a, Stub $s, $isNested) {
+                    return $isNested ? $a : StubCaster::castStub($v, $a, $s, true);
+                },
+            ]);
+        }
+
+        return self::$cloner;
     }
 
     /**

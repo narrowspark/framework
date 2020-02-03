@@ -37,6 +37,13 @@ use Viserio\Contract\Filesystem\Watcher\Watcher as WatcherContract;
 class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContract
 {
     /**
+     * List of the default permissions for file end directory.
+     *
+     * @var array<string, array<string, float|int|string>>
+     */
+    protected static $permissions;
+
+    /**
      * Last catch error message.
      *
      * @var null|string
@@ -49,13 +56,6 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
      * @var null|int
      */
     private static $lastType;
-
-    /**
-     * List of the default permissions for file end directory.
-     *
-     * @var array<string, array<string, float|int|string>>
-     */
-    protected static $permissions;
 
     /**
      * Create a new Filesystem instance.
@@ -947,6 +947,22 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
     }
 
     /**
+     * @internal
+     *
+     * @param int    $type
+     * @param string $msg
+     *
+     * @return bool;
+     */
+    public static function handleError(int $type, string $msg): bool
+    {
+        self::$lastError = $msg;
+        self::$lastType = $type;
+
+        return true;
+    }
+
+    /**
      * @param string $origin
      * @param string $target
      * @param string $linkType Name of the link type, typically 'symbolic' or 'hard'
@@ -1031,22 +1047,6 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
         \restore_error_handler();
 
         throw $e;
-    }
-
-    /**
-     * @internal
-     *
-     * @param int    $type
-     * @param string $msg
-     *
-     * @return bool;
-     */
-    public static function handleError(int $type, string $msg): bool
-    {
-        self::$lastError = $msg;
-        self::$lastType = $type;
-
-        return true;
     }
 
     /**

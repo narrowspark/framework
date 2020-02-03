@@ -169,27 +169,6 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
     }
 
     /**
-     * Configured invoker.
-     *
-     * @return \Invoker\InvokerInterface
-     */
-    private function getInvoker(): InvokerInterface
-    {
-        if (! $this->invoker) {
-            $parameterResolver = new ResolverChain([
-                new NumericArrayResolver(),
-                new AssociativeArrayResolver(),
-                new TypeHintContainerResolver($this),
-                new ParameterNameContainerResolver($this),
-                new DefaultValueResolver(),
-            ]);
-            $this->invoker = new Invoker($parameterResolver, $this);
-        }
-
-        return $this->invoker;
-    }
-
-    /**
      * Set a custom invoker.
      *
      * @param InvokerInterface $invoker
@@ -581,6 +560,120 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function getServicesAndAliases(): array
+    {
+        return \array_unique(
+            \array_merge(
+                \array_keys($this->aliases),
+                \array_keys($this->methodMapping),
+                \array_keys($this->fileMap)
+            )
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function populateAvailableTypes(): void
+    {
+        $this->types = [];
+        $this->ambiguousServiceTypes = [];
+
+        foreach ($this->methodMapping as $id => $method) {
+            $value = $this->get($id);
+
+            if (! \is_object($value) || $value instanceof Closure) {
+                return;
+            }
+
+            $this->populateAvailableType($id, \get_class($value));
+        }
+    }
+
+    /**
+     * As a separate method to allow "getParameter()" to use the really fast `??` operator.
+     * And a helper function to extend getParameter with dynamic parameter loading if needed.
+     *
+     * @param string $id
+     *
+     * @throws \Viserio\Contract\Container\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Container\Exception\NotFoundException
+     *
+     * @return mixed
+     */
+    protected function doGetParameter(string $id)
+    {
+        if ($id === '') {
+            throw new InvalidArgumentException('You called getParameter with a empty argument.');
+        }
+
+        if ($this->hasParameter($id)) {
+            return $this->dottedKeyCache[$id] = \array_reduce(
+                \explode('.', $id),
+                static function (array $value, $key) {
+                    return $value[$key];
+                },
+                $this->getParameters()
+            );
+        }
+
+        $alternatives = [];
+
+        foreach (\array_keys(\array_merge($this->parameters, $this->loadedDynamicParameters)) as $key) {
+            $lev = \levenshtein($id, $key);
+
+            if ($lev <= \strlen($id) / 3 || false !== \strpos($key, $id)) {
+                $alternatives[] = $key;
+            }
+        }
+
+        $nonNestedAlternative = null;
+
+        if (\count($alternatives) === 0 && \strpos($id, '.') !== false) {
+            $namePartsLength = \array_map('\strlen', \explode('.', $id));
+
+            $key = \substr($id, 0, (int) (-1 * (1 + \array_pop($namePartsLength))));
+
+            while (\count($namePartsLength)) {
+                if ($this->hasParameter($key)) {
+                    if (\is_array($this->getParameter($key))) {
+                        $nonNestedAlternative = $key;
+                    }
+
+                    break;
+                }
+
+                $key = \substr($key, 0, (int) (-1 * (1 + \array_pop($namePartsLength))));
+            }
+        }
+
+        throw new ParameterNotFoundException($id, null, null, null, $alternatives, $nonNestedAlternative);
+    }
+
+    /**
+     * Configured invoker.
+     *
+     * @return \Invoker\InvokerInterface
+     */
+    private function getInvoker(): InvokerInterface
+    {
+        if (! $this->invoker) {
+            $parameterResolver = new ResolverChain([
+                new NumericArrayResolver(),
+                new AssociativeArrayResolver(),
+                new TypeHintContainerResolver($this),
+                new ParameterNameContainerResolver($this),
+                new DefaultValueResolver(),
+            ]);
+            $this->invoker = new Invoker($parameterResolver, $this);
+        }
+
+        return $this->invoker;
+    }
+
+    /**
      * Autowires the constructor or a method.
      *
      * @param ReflectionFunctionAbstract $reflectionMethod
@@ -680,98 +773,5 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
         \ksort($arguments);
 
         return $arguments;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getServicesAndAliases(): array
-    {
-        return \array_unique(
-            \array_merge(
-                \array_keys($this->aliases),
-                \array_keys($this->methodMapping),
-                \array_keys($this->fileMap)
-            )
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function populateAvailableTypes(): void
-    {
-        $this->types = [];
-        $this->ambiguousServiceTypes = [];
-
-        foreach ($this->methodMapping as $id => $method) {
-            $value = $this->get($id);
-
-            if (! \is_object($value) || $value instanceof Closure) {
-                return;
-            }
-
-            $this->populateAvailableType($id, \get_class($value));
-        }
-    }
-
-    /**
-     * As a separate method to allow "getParameter()" to use the really fast `??` operator.
-     * And a helper function to extend getParameter with dynamic parameter loading if needed.
-     *
-     * @param string $id
-     *
-     * @throws \Viserio\Contract\Container\Exception\InvalidArgumentException
-     * @throws \Viserio\Contract\Container\Exception\NotFoundException
-     *
-     * @return mixed
-     */
-    protected function doGetParameter(string $id)
-    {
-        if ($id === '') {
-            throw new InvalidArgumentException('You called getParameter with a empty argument.');
-        }
-
-        if ($this->hasParameter($id)) {
-            return $this->dottedKeyCache[$id] = \array_reduce(
-                \explode('.', $id),
-                static function (array $value, $key) {
-                    return $value[$key];
-                },
-                $this->getParameters()
-            );
-        }
-
-        $alternatives = [];
-
-        foreach (\array_keys(\array_merge($this->parameters, $this->loadedDynamicParameters)) as $key) {
-            $lev = \levenshtein($id, $key);
-
-            if ($lev <= \strlen($id) / 3 || false !== \strpos($key, $id)) {
-                $alternatives[] = $key;
-            }
-        }
-
-        $nonNestedAlternative = null;
-
-        if (\count($alternatives) === 0 && \strpos($id, '.') !== false) {
-            $namePartsLength = \array_map('\strlen', \explode('.', $id));
-
-            $key = \substr($id, 0, (int) (-1 * (1 + \array_pop($namePartsLength))));
-
-            while (\count($namePartsLength)) {
-                if ($this->hasParameter($key)) {
-                    if (\is_array($this->getParameter($key))) {
-                        $nonNestedAlternative = $key;
-                    }
-
-                    break;
-                }
-
-                $key = \substr($key, 0, (int) (-1 * (1 + \array_pop($namePartsLength))));
-            }
-        }
-
-        throw new ParameterNotFoundException($id, null, null, null, $alternatives, $nonNestedAlternative);
     }
 }

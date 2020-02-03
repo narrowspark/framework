@@ -112,7 +112,9 @@ final class RegisterParameterProcessorsPipe implements PipeContract
         }
 
         if (\count($runtimeProcessorRefs) !== 0) {
-            $containerBuilder->singleton(self::RUNTIME_PROCESSORS_KEY, ArrayIterator::class)
+            /** @var \Viserio\Contract\Container\Definition\IteratorDefinition $iteratorDefinition */
+            $iteratorDefinition = $containerBuilder->singleton(self::RUNTIME_PROCESSORS_KEY, ArrayIterator::class);
+            $iteratorDefinition
                 ->setArgument($runtimeProcessorRefs)
                 ->addTag(ResolvePreloadPipe::TAG)
                 ->setPublic(true);
@@ -120,8 +122,10 @@ final class RegisterParameterProcessorsPipe implements PipeContract
         }
 
         if (\count($processorRefs) !== 0) {
-            $containerBuilder->singleton(self::PROCESSORS_KEY, ArrayIterator::class)
-                ->setArgument($processorRefs);
+            /** @var \Viserio\Contract\Container\Definition\IteratorDefinition $iteratorDefinition */
+            $iteratorDefinition = $containerBuilder->singleton(self::PROCESSORS_KEY, ArrayIterator::class);
+            $iteratorDefinition->setArgument($processorRefs);
+
             $containerBuilder->setParameter(self::PROCESSOR_TYPES_PARAMETER_KEY, $processorTypes);
         }
     }

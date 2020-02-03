@@ -11,7 +11,7 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-use Viserio\Component\Foundation\Tests\Fixture\Provider\FixtureServiceProvider;
+use Viserio\Provider\Framework\Tests\Fixture\Provider\FixtureServiceProvider;
 
 return [
     FixtureServiceProvider::class,

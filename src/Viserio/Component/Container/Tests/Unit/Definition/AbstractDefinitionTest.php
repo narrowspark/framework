@@ -52,16 +52,6 @@ abstract class AbstractDefinitionTest extends MockeryTestCase
         $this->definition = $this->getDefinition();
     }
 
-    /**
-     * @return ClosureDefinition|FactoryDefinition|IteratorDefinition|ObjectDefinition|ParameterDefinition|UndefinedDefinition
-     */
-    abstract protected function getDefinition();
-
-    /**
-     * @return mixed
-     */
-    abstract protected function getValue();
-
     public function testGetName(): void
     {
         self::assertSame($this->name, $this->definition->getName());
@@ -195,6 +185,16 @@ abstract class AbstractDefinitionTest extends MockeryTestCase
         self::assertSame($this->definition, $this->definition->setSynthetic(true), '->setSynthetic() implements a fluent interface');
         self::assertTrue($this->definition->isSynthetic(), '->isSynthetic() returns true if the service is synthetic.');
     }
+
+    /**
+     * @return ClosureDefinition|FactoryDefinition|IteratorDefinition|ObjectDefinition|ParameterDefinition|UndefinedDefinition
+     */
+    abstract protected function getDefinition();
+
+    /**
+     * @return mixed
+     */
+    abstract protected function getValue();
 
     abstract protected function getDefinitionName(): string;
 }

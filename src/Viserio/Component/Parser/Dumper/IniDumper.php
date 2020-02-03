@@ -19,19 +19,19 @@ use Viserio\Contract\Parser\Exception\RuntimeException;
 class IniDumper implements DumperContract
 {
     /**
-     * Separator for nesting levels of configuration data identifiers.
-     *
-     * @var string
-     */
-    private $nestSeparator = '.';
-
-    /**
      * If true the INI string is rendered in the global namespace without
      * sections.
      *
      * @var bool
      */
     protected $renderWithoutSections = false;
+
+    /**
+     * Separator for nesting levels of configuration data identifiers.
+     *
+     * @var string
+     */
+    private $nestSeparator = '.';
 
     /**
      * Get nest separator.
@@ -143,6 +143,34 @@ class IniDumper implements DumperContract
     }
 
     /**
+     * Root elements that are not assigned to any section needs to be on the
+     * top of config.
+     *
+     * @param array<int|string, mixed> $config
+     *
+     * @return array<int|string, mixed>
+     */
+    protected function sortRootElements(array $config): array
+    {
+        $sections = [];
+        // Remove sections from config array.
+        foreach ($config as $key => $value) {
+            if (\is_array($value)) {
+                $sections[$key] = $value;
+
+                unset($config[$key]);
+            }
+        }
+
+        // Read sections to the end.
+        foreach ($sections as $key => $value) {
+            $config[$key] = $value;
+        }
+
+        return $config;
+    }
+
+    /**
      * Converts the supplied value into a valid ini representation.
      *
      * @param mixed $value
@@ -170,33 +198,5 @@ class IniDumper implements DumperContract
         }
 
         throw new RuntimeException('Value can not contain double quotes.');
-    }
-
-    /**
-     * Root elements that are not assigned to any section needs to be on the
-     * top of config.
-     *
-     * @param array<int|string, mixed> $config
-     *
-     * @return array<int|string, mixed>
-     */
-    protected function sortRootElements(array $config): array
-    {
-        $sections = [];
-        // Remove sections from config array.
-        foreach ($config as $key => $value) {
-            if (\is_array($value)) {
-                $sections[$key] = $value;
-
-                unset($config[$key]);
-            }
-        }
-
-        // Read sections to the end.
-        foreach ($sections as $key => $value) {
-            $config[$key] = $value;
-        }
-
-        return $config;
     }
 }

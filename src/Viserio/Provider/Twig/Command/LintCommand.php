@@ -70,18 +70,6 @@ class LintCommand extends BaseLintCommand implements ProvidesDefaultConfigContra
     /**
      * {@inheritdoc}
      */
-    protected function getFinder(array $paths, ?string $file = null): iterable
-    {
-        return Finder::create()
-            ->files()
-            ->in($paths)
-            ->name(($file === null ? '*.' : $file . '.') . $this->fileExtension)
-            ->getIterator();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public static function getDimensions(): iterable
     {
         return ['viserio', 'view'];
@@ -99,6 +87,18 @@ class LintCommand extends BaseLintCommand implements ProvidesDefaultConfigContra
                 ],
             ],
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getFinder(array $paths, ?string $file = null): iterable
+    {
+        return Finder::create()
+            ->files()
+            ->in($paths)
+            ->name(($file === null ? '*.' : $file . '.') . $this->fileExtension)
+            ->getIterator();
     }
 
     /**

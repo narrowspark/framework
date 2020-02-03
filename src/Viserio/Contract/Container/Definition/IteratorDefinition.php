@@ -27,7 +27,7 @@ interface IteratorDefinition extends Definition
      *
      * @param array<int|string, mixed> $argument
      *
-     * @return $this
+     * @return static
      */
-    public function setArgument(array $argument): self;
+    public function setArgument(array $argument);
 }

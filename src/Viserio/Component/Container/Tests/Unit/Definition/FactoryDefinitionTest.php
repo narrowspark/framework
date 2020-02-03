@@ -43,14 +43,6 @@ final class FactoryDefinitionTest extends AbstractDefinitionTest
     /** @var \Viserio\Component\Container\Definition\FactoryDefinition */
     protected $definition;
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function getDefinition(): FactoryDefinition
-    {
-        return new FactoryDefinition($this->getDefinitionName(), $this->value, DefinitionContract::SINGLETON);
-    }
-
     public function testGetValue(): void
     {
         [$class, $method] = $this->definition->getValue();
@@ -164,6 +156,14 @@ final class FactoryDefinitionTest extends AbstractDefinitionTest
             [['...', 'method']],
             [['class', '...']],
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getDefinition(): FactoryDefinition
+    {
+        return new FactoryDefinition($this->getDefinitionName(), $this->value, DefinitionContract::SINGLETON);
     }
 
     /**

@@ -28,9 +28,6 @@ final class FilesystemVfsStreamTest extends AbstractFilesystemTestCase
 {
     use AssertArrayTrait;
 
-    /** @var \org\bovigo\vfs\vfsStreamDirectory */
-    private $root;
-
     /**
      * {@inheritdoc}
      */
@@ -63,6 +60,9 @@ final class FilesystemVfsStreamTest extends AbstractFilesystemTestCase
         'testSetOwnerByName' => 'chown dont support stream wrappers',
         'testSetOwnerById' => 'chown dont support stream wrappers',
     ];
+
+    /** @var \org\bovigo\vfs\vfsStreamDirectory */
+    private $root;
 
     /**
      * {@inheritdoc}

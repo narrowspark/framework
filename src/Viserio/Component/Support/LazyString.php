@@ -26,6 +26,15 @@ class LazyString implements Stringable
     private $value;
 
     /**
+     * Private constructor; non-instantiable.
+     *
+     * @codeCoverageIgnore
+     */
+    private function __construct()
+    {
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @throws ReflectionException
@@ -51,15 +60,6 @@ class LazyString implements Stringable
 
             return $exception->getMessage();
         }
-    }
-
-    /**
-     * Private constructor; non-instantiable.
-     *
-     * @codeCoverageIgnore
-     */
-    private function __construct()
-    {
     }
 
     /**

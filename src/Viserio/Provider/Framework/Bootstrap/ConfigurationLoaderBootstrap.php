@@ -24,16 +24,14 @@ class ConfigurationLoaderBootstrap extends AbstractFilesLoaderBootstrap implemen
      *
      * @var string[]
      */
-    protected static $configExtensions = [
+    protected static array $configExtensions = [
         'php',
     ];
 
     /**
-     * Bypass given files.
-     *
-     * @var string[]
+     * {@inheritdoc}
      */
-    protected static $bypassFiles = [
+    protected static array $bypassFiles = [
         'serviceproviders',
         'bootstrap',
     ];
@@ -117,7 +115,13 @@ class ConfigurationLoaderBootstrap extends AbstractFilesLoaderBootstrap implemen
     {
         foreach (static::load($path) as $key => $value) {
             if ($containerBuilder->hasParameter($key)) {
-                $containerBuilder->setParameter($key, \array_merge_recursive($containerBuilder->getParameter($key)->getValue(), $value));
+                $foundValue = $containerBuilder->getParameter($key)->getValue();
+
+                if (\is_array($foundValue)) {
+                    $value = \array_merge_recursive($foundValue, $value);
+                }
+
+                $containerBuilder->setParameter($key, $value);
             } else {
                 $containerBuilder->setParameter($key, $value);
             }

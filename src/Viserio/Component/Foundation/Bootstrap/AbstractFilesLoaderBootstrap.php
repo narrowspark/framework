@@ -20,9 +20,9 @@ abstract class AbstractFilesLoaderBootstrap
     /**
      * Bypass given files by key.
      *
-     * @var array
+     * @var array<int, string>
      */
-    protected static $bypassFiles = [];
+    protected static array $bypassFiles = [];
 
     /**
      * Get all of the files for the application.

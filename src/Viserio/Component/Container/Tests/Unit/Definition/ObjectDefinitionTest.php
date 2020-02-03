@@ -38,14 +38,6 @@ final class ObjectDefinitionTest extends AbstractDefinitionTest
     /** @var \Viserio\Component\Container\Definition\ObjectDefinition */
     protected $definition;
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function getDefinition(): ObjectDefinition
-    {
-        return new ObjectDefinition($this->getDefinitionName(), $this->value, DefinitionContract::SINGLETON);
-    }
-
     public function testGetValue(): void
     {
         self::assertInstanceOf(stdClass::class, $this->definition->getValue());
@@ -87,6 +79,14 @@ final class ObjectDefinitionTest extends AbstractDefinitionTest
             self::assertSame($object->{$property}, $data[0]);
             self::assertFalse($data[1]);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getDefinition(): ObjectDefinition
+    {
+        return new ObjectDefinition($this->getDefinitionName(), $this->value, DefinitionContract::SINGLETON);
     }
 
     /**

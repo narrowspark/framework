@@ -60,7 +60,7 @@ trait ConfigurationDeprecatedIteratorTestTrait
     }
 
     /**
-     * @dataProvider provideDeprecationMessagesCases
+     * @dataProvider provideDeprecationMessageResolvingCases
      *
      * @param string     $class
      * @param null|array $expectedError
@@ -96,7 +96,7 @@ trait ConfigurationDeprecatedIteratorTestTrait
         self::assertSame($expectedError, $lastError);
     }
 
-    public static function provideDeprecationMessagesCases(): iterable
+    public static function provideDeprecationMessageResolvingCases(): iterable
     {
         return [
             'It deprecates an config key with default message' => [

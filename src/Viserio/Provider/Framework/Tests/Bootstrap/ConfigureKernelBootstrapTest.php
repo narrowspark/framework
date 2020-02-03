@@ -11,14 +11,14 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\Foundation\Tests\Bootstrap;
+namespace Viserio\Provider\Framework\Tests\Bootstrap;
 
 use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Foundation\Bootstrap\ConfigureKernelBootstrap;
 use Viserio\Contract\Container\CompiledContainer as CompiledContainerContract;
 use Viserio\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
+use Viserio\Provider\Framework\Bootstrap\ConfigureKernelBootstrap;
 use Viserio\Provider\Framework\Bootstrap\InitializeContainerBootstrap;
 
 /**
@@ -46,17 +46,17 @@ final class ConfigureKernelBootstrapTest extends MockeryTestCase
     public function testBootstrap(): void
     {
         $container = Mockery::mock(CompiledContainerContract::class);
-        $container->shouldReceive('get')
-            ->with('config')
-            ->andReturn([]);
+        $container->shouldReceive('getParameter')
+            ->with('viserio.app.timezone')
+            ->andReturn('UTC');
+        $container->shouldReceive('getParameter')
+            ->with('viserio.app.charset')
+            ->andReturn('UTF-8');
 
         $kernel = Mockery::mock(KernelContract::class);
         $kernel->shouldReceive('getContainer')
             ->once()
             ->andReturn($container);
-        $kernel->shouldReceive('setKernelConfigurations')
-            ->once()
-            ->with([]);
 
         ConfigureKernelBootstrap::bootstrap($kernel);
     }

@@ -203,53 +203,6 @@ final class Stream
     }
 
     /**
-     * Checks handle and locks file.
-     *
-     * @param false|resource $handle
-     * @param int            $lock
-     *
-     * @return bool
-     */
-    private function checkAndLock($handle, int $lock): bool
-    {
-        if ($handle === false) {
-            return false;
-        }
-
-        if (! \flock($handle, $lock)) {
-            \fclose($handle);
-
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Error destructor.
-     *
-     * @return void
-     */
-    private function clean(): void
-    {
-        if (! \is_resource($this->handle)) {
-            return;
-        }
-
-        \flock($this->handle, \LOCK_UN);
-        \fclose($this->handle);
-
-        if ($this->deleteFile && $this->file !== null) {
-            \unlink($this->file);
-        }
-
-        if (\is_resource($this->tempHandle) && $this->tempFile !== null) {
-            \fclose($this->tempHandle);
-            \unlink($this->tempFile);
-        }
-    }
-
-    /**
      * Close a resource.
      *
      * @return void
@@ -576,6 +529,53 @@ final class Stream
         \trigger_error(\sprintf('Set timeout with [%s] class, is not supported yet.', __CLASS__), \E_USER_WARNING);
 
         return false;
+    }
+
+    /**
+     * Checks handle and locks file.
+     *
+     * @param false|resource $handle
+     * @param int            $lock
+     *
+     * @return bool
+     */
+    private function checkAndLock($handle, int $lock): bool
+    {
+        if ($handle === false) {
+            return false;
+        }
+
+        if (! \flock($handle, $lock)) {
+            \fclose($handle);
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Error destructor.
+     *
+     * @return void
+     */
+    private function clean(): void
+    {
+        if (! \is_resource($this->handle)) {
+            return;
+        }
+
+        \flock($this->handle, \LOCK_UN);
+        \fclose($this->handle);
+
+        if ($this->deleteFile && $this->file !== null) {
+            \unlink($this->file);
+        }
+
+        if (\is_resource($this->tempHandle) && $this->tempFile !== null) {
+            \fclose($this->tempHandle);
+            \unlink($this->tempFile);
+        }
     }
 
     /**

@@ -25,6 +25,8 @@ use Viserio\Component\Container\Test\AbstractContainerTestCase;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Console\Container\Provider\ConsoleServiceProvider
+ *
  * @small
  */
 final class ConfigServiceProviderTest extends AbstractContainerTestCase

@@ -29,6 +29,14 @@ final class IteratorDefinitionTest extends AbstractDefinitionTest
     /** @var \Viserio\Component\Container\Definition\IteratorDefinition */
     protected $definition;
 
+    public function testSetAddAndGetArguments(): void
+    {
+        self::assertSame($this->definition, $this->definition->setArgument($this->value), '->setArgument() implements a fluent interface');
+
+        self::assertTrue($this->definition->getChange('argument'));
+        self::assertSame($this->value, $this->definition->getArgument());
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -78,13 +86,5 @@ final class IteratorDefinitionTest extends AbstractDefinitionTest
     protected function getDefinitionName(): string
     {
         return 'test';
-    }
-
-    public function testSetAddAndGetArguments(): void
-    {
-        self::assertSame($this->definition, $this->definition->setArgument($this->value), '->setArgument() implements a fluent interface');
-
-        self::assertTrue($this->definition->getChange('argument'));
-        self::assertSame($this->value, $this->definition->getArgument());
     }
 }

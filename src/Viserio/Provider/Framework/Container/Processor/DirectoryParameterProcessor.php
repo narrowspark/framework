@@ -24,19 +24,10 @@ final class DirectoryParameterProcessor extends AbstractParameterProcessor imple
     RequiresMandatoryConfigContract,
     RequiresValidatedConfigContract
 {
-    public const PARAMETER_KEY = 'viserio.app.directory.processor.check_strict';
-
-    /** @var array<string, array<int, string>> */
+    /** @var array<string, array<int, string>|string> */
     protected array $mappers;
 
     private CompiledContainerContract $compiledContainer;
-
-    /**
-     * Check to active or deactivate strict parameter resolving.
-     *
-     * @var bool
-     */
-    private bool $strict;
 
     /**
      * Create a new DirectoryParameterProcessor instance.
@@ -48,12 +39,6 @@ final class DirectoryParameterProcessor extends AbstractParameterProcessor imple
     {
         $this->compiledContainer = $compiledContainer;
         $this->mappers = $mappers;
-
-        if ($compiledContainer->hasParameter($key = 'viserio.app.directory.processor.check_strict')) {
-            $this->strict = $compiledContainer->getParameter($key);
-        } else {
-            $this->strict = true;
-        }
     }
 
     /**
@@ -80,7 +65,7 @@ final class DirectoryParameterProcessor extends AbstractParameterProcessor imple
     public static function getConfigValidators(): iterable
     {
         return [
-            'mapper' => ['array'],
+            'mapper' => ['array', 'string'],
         ];
     }
 
@@ -112,21 +97,23 @@ final class DirectoryParameterProcessor extends AbstractParameterProcessor imple
         $value = $this->mappers[$key] ?? null;
 
         if ($value === null) {
-            if ($this->strict) {
-                throw new InvalidArgumentException(\sprintf('Resolving of [%s] failed, no mapper was found.', $parameter));
-            }
-
-            return $parameter;
+            throw new InvalidArgumentException(\sprintf('Resolving of [%s] failed, no mapper was found.', $parameter));
         }
 
-        $newValue = $this->compiledContainer->hasParameter($value[0]) ? $this->compiledContainer->getParameter($value[0])->{$value[1]}() : null;
+        if (\is_array($value)) {
+            if ($this->compiledContainer->has($value[0])) {
+                $newValue = $this->compiledContainer->get($value[0])->{$value[1]}();
+            } else {
+                throw new InvalidArgumentException(\sprintf('Resolving of [%s] failed, mapper [%s::%s] was not found.', $parameter, $value[0], $value[1]));
+            }
+        } elseif (\is_string($value) && $this->compiledContainer->hasParameter($value)) {
+            $newValue = $this->compiledContainer->getParameter($value);
+        } else {
+            $newValue = $value;
+        }
 
         if ($newValue === null) {
-            $newValue = $this->compiledContainer->has($value[0]) ? $this->compiledContainer->get($value[0])->{$value[1]}() : null;
-        }
-
-        if ($this->strict && $newValue === null) {
-            throw new InvalidArgumentException(\sprintf('Resolving of [%s] failed, mapper [%s::%s] was not found.', $parameter, $value[0], $value[1]));
+            throw new InvalidArgumentException(\sprintf('Resolving of [%s] failed, non-empty string was resolved [%s].', $parameter, is_class($newValue) ? \get_class($newValue) : \gettype($newValue)));
         }
 
         if ($newValue === null) {

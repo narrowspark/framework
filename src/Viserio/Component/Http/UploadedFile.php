@@ -162,24 +162,6 @@ class UploadedFile implements UploadedFileInterface
     }
 
     /**
-     * Check if error is a int or a array, then set it.
-     *
-     * @param int $error
-     *
-     * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException
-     *
-     * @return void
-     */
-    private function setError(int $error): void
-    {
-        if (! \in_array($error, self::ERRORS, true)) {
-            throw new InvalidArgumentException('Invalid error status for UploadedFile.');
-        }
-
-        $this->error = $error;
-    }
-
-    /**
      * {@inheritdoc}
      *
      * @throws \Viserio\Contract\Http\Exception\RuntimeException if the upload was not successful
@@ -261,6 +243,24 @@ class UploadedFile implements UploadedFileInterface
         if ($this->moved === false) {
             throw new RuntimeException(\sprintf('Uploaded file could not be moved to %s.', $targetPath));
         }
+    }
+
+    /**
+     * Check if error is a int or a array, then set it.
+     *
+     * @param int $error
+     *
+     * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException
+     *
+     * @return void
+     */
+    private function setError(int $error): void
+    {
+        if (! \in_array($error, self::ERRORS, true)) {
+            throw new InvalidArgumentException('Invalid error status for UploadedFile.');
+        }
+
+        $this->error = $error;
     }
 
     /**

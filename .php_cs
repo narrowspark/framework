@@ -36,6 +36,8 @@ $config = new Config($header, [
     'PhpCsFixerCustomFixers/no_commented_out_code' => false,
     'PhpCsFixerCustomFixers/phpdoc_no_superfluous_param' => false,
     'phpdoc_to_return_type' => false,
+    'php_unit_ordered_covers' => true,
+    'ordered_class_elements' => true,
 ]);
 
 $config->getFinder()

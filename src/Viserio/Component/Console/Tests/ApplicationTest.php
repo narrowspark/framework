@@ -885,6 +885,14 @@ final class ApplicationTest extends MockeryTestCase
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function allowMockingNonExistentMethods(bool $allow = false): void
+    {
+        parent::allowMockingNonExistentMethods(true);
+    }
+
+    /**
      * @param bool $skipCommand
      *
      * @return \Viserio\Contract\Events\EventManager
@@ -915,14 +923,6 @@ final class ApplicationTest extends MockeryTestCase
         });
 
         return $dispatcher;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function allowMockingNonExistentMethods(bool $allow = false): void
-    {
-        parent::allowMockingNonExistentMethods(true);
     }
 
     /**

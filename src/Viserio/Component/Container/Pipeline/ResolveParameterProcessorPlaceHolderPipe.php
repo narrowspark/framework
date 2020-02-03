@@ -36,22 +36,15 @@ final class ResolveParameterProcessorPlaceHolderPipe extends AbstractRecursivePi
     /**
      * {@inheritdoc}
      */
-    protected function getProcessors(): iterable
-    {
-        return $this->processors;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilderContract $containerBuilder): void
     {
         $this->containerBuilder = $containerBuilder;
 
         if ($this->containerBuilder->hasDefinition(RegisterParameterProcessorsPipe::PROCESSORS_KEY)) {
-            $processors = $this->containerBuilder->getDefinition(RegisterParameterProcessorsPipe::PROCESSORS_KEY)->getValue();
+            /** @var \Viserio\Contract\Container\Definition\IteratorDefinition $iteratorDefinition */
+            $iteratorDefinition = $this->containerBuilder->getDefinition(RegisterParameterProcessorsPipe::PROCESSORS_KEY);
 
-            foreach ($processors as $definition) {
+            foreach ($iteratorDefinition->getArgument() as $definition) {
                 $class = $this->containerBuilder->findDefinition($definition->getName())
                     ->getValue();
 
@@ -70,6 +63,14 @@ final class ResolveParameterProcessorPlaceHolderPipe extends AbstractRecursivePi
             $this->containerBuilder->removeParameter(RegisterParameterProcessorsPipe::PROCESSOR_TYPES_PARAMETER_KEY);
             $this->containerBuilder = null;
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getProcessors(): iterable
+    {
+        return $this->processors;
     }
 
     /**

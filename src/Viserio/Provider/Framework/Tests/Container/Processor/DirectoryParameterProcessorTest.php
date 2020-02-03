@@ -54,84 +54,58 @@ final class DirectoryParameterProcessorTest extends MockeryTestCase
                 AbstractKernel::class,
                 'getConfigPath',
             ],
+            'string' => __DIR__,
+            'parameter' => 'foo',
         ];
     }
 
     public function testSupports(): void
     {
-        $key = DirectoryParameterProcessor::PARAMETER_KEY;
-
-        $this->containerMock->shouldReceive('hasParameter')
-            ->once()
-            ->with($key)
-            ->andReturn(true);
-        $this->containerMock->shouldReceive('getParameter')
-            ->once()
-            ->with($key)
-            ->andReturn(true);
-
         $processor = new DirectoryParameterProcessor($this->data, $this->containerMock);
 
         self::assertTrue($processor->supports('{test|directory}'));
         self::assertFalse($processor->supports('test'));
     }
 
-    public function testProcessWithoutStrictMode(): void
+    public function testProcess(): void
     {
         $kernel = new Kernel();
 
-        $key = DirectoryParameterProcessor::PARAMETER_KEY;
-
-        $this->containerMock->shouldReceive('hasParameter')
-            ->once()
-            ->with($key)
-            ->andReturn(false);
         $this->containerMock->shouldReceive('has')
             ->once()
-            ->with($key)
-            ->andReturn(true);
-        $this->containerMock->shouldReceive('get')
-            ->once()
-            ->with($key)
-            ->andReturn(false);
-
-        $this->containerMock->shouldReceive('hasParameter')
-            ->twice()
-            ->with(AbstractKernel::class)
-            ->andReturn(false);
-        $this->containerMock->shouldReceive('has')
-            ->twice()
             ->with(AbstractKernel::class)
             ->andReturn(true);
         $this->containerMock->shouldReceive('get')
-            ->twice()
+            ->once()
             ->andReturn($kernel);
+        $this->containerMock->shouldReceive('hasParameter')
+            ->once()
+            ->with(__DIR__)
+            ->andReturn(false);
+        $this->containerMock->shouldReceive('hasParameter')
+            ->once()
+            ->with('foo')
+            ->andReturn(true);
+        $this->containerMock->shouldReceive('getParameter')
+            ->once()
+            ->with('foo')
+            ->andReturn(__DIR__);
+
 
         $processor = new DirectoryParameterProcessor($this->data, $this->containerMock);
 
         self::assertSame($kernel->getConfigPath(), $processor->process('config|directory'));
-        self::assertSame($kernel->getConfigPath('test'), $processor->process('{config|directory}' . \DIRECTORY_SEPARATOR . 'test'));
-        self::assertSame('test|directory', $processor->process('test|directory'));
+        self::assertSame(__DIR__, $processor->process('string|directory'));
+        self::assertSame(__DIR__, $processor->process('parameter|directory'));
     }
 
-    public function testProcessWithStrictMode(): void
+    public function testProcessToThrowExceptionIfMapperWasNotFound(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Resolving of [%directory:test%] failed, no mapper was found.');
-
-        $key = DirectoryParameterProcessor::PARAMETER_KEY;
-
-        $this->containerMock->shouldReceive('hasParameter')
-            ->once()
-            ->with($key)
-            ->andReturn(true);
-        $this->containerMock->shouldReceive('getParameter')
-            ->once()
-            ->with($key)
-            ->andReturn(true);
+        $this->expectExceptionMessage('Resolving of [{config|directory}/test] failed, no mapper was found');
 
         $processor = new DirectoryParameterProcessor($this->data, $this->containerMock);
 
-        self::assertSame(':test%', $processor->process(':test%'));
+        $processor->process('{config|directory}/test');
     }
 }

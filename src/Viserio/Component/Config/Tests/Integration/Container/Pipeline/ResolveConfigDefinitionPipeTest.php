@@ -23,6 +23,8 @@ use Viserio\Component\Container\Test\AbstractContainerTestCase;
 /**
  * @internal
  *
+ * @covers \Viserio\Component\Config\Container\Pipeline\ResolveConfigDefinitionPipe
+ *
  * @small
  */
 final class ResolveConfigDefinitionPipeTest extends AbstractContainerTestCase
