@@ -45,9 +45,9 @@
     },
     "suggest": {
         "viserio/config": "Required to use service-provider (^1.0@dev).",
-        "viserio/finder": "Required to use the commands (^1.0@dev).",
         "viserio/console": "Required to use the commands (^1.0@dev).",
         "viserio/container": "Required to use service-provider (^1.0@dev).",
+        "viserio/finder": "Required to use the commands (^1.0@dev).",
         "viserio/twig-bridge": "Required to use the twig extensions, commands for lint and debug (^1.0@dev)."
     },
     "extra": {
