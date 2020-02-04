@@ -40,7 +40,6 @@
         "narrowspark/coding-standard": "^3.4.0",
         "narrowspark/testing-helper": "^8.0.2",
         "phpunit/phpunit": "8.2.*",
-        "slam/phpstan-extensions": "^4.0.0",
         "viserio/container": "^1.0@dev",
         "viserio/phpstan-bridge": "^1.0@dev"
     },

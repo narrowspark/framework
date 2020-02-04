@@ -45,11 +45,10 @@
         "nikic/php-parser": "^4.2.1",
         "nyholm/nsa": "^1.1.0",
         "ocramius/proxy-manager": "^2.6.0",
+        "phpstan/phpstan-php-parser": "^0.12.1",
         "phpunit/phpunit": "8.2.*",
-        "slam/phpstan-extensions": "^4.0.0",
         "viserio/filesystem": "^1.0@dev",
-        "viserio/phpstan-bridge": "^1.0@dev",
-        "phpstan/phpstan-php-parser": "^0.12.1"
+        "viserio/phpstan-bridge": "^1.0@dev"
     },
     "suggest": {
         "nikic/php-parser": "Required to dump anonymous classes and closure without \"$this\" use (^4.2.0).",

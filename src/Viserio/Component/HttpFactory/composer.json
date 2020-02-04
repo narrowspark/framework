@@ -33,6 +33,7 @@
         "psr/http-message-implementation": "^1.0"
     },
     "require-dev": {
+        "narrowspark/coding-standard": "^3.4.0",
         "phpunit/phpunit": "8.2.*",
         "viserio/container": "^1.0@dev",
         "viserio/phpstan-bridge": "^1.0@dev"

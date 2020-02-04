@@ -43,7 +43,6 @@
         "narrowspark/testing-helper": "^8.0.2",
         "php-di/invoker": "^2.0.0",
         "phpunit/phpunit": "8.2.*",
-        "slam/phpstan-extensions": "^4.0.0",
         "viserio/container": "^1.0@dev",
         "viserio/phpstan-bridge": "^1.0@dev",
         "voku/stringy": "^5.2.0"

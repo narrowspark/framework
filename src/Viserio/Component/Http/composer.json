@@ -53,8 +53,7 @@
         "narrowspark/testing-helper": "^8.0.2",
         "nyholm/nsa": "^1.1.0",
         "php-http/psr7-integration-tests": "^1.0",
-        "phpunit/phpunit": "8.2.*",
-        "slam/phpstan-extensions": "^4.0.0"
+        "phpunit/phpunit": "8.2.*"
     },
     "extra": {
         "branch-alias": {
