@@ -165,7 +165,7 @@ abstract class AbstractMessage implements MessageInterface
             return '';
         }
 
-        return \implode(',', $value);
+        return \implode(', ', $value);
     }
 
     /**

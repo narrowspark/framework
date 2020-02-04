@@ -17,7 +17,7 @@ jobs:
       max-parallel: 2
       matrix:
         operating-system: [ubuntu-latest]
-        php-versions: ["7.4"]
+        php-versions: ["7.4.2"]
         dependencies: ["highest", "lowest"]
 
     name: "Audit on PHP ${{ matrix.php-versions }} and ${{ matrix.operating-system }} OS"

@@ -22,7 +22,7 @@ jobs:
       - name: "Setup PHP"
         uses: shivammathur/setup-php@1.8.2
         with:
-          php-version: "7.4"
+          php-version: "7.4.2"
           extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl, pdo, pdo_sqlite, inotify, pcntl, posix, xdebug
           ini-values: pcov.directory=api, date.timezone=Europe/Berlin, opcache.enable_cli=1, serialize_precision=14
           coverage: none

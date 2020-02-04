@@ -67,7 +67,7 @@ jobs:
       - name: "Setup PHP"
         uses: shivammathur/setup-php@1.8.2
         with:
-          php-version: 7.4
+          php-version: "7.4.2"
           extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, inotify, pcntl, posix
           pecl: true
           tools: composer, composer-prefetcher, cs2pr

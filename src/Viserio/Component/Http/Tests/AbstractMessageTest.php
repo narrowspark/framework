@@ -275,9 +275,9 @@ abstract class AbstractMessageTest extends MockeryTestCase
             // Description => [header name, header value, getHeader(), getHeaderLine()],
             'Basic: value' => ['Basic', 'value', ['value'], 'value'],
             'array value' => ['Basic', ['value'], ['value'], 'value'],
-            'two value' => ['Basic', ['value1', 'value2'], ['value1', 'value2'], 'value1,value2'],
+            'two value' => ['Basic', ['value1', 'value2'], ['value1', 'value2'], 'value1, value2'],
             'empty header value' => ['Bar', '', [''], ''],
-            'array value with key' => ['foo', ['foo' => 'text/plain', 'bar' => 'application/json'], ['text/plain', 'application/json'], 'text/plain,application/json'],
+            'array value with key' => ['foo', ['foo' => 'text/plain', 'bar' => 'application/json'], ['text/plain', 'application/json'], 'text/plain, application/json'],
             'Header with int' => ['HTTP__1', 'test', ['test'], 'test'],
             'Int header' => [1, 'test', ['test'], 'test'],
             ['key', 'allowed key', ['allowed key'], 'allowed key'],
@@ -326,9 +326,18 @@ abstract class AbstractMessageTest extends MockeryTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(\sprintf('[%s] is not a valid HTTP header field name.', $header));
 
-        $request = $this->classToTest;
+        $message = $this->classToTest;
 
-        $request->withHeader($header, 'value');
+        $message->withHeader($header, 'value');
+    }
+
+    public function testWithAddedHeaderArrayValueAndKeys(): void
+    {
+        $message = $this->classToTest->withAddedHeader('list', ['foo' => 'one']);
+        $message = $message->withAddedHeader('list', ['foo' => 'two', 'bar' => 'three']);
+
+        $headerLine = $message->getHeaderLine('list');
+        self::assertSame('one, two, three', $headerLine);
     }
 
     public static function provideContainsNotAllowedCharsOnHeaderFieldCases(): iterable

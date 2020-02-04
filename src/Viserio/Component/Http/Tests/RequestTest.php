@@ -557,7 +557,7 @@ final class RequestTest extends AbstractMessageTest
             'Foo' => ['a', 'b', 'c'],
         ]);
 
-        self::assertEquals('a,b,c', $request->getHeaderLine('Foo'));
+        self::assertEquals('a, b, c', $request->getHeaderLine('Foo'));
         self::assertEquals('', $request->getHeaderLine('Bar'));
     }
 

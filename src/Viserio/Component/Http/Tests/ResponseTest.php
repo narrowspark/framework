@@ -209,7 +209,7 @@ final class ResponseTest extends AbstractMessageTest
         ]);
 
         self::assertSame(['Foo' => ['baz', 'bar']], $response->getHeaders());
-        self::assertSame('baz,bar', $response->getHeaderLine('Foo'));
+        self::assertSame('baz, bar', $response->getHeaderLine('Foo'));
         self::assertSame(['baz', 'bar'], $response->getHeader('Foo'));
     }
 
@@ -315,7 +315,7 @@ final class ResponseTest extends AbstractMessageTest
 
         self::assertSame(['Foo' => ['Bar']], $response->getHeaders());
         self::assertSame(['Foo' => ['Bar'], 'baZ' => ['Bam', 'Bar']], $response2->getHeaders());
-        self::assertSame('Bam,Bar', $response2->getHeaderLine('baz'));
+        self::assertSame('Bam, Bar', $response2->getHeaderLine('baz'));
         self::assertSame(['Bam', 'Bar'], $response2->getHeader('baz'));
     }
 
@@ -337,7 +337,7 @@ final class ResponseTest extends AbstractMessageTest
 
         self::assertSame(['Foo' => ['Bar']], $response->getHeaders());
         self::assertSame(['Foo' => ['Bar', 'Baz']], $response2->getHeaders());
-        self::assertSame('Bar,Baz', $response2->getHeaderLine('foo'));
+        self::assertSame('Bar, Baz', $response2->getHeaderLine('foo'));
         self::assertSame(['Bar', 'Baz'], $response2->getHeader('foo'));
     }
 
@@ -348,7 +348,7 @@ final class ResponseTest extends AbstractMessageTest
 
         self::assertSame(['Foo' => ['Bar']], $response->getHeaders());
         self::assertSame(['Foo' => ['Bar', 'Baz', 'Bam']], $response2->getHeaders());
-        self::assertSame('Bar,Baz,Bam', $response2->getHeaderLine('foo'));
+        self::assertSame('Bar, Baz, Bam', $response2->getHeaderLine('foo'));
         self::assertSame(['Bar', 'Baz', 'Bam'], $response2->getHeader('foo'));
     }
 
