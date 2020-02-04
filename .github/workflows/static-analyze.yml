@@ -69,8 +69,7 @@ jobs:
         with:
           php-version: "7.4.2"
           extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, inotify, pcntl, posix
-          pecl: true
-          tools: composer, composer-prefetcher, cs2pr
+          tools: composer, composer-prefetcher, cs2pr, pecl
 
       - name: "Configure Container"
         env:

@@ -31,8 +31,8 @@ jobs:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl, pdo, pdo_sqlite
           ini-values: post_max_size=256M, date.timezone=Europe/Berlin, opcache.enable_cli=1, serialize_precision=14
-          pecl: true
-          tools: composer, composer-prefetcher
+          coverage: none
+          tools: composer, composer-prefetcher, pecl
 
       - name: "Configure container"
         env:
