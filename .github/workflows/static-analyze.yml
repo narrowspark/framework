@@ -104,4 +104,4 @@ jobs:
           $COMPOSER_UP
           echo ::endgroup::
 
-          ./vendor/bin/phpstan analyse -c ./phpstan.neon --memory-limit=-1 --error-format=checkstyle | cs2pr
+          php -d memory_limit=-1 vendor/bin/phpstan analyse --error-format=checkstyle | cs2pr
