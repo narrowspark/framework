@@ -30,7 +30,7 @@
     },
     "require-dev": {
         "mockery/mockery": "^1.2.4",
-        "narrowspark/coding-standard": "^3.4.0",
+        "narrowspark/coding-standard": "^4.0.0",
         "narrowspark/testing-helper": "^8.0.2",
         "phpunit/phpunit": "8.2.*",
         "viserio/parser": "^1.0@dev",

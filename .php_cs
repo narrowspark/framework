@@ -1,16 +1,26 @@
 <?php
+
+declare(strict_types=1);
+
+use Ergebnis\License;
 use Narrowspark\CS\Config\Config;
 
-$header = <<<'EOF'
-This file is part of Narrowspark Framework.
+$license = static function ($path) {
+    return License\Type\MIT::markdown(
+        $path . '/LICENSE.md',
+        License\Range::since(
+            License\Year::fromString('2018'),
+            new \DateTimeZone('UTC')
+        ),
+        License\Holder::fromString('Daniel Bannert'),
+        License\Url::fromString('https://github.com/narrowspark/automatic')
+    );
+};
 
-(c) Daniel Bannert <d.bannert@anolilab.de>
+$mainLicense = $license(__DIR__);
+$mainLicense->save();
 
-This source file is subject to the MIT license that is bundled
-with this source code in the file LICENSE.
-EOF;
-
-$config = new Config($header, [
+$config = new Config($mainLicense->header(), [
     'native_function_invocation' => [
         'exclude' => [
             'fread',
@@ -25,19 +35,15 @@ $config = new Config($header, [
             'glob',
         ],
     ],
+    'static_lambda' => false,
+    'final_public_method_for_abstract_class' => false,
+    'final_class' => false,
+    // @todo waiting for php-cs-fixer 2.16.2
     'global_namespace_import' => [
         'import_classes' => true,
         'import_constants' => false,
         'import_functions' => false,
-    ],
-    'static_lambda' => false,
-    'final_class' => false,
-    'heredoc_indentation' => false,
-    'PhpCsFixerCustomFixers/no_commented_out_code' => false,
-    'PhpCsFixerCustomFixers/phpdoc_no_superfluous_param' => false,
-    'phpdoc_to_return_type' => false,
-    'php_unit_ordered_covers' => true,
-    'ordered_class_elements' => true,
+    ]
 ]);
 
 $config->getFinder()

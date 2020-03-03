@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 2
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@1.8.2
+        uses: shivammathur/setup-php@2.1.0
         with:
           php-version: "7.4.2"
           extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo
