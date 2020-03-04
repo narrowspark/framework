@@ -373,6 +373,7 @@ final class SetCookieTest extends TestCase
     {
         $time = new DateTime('Fri, 20-May-2011 15:25:52 GMT');
         $cookie = new SetCookie('foo', 'bar', $time, '/', '.myfoodomain.com', true, true, SetCookie::SAMESITE_STRICT);
+
         self::assertEquals(
             'foo=bar; Expires=' . (new Chronos(\gmdate('D, d-M-Y H:i:s', $time->getTimestamp())))->toCookieString() . '; Path=/; Domain=myfoodomain.com; Secure; HttpOnly; SameSite=strict',
             $cookie->__toString(),
@@ -380,16 +381,18 @@ final class SetCookieTest extends TestCase
         );
 
         $cookie = new SetCookie('foo', null, 1, '/admin/', '.myfoodomain.com', false, true);
+
         self::assertEquals(
             'foo=deleted; Expires=' . (new Chronos(\gmdate(
                 'D, d-M-Y H:i:s T',
                 Chronos::now()->getTimestamp() - 31536001
-            )))->toCookieString() . '; Path=/admin; Domain=myfoodomain.com; Max-Age=1; HttpOnly',
+            )))->setTimezone('UTC')->toCookieString() . '; Path=/admin; Domain=myfoodomain.com; Max-Age=1; HttpOnly',
             $cookie->__toString(),
             '->__toString() returns string representation of a cleared cookie if value is NULL'
         );
 
         $cookie = new SetCookie('foo');
+
         self::assertEquals(
             'foo=deleted; Expires=' . (new Chronos(\gmdate(
                 'D, d-M-Y H:i:s T',

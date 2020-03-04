@@ -98,6 +98,10 @@ final class ScheduleTest extends MockeryTestCase
         self::assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[2]->getCommand());
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testCommandThrowException(): void
     {
         $this->expectException(LogicException::class);

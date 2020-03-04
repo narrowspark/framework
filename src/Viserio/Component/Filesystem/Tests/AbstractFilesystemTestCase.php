@@ -756,9 +756,6 @@ abstract class AbstractFilesystemTestCase extends TestCase
         self::assertEquals('Foo Bar', $this->filesystem->read($this->createFile(__FUNCTION__, 'Foo Bar')));
     }
 
-    /**
-     * @todo fix this test for docker run
-     */
     public function testReadThrowIOException(): void
     {
         if (\array_key_exists(__FUNCTION__, $this->skippedTests)) {
@@ -1333,9 +1330,6 @@ abstract class AbstractFilesystemTestCase extends TestCase
         self::assertSame($dir, $this->filesystem->changeExtension($dir, 'php'));
     }
 
-    /**
-     * @todo fix this test for docker run
-     */
     public function testIsWritable(): void
     {
         if (\array_key_exists(__FUNCTION__, $this->skippedTests)) {
