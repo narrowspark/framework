@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Routing;
@@ -42,26 +42,16 @@ interface Dispatcher
 
     /**
      * Set the cache path for compiled routes.
-     *
-     * @param string $path
-     *
-     * @return void
      */
     public function setCachePath(string $path): void;
 
     /**
      * Get the cache path for the compiled routes.
-     *
-     * @return string
      */
     public function getCachePath(): string;
 
     /**
      * Refresh cache file on development.
-     *
-     * @param bool $refreshCache
-     *
-     * @return void
      */
     public function refreshCache(bool $refreshCache): void;
 
@@ -75,13 +65,8 @@ interface Dispatcher
     /**
      * Match and dispatch a route matching the given http method and uri.
      *
-     * @param \Viserio\Contract\Routing\RouteCollection $routes
-     * @param \Psr\Http\Message\ServerRequestInterface  $request
-     *
      * @throws \Narrowspark\HttpStatus\Exception\MethodNotAllowedException
      * @throws \Narrowspark\HttpStatus\Exception\NotFoundException
-     *
-     * @return \Psr\Http\Message\ResponseInterface
      */
     public function handle(RouteCollectionContract $routes, ServerRequestInterface $request): ResponseInterface;
 }

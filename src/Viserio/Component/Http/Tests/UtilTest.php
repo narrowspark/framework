@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Http\Tests;
@@ -30,6 +30,7 @@ use Viserio\Contract\Http\Exception\RuntimeException;
  * @internal
  *
  * @small
+ * @coversNothing
  */
 final class UtilTest extends TestCase
 {
@@ -138,7 +139,6 @@ final class UtilTest extends TestCase
     /**
      * @dataProvider provideGetAllHeadersCases
      *
-     * @param string                         $testType
      * @param array<string, null|int|string> $expected
      * @param array<string, null|int|string> $server
      */
@@ -726,9 +726,6 @@ final class UtilTest extends TestCase
 
     /**
      * @dataProvider provideNormalizeFilesCases
-     *
-     * @param mixed $files
-     * @param mixed $expected
      */
     public function testNormalizeFiles($files, $expected): void
     {
@@ -889,7 +886,7 @@ final class UtilTest extends TestCase
     public function testKeepsPositionOfResource(): void
     {
         /** @var resource $handler */
-        $handler = \fopen(__FILE__, 'r');
+        $handler = \fopen(__FILE__, 'rb');
 
         \fseek($handler, 10);
 
@@ -922,7 +919,7 @@ final class UtilTest extends TestCase
 
     public function testFactoryCreatesFromResource(): void
     {
-        $resource = \fopen(__FILE__, 'r');
+        $resource = \fopen(__FILE__, 'rb');
         $stream = Util::createStreamFor($resource);
 
         self::assertInstanceOf(Stream::class, $stream);

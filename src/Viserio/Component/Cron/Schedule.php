@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Cron;
@@ -50,8 +50,7 @@ class Schedule implements ScheduleContract
     /**
      * Create a new Schedule instance.
      *
-     * @param string      $path        path for the working directory
-     * @param null|string $consoleName
+     * @param string $path path for the working directory
      */
     public function __construct(string $path, ?string $consoleName = null)
     {
@@ -150,10 +149,6 @@ class Schedule implements ScheduleContract
 
     /**
      * Compile parameters for a command.
-     *
-     * @param array $parameters
-     *
-     * @return string
      */
     protected function compileParameters(array $parameters): string
     {

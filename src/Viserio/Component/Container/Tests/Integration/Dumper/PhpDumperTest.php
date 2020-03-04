@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Container\Tests\Integration\Dumper;
@@ -411,9 +411,6 @@ final class PhpDumperTest extends AbstractContainerTestCase
                 $this->text = $text;
             }
 
-            /**
-             * @return null|string
-             */
             public function getText(): ?string
             {
                 return $this->text;
@@ -442,9 +439,6 @@ final class PhpDumperTest extends AbstractContainerTestCase
                 $this->text = $text;
             }
 
-            /**
-             * @return string
-             */
             public function getText(): string
             {
                 return $this->text;
@@ -1298,8 +1292,6 @@ final class PhpDumperTest extends AbstractContainerTestCase
      * @dataProvider provideAlmostCircularCases
      * @runInSeparateProcess
      * @preserveGlobalState disabled
-     *
-     * @param mixed $visibility
      */
     public function testAlmostCircular($visibility): void
     {
@@ -2161,9 +2153,6 @@ final class PhpDumperTest extends AbstractContainerTestCase
         parent::assertDumpedContainer($functionName);
     }
 
-    /**
-     * @param \Viserio\Component\Container\ContainerBuilder $builder1
-     */
     private function arrangeContainerEntries(ContainerBuilder $builder1): void
     {
         $builder1->bind('factory_class', function () {

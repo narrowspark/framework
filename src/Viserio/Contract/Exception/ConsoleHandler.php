@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Exception;
@@ -19,15 +19,11 @@ interface ConsoleHandler extends Handler
 {
     /**
      * Register the exception / Error handlers for the application.
-     *
-     * @return void
      */
     public function register(): void;
 
     /**
      * Unregister the PHP error handler.
-     *
-     * @return void
      */
     public function unregister(): void;
 
@@ -35,9 +31,6 @@ interface ConsoleHandler extends Handler
      * Render an exception to the console.
      *
      * @param \Viserio\Contract\Exception\ConsoleOutput $output
-     * @param Throwable                                 $exception
-     *
-     * @return void
      */
     public function render(ConsoleOutput $output, Throwable $exception): void;
 }

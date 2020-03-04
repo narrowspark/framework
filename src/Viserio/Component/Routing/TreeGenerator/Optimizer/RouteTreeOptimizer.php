@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Routing\TreeGenerator\Optimizer;
@@ -21,10 +21,6 @@ final class RouteTreeOptimizer
 {
     /**
      * Optimizes the supplied route tree.
-     *
-     * @param array $routeTree
-     *
-     * @return array
      */
     public function optimize(array $routeTree): array
     {
@@ -39,10 +35,6 @@ final class RouteTreeOptimizer
 
     /**
      * Optimize child node collection.
-     *
-     * @param \Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection $nodes
-     *
-     * @return \Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection
      */
     private function optimizeNodes(ChildrenNodeCollection $nodes): ChildrenNodeCollection
     {
@@ -59,10 +51,6 @@ final class RouteTreeOptimizer
 
     /**
      * Optimize node collection.
-     *
-     * @param \Viserio\Component\Routing\TreeGenerator\RouteTreeNode $node
-     *
-     * @return \Viserio\Component\Routing\TreeGenerator\RouteTreeNode
      */
     private function optimizeNode(RouteTreeNode $node): RouteTreeNode
     {
@@ -90,10 +78,6 @@ final class RouteTreeOptimizer
 
     /**
      * Move matched common node to the parent node.
-     *
-     * @param \Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection $nodeCollection
-     *
-     * @return \Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection
      */
     private function moveCommonMatchersToParentNode(ChildrenNodeCollection $nodeCollection): ChildrenNodeCollection
     {
@@ -124,11 +108,6 @@ final class RouteTreeOptimizer
 
     /**
      * Extract parent nodes from route tree nood.
-     *
-     * @param \Viserio\Component\Routing\TreeGenerator\RouteTreeNode $node1
-     * @param \Viserio\Component\Routing\TreeGenerator\RouteTreeNode $node2
-     *
-     * @return null|\Viserio\Component\Routing\TreeGenerator\RouteTreeNode
      */
     private function extractCommonParentNode(RouteTreeNode $node1, RouteTreeNode $node2): ?RouteTreeNode
     {

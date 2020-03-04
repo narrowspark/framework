@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Profiler;
@@ -21,41 +21,26 @@ interface AssetsRenderer extends RenderableContract
      * Set the Profiler.
      *
      * @param \Viserio\Contract\Profiler\Profiler $profiler
-     *
-     * @return self
      */
     public function setProfiler(Profiler $profiler): self;
 
     /**
      * Add icon to list.
-     *
-     * @param string $name
-     * @param string $path
-     *
-     * @return self
      */
     public function setIcon(string $name, string $path): self;
 
     /**
      * Get all registered icons.
-     *
-     * @return array
      */
     public function getIcons(): array;
 
     /**
      * Ignores widgets provided by a collector.
-     *
-     * @param string $name
-     *
-     * @return self
      */
     public function setIgnoredCollector(string $name): self;
 
     /**
      * Returns the list of ignored collectors.
-     *
-     * @return array
      */
     public function getIgnoredCollectors(): array;
 
@@ -63,8 +48,6 @@ interface AssetsRenderer extends RenderableContract
      * Return assets as a string.
      *
      * @param string $type 'js' or 'css'
-     *
-     * @return string
      */
     public function dumpAssetsToString(string $type): string;
 
@@ -72,8 +55,6 @@ interface AssetsRenderer extends RenderableContract
      * Returns the list of asset files.
      *
      * @param null|string $type Only return css or js files
-     *
-     * @return array
      */
     public function getAssets(?string $type = null): array;
 }

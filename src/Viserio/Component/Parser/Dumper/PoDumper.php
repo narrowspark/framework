@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Parser\Dumper;
@@ -30,8 +30,6 @@ class PoDumper implements DumperContract
 
     /**
      * Create a new po dumper.
-     *
-     * @param string $eol
      *
      * @throws \Viserio\Contract\Parser\Exception\DumpException
      */
@@ -119,8 +117,6 @@ class PoDumper implements DumperContract
      * Prepares a string to be outputed into a file.
      *
      * @param string $string the string to be converted
-     *
-     * @return string
      */
     protected function cleanExport(string $string): string
     {
@@ -142,7 +138,6 @@ class PoDumper implements DumperContract
      * Adds tcomment to the output.
      *
      * @param array<string, mixed> $entry
-     * @param string               $output
      *
      * @return array<int, mixed>
      */
@@ -161,7 +156,6 @@ class PoDumper implements DumperContract
      * Adds ccomment to the output.
      *
      * @param array<string, mixed> $entry
-     * @param string               $output
      *
      * @return array<int, mixed>
      */
@@ -180,7 +174,6 @@ class PoDumper implements DumperContract
      * Adds reference to the output.
      *
      * @param array<string, mixed> $entry
-     * @param string               $output
      *
      * @return array<int, mixed>
      */
@@ -199,7 +192,6 @@ class PoDumper implements DumperContract
      * Adds flags infos to the output.
      *
      * @param array<string, mixed> $entry
-     * @param string               $output
      *
      * @return array<int, mixed>
      */
@@ -216,7 +208,6 @@ class PoDumper implements DumperContract
      * Adds previous info to the output.
      *
      * @param array<string, mixed> $entry
-     * @param string               $output
      *
      * @return array<int, mixed>
      */
@@ -241,8 +232,6 @@ class PoDumper implements DumperContract
      * Adds msgid to the output.
      *
      * @param array<string, mixed> $entry
-     * @param string               $output
-     * @param bool                 $isObsolete
      *
      * @throws \Viserio\Contract\Parser\Exception\DumpException
      *
@@ -278,7 +267,6 @@ class PoDumper implements DumperContract
      * Add msgid_plural to the output.
      *
      * @param array<string, mixed> $entry
-     * @param string               $output
      *
      * @throws \Viserio\Contract\Parser\Exception\DumpException
      *
@@ -310,11 +298,6 @@ class PoDumper implements DumperContract
      * Adds key with msgstr to the output.
      *
      * @param array<string, mixed> $entry
-     * @param bool                 $isPlural
-     * @param string               $output
-     * @param bool                 $isObsolete
-     *
-     * @return string
      */
     private function addMsgstrToOutput(array $entry, bool $isPlural, string $output, bool $isObsolete): string
     {
@@ -362,7 +345,6 @@ class PoDumper implements DumperContract
      * Adds a header to the output.
      *
      * @param array<int|string, mixed> $data
-     * @param string                   $output
      *
      * @throws \Viserio\Contract\Parser\Exception\DumpException
      *

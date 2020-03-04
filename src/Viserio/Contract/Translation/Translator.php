@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Translation;
@@ -23,8 +23,6 @@ interface Translator
 
     /**
      * Gets the string dictating the default language to translate into. (e.g. 'en').
-     *
-     * @return string
      */
     public function getLocale(): string;
 
@@ -34,8 +32,6 @@ interface Translator
      * @param string $locale A string representing the default language to translate into. (e.g. 'en').
      *
      * @throws InvalidArgumentException If the locale contains invalid characters
-     *
-     * @return self
      */
     public function setLocale(string $locale): self;
 
@@ -68,20 +64,11 @@ interface Translator
 
     /**
      * Add helper.
-     *
-     * @param string   $name
-     * @param callable $helper
-     *
-     * @return self
      */
     public function addHelper(string $name, callable $helper): self;
 
     /**
      * Add filter.
-     *
-     * @param callable $filter
-     *
-     * @return self
      */
     public function addFilter(callable $filter): self;
 }

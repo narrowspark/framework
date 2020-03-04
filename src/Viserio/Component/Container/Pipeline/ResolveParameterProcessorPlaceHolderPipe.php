@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Container\Pipeline;
@@ -135,9 +135,6 @@ final class ResolveParameterProcessorPlaceHolderPipe extends AbstractRecursivePi
 
     /**
      * Replaces process parameter placeholders ({name|process}) by their values.
-     *
-     * @param mixed $value
-     * @param array $resolving An array of keys that are being resolved (used internally to detect circular references)
      *
      * @throws \Viserio\Contract\Container\Exception\CircularParameterException if a circular reference if detected
      * @throws \Viserio\Contract\Container\Exception\RuntimeException           when a given parameter has a type problem

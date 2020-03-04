@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\View;
@@ -19,31 +19,21 @@ interface View extends Renderable
 {
     /**
      * Get the name of the view.
-     *
-     * @return string
      */
     public function getName(): string;
 
     /**
      * Get the array of view data.
-     *
-     * @return array
      */
     public function getData(): array;
 
     /**
      * Get the path to the view file.
-     *
-     * @return string
      */
     public function getPath(): string;
 
     /**
      * Set the path to the view.
-     *
-     * @param string $path
-     *
-     * @return self
      */
     public function setPath(string $path): self;
 
@@ -51,18 +41,11 @@ interface View extends Renderable
      * Add a piece of data to the view.
      *
      * @param array|string $key
-     * @param mixed        $value
-     *
-     * @return self
      */
     public function with($key, $value = null): self;
 
     /**
      * Get the string contents of the view.
-     *
-     * @param null|callable $callback
-     *
-     * @return string
      */
     public function render(?callable $callback = null): string;
 
@@ -70,10 +53,7 @@ interface View extends Renderable
      * Add a view instance to the view data.
      *
      * @param string   $key
-     * @param string   $view
      * @param string[] $data
-     *
-     * @return self
      */
     public function nest($key, string $view, array $data = []): self;
 

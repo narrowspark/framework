@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Parser\Dumper;
@@ -49,11 +49,7 @@ class TomlDumper implements DumperContract
     /**
      * Build toml file from given array.
      *
-     * @param array<int|string, mixed>    $data
-     * @param \Yosymfony\Toml\TomlBuilder $builder
-     * @param string                      $parent
-     *
-     * @return \Yosymfony\Toml\TomlBuilder
+     * @param array<int|string, mixed> $data
      */
     private function fromArray(array $data, TomlBuilder $builder, string $parent = ''): TomlBuilder
     {
@@ -87,11 +83,7 @@ class TomlDumper implements DumperContract
     /**
      * Run through all arrays.
      *
-     * @param array<int|string, mixed>    $values
-     * @param string                      $parent
-     * @param \Yosymfony\Toml\TomlBuilder $builder
-     *
-     * @return \Yosymfony\Toml\TomlBuilder
+     * @param array<int|string, mixed> $values
      */
     private function processArrayOfArrays(array $values, string $parent, TomlBuilder $builder): TomlBuilder
     {
@@ -124,8 +116,6 @@ class TomlDumper implements DumperContract
      * Check if array has string keys.
      *
      * @param array<int|string, mixed> $array
-     *
-     * @return bool
      */
     private function hasStringKeys(array $array): bool
     {
@@ -136,8 +126,6 @@ class TomlDumper implements DumperContract
      * Check if array has only arrays.
      *
      * @param array<int|string, mixed> $array
-     *
-     * @return bool
      */
     private function onlyArrays(array $array): bool
     {

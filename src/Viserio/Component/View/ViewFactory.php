@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\View;
@@ -28,22 +28,16 @@ class ViewFactory implements FactoryContract
 
     /**
      * Array of registered view name aliases.
-     *
-     * @var array
      */
     protected array $aliases = [];
 
     /**
      * All of the registered view names.
-     *
-     * @var array
      */
     protected array $names = [];
 
     /**
      * Register a view extension.
-     *
-     * @var array
      */
     protected static array $extensions = [
         'php' => 'php',
@@ -55,8 +49,6 @@ class ViewFactory implements FactoryContract
 
     /**
      * Data that should be available to all templates.
-     *
-     * @var array
      */
     protected array $shared = [];
 
@@ -76,9 +68,6 @@ class ViewFactory implements FactoryContract
 
     /**
      * Create a new factory instance.
-     *
-     * @param \Viserio\Contract\View\EngineResolver $engines
-     * @param \Viserio\Contract\View\Finder         $finder
      */
     public function __construct(EngineResolverContract $engines, FinderContract $finder)
     {
@@ -341,10 +330,6 @@ class ViewFactory implements FactoryContract
 
     /**
      * Parse the given data into a raw array.
-     *
-     * @param mixed $data
-     *
-     * @return array
      */
     protected function parseData($data): array
     {
@@ -353,10 +338,6 @@ class ViewFactory implements FactoryContract
 
     /**
      * Get the extension used by the view file.
-     *
-     * @param string $path
-     *
-     * @return null|string
      */
     protected function getExtension(string $path): ?string
     {
@@ -376,10 +357,6 @@ class ViewFactory implements FactoryContract
     /**
      * Get the right view object.
      *
-     * @param \Viserio\Contract\View\Factory            $factory
-     * @param \Viserio\Contract\View\Engine             $engine
-     * @param string                                    $view
-     * @param array                                     $fileInfo
      * @param array|\Viserio\Contract\Support\Arrayable $data
      *
      * @return \Viserio\Component\View\View
@@ -396,11 +373,6 @@ class ViewFactory implements FactoryContract
 
     /**
      * Determine if a given string ends with a given substring.
-     *
-     * @param string $haystack
-     * @param string $needle
-     *
-     * @return bool
      */
     private function endsWith(string $haystack, string $needle): bool
     {

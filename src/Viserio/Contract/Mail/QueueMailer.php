@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Mail;
@@ -21,8 +21,6 @@ interface QueueMailer extends Mailer
 {
     /**
      * Get the queue manager instance.
-     *
-     * @return \Viserio\Contract\Queue\QueueConnector
      */
     public function getQueue(): QueueConnectorContract;
 
@@ -30,36 +28,23 @@ interface QueueMailer extends Mailer
      * Queue a new e-mail message for sending.
      *
      * @param array|string   $view
-     * @param array          $data
      * @param Closure|string $callback
-     * @param null|string    $queue
-     *
-     * @return mixed
      */
     public function queue($view, array $data = [], $callback = null, ?string $queue = null);
 
     /**
      * Queue a new e-mail message for sending on the given queue.
      *
-     * @param string         $queue
      * @param array|string   $view
-     * @param array          $data
      * @param Closure|string $callback
-     *
-     * @return mixed
      */
     public function onQueue(string $queue, $view, array $data, $callback);
 
     /**
      * Queue a new e-mail message for sending after (n) seconds.
      *
-     * @param int            $delay
      * @param array|string   $view
-     * @param array          $data
      * @param Closure|string $callback
-     * @param null|string    $queue
-     *
-     * @return mixed
      */
     public function later(
         int $delay,
@@ -72,13 +57,8 @@ interface QueueMailer extends Mailer
     /**
      * Queue a new e-mail message for sending after (n) seconds on the given queue.
      *
-     * @param string         $queue
-     * @param int            $delay
      * @param array|string   $view
-     * @param array          $data
      * @param Closure|string $callback
-     *
-     * @return mixed
      */
     public function laterOn(
         string $queue,
@@ -90,9 +70,6 @@ interface QueueMailer extends Mailer
 
     /**
      * Handle a queued e-mail message job.
-     *
-     * @param \Viserio\Contract\Queue\Job $job
-     * @param array                       $data
      */
     public function handleQueuedMessage(JobContract $job, array $data);
 }

@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Profiler;
@@ -76,8 +76,6 @@ class Profile
 
     /**
      * Create new Profiler profile.
-     *
-     * @param string $token
      */
     public function __construct(string $token)
     {
@@ -85,8 +83,6 @@ class Profile
     }
 
     /**
-     * @return array
-     *
      * @codeCoverageIgnore
      */
     public function __sleep(): array
@@ -119,8 +115,6 @@ class Profile
      * Sets the token.
      *
      * @param string $token The token
-     *
-     * @return void
      */
     public function setToken(string $token): void
     {
@@ -139,10 +133,6 @@ class Profile
 
     /**
      * Sets the IP.
-     *
-     * @param string $ip
-     *
-     * @return void
      */
     public function setIp(string $ip): void
     {
@@ -161,10 +151,6 @@ class Profile
 
     /**
      * Set the request method.
-     *
-     * @param string $method
-     *
-     * @return void
      */
     public function setMethod(string $method): void
     {
@@ -173,8 +159,6 @@ class Profile
 
     /**
      * Returns the url.
-     *
-     * @return string
      */
     public function getUrl(): string
     {
@@ -183,10 +167,6 @@ class Profile
 
     /**
      * Set the request url.
-     *
-     * @param string $url
-     *
-     * @return void
      */
     public function setUrl(string $url): void
     {
@@ -211,8 +191,6 @@ class Profile
      * Set the needed time.
      *
      * @param float|string $time
-     *
-     * @return void
      */
     public function setTime($time): void
     {
@@ -231,10 +209,6 @@ class Profile
 
     /**
      * Set the creation date.
-     *
-     * @param string $date
-     *
-     * @return void
      */
     public function setDate(string $date): void
     {
@@ -243,8 +217,6 @@ class Profile
 
     /**
      * Get the response status code.
-     *
-     * @return string
      */
     public function getStatusCode(): string
     {
@@ -253,10 +225,6 @@ class Profile
 
     /**
      * Set the response status code.
-     *
-     * @param int $statusCode
-     *
-     * @return void
      */
     public function setStatusCode(int $statusCode): void
     {
@@ -275,10 +243,6 @@ class Profile
 
     /**
      * Sets the Collectors associated with this profile.
-     *
-     * @param array $collectors
-     *
-     * @return void
      */
     public function setCollectors(array $collectors): void
     {
@@ -293,8 +257,6 @@ class Profile
      * @param string $name A collector name
      *
      * @throws \Viserio\Contract\Profiler\Exception\CollectorNotFoundException if the collector does not exist
-     *
-     * @return \Viserio\Contract\Profiler\DataCollector
      */
     public function getCollector(string $name): DataCollectorContract
     {
@@ -307,10 +269,6 @@ class Profile
 
     /**
      * Adds a Collector.
-     *
-     * @param \Viserio\Contract\Profiler\DataCollector $collector
-     *
-     * @return void
      */
     public function addCollector(DataCollectorContract $collector): void
     {
@@ -321,8 +279,6 @@ class Profile
      * Returns true if a Collector for the given name exists.
      *
      * @param string $name A collector name
-     *
-     * @return bool
      */
     public function hasCollector(string $name): bool
     {

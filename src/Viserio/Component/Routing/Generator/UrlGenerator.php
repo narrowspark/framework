@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Routing\Generator;
@@ -89,10 +89,6 @@ class UrlGenerator implements UrlGeneratorContract
 
     /**
      * Create a new URL Generator instance.
-     *
-     * @param \Viserio\Contract\Routing\RouteCollection $routes
-     * @param \Psr\Http\Message\ServerRequestInterface  $request
-     * @param \Psr\Http\Message\UriFactoryInterface     $uriFactory
      */
     public function __construct(
         RouteCollectionContract $routes,
@@ -174,12 +170,6 @@ class UrlGenerator implements UrlGeneratorContract
 
     /**
      * Get the URL for a given route instance.
-     *
-     * @param \Viserio\Contract\Routing\Route $route
-     * @param array                           $parameters
-     * @param int                             $referenceType
-     *
-     * @return string
      */
     protected function toRoute(RouteContract $route, array $parameters, int $referenceType): string
     {
@@ -213,11 +203,6 @@ class UrlGenerator implements UrlGeneratorContract
 
     /**
      * Prepare route patch with all parameters and encode the path.
-     *
-     * @param \Viserio\Contract\Routing\Route $route
-     * @param array                           $parameters
-     *
-     * @return string
      */
     protected function prepareRoutePath(RouteContract $route, array $parameters): string
     {
@@ -246,10 +231,6 @@ class UrlGenerator implements UrlGeneratorContract
 
     /**
      * Check if a scheme is required.
-     *
-     * @param \Viserio\Contract\Routing\Route $route
-     *
-     * @return bool
      */
     protected function isSchemeRequired(RouteContract $route): bool
     {
@@ -269,10 +250,6 @@ class UrlGenerator implements UrlGeneratorContract
      * The path segments "." and ".." are interpreted as relative reference when resolving a URI;
      * see http://tools.ietf.org/html/rfc3986#section-3.3 so we need to encode them as they are not used for this purpose here
      * otherwise we would generate a URI that, when followed by a user agent (e.g. browser), does not match this route.
-     *
-     * @param string $path
-     *
-     * @return string
      */
     protected function replacePathSegments(string $path): string
     {
@@ -289,11 +266,6 @@ class UrlGenerator implements UrlGeneratorContract
 
     /**
      * Add the port and scheme to the uri if necessary.
-     *
-     * @param \Psr\Http\Message\UriInterface  $uri
-     * @param \Viserio\Contract\Routing\Route $route
-     *
-     * @return \Psr\Http\Message\UriInterface
      */
     protected function addPortAndSchemeToUri(UriInterface $uri, RouteContract $route): UriInterface
     {
@@ -316,11 +288,6 @@ class UrlGenerator implements UrlGeneratorContract
 
     /**
      * Replace all of the wildcard parameters for a route path.
-     *
-     * @param string $path
-     * @param array  $parameters
-     *
-     * @return string
      */
     protected function replaceRouteParameters(string $path, array &$parameters): string
     {
@@ -339,11 +306,6 @@ class UrlGenerator implements UrlGeneratorContract
 
     /**
      * Replace all of the named parameters in the path.
-     *
-     * @param string $path
-     * @param array  $parameters
-     *
-     * @return string
      */
     protected function replaceNamedParameters(string $path, array &$parameters): string
     {
@@ -362,11 +324,6 @@ class UrlGenerator implements UrlGeneratorContract
 
     /**
      * Add a query string to the URI.
-     *
-     * @param string $uri
-     * @param array  $parameters
-     *
-     * @return string
      */
     protected function addQueryString(string $uri, array $parameters): string
     {
@@ -388,10 +345,6 @@ class UrlGenerator implements UrlGeneratorContract
 
     /**
      * Get the query string for a given route.
-     *
-     * @param array $parameters
-     *
-     * @return string
      */
     protected function getRouteQueryString(array $parameters): string
     {
@@ -420,16 +373,11 @@ class UrlGenerator implements UrlGeneratorContract
         }
 
         // "/" and "?" can be left decoded for better user experience, see
-        // http://tools.ietf.org/html/rfc3986#section-3.4
         return '?' . \trim(\strtr($query, ['%2F' => '/']), '&');
     }
 
     /**
      * Get the string parameters from a given list.
-     *
-     * @param array $parameters
-     *
-     * @return array
      */
     protected function getStringParameters(array $parameters): array
     {
@@ -438,10 +386,6 @@ class UrlGenerator implements UrlGeneratorContract
 
     /**
      * Get the numeric parameters from a given list.
-     *
-     * @param array $parameters
-     *
-     * @return array
      */
     protected function getNumericParameters(array $parameters): array
     {

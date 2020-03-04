@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Container\Pipeline;
@@ -241,15 +241,10 @@ final class AutowirePipe extends AbstractRecursivePipe
     /**
      * Resolve methods calls.
      *
-     * @param ReflectionClass $reflectionClass
-     * @param bool            $isRoot
-     *
      * @throws ReflectionException
      * @throws \Viserio\Contract\Container\Exception\UnresolvableDependencyException
      * @throws \Viserio\Contract\Container\Exception\CircularDependencyException
      * @throws \Viserio\Contract\Container\Exception\NotFoundException
-     *
-     * @return void
      */
     private function autowireCalls(ReflectionClass $reflectionClass, bool $isRoot): void
     {
@@ -293,9 +288,6 @@ final class AutowirePipe extends AbstractRecursivePipe
 
     /**
      * Autowires the constructor or a method.
-     *
-     * @param ReflectionFunctionAbstract $reflectionMethod
-     * @param array                      $arguments
      *
      * @throws \Viserio\Contract\Container\Exception\UnresolvableDependencyException
      * @throws ReflectionException
@@ -412,12 +404,8 @@ final class AutowirePipe extends AbstractRecursivePipe
     /**
      * Returns a service to the matching the given type, if any exist.
      *
-     * @param \Viserio\Contract\Container\Definition\ReferenceDefinition $reference
-     *
      * @throws \Viserio\Contract\Container\Exception\CircularDependencyException
      * @throws \Viserio\Contract\Container\Exception\NotFoundException
-     *
-     * @return null|\Viserio\Contract\Container\Definition\ReferenceDefinition
      */
     private function getAutowiredReference(ReferenceDefinitionContract $reference): ?ReferenceDefinitionContract
     {

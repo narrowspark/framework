@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Routing\TreeGenerator;
@@ -26,8 +26,6 @@ final class ChildrenNodeCollection
 
     /**
      * Create a new child node collection instance.
-     *
-     * @param array $children
      */
     public function __construct(array $children = [])
     {
@@ -44,27 +42,18 @@ final class ChildrenNodeCollection
 
     /**
      * @param \Viserio\Component\Routing\TreeGenerator\RouteTreeNode $node
-     *
-     * @return bool
      */
     public function hasChild(RouteTreeNode $node): bool
     {
         return $this->hasChildFor($node->getFirstMatcher());
     }
 
-    /**
-     * @param \Viserio\Contract\Routing\SegmentMatcher $matcher
-     *
-     * @return bool
-     */
     public function hasChildFor(SegmentMatcherContract $matcher): bool
     {
         return isset($this->children[$matcher->getHash()]);
     }
 
     /**
-     * @param \Viserio\Contract\Routing\SegmentMatcher $matcher
-     *
      * @return null|\Viserio\Component\Routing\TreeGenerator\RouteTreeNode
      */
     public function getChild(SegmentMatcherContract $matcher): ?RouteTreeNode

@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Routing\Route;
@@ -17,11 +17,6 @@ class Group
 {
     /**
      * Merge route groups into a new array.
-     *
-     * @param array $new
-     * @param array $old
-     *
-     * @return array
      */
     public static function merge(array $new, array $old): array
     {
@@ -47,11 +42,6 @@ class Group
 
     /**
      * Format the uses prefix for the new group attributes.
-     *
-     * @param array $new
-     * @param array $old
-     *
-     * @return null|string
      */
     protected static function formatNamespace(array $new, array $old): ?string
     {
@@ -70,11 +60,6 @@ class Group
 
     /**
      * Format the prefix for the new group attributes.
-     *
-     * @param array $new
-     * @param array $old
-     *
-     * @return null|string
      */
     protected static function formatGroupPrefix(array $new, array $old): ?string
     {
@@ -89,11 +74,6 @@ class Group
 
     /**
      * Format the suffix for the new group attributes.
-     *
-     * @param array $new
-     * @param array $old
-     *
-     * @return null|string
      */
     protected static function formatGroupSuffix(array $new, array $old): ?string
     {
@@ -108,11 +88,6 @@ class Group
 
     /**
      * Format the "wheres" for the new group attributes.
-     *
-     * @param array $new
-     * @param array $old
-     *
-     * @return array
      */
     protected static function formatWhere(array $new, array $old): array
     {
@@ -124,11 +99,6 @@ class Group
 
     /**
      * Format the "as" clause of the new group attributes.
-     *
-     * @param array $new
-     * @param array $old
-     *
-     * @return array
      */
     protected static function formatAs(array $new, array $old): array
     {

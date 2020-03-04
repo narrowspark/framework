@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Session;
@@ -66,8 +66,6 @@ class SessionManager extends AbstractManager implements ProvidesDefaultConfigCon
 
     /**
      * Hide this from var_dump(), etc.
-     *
-     * @return array
      */
     public function __debugInfo(): array
     {
@@ -78,8 +76,6 @@ class SessionManager extends AbstractManager implements ProvidesDefaultConfigCon
 
     /**
      * Set the cookie jar instance.
-     *
-     * @param \Viserio\Contract\Cookie\QueueingFactory $cookieJar
      */
     public function setCookieJar(JarContract $cookieJar): void
     {
@@ -122,10 +118,6 @@ class SessionManager extends AbstractManager implements ProvidesDefaultConfigCon
 
     /**
      * Create an instance of the file session driver.
-     *
-     * @param array $config
-     *
-     * @return \Viserio\Contract\Session\Store
      */
     protected function createFileDriver(array $config): StoreContract
     {
@@ -141,8 +133,6 @@ class SessionManager extends AbstractManager implements ProvidesDefaultConfigCon
      * Create an instance of the "cookie" session driver.
      *
      * @throws \Viserio\Contract\Session\Exception\RuntimeException
-     *
-     * @return \Viserio\Contract\Session\Store
      */
     protected function createCookieDriver(): StoreContract
     {
@@ -160,8 +150,6 @@ class SessionManager extends AbstractManager implements ProvidesDefaultConfigCon
 
     /**
      * Create an instance of the Array session driver.
-     *
-     * @return \Viserio\Contract\Session\Store
      */
     protected function createArrayDriver(): StoreContract
     {
@@ -170,8 +158,6 @@ class SessionManager extends AbstractManager implements ProvidesDefaultConfigCon
 
     /**
      * Create an instance of the Memcached session driver.
-     *
-     * @return \Viserio\Contract\Session\Store
      *
      * @codeCoverageIgnore
      */
@@ -183,8 +169,6 @@ class SessionManager extends AbstractManager implements ProvidesDefaultConfigCon
     /**
      * Create an instance of the Memcache session driver.
      *
-     * @return \Viserio\Contract\Session\Store
-     *
      * @codeCoverageIgnore
      */
     protected function createMemcacheDriver(): StoreContract
@@ -194,8 +178,6 @@ class SessionManager extends AbstractManager implements ProvidesDefaultConfigCon
 
     /**
      * Create an instance of the Mongodb session driver.
-     *
-     * @return \Viserio\Contract\Session\Store
      *
      * @codeCoverageIgnore
      */
@@ -207,8 +189,6 @@ class SessionManager extends AbstractManager implements ProvidesDefaultConfigCon
     /**
      * Create an instance of the Predis session driver.
      *
-     * @return \Viserio\Contract\Session\Store
-     *
      * @codeCoverageIgnore
      */
     protected function createPredisDriver(): StoreContract
@@ -219,8 +199,6 @@ class SessionManager extends AbstractManager implements ProvidesDefaultConfigCon
     /**
      * Create an instance of the Redis session driver.
      *
-     * @return \Viserio\Contract\Session\Store
-     *
      * @codeCoverageIgnore
      */
     protected function createRedisDriver(): StoreContract
@@ -230,8 +208,6 @@ class SessionManager extends AbstractManager implements ProvidesDefaultConfigCon
 
     /**
      * Create an instance of the Filesystem session driver.
-     *
-     * @return \Viserio\Contract\Session\Store
      */
     protected function createFilesystemDriver(): StoreContract
     {
@@ -240,8 +216,6 @@ class SessionManager extends AbstractManager implements ProvidesDefaultConfigCon
 
     /**
      * Create an instance of the APCu session driver.
-     *
-     * @return \Viserio\Contract\Session\Store
      *
      * @codeCoverageIgnore
      */
@@ -253,11 +227,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultConfigCon
     /**
      * Create an instance of the Migrating session driver.
      *
-     * @param array $config
-     *
      * @throws \Viserio\Contract\Session\Exception\RuntimeException
-     *
-     * @return \Viserio\Contract\Session\Store
      */
     protected function createMigratingDriver(array $config): StoreContract
     {
@@ -289,8 +259,6 @@ class SessionManager extends AbstractManager implements ProvidesDefaultConfigCon
      * @param string $driver
      *
      * @throws \Viserio\Contract\Session\Exception\RuntimeException
-     *
-     * @return \Viserio\Contract\Session\Store
      */
     protected function createCacheBased($driver): StoreContract
     {
@@ -308,10 +276,6 @@ class SessionManager extends AbstractManager implements ProvidesDefaultConfigCon
 
     /**
      * Build the session instance.
-     *
-     * @param SessionHandlerInterface $handler
-     *
-     * @return \Viserio\Contract\Session\Store
      */
     protected function buildSession(SessionHandlerInterface $handler): StoreContract
     {
@@ -324,10 +288,6 @@ class SessionManager extends AbstractManager implements ProvidesDefaultConfigCon
 
     /**
      * Build the encrypted session instance.
-     *
-     * @param SessionHandlerInterface $handler
-     *
-     * @return \Viserio\Contract\Session\Store
      */
     protected function buildEncryptedSession(SessionHandlerInterface $handler): StoreContract
     {

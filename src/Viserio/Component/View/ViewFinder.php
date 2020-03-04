@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\View;
@@ -21,29 +21,21 @@ class ViewFinder implements FinderContract
 {
     /**
      * The array of active view paths.
-     *
-     * @var array
      */
     protected array $paths = [];
 
     /**
      * The array of views that have been located.
-     *
-     * @var array
      */
     protected array $views = [];
 
     /**
      * The namespace to file path hints.
-     *
-     * @var array
      */
     protected array $hints = [];
 
     /**
      * Register a view extension with the finder.
-     *
-     * @var array
      */
     protected static array $extensions = [
         'php',
@@ -55,9 +47,6 @@ class ViewFinder implements FinderContract
 
     /**
      * Create a new file view loader instance.
-     *
-     * @param array $paths
-     * @param array $extensions
      */
     public function __construct(array $paths, array $extensions = [])
     {
@@ -212,10 +201,6 @@ class ViewFinder implements FinderContract
 
     /**
      * Get the path to a template with a named path.
-     *
-     * @param string $name
-     *
-     * @return array
      */
     protected function findNamedPathView(string $name): array
     {
@@ -227,11 +212,7 @@ class ViewFinder implements FinderContract
     /**
      * Get the segments of a template with a named path.
      *
-     * @param string $name
-     *
      * @throws \Viserio\Contract\View\Exception\InvalidArgumentException
-     *
-     * @return array
      */
     protected function getNamespaceSegments(string $name): array
     {
@@ -251,12 +232,7 @@ class ViewFinder implements FinderContract
     /**
      * Find the given view in the list of paths.
      *
-     * @param string $name
-     * @param array  $paths
-     *
      * @throws \Viserio\Contract\View\Exception\InvalidArgumentException
-     *
-     * @return array
      */
     protected function findInPaths(string $name, array $paths): array
     {
@@ -285,10 +261,6 @@ class ViewFinder implements FinderContract
 
     /**
      * Get an array of possible view files.
-     *
-     * @param string $name
-     *
-     * @return array
      */
     protected function getPossibleViewFiles(string $name): array
     {

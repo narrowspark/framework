@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Container\Traits;
@@ -27,18 +27,11 @@ trait TypeNotFoundMessageCreatorTrait
 
     /**
      * Populates the list of available types.
-     *
-     * @return void
      */
     abstract protected function populateAvailableTypes(): void;
 
     /**
      * Populates the list of available types for a given definition.
-     *
-     * @param string $id
-     * @param string $value
-     *
-     * @return void
      */
     protected function populateAvailableType(string $id, string $value): void
     {
@@ -60,18 +53,10 @@ trait TypeNotFoundMessageCreatorTrait
     /**
      * Get the reflection object for the object or class name.
      *
-     * @param string $class
-     * @param bool   $throw
-     *
      * @throws ReflectionException
-     *
-     * @return null|ReflectionClass
      */
     abstract protected function getClassReflector(string $class, bool $throw = true): ?ReflectionClass;
 
-    /**
-     * @return array
-     */
     abstract protected function getServicesAndAliases(): array;
 
     /**
@@ -79,21 +64,13 @@ trait TypeNotFoundMessageCreatorTrait
      * Returns false otherwise.
      *
      * @param string $id identifier of the entry to look for
-     *
-     * @return bool
      */
     abstract protected function has(string $id): bool;
 
     /**
      * Generate a error message for not found classes or interfaces.
      *
-     * @param string $type
-     * @param string $label
-     * @param string $currentId
-     *
      * @throws ReflectionException
-     *
-     * @return string
      */
     private function createTypeNotFoundMessage(string $type, string $label, string $currentId): string
     {
@@ -122,11 +99,6 @@ trait TypeNotFoundMessageCreatorTrait
         return \sprintf('Cannot autowire service [%s]: %s %s', $currentId, $label, $message);
     }
 
-    /**
-     * @param string $type
-     *
-     * @return null|string
-     */
     private function createTypeAlternatives(string $type): ?string
     {
         // try suggesting available aliases first
@@ -155,12 +127,6 @@ trait TypeNotFoundMessageCreatorTrait
         return \sprintf(' You should maybe alias this %s to %s.', \class_exists($type, false) ? 'class' : 'interface', $message);
     }
 
-    /**
-     * @param string      $type
-     * @param null|string $extraContext
-     *
-     * @return null|string
-     */
     private function getAliasesSuggestionForType(string $type, ?string $extraContext = null): ?string
     {
         $aliases = [];
@@ -194,11 +160,6 @@ trait TypeNotFoundMessageCreatorTrait
 
     /**
      * Associates a type and a service id if applicable.
-     *
-     * @param string $type
-     * @param string $id
-     *
-     * @return void
      */
     private function setType(string $type, string $id): void
     {

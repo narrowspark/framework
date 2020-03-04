@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Finder;
@@ -55,8 +55,6 @@ interface Finder extends Countable, IteratorAggregate
      *
      * This can be slow as all the matching files and directories must be retrieved for comparison.
      *
-     * @param Closure $closure
-     *
      * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function sort(Closure $closure): self;
@@ -95,8 +93,6 @@ interface Finder extends Countable, IteratorAggregate
      * Tells finder to ignore unreadable directories.
      *
      * By default, scanning unreadable directories content throws an AccessDeniedException.
-     *
-     * @param bool $ignore
      *
      * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
@@ -236,8 +232,6 @@ interface Finder extends Countable, IteratorAggregate
      *
      * This option is enabled by default.
      *
-     * @param bool $ignoreDotFiles
-     *
      * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function ignoreDotFiles(bool $ignoreDotFiles): self;
@@ -247,8 +241,6 @@ interface Finder extends Countable, IteratorAggregate
      *
      * This option is enabled by default.
      *
-     * @param bool $ignoreVCS
-     *
      * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function ignoreVCS(bool $ignoreVCS): self;
@@ -257,8 +249,6 @@ interface Finder extends Countable, IteratorAggregate
      * Forces Finder to obey .gitignore and ignore files based on rules listed there.
      *
      * This option is disabled by default.
-     *
-     * @param bool $ignoreVCSIgnored
      *
      * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
@@ -275,8 +265,6 @@ interface Finder extends Countable, IteratorAggregate
      * Sorts files and directories by name.
      *
      * This can be slow as all the matching files and directories must be retrieved for comparison.
-     *
-     * @param bool $useNaturalSort
      *
      * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
@@ -332,8 +320,6 @@ interface Finder extends Countable, IteratorAggregate
      * The anonymous function receives a \SplFileInfo and must return false
      * to remove files.
      *
-     * @param callable $closure
-     *
      * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function filter(callable $closure): self;
@@ -364,8 +350,6 @@ interface Finder extends Countable, IteratorAggregate
 
     /**
      * Check if the any results were found.
-     *
-     * @return bool
      */
     public function hasResults(): bool;
 }

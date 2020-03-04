@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Queue;
@@ -19,14 +19,6 @@ interface Worker
 {
     /**
      * Listen to the given queue in a loop.
-     *
-     * @param string      $connectionName
-     * @param null|string $queue
-     * @param int         $delay
-     * @param int         $memory
-     * @param int         $timeout
-     * @param int         $sleep
-     * @param int         $maxTries
      */
     public function daemon(
         string $connectionName,
@@ -41,10 +33,7 @@ interface Worker
     /**
      * Process a given job from the queue.
      *
-     * @param string                      $connection
      * @param \Viserio\Contract\Queue\Job $job
-     * @param int                         $maxTries
-     * @param int                         $delay
      *
      * @throws Throwable
      */
@@ -52,12 +41,6 @@ interface Worker
 
     /**
      * Run the next job on the queue.
-     *
-     * @param string      $connectionName
-     * @param null|string $queue
-     * @param int         $delay
-     * @param int         $sleep
-     * @param int         $maxTries
      */
     public function runNextJob(
         string $connectionName,
@@ -69,10 +52,6 @@ interface Worker
 
     /**
      * Determine if the memory limit has been exceeded.
-     *
-     * @param int $memoryLimit
-     *
-     * @return bool
      */
     public function memoryExceeded(int $memoryLimit): bool;
 
@@ -83,8 +62,6 @@ interface Worker
 
     /**
      * Sleep the script for a given number of seconds.
-     *
-     * @param int $seconds
      */
     public function sleep(int $seconds);
 }

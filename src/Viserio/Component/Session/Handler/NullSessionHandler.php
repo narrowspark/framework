@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Session\Handler;
@@ -39,8 +39,6 @@ class NullSessionHandler extends AbstractSessionHandler
      *
      * @param string $sessionId   The session id
      * @param string $sessionData
-     *
-     * @return bool
      */
     public function updateTimestamp($sessionId, $sessionData): bool
     {
@@ -53,8 +51,6 @@ class NullSessionHandler extends AbstractSessionHandler
      * @see https://php.net/manual/en/sessionhandlerinterface.gc.php
      *
      * @param int $maxlifetime
-     *
-     * @return bool
      */
     public function gc($maxlifetime): bool
     {

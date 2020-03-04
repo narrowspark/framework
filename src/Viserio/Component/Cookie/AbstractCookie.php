@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Cookie;
@@ -310,8 +310,6 @@ abstract class AbstractCookie implements CookieContract, StringableContract
      * @param null|DateTimeInterface|int|string $expiration
      *
      * @throws \Viserio\Contract\Cookie\Exception\InvalidArgumentException
-     *
-     * @return int
      */
     protected function normalizeExpires($expiration = null): int
     {
@@ -342,10 +340,6 @@ abstract class AbstractCookie implements CookieContract, StringableContract
     /**
      * Remove the leading '.' and lowercase the domain as per spec in RFC 6265.
      *
-     * @param null|string $domain
-     *
-     * @return null|string
-     *
      * @see http://tools.ietf.org/html/rfc6265#section-4.1.2.3
      * @see http://tools.ietf.org/html/rfc6265#section-5.1.3
      * @see http://tools.ietf.org/html/rfc6265#section-5.2.3
@@ -362,10 +356,6 @@ abstract class AbstractCookie implements CookieContract, StringableContract
     /**
      * Processes path as per spec in RFC 6265.
      *
-     * @param string $path
-     *
-     * @return string
-     *
      * @see http://tools.ietf.org/html/rfc6265#section-5.1.4
      * @see http://tools.ietf.org/html/rfc6265#section-5.2.4
      */
@@ -380,11 +370,6 @@ abstract class AbstractCookie implements CookieContract, StringableContract
         return $path;
     }
 
-    /**
-     * @param array $cookieStringParts
-     *
-     * @return array
-     */
     protected function appendFormattedNameAndValuePartIfSet(array $cookieStringParts): array
     {
         $name = \urlencode($this->name) . '=';
@@ -404,11 +389,6 @@ abstract class AbstractCookie implements CookieContract, StringableContract
         return $cookieStringParts;
     }
 
-    /**
-     * @param array $cookieStringParts
-     *
-     * @return array
-     */
     protected function appendFormattedDomainPartIfSet(array $cookieStringParts): array
     {
         if ($this->domain !== null) {
@@ -418,11 +398,6 @@ abstract class AbstractCookie implements CookieContract, StringableContract
         return $cookieStringParts;
     }
 
-    /**
-     * @param array $cookieStringParts
-     *
-     * @return array
-     */
     protected function appendFormattedPathPartIfSet(array $cookieStringParts): array
     {
         if ($this->path !== null) {
@@ -432,11 +407,6 @@ abstract class AbstractCookie implements CookieContract, StringableContract
         return $cookieStringParts;
     }
 
-    /**
-     * @param array $cookieStringParts
-     *
-     * @return array
-     */
     protected function appendFormattedMaxAgePartIfSet(array $cookieStringParts): array
     {
         if ($this->maxAge) {
@@ -446,11 +416,6 @@ abstract class AbstractCookie implements CookieContract, StringableContract
         return $cookieStringParts;
     }
 
-    /**
-     * @param array $cookieStringParts
-     *
-     * @return array
-     */
     protected function appendFormattedSecurePartIfSet(array $cookieStringParts): array
     {
         if ($this->secure) {
@@ -460,11 +425,6 @@ abstract class AbstractCookie implements CookieContract, StringableContract
         return $cookieStringParts;
     }
 
-    /**
-     * @param array $cookieStringParts
-     *
-     * @return array
-     */
     protected function appendFormattedHttpOnlyPartIfSet(array $cookieStringParts): array
     {
         if ($this->httpOnly) {
@@ -474,11 +434,6 @@ abstract class AbstractCookie implements CookieContract, StringableContract
         return $cookieStringParts;
     }
 
-    /**
-     * @param array $cookieStringParts
-     *
-     * @return array
-     */
     protected function appendFormattedSameSitePartIfSet(array $cookieStringParts): array
     {
         if ($this->sameSite) {
@@ -492,8 +447,6 @@ abstract class AbstractCookie implements CookieContract, StringableContract
      * Check if the string / int is a unix timestamp.
      *
      * @param int|string $timestamp
-     *
-     * @return bool
      */
     protected function isValidTimeStamp($timestamp): bool
     {
@@ -504,8 +457,6 @@ abstract class AbstractCookie implements CookieContract, StringableContract
      * Get timestamp as cookie string format.
      *
      * @param null|DateTimeInterface|int|string $expiration
-     *
-     * @return null|string
      */
     protected function getTimestamp($expiration): ?string
     {

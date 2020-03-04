@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Container\Dumper;
@@ -24,11 +24,6 @@ use ReflectionProperty;
  */
 final class Preloader
 {
-    /**
-     * @param array $classes
-     *
-     * @return void
-     */
     public static function preload(array $classes): void
     {
         \set_error_handler(function ($t, $m, $f, $l): void {
@@ -61,12 +56,6 @@ final class Preloader
         }
     }
 
-    /**
-     * @param string $class
-     * @param array  $preloaded
-     *
-     * @return void
-     */
     private static function doPreload(string $class, array &$preloaded): void
     {
         if (isset($preloaded[$class]) || \in_array($class, ['self', 'static', 'parent'], true)) {

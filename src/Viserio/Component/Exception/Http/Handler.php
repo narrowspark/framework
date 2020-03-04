@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Exception\Http;
@@ -55,9 +55,7 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
     /**
      * Create a new handler instance.
      *
-     * @param array|ArrayAccess                          $config
-     * @param \Psr\Http\Message\ResponseFactoryInterface $responseFactory
-     * @param null|\Psr\Log\LoggerInterface              $logger
+     * @param array|ArrayAccess $config
      */
     public function __construct($config, ResponseFactoryInterface $responseFactory, ?LoggerInterface $logger = null)
     {
@@ -161,12 +159,6 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
 
     /**
      * Get a prepared response with the transformed exception.
-     *
-     * @param null|\Psr\Http\Message\ServerRequestInterface $request
-     * @param Throwable                                     $exception
-     * @param Throwable                                     $transformed
-     *
-     * @return \Psr\Http\Message\ResponseInterface
      */
     protected function getPreparedResponse(
         ?ServerRequestInterface $request,
@@ -192,12 +184,6 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
 
     /**
      * Create a response for the given exception.
-     *
-     * @param null|\Psr\Http\Message\ServerRequestInterface $request
-     * @param Throwable                                     $exception
-     * @param Throwable                                     $transformed
-     *
-     * @return \Psr\Http\Message\ResponseInterface
      */
     protected function getResponse(
         ?ServerRequestInterface $request,
@@ -219,13 +205,6 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
 
     /**
      * Get the displayer instance.
-     *
-     * @param null|\Psr\Http\Message\ServerRequestInterface $request
-     * @param Throwable                                     $original
-     * @param Throwable                                     $transformed
-     * @param int                                           $code
-     *
-     * @return \Viserio\Contract\Exception\Displayer
      */
     protected function getDisplayer(
         ?ServerRequestInterface $request,
@@ -255,11 +234,7 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
     /**
      * Get the filtered list of displayers.
      *
-     * @param \Viserio\Contract\Exception\Displayer[]  $displayers
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param Throwable                                $original
-     * @param Throwable                                $transformed
-     * @param int                                      $code
+     * @param \Viserio\Contract\Exception\Displayer[] $displayers
      *
      * @return \Viserio\Contract\Exception\Displayer[]
      */
@@ -288,11 +263,6 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
 
     /**
      * Sort displayer after the first found accept header.
-     *
-     * @param array                                    $filtered
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     *
-     * @return \Viserio\Contract\Exception\Displayer
      */
     private function sortedFilter(array $filtered, ServerRequestInterface $request): DisplayerContract
     {

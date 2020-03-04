@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Foundation;
@@ -81,8 +81,6 @@ abstract class AbstractKernel implements KernelContract
      * List of allowed bootstrap types.
      *
      * @internal
-     *
-     * @var array
      */
     protected static array $allowedBootstrapTypes = ['global'];
 
@@ -95,22 +93,16 @@ abstract class AbstractKernel implements KernelContract
 
     /**
      * A Container Builder instance.
-     *
-     * @var null|\Viserio\Contract\Container\ContainerBuilder&\Viserio\Contract\Container\ServiceProvider\ContainerBuilder
      */
     protected $containerBuilder;
 
     /**
      * The environment file to load during bootstrapping.
-     *
-     * @var string
      */
     protected string $environmentFile = '.env';
 
     /**
      * The custom environment path defined by the developer.
-     *
-     * @var null|string
      */
     protected ?string $environmentPath = null;
 
@@ -130,15 +122,11 @@ abstract class AbstractKernel implements KernelContract
 
     /**
      * The current application environment.
-     *
-     * @var null|string
      */
     protected ?string $environment = null;
 
     /**
      * Check if the application is running in debug mode.
-     *
-     * @var bool
      */
     protected bool $debug = false;
 
@@ -492,15 +480,11 @@ abstract class AbstractKernel implements KernelContract
 
     /**
      * Returns the bootstrap lock file path.
-     *
-     * @return string
      */
     abstract protected function getBootstrapLockFileName(): string;
 
     /**
      * Returns the bootstrap lock file path.
-     *
-     * @return string
      */
     protected function getBootstrapDirPath(): string
     {
@@ -509,8 +493,6 @@ abstract class AbstractKernel implements KernelContract
 
     /**
      * Returns prepared bootstrap classes, sorted and filtered after static::$allowedBootstrapTypes.
-     *
-     * @return array
      */
     protected function getPreparedBootstraps(): array
     {

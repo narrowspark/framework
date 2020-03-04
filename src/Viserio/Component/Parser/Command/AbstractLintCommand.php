@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Parser\Command;
@@ -65,12 +65,8 @@ abstract class AbstractLintCommand extends AbstractCommand
      * Get display type from format.
      *
      * @param array<int, array<string, null|array<int, array<string, mixed>>|bool|string>> $files
-     * @param string                                                                       $format
-     * @param bool                                                                         $displayCorrectFiles
      *
      * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException
-     *
-     * @return int
      */
     protected function display(array $files, string $format, bool $displayCorrectFiles): int
     {
@@ -89,9 +85,6 @@ abstract class AbstractLintCommand extends AbstractCommand
      * Display errors in txt format.
      *
      * @param array<int, array<string, null|array<int, array<string, mixed>>|bool|string>> $filesInfo
-     * @param bool                                                                         $displayCorrectFiles
-     *
-     * @return int
      */
     abstract protected function displayTxt(array $filesInfo, bool $displayCorrectFiles): int;
 
@@ -99,8 +92,6 @@ abstract class AbstractLintCommand extends AbstractCommand
      * Display errors in json format.
      *
      * @param array<int, array<string, null|array<int, array<string, mixed>>|bool|string>> $filesInfo
-     *
-     * @return int
      */
     protected function displayJson(array $filesInfo): int
     {
@@ -124,17 +115,12 @@ abstract class AbstractLintCommand extends AbstractCommand
     /**
      * Validate file content.
      *
-     * @param string      $content
-     * @param null|string $file
-     *
      * @return array<string, mixed>
      */
     abstract protected function validate(string $content, ?string $file = null): array;
 
     /**
      * Get a generator of files.
-     *
-     * @param string $fileOrDirectory
      *
      * @return Generator<string>
      */
@@ -158,8 +144,6 @@ abstract class AbstractLintCommand extends AbstractCommand
 
     /**
      * Get content from stdin.
-     *
-     * @return null|string
      */
     protected function getStdin(): ?string
     {
@@ -178,8 +162,6 @@ abstract class AbstractLintCommand extends AbstractCommand
 
     /**
      * Get item from dirs.
-     *
-     * @param string $directory
      *
      * @return RecursiveIteratorIterator<string, SplFileInfo>
      */

@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Console\Command;
@@ -22,11 +22,7 @@ final class ExpressionParser
     /**
      * Parse given command string.
      *
-     * @param string $expression
-     *
      * @throws \Viserio\Contract\Console\Exception\InvalidCommandExpression
-     *
-     * @return array
      */
     public static function parse(string $expression): array
     {
@@ -62,10 +58,6 @@ final class ExpressionParser
 
     /**
      * Check if token is a option.
-     *
-     * @param string $token
-     *
-     * @return bool
      */
     private static function isOption(string $token): bool
     {
@@ -75,11 +67,7 @@ final class ExpressionParser
     /**
      * Parse arguments.
      *
-     * @param string $token
-     *
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
-     *
-     * @return \Viserio\Component\Console\Input\InputArgument
      */
     private static function parseArgument(string $token): InputArgument
     {
@@ -119,11 +107,7 @@ final class ExpressionParser
     /**
      * Parse options.
      *
-     * @param string $token
-     *
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
-     *
-     * @return \Viserio\Component\Console\Input\InputOption
      */
     private static function parseOption(string $token): InputOption
     {
@@ -160,10 +144,6 @@ final class ExpressionParser
 
     /**
      * Parse the token into its token and description segments.
-     *
-     * @param string $token
-     *
-     * @return array
      */
     private static function extractDescription(string $token): array
     {
@@ -174,11 +154,6 @@ final class ExpressionParser
 
     /**
      * Determine if a given string starts with a given substring.
-     *
-     * @param string $haystack
-     * @param string $needle
-     *
-     * @return bool
      */
     private static function startsWith(string $haystack, string $needle): bool
     {
@@ -187,11 +162,6 @@ final class ExpressionParser
 
     /**
      * Determine if a given string ends with a given substring.
-     *
-     * @param string $haystack
-     * @param string $needle
-     *
-     * @return bool
      */
     private static function endsWith(string $haystack, string $needle): bool
     {

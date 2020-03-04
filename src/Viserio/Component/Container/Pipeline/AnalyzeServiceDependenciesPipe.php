@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Container\Pipeline;
@@ -36,29 +36,21 @@ final class AnalyzeServiceDependenciesPipe extends AbstractRecursivePipe
 {
     /**
      * Check if properties and methods parameter should be analyzed.
-     *
-     * @var bool
      */
     private bool $onlyConstructorArguments;
 
     /**
      * Check if proxy dumper is used.
-     *
-     * @var bool
      */
     private bool $hasProxyDumper;
 
     /**
      * Check if value is lazy.
-     *
-     * @var bool
      */
     private bool $lazy;
 
     /**
      * Check if it was run by constructor parameters.
-     *
-     * @var bool
      */
     private bool $byConstructor;
 
@@ -92,9 +84,6 @@ final class AnalyzeServiceDependenciesPipe extends AbstractRecursivePipe
 
     /**
      * Create a new analyze service dependencies instance.
-     *
-     * @param bool $onlyConstructorArguments
-     * @param bool $hasProxyDumper
      */
     public function __construct(bool $onlyConstructorArguments = false, bool $hasProxyDumper = true)
     {
@@ -260,8 +249,6 @@ final class AnalyzeServiceDependenciesPipe extends AbstractRecursivePipe
      * Find definition id.
      *
      * @param \Viserio\Contract\Container\Definition\AliasDefinition|\Viserio\Contract\Container\Definition\Definition|\Viserio\Contract\Container\Definition\ReferenceDefinition $definition
-     *
-     * @return null|string
      */
     private function getDefinitionId($definition): ?string
     {

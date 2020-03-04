@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Profiler\DataCollector\Bridge\PDO;
@@ -41,7 +41,6 @@ class TracedStatement
 
     /**
      * @param string $sql
-     * @param array  $params
      * @param string $preparedId
      */
     public function __construct($sql, array $params = [], $preparedId = null)
@@ -53,8 +52,6 @@ class TracedStatement
 
     /**
      * Returns the SQL string used for the query.
-     *
-     * @return string
      */
     public function getSql(): string
     {
@@ -63,8 +60,6 @@ class TracedStatement
 
     /**
      * Returns the number of rows affected/returned.
-     *
-     * @return int
      */
     public function getRowCount(): int
     {
@@ -73,8 +68,6 @@ class TracedStatement
 
     /**
      * Returns an array of parameters used with the query.
-     *
-     * @return array
      */
     public function getParameters(): array
     {
@@ -87,17 +80,11 @@ class TracedStatement
         return $params;
     }
 
-    /**
-     * @return mixed
-     */
     public function getStartTime()
     {
         return $this->startTime;
     }
 
-    /**
-     * @return mixed
-     */
     public function getEndTime()
     {
         return $this->endTime;
@@ -105,25 +92,17 @@ class TracedStatement
 
     /**
      * Returns the duration in seconds of the execution.
-     *
-     * @return int
      */
     public function getDuration(): int
     {
         return $this->duration;
     }
 
-    /**
-     * @return mixed
-     */
     public function getStartMemory()
     {
         return $this->startMemory;
     }
 
-    /**
-     * @return mixed
-     */
     public function getEndMemory()
     {
         return $this->endMemory;
@@ -131,8 +110,6 @@ class TracedStatement
 
     /**
      * Returns the exception triggered.
-     *
-     * @return Exception
      */
     public function getException(): Exception
     {
@@ -141,8 +118,6 @@ class TracedStatement
 
     /**
      * Returns the prepared statement id.
-     *
-     * @return string
      */
     public function getPreparedId(): string
     {
@@ -160,10 +135,9 @@ class TracedStatement
     }
 
     /**
-     * @param null|Exception $exception
-     * @param int            $rowCount
-     * @param null           $endTime
-     * @param null           $endMemory
+     * @param int  $rowCount
+     * @param null $endTime
+     * @param null $endMemory
      */
     public function end(?Exception $exception = null, $rowCount = 0, $endTime = null, $endMemory = null): void
     {
@@ -177,10 +151,6 @@ class TracedStatement
 
     /**
      * Check parameters for illegal (non UTF-8) strings, like Binary data.
-     *
-     * @param array $params
-     *
-     * @return mixed
      */
     public function checkParameters(array $params)
     {
@@ -197,8 +167,6 @@ class TracedStatement
      * Returns the SQL string with any parameters used embedded.
      *
      * @param string $quotationChar
-     *
-     * @return string
      */
     public function getSqlWithParams($quotationChar = '<>'): string
     {
@@ -226,8 +194,6 @@ class TracedStatement
 
     /**
      * Checks if this is a prepared statement.
-     *
-     * @return bool
      */
     public function isPrepared(): bool
     {
@@ -236,8 +202,6 @@ class TracedStatement
 
     /**
      * Returns the memory usage during the execution.
-     *
-     * @return int
      */
     public function getMemoryUsage(): int
     {
@@ -246,8 +210,6 @@ class TracedStatement
 
     /**
      * Checks if the statement was successful.
-     *
-     * @return bool
      */
     public function isSuccess(): bool
     {
@@ -256,8 +218,6 @@ class TracedStatement
 
     /**
      * Returns the exception's code.
-     *
-     * @return string
      */
     public function getErrorCode(): string
     {
@@ -266,8 +226,6 @@ class TracedStatement
 
     /**
      * Returns the exception's message.
-     *
-     * @return string
      */
     public function getErrorMessage(): string
     {

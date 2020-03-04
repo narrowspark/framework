@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Container;
@@ -18,8 +18,6 @@ use Psr\Container\ContainerInterface;
 interface DelegateAwareContainer
 {
     /**
-     * @param array $delegates
-     *
      * @return static
      */
     public function setDelegates(array $delegates);
@@ -28,18 +26,12 @@ interface DelegateAwareContainer
      * Delegate a backup container to be checked for services if it
      * cannot be resolved via this container.
      *
-     * @param \Psr\Container\ContainerInterface $container
-     *
      * @return static
      */
     public function delegate(ContainerInterface $container);
 
     /**
      * Returns true if service is registered in one of the delegated backup containers.
-     *
-     * @param string $abstract
-     *
-     * @return bool
      */
     public function hasInDelegate(string $abstract): bool;
 }

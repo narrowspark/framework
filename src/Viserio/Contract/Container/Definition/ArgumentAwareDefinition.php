@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Container\Definition;
@@ -19,8 +19,6 @@ interface ArgumentAwareDefinition
 {
     /**
      * Set a list of arguments.
-     *
-     * @param array $arguments
      *
      * @return static
      */
@@ -39,7 +37,6 @@ interface ArgumentAwareDefinition
      * Sets a specific argument.
      *
      * @param int|string $key
-     * @param mixed      $value
      *
      * @return static
      */
@@ -49,15 +46,11 @@ interface ArgumentAwareDefinition
      * Gets an argument from key.
      *
      * @param int|string $index
-     *
-     * @return mixed
      */
     public function getArgument($index);
 
     /**
      * Returns the list of arguments to pass when calling the method.
-     *
-     * @return array
      */
     public function getArguments(): array;
 
@@ -65,7 +58,6 @@ interface ArgumentAwareDefinition
      * Replaces a specific argument.
      *
      * @param int|string $index
-     * @param mixed      $argument
      *
      * @throws OutOfBoundsException When the replaced argument does not exist
      *

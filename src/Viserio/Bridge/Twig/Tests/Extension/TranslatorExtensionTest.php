@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Bridge\Twig\Tests\Extension;
@@ -27,6 +27,7 @@ use Viserio\Component\Translation\TranslationManager;
  * @internal
  *
  * @small
+ * @coversNothing
  */
 final class TranslatorExtensionTest extends MockeryTestCase
 {
@@ -73,10 +74,6 @@ final class TranslatorExtensionTest extends MockeryTestCase
 
     /**
      * @dataProvider provideTransCases
-     *
-     * @param mixed $template
-     * @param mixed $expected
-     * @param array $variables
      */
     public function testTrans($template, $expected, array $variables = []): void
     {
@@ -197,10 +194,7 @@ final class TranslatorExtensionTest extends MockeryTestCase
     }
 
     /**
-     * @param array|string                                           $template
-     * @param null|\Viserio\Component\Translation\TranslationManager $translator
-     *
-     * @return TemplateWrapper
+     * @param array|string $template
      */
     private function getTemplate($template, ?TranslationManager $translator = null): TemplateWrapper
     {
@@ -220,9 +214,6 @@ final class TranslatorExtensionTest extends MockeryTestCase
         return $twig->load('index');
     }
 
-    /**
-     * @return \Viserio\Component\Translation\TranslationManager
-     */
     private function getTranslationManager(): TranslationManager
     {
         $translator = new TranslationManager(new IntlMessageFormatter());

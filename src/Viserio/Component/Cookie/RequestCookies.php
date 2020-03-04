@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Cookie;
@@ -20,8 +20,6 @@ final class RequestCookies extends AbstractCookieCollector
 {
     /**
      * Create a new cookie collection instance.
-     *
-     * @param array $cookies
      *
      * @throws \Viserio\Contract\Cookie\Exception\InvalidArgumentException
      */
@@ -39,11 +37,7 @@ final class RequestCookies extends AbstractCookieCollector
     /**
      * Creates a Cookie instance from a Set-Cookie header value.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     *
      * @throws \Viserio\Contract\Cookie\Exception\InvalidArgumentException
-     *
-     * @return self
      */
     public static function fromRequest(ServerRequestInterface $request): self
     {
@@ -52,10 +46,6 @@ final class RequestCookies extends AbstractCookieCollector
 
     /**
      * Render Cookies into a Request.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     *
-     * @return \Psr\Http\Message\ServerRequestInterface
      */
     public function renderIntoCookieHeader(ServerRequestInterface $request): ServerRequestInterface
     {
@@ -66,10 +56,6 @@ final class RequestCookies extends AbstractCookieCollector
 
     /**
      * Create a list of Cookies from a Cookie header value string.
-     *
-     * @param string $string
-     *
-     * @return array
      */
     protected static function listFromCookieString(string $string): array
     {
@@ -82,8 +68,6 @@ final class RequestCookies extends AbstractCookieCollector
 
     /**
      * Create one Cookie from a cookie key/value header value string.
-     *
-     * @param string $string
      *
      * @return \Viserio\Component\Cookie\Cookie
      */

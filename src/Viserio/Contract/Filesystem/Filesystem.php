@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Filesystem;
@@ -39,11 +39,7 @@ interface Filesystem extends DirectorySystem
     /**
      * Check whether a file exists.
      *
-     * @param string $path
-     *
      * @throws \Viserio\Contract\Filesystem\Exception\IOException
-     *
-     * @return bool
      */
     public function has(string $path): bool;
 
@@ -82,23 +78,18 @@ interface Filesystem extends DirectorySystem
      *                                           - $config['visibility'] Whether to change the file chmod (defaults to public visibility)
      *
      * @throws \Viserio\Contract\Filesystem\Exception\IOException
-     *
-     * @return void
      */
     public function write(string $path, string $content, array $config = []): void;
 
     /**
      * Write a new file using a stream.
      *
-     * @param string                    $path
      * @param resource                  $resource
      * @param array<string, int|string> $config   An array of boolean options
      *                                            Valid options are:
      *                                            - $config['visibility'] Whether to change the file chmod (defaults to public visibility)
      *
      * @throws \Viserio\Contract\Filesystem\Exception\IOException
-     *
-     * @return void
      */
     public function writeStream(string $path, $resource, array $config = []): void;
 
@@ -106,16 +97,12 @@ interface Filesystem extends DirectorySystem
      * Appends the given content to the specified file.
      * If the file does not exist, the file will be created.
      *
-     * @param string                    $path
-     * @param string                    $content
-     * @param array<string, int|string> $config  An array of boolean options
-     *                                           Valid options are:
-     *                                           - $config['visibility'] Whether to change the file chmod (defaults to public visibility)
+     * @param array<string, int|string> $config An array of boolean options
+     *                                          Valid options are:
+     *                                          - $config['visibility'] Whether to change the file chmod (defaults to public visibility)
      *
      * @throws \Viserio\Contract\Filesystem\Exception\NotFoundException
      * @throws \Viserio\Contract\Filesystem\Exception\IOException
-     *
-     * @return void
      */
     public function append(string $path, string $content, array $config = []): void;
 
@@ -123,7 +110,6 @@ interface Filesystem extends DirectorySystem
      * Appends the given content to the specified file using stream.
      * If the file does not exist, the file will be created.
      *
-     * @param string                    $path
      * @param resource                  $resource
      * @param array<string, int|string> $config   An array of boolean options
      *                                            Valid options are:
@@ -131,8 +117,6 @@ interface Filesystem extends DirectorySystem
      *
      * @throws \Viserio\Contract\Filesystem\Exception\NotFoundException
      * @throws \Viserio\Contract\Filesystem\Exception\IOException
-     *
-     * @return void
      */
     public function appendStream(string $path, $resource, array $config = []): void;
 
@@ -148,15 +132,12 @@ interface Filesystem extends DirectorySystem
      *
      * @throws \Viserio\Contract\Filesystem\Exception\NotFoundException
      * @throws \Viserio\Contract\Filesystem\Exception\IOException
-     *
-     * @return void
      */
     public function update(string $path, string $content, array $config = []): void;
 
     /**
      * Update a file using a stream.
      *
-     * @param string                    $path
      * @param resource                  $resource
      * @param array<string, int|string> $config   An array of boolean options
      *                                            Valid options are:
@@ -164,52 +145,37 @@ interface Filesystem extends DirectorySystem
      *                                            - $config['visibility'] Whether to change the file chmod (defaults to public visibility)
      *
      * @throws \Viserio\Contract\Filesystem\Exception\IOException if the getting of the stream content failed
-     *
-     * @return void
      */
     public function updateStream(string $path, $resource, array $config = []): void;
 
     /**
      * Change the owner of a file or directory.
      *
-     * @param string     $file
      * @param int|string $user A user name or number
      *
      * @throws \Viserio\Contract\Filesystem\Exception\IOException When the change fails
-     *
-     * @return void
      */
     public function setOwner(string $file, $user): void;
 
     /**
      * Change the group of an array of files or directories.
      *
-     * @param string     $file
      * @param int|string $group A group name or number
      *
      * @throws \Viserio\Contract\Filesystem\Exception\IOException When the change fails
-     *
-     * @return void
      */
     public function setGroup(string $file, $group): void;
 
     /**
      * Get the visibility for the given path.
-     *
-     * @param string $path
-     *
-     * @return int
      */
     public function getVisibility(string $path): int;
 
     /**
      * Set the visibility for the given path.
      *
-     * @param string           $path
      * @param float|int|string $visibility The new mode (octal)
      * @param int              $umask      The mode mask (octal)
-     *
-     * @return void
      */
     public function setVisibility(string $path, $visibility, int $umask = 0000): void;
 
@@ -226,16 +192,12 @@ interface Filesystem extends DirectorySystem
      *
      * @throws \Viserio\Contract\Filesystem\Exception\NotFoundException When originFile doesn't exist
      * @throws \Viserio\Contract\Filesystem\Exception\IOException       When copy fails
-     *
-     * @return void
      */
     public function copy(string $originFile, string $targetFile, bool $override = false): void;
 
     /**
      * Move a file to a new location.
      *
-     * @param string              $from
-     * @param string              $to
      * @param array<string, bool> $config An array of boolean options
      *                                    Valid options are:
      *                                    - $config['overwrite'] If true, target files newer than origin files are overwritten (see copy(), defaults to false)
@@ -243,8 +205,6 @@ interface Filesystem extends DirectorySystem
      * @throws \Viserio\Contract\Filesystem\Exception\IOException
      * @throws \Viserio\Contract\Filesystem\Exception\UnreadableFileException
      * @throws \Viserio\Contract\Filesystem\Exception\NotFoundException
-     *
-     * @return void
      */
     public function move(string $from, string $to, array $config = []): void;
 
@@ -252,8 +212,6 @@ interface Filesystem extends DirectorySystem
      * Get a file's size.
      *
      * @param string $path the path to the file
-     *
-     * @return int
      */
     public function getSize(string $path): int;
 
@@ -282,17 +240,11 @@ interface Filesystem extends DirectorySystem
 
     /**
      * Delete the file at a given path.
-     *
-     * @param string $path
-     *
-     * @return void
      */
     public function delete(string $path): void;
 
     /**
      * Get an array of all files in a directory.
-     *
-     * @param string $directory
      *
      * @return Iterator<string, SplFileInfo>
      */
@@ -301,19 +253,12 @@ interface Filesystem extends DirectorySystem
     /**
      * Get all of the files from the given directory (recursive).
      *
-     * @param string $directory
-     * @param bool   $showHiddenFiles
-     *
      * @return Iterator<string, SplFileInfo>
      */
     public function allFiles(string $directory, bool $showHiddenFiles = false): Iterator;
 
     /**
      * Extract the file extension from a file path.
-     *
-     * @param string $path
-     *
-     * @return string
      */
     public function getExtension(string $path): string;
 
@@ -340,30 +285,18 @@ interface Filesystem extends DirectorySystem
 
     /**
      * Check if path is writable.
-     *
-     * @param string $path
-     *
-     * @return bool
      */
     public function isWritable(string $path): bool;
 
     /**
      * Tells whether a file exists and is readable.
      *
-     * @param string $filename
-     *
      * @throws \Viserio\Contract\Filesystem\Exception\IOException When windows path is longer than 258 characters
-     *
-     * @return bool
      */
     public function isReadable(string $filename): bool;
 
     /**
      * Check if path is a file.
-     *
-     * @param string $file
-     *
-     * @return bool
      */
     public function isFile(string $file): bool;
 
@@ -375,21 +308,17 @@ interface Filesystem extends DirectorySystem
      *  - existing files in the target directory will be overwritten, except if they are newer (see the `override` option)
      *  - files in the target directory that do not exist in the source directory will not be deleted (see the `delete` option)
      *
-     * @param string                  $originDir
-     * @param string                  $targetDir
-     * @param null|Traversable<mixed> $iterator  Iterator that filters which files and directories to copy, if null a recursive iterator is created
-     * @param array<string, bool>     $config    An array of boolean options
-     *                                           Valid options are:
-     *                                           - $config['override'] If true, target files newer than origin files are overwritten (see copy(), defaults to false)
-     *                                           - $config['copy_on_windows'] Whether to copy files instead of links on Windows (see symlink(), defaults to false)
-     *                                           - $config['follow_symlinks'] Whether to follow symlinks
-     *                                           - $config['delete'] Whether to delete files that are not in the source directory (defaults to false)
+     * @param null|Traversable<mixed> $iterator Iterator that filters which files and directories to copy, if null a recursive iterator is created
+     * @param array<string, bool>     $config   An array of boolean options
+     *                                          Valid options are:
+     *                                          - $config['override'] If true, target files newer than origin files are overwritten (see copy(), defaults to false)
+     *                                          - $config['copy_on_windows'] Whether to copy files instead of links on Windows (see symlink(), defaults to false)
+     *                                          - $config['follow_symlinks'] Whether to follow symlinks
+     *                                          - $config['delete'] Whether to delete files that are not in the source directory (defaults to false)
      *
      * @throws \Viserio\Contract\Filesystem\Exception\IOException   When file type is unknown
      * @throws \Viserio\Contract\Finder\Exception\NotFoundException
      * @throws Throwable
-     *
-     * @return void
      */
     public function mirror(
         string $originDir,

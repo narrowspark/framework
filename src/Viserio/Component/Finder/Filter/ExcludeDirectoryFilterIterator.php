@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Finder\Filter;
@@ -102,7 +102,7 @@ class ExcludeDirectoryFilterIterator extends FilterIterator implements Recursive
     public function hasChildren(): bool
     {
         if ($this->isRecursive) {
-            /** @var \RecursiveIterator<int|string, \Viserio\Contract\Finder\SplFileInfo> $iterator */
+            /** @var RecursiveIterator<int|string, \Viserio\Contract\Finder\SplFileInfo> $iterator */
             $iterator = $this->iterator;
 
             return $iterator->hasChildren();
@@ -114,11 +114,11 @@ class ExcludeDirectoryFilterIterator extends FilterIterator implements Recursive
     /**
      * {@inheritdoc}
      *
-     * @return \RecursiveIterator<int|string, \Viserio\Contract\Finder\SplFileInfo>
+     * @return RecursiveIterator<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function getChildren(): RecursiveIterator
     {
-        /** @var \RecursiveIterator<int|string, \Viserio\Contract\Finder\SplFileInfo> $iterator */
+        /** @var RecursiveIterator<int|string, \Viserio\Contract\Finder\SplFileInfo> $iterator */
         $iterator = $this->iterator;
 
         $children = new self($iterator->getChildren(), []);

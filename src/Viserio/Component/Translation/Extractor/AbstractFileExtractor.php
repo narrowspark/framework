@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Translation\Extractor;
@@ -39,8 +39,6 @@ abstract class AbstractFileExtractor implements ExtractorContract
      * Extract files from given resources.
      *
      * @param iterable|SplFileInfo|string $resource Files, a file or a directory
-     *
-     * @return array
      */
     protected function extractFiles($resource): array
     {
@@ -74,11 +72,7 @@ abstract class AbstractFileExtractor implements ExtractorContract
     /**
      * Check if is file.
      *
-     * @param string $file
-     *
      * @throws \Viserio\Contract\Translation\Exception\InvalidArgumentException
-     *
-     * @return bool
      */
     protected function isFile(string $file): bool
     {
@@ -91,10 +85,6 @@ abstract class AbstractFileExtractor implements ExtractorContract
 
     /**
      * Check if file can be extracted.
-     *
-     * @param string $file
-     *
-     * @return bool
      */
     abstract protected function canBeExtracted(string $file): bool;
 

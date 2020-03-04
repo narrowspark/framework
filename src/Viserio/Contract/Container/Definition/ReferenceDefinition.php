@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Container\Definition;
@@ -34,15 +34,11 @@ interface ReferenceDefinition extends ChangeAwareDefinitionContract, MethodCalls
 
     /**
      * Get the PHP type of the identified service.
-     *
-     * @return null|string
      */
     public function getType(): ?string;
 
     /**
      * Set the PHP type of the identified service.
-     *
-     * @param string $type
      *
      * @return static
      */
@@ -50,22 +46,16 @@ interface ReferenceDefinition extends ChangeAwareDefinitionContract, MethodCalls
 
     /**
      * Returns the behavior to be used when the service does not exist.
-     *
-     * @return int
      */
     public function getBehavior(): int;
 
     /**
      * Get the definition hash.
-     *
-     * @return string
      */
     public function getHash(): string;
 
     /**
      * Return a variable name of this reference.
-     *
-     * @param string $parameterName
      *
      * @return static
      */
@@ -73,8 +63,6 @@ interface ReferenceDefinition extends ChangeAwareDefinitionContract, MethodCalls
 
     /**
      * Return a variable name of this reference.
-     *
-     * @return null|string
      */
     public function getVariableName(): ?string;
 }

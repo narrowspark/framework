@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Foundation;
@@ -23,8 +23,6 @@ interface Kernel
 {
     /**
      * Get a Environment Detector instance.
-     *
-     * @return \Viserio\Contract\Foundation\Environment
      */
     public function getEnvironmentDetector(): EnvironmentContract;
 
@@ -46,8 +44,6 @@ interface Kernel
 
     /**
      * Returns a object with \Viserio\Contract\Container\LazyProxy\Dumper interface implemented.
-     *
-     * @return null|\Viserio\Contract\Container\LazyProxy\Dumper
      */
     public function getProxyDumper(): ?ProxyDumperContract;
 
@@ -55,8 +51,6 @@ interface Kernel
      * Gets the container's base class.
      *
      * All names except Container must be fully qualified.
-     *
-     * @return string
      */
     public function getContainerBaseClass(): string;
 
@@ -78,36 +72,26 @@ interface Kernel
 
     /**
      * Bootstrap the kernel.
-     *
-     * @return void
      */
     public function bootstrap(): void;
 
     /**
      * Determine if application is in local environment.
-     *
-     * @return bool
      */
     public function isLocal(): bool;
 
     /**
      * Determine if we are running unit tests.
-     *
-     * @return bool
      */
     public function isRunningUnitTests(): bool;
 
     /**
      * Determine if we are running in the console.
-     *
-     * @return bool
      */
     public function isRunningInConsole(): bool;
 
     /**
      * Determine if the application is currently down for maintenance.
-     *
-     * @return bool
      */
     public function isDownForMaintenance(): bool;
 
@@ -122,8 +106,6 @@ interface Kernel
      * Get the path to the application "app" directory.
      *
      * @param string $path Optionally, a path to append to the app path
-     *
-     * @return string
      */
     public function getAppPath(string $path = ''): string;
 
@@ -135,8 +117,6 @@ interface Kernel
      * value; however, you can theoretically change the path from here.
      *
      * @param string $path Optionally, a path to append to the config path
-     *
-     * @return string
      */
     public function getConfigPath(string $path = ''): string;
 
@@ -148,8 +128,6 @@ interface Kernel
      * free to modify the path but you probably will not ever need to.
      *
      * @param string $path Optionally, a path to append to the database path
-     *
-     * @return string
      */
     public function getDatabasePath(string $path = ''): string;
 
@@ -161,8 +139,6 @@ interface Kernel
      * point for web requests into these applications from the outside.
      *
      * @param string $path Optionally, a path to append to the public path
-     *
-     * @return string
      */
     public function getPublicPath(string $path = ''): string;
 
@@ -173,8 +149,6 @@ interface Kernel
      * and other pieces of information.
      *
      * @param string $path Optionally, a path to append to the storage path
-     *
-     * @return string
      */
     public function getStoragePath(string $path = ''): string;
 
@@ -182,8 +156,6 @@ interface Kernel
      * Get the path to the resources directory.
      *
      * @param string $path Optionally, a path to append to the resources path
-     *
-     * @return string
      */
     public function getResourcePath(string $path = ''): string;
 
@@ -193,8 +165,6 @@ interface Kernel
      * This path is used by the language file loader to load your application
      * language files. The purpose of these files is to store your strings
      * that are translated into other languages for views, e-mails, etc.
-     *
-     * @return string
      */
     public function getLangPath(): string;
 
@@ -204,8 +174,6 @@ interface Kernel
      * This path is used by the routes loader to load the application
      * routes files. In general, you should'nt need to change this
      * value; however, you can theoretically change the path from here.
-     *
-     * @return string
      */
     public function getRoutesPath(): string;
 
@@ -213,56 +181,36 @@ interface Kernel
      * Get the path to the tests directory.
      *
      * @param string $path Optionally, a path to append to the tests path
-     *
-     * @return string
      */
     public function getTestsPath(string $path = ''): string;
 
     /**
      * Set the directory for the environment file.
-     *
-     * @param string $path
-     *
-     * @return self
      */
     public function useEnvironmentPath(string $path): self;
 
     /**
      * Set the environment file to be loaded during bootstrapping.
-     *
-     * @param string $file
-     *
-     * @return self
      */
     public function loadEnvironmentFrom(string $file): self;
 
     /**
      * Get the path to the environment file directory.
-     *
-     * @return string
      */
     public function getEnvironmentPath(): string;
 
     /**
      * Get the environment file the application is using.
-     *
-     * @return string
      */
     public function getEnvironmentFile(): string;
 
     /**
      * Get the fully qualified path to the environment file.
-     *
-     * @return string
      */
     public function getEnvironmentFilePath(): string;
 
     /**
      * Detect the application's current environment.
-     *
-     * @param \Closure $callback
-     *
-     * @return string
      */
     public function detectEnvironment(Closure $callback): string;
 
@@ -282,17 +230,11 @@ interface Kernel
 
     /**
      * Detects if the current application is in debug mode.
-     *
-     * @param Closure $callback
-     *
-     * @return bool
      */
     public function detectDebugMode(Closure $callback): bool;
 
     /**
      * Returns a list of all service providers that will be registered.
-     *
-     * @return array
      */
     public function getRegisteredServiceProviders(): array;
 }

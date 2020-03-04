@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Profiler;
@@ -20,18 +20,11 @@ interface DataCollector
 {
     /**
      * Collects data for the given Request.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
-     * @param \Psr\Http\Message\ResponseInterface      $response
-     *
-     * @return void
      */
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void;
 
     /**
      * Returns the unique name of the collector.
-     *
-     * @return string
      */
     public function getName(): string;
 
@@ -41,23 +34,17 @@ interface DataCollector
      *  - label
      *  - value
      *  - class.
-     *
-     * @return array
      */
     public function getMenu(): array;
 
     /**
      * Get the Tab position from a collector.
      * Choose between left or right position.
-     *
-     * @return string
      */
     public function getMenuPosition(): string;
 
     /**
      * Resets this data collector to its initial state.
-     *
-     * @return void
      */
     public function reset(): void;
 }

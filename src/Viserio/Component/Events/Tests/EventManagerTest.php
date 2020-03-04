@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Events\Tests;
@@ -24,6 +24,7 @@ use Viserio\Component\Events\Tests\Fixture\ExtendedEventManger;
  * @internal
  *
  * @small
+ * @coversNothing
  */
 final class EventManagerTest extends TestCase
 {
@@ -474,11 +475,6 @@ final class EventManagerTest extends TestCase
     /**
      * Asserts the number of listeners added for a specific event or all events
      * in total.
-     *
-     * @param int    $expected
-     * @param string $eventName
-     *
-     * @return void
      */
     private function assertNumberListenersAdded(int $expected, string $eventName): void
     {

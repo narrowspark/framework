@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Http;
@@ -66,8 +66,6 @@ abstract class AbstractMessage implements MessageInterface
      *
      * @param string $name  The property name
      * @param mixed  $value The property value
-     *
-     * @return void
      */
     public function __set($name, $value): void
     {
@@ -317,8 +315,6 @@ abstract class AbstractMessage implements MessageInterface
      * Set validated headers.
      *
      * @param array<int|string, mixed> $headers
-     *
-     * @return void
      */
     protected function setHeaders(array $headers): void
     {
@@ -354,11 +350,7 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * Validate the HTTP protocol version.
      *
-     * @param string $version
-     *
      * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException on invalid HTTP protocol version
-     *
-     * @return void
      */
     private function validateProtocolVersion(string $version): void
     {
@@ -412,10 +404,6 @@ abstract class AbstractMessage implements MessageInterface
 
     /**
      * Assert given header.
-     *
-     * @param mixed $header
-     *
-     * @return void
      */
     private function assertHeader($header): void
     {

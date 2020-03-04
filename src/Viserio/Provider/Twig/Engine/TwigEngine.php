@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Provider\Twig\Engine;
@@ -26,8 +26,6 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultConfigCont
 
     /**
      * Twig environment.
-     *
-     * @var \Twig\Environment
      */
     protected Environment $twig;
 
@@ -41,7 +39,6 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultConfigCont
     /**
      * Create a new engine instance.
      *
-     * @param \Twig\Environment         $twig
      * @param array<int, object|string> $extensions
      */
     public function __construct(Environment $twig, array $extensions = [])
@@ -52,8 +49,6 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultConfigCont
 
     /**
      * Returns the engine names.
-     *
-     * @return array
      */
     public static function getDefaultNames(): array
     {

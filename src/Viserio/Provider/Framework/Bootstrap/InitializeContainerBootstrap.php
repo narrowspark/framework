@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Provider\Framework\Bootstrap;
@@ -86,7 +86,7 @@ class InitializeContainerBootstrap implements BootstrapContract
         try {
             \is_dir($cacheDir) ?: \mkdir($cacheDir, 0777, true);
 
-            if ($lock = \fopen($containerFile, 'w')) {
+            if ($lock = \fopen($containerFile, 'wb')) {
                 \chmod($containerFile, 0666 & ~\umask());
 
                 \flock($lock, \LOCK_EX | \LOCK_NB, $wouldBlock);
@@ -167,8 +167,6 @@ class InitializeContainerBootstrap implements BootstrapContract
     /**
      * Gets the container class.
      *
-     * @param \Viserio\Contract\Foundation\Kernel $kernel
-     *
      * @return string The container class
      */
     protected static function getContainerClass(KernelContract $kernel): string
@@ -181,10 +179,6 @@ class InitializeContainerBootstrap implements BootstrapContract
 
     /**
      * Builds the service container.
-     *
-     * @param string                              $cacheDir
-     * @param string                              $logDir
-     * @param \Viserio\Contract\Foundation\Kernel $kernel
      *
      * @throws \RuntimeException
      *
@@ -211,15 +205,10 @@ class InitializeContainerBootstrap implements BootstrapContract
     /**
      * Dumps the service container to PHP code in the cache.
      *
-     * @param \Viserio\Provider\Framework\Bootstrap\Cache\AbstractCache $cache
-     * @param \Viserio\Contract\Container\ContainerBuilder              $container  The service container
-     * @param string                                                    $class      The name of the class to generate
-     * @param \Viserio\Contract\Foundation\Kernel                       $kernel
-     * @param \Viserio\Contract\Filesystem\Filesystem                   $filesystem
+     * @param \Viserio\Contract\Container\ContainerBuilder $container The service container
+     * @param string                                       $class     The name of the class to generate
      *
      * @throws \Viserio\Contract\Container\Exception\CircularDependencyException
-     *
-     * @return void
      */
     protected static function dumpContainer(
         AbstractCache $cache,
@@ -279,11 +268,6 @@ class InitializeContainerBootstrap implements BootstrapContract
         $cache->write($rootCode);
     }
 
-    /**
-     * @param mixed $collectedLogs
-     *
-     * @return null|array
-     */
     protected static function collectContainerLogs(&$collectedLogs): ?array
     {
         $previousHandler = \set_error_handler(static function ($type, $message, $file, $line) use (&$collectedLogs, &$previousHandler) {

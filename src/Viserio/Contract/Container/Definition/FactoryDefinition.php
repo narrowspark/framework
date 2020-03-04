@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Container\Definition;
@@ -19,8 +19,6 @@ interface FactoryDefinition extends ArgumentAwareDefinition, AutowiredAwareDefin
 {
     /**
      * Get the class of this definition.
-     *
-     * @return string
      */
     public function getClass(): string;
 
@@ -35,7 +33,6 @@ interface FactoryDefinition extends ArgumentAwareDefinition, AutowiredAwareDefin
      * Sets a specific argument.
      *
      * @param int|string $key
-     * @param mixed      $value
      *
      * @return static
      */
@@ -45,15 +42,11 @@ interface FactoryDefinition extends ArgumentAwareDefinition, AutowiredAwareDefin
      * Gets an class parameter from key.
      *
      * @param int|string $index
-     *
-     * @return mixed
      */
     public function getClassArgument($index);
 
     /**
      * Get the factory method.
-     *
-     * @return string
      */
     public function getMethod(): string;
 
@@ -61,7 +54,6 @@ interface FactoryDefinition extends ArgumentAwareDefinition, AutowiredAwareDefin
      * Replaces a specific class parameter.
      *
      * @param int|string $index
-     * @param mixed      $parameter
      *
      * @throws OutOfBoundsException When the replaced argument does not exist
      *
@@ -71,15 +63,11 @@ interface FactoryDefinition extends ArgumentAwareDefinition, AutowiredAwareDefin
 
     /**
      * Returns a list of class parameters.
-     *
-     * @return array
      */
     public function getClassArguments(): array;
 
     /**
      * Set a list of class parameters.
-     *
-     * @param array $arguments
      *
      * @return static
      */
@@ -87,15 +75,11 @@ interface FactoryDefinition extends ArgumentAwareDefinition, AutowiredAwareDefin
 
     /**
      * Check if the method is static.
-     *
-     * @return bool
      */
     public function isStatic(): bool;
 
     /**
      * Set true if the method is static or false if not.
-     *
-     * @param bool $static
      *
      * @return static
      */
@@ -103,15 +87,11 @@ interface FactoryDefinition extends ArgumentAwareDefinition, AutowiredAwareDefin
 
     /**
      * Get the method return type.
-     *
-     * @return null|string
      */
     public function getReturnType(): ?string;
 
     /**
      * Set the method return type.
-     *
-     * @param string $type
      *
      * @return static
      */

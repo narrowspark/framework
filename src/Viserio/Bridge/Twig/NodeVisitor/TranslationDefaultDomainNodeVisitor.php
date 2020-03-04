@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Bridge\Twig\NodeVisitor;
@@ -120,11 +120,6 @@ class TranslationDefaultDomainNodeVisitor extends AbstractNodeVisitor
         return $node;
     }
 
-    /**
-     * @param mixed $arguments
-     *
-     * @return bool
-     */
     private function isNamedArguments($arguments): bool
     {
         foreach ($arguments as $name => $node) {
@@ -136,9 +131,6 @@ class TranslationDefaultDomainNodeVisitor extends AbstractNodeVisitor
         return false;
     }
 
-    /**
-     * @return string
-     */
     private function getVarName(): string
     {
         return \sprintf('__internal_%s', \hash('sha256', \uniqid((string) \mt_rand(), true), false));

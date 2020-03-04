@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Parser\Utils;
@@ -32,8 +32,6 @@ final class XliffUtils
     /**
      * Validates and parses the given file into a DOMDocument.
      *
-     * @param DOMDocument $dom
-     *
      * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException
      *
      * @return array<int, array<string, int|string>>
@@ -47,11 +45,7 @@ final class XliffUtils
      * Gets xliff file version based on the root "version" attribute.
      * Defaults to 1.2 for backwards compatibility.
      *
-     * @param DOMDocument $dom
-     *
      * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException;
-     *
-     * @return string
      */
     public static function getVersionNumber(DOMDocument $dom): string
     {
@@ -78,12 +72,8 @@ final class XliffUtils
     /**
      * Get the right xliff schema from version.
      *
-     * @param string $xliffVersion
-     *
      * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException;
      * @throws \Viserio\Contract\Parser\Exception\RuntimeException;
-     *
-     * @return string
      */
     public static function getSchema(string $xliffVersion): string
     {
@@ -114,8 +104,6 @@ final class XliffUtils
      *
      * @param string $schemaSource Current content of schema file
      * @param string $xmlUri       External URI of XML to convert to local
-     *
-     * @return string
      */
     private static function fixLocation(string $schemaSource, string $xmlUri): string
     {

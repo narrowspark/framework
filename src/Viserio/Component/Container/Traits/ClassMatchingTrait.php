@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Container\Traits;
@@ -24,8 +24,6 @@ trait ClassMatchingTrait
      *
      * @param array $patterns The class patterns to expand
      * @param array $classes  The existing classes to match against the patterns
-     *
-     * @return array
      */
     private function expandClasses(array $patterns, array $classes): array
     {
@@ -55,8 +53,6 @@ trait ClassMatchingTrait
 
     /**
      * Returns all found classes in the composer class map.
-     *
-     * @return array
      */
     private function getClassesInComposerClassMaps(): array
     {
@@ -81,10 +77,6 @@ trait ClassMatchingTrait
 
     /**
      * Transform class patterns to regexps.
-     *
-     * @param array $patterns
-     *
-     * @return array
      */
     private function patternsToRegexps(array $patterns): array
     {
@@ -110,11 +102,6 @@ trait ClassMatchingTrait
 
     /**
      * Check if the given class match a regexps.
-     *
-     * @param string $class
-     * @param array  $regexps
-     *
-     * @return bool
      */
     private function matchAnyRegexps(string $class, array $regexps): bool
     {

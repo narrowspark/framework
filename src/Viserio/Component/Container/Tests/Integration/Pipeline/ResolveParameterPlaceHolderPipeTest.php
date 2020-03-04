@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Container\Tests\Integration\Pipeline;
@@ -38,10 +38,6 @@ final class ResolveParameterPlaceHolderPipeTest extends TestCase
 {
     /**
      * @dataProvider provideProcessCases
-     *
-     * @param array $asserts
-     * @param array $parameters
-     * @param array $services
      */
     public function testProcess(array $asserts, array $parameters = [], array $services = []): void
     {
@@ -92,7 +88,6 @@ final class ResolveParameterPlaceHolderPipeTest extends TestCase
             ],
             [
                 [
-
                     'foo' => ['getValue', FooClass::class],
                 ],
                 [
@@ -288,12 +283,6 @@ final class ResolveParameterPlaceHolderPipeTest extends TestCase
 
     /**
      * @dataProvider provideProcessThrowsExceptionIfStrictModeIsActiveCases
-     *
-     * @param callable $callback
-     * @param string   $key
-     * @param string   $type
-     *
-     * @return void
      */
     public function testProcessThrowsExceptionIfStrictModeIsActive(callable $callback, string $key, string $type): void
     {
@@ -358,10 +347,6 @@ final class ResolveParameterPlaceHolderPipeTest extends TestCase
         self::assertSame('{non_existent_param}', $container->getDefinition($key)->getArgument(0));
     }
 
-    /**
-     * @param \Viserio\Contract\Container\ContainerBuilder $container
-     * @param bool                                         $throwException
-     */
     private function process(ContainerBuilderContract $container, bool $throwException = true): void
     {
         $pipe = new ResolveParameterPlaceHolderPipe(true, $throwException);

@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Session\Tests;
@@ -25,6 +25,7 @@ use Viserio\Component\Session\Store;
  * @internal
  *
  * @small
+ * @coversNothing
  */
 final class StoreTest extends MockeryTestCase
 {
@@ -105,8 +106,6 @@ final class StoreTest extends MockeryTestCase
      * @dataProvider provideValidSessionNameCases
      *
      * @var string
-     *
-     * @param string $sessionName
      */
     public function testValidSessionName(string $sessionName): void
     {
@@ -128,8 +127,6 @@ final class StoreTest extends MockeryTestCase
      * @dataProvider provideInvalidSessionNameCases
      *
      * @var string
-     *
-     * @param string $sessionName
      */
     public function testInvalidSessionName(string $sessionName): void
     {
@@ -456,13 +453,6 @@ final class StoreTest extends MockeryTestCase
         parent::allowMockingNonExistentMethods(true);
     }
 
-    /**
-     * @param int    $requestsCount
-     * @param string $fingerprint
-     * @param int    $regenerationTrace
-     *
-     * @return string
-     */
     private function getSessionInfoAsJsonString(
         int $requestsCount = 0,
         string $fingerprint = '',

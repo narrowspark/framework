@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Cron;
@@ -37,7 +37,6 @@ class CallbackCron extends Cron
      * Create a new callback cron instance.
      *
      * @param callable|string $callback
-     * @param array           $parameters
      *
      * @throws \Viserio\Contract\Cron\Exception\InvalidArgumentException
      */
@@ -55,8 +54,6 @@ class CallbackCron extends Cron
 
     /**
      * Run the given cron job.
-     *
-     * @return mixed
      */
     public function run()
     {
@@ -87,8 +84,6 @@ class CallbackCron extends Cron
      * Do not allow the cron job to overlap each other.
      *
      * @throws \Viserio\Contract\Cron\Exception\LogicException
-     *
-     * @return \Viserio\Contract\Cron\Cron
      */
     public function withoutOverlapping(): CronContract
     {
@@ -103,8 +98,6 @@ class CallbackCron extends Cron
 
     /**
      * Get the summary of the event for display.
-     *
-     * @return string
      */
     public function getSummaryForDisplay(): string
     {
@@ -117,8 +110,6 @@ class CallbackCron extends Cron
 
     /**
      * Get the mutex name for the scheduled command.
-     *
-     * @return string
      */
     protected function getMutexName(): string
     {

@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Translation\Tests\Extractor\PhpParser;
@@ -54,15 +54,12 @@ use Viserio\Component\Translation\Extractor\PhpParser\ScalarString;
  * @internal
  *
  * @small
+ * @coversNothing
  */
 final class ScalarStringTest extends TestCase
 {
     /**
      * @dataProvider provideParseEscapeSequencesCases
-     *
-     * @param mixed $expected
-     * @param mixed $string
-     * @param mixed $quote
      */
     public function testParseEscapeSequences($expected, $string, $quote): void
     {
@@ -74,9 +71,6 @@ final class ScalarStringTest extends TestCase
 
     /**
      * @dataProvider provideCreateCases
-     *
-     * @param mixed $expected
-     * @param mixed $string
      */
     public function testCreate($expected, $string): void
     {

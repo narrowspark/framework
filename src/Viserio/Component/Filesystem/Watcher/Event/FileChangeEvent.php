@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Filesystem\Watcher\Event;
@@ -32,9 +32,6 @@ final class FileChangeEvent
 
     /**
      * Create a new FileChangeEvent instance.
-     *
-     * @param string $file
-     * @param int    $event
      */
     public function __construct(string $file, int $event)
     {
@@ -44,8 +41,6 @@ final class FileChangeEvent
 
     /**
      * Returns the file path.
-     *
-     * @return string
      */
     public function getFile(): string
     {
@@ -54,8 +49,6 @@ final class FileChangeEvent
 
     /**
      * Returns the event int, like 1 for file changed, 2 for file deleted and 3 for file created.
-     *
-     * @return int
      */
     public function getEvent(): int
     {

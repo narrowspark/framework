@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\HttpFoundation\Tests;
@@ -38,6 +38,7 @@ use Viserio\Contract\Routing\Router as RouterContract;
  * @preserveGlobalState disabled
  *
  * @small
+ * @coversNothing
  */
 final class KernelTest extends MockeryTestCase
 {
@@ -189,9 +190,6 @@ final class KernelTest extends MockeryTestCase
 
     /**
      * @param \Mockery\MockInterface|\Psr\Container\ContainerInterface $container
-     * @param null|\Viserio\Contract\Foundation\BootstrapManager       $bootstrapManager
-     *
-     * @return \Viserio\Component\HttpFoundation\Kernel
      */
     private function getKernel(MockInterface $container, ?BootstrapManagerContract $bootstrapManager = null): Kernel
     {
@@ -224,9 +222,6 @@ final class KernelTest extends MockeryTestCase
         return $kernel;
     }
 
-    /**
-     * @return \Mockery\MockInterface
-     */
     private function arrangeKernelHandleEvents(): MockInterface
     {
         $eventsMock = Mock::mock(EventManagerContract::class);
@@ -240,9 +235,6 @@ final class KernelTest extends MockeryTestCase
         return $eventsMock;
     }
 
-    /**
-     * @return \Mockery\MockInterface
-     */
     private function arrangeServerRequestWithXPhpObLevel(): MockInterface
     {
         $serverRequestMock = Mock::mock(ServerRequestInterface::class);
@@ -274,7 +266,6 @@ final class KernelTest extends MockeryTestCase
     }
 
     /**
-     * @param Exception                                                       $exception
      * @param \Mockery\MockInterface|\Psr\Http\Message\ServerRequestInterface $serverRequest
      * @param \Mockery\MockInterface|\Psr\Container\ContainerInterface        $container
      */

@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Parser\Parser;
@@ -42,8 +42,6 @@ class IniParser implements ParserContract
      * values are merged.
      *
      * @see https://www.php.net/parse_ini_file
-     *
-     * @return bool
      */
     public function getProcessSections(): bool
     {
@@ -57,8 +55,6 @@ class IniParser implements ParserContract
      *
      * @see https://www.php.net/parse_ini_file
      *
-     * @param bool $processSections
-     *
      * @return $this
      */
     public function setProcessSections(bool $processSections): self
@@ -70,8 +66,6 @@ class IniParser implements ParserContract
 
     /**
      * Get nest separator.
-     *
-     * @return string
      */
     public function getNestSeparator(): string
     {
@@ -80,10 +74,6 @@ class IniParser implements ParserContract
 
     /**
      * Set nest separator.
-     *
-     * @param string $separator
-     *
-     * @return self
      */
     public function setNestSeparator(string $separator): self
     {
@@ -166,7 +156,6 @@ class IniParser implements ParserContract
      * Process a key.
      *
      * @param int|string                                    $key
-     * @param mixed                                         $value
      * @param array<int|string, null|array|bool|int|string> $config
      *
      * @throws \Viserio\Contract\Parser\Exception\RuntimeException
@@ -201,7 +190,6 @@ class IniParser implements ParserContract
      * Process a nested section.
      *
      * @param array<int|string, mixed> $sections
-     * @param mixed                    $value
      *
      * @return array<int|string, mixed>
      */
@@ -221,8 +209,6 @@ class IniParser implements ParserContract
 
     /**
      * Normalizes INI and other values.
-     *
-     * @param mixed $value
      *
      * @return null|array<int|string, mixed>|bool|int|string
      */
@@ -276,10 +262,7 @@ class IniParser implements ParserContract
     /**
      * Case insensitively compares values.
      *
-     * @param string                   $value
      * @param array<int|string, mixed> $comparisons
-     *
-     * @return bool
      */
     private static function compareValues(string $value, array $comparisons): bool
     {

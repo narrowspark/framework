@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Parser\Utils;
@@ -43,11 +43,7 @@ final class XmlUtils
     /**
      * A simplexml_import_dom wrapper.
      *
-     * @param DOMDocument $dom
-     *
      * @throws \Viserio\Contract\Parser\Exception\ParseException
-     *
-     * @return SimpleXMLElement
      */
     public static function importDom(DOMDocument $dom): SimpleXMLElement
     {
@@ -63,8 +59,7 @@ final class XmlUtils
     /**
      * Validates and parses the given file into a DOMDocument.
      *
-     * @param DOMDocument $dom
-     * @param string      $schema source of the schema
+     * @param string $schema source of the schema
      *
      * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException
      *
@@ -96,8 +91,6 @@ final class XmlUtils
      * Transforms xml errors to errors string.
      *
      * @param array<int, array<string, int|string>> $xmlErrors
-     *
-     * @return string
      */
     public static function getErrorsAsString(array $xmlErrors): string
     {
@@ -120,8 +113,6 @@ final class XmlUtils
 
     /**
      * Returns the XML errors of the internal XML parser.
-     *
-     * @param bool $internalErrors
      *
      * @return array<int, array<string, int|string>> An array of errors
      */
@@ -154,8 +145,6 @@ final class XmlUtils
      *
      * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException When loading of XML file returns error
      * @throws \Viserio\Contract\Parser\Exception\FileNotFoundException
-     *
-     * @return DOMDocument
      */
     public static function loadFile(string $file, $schemaOrCallable = null): DOMDocument
     {
@@ -173,8 +162,6 @@ final class XmlUtils
      * @param null|callable|string $schemaOrCallable An XSD schema file path, a callable, or null to disable validation
      *
      * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException When loading of XML file returns error
-     *
-     * @return DOMDocument
      */
     public static function loadString(string $content, $schemaOrCallable = null): DOMDocument
     {
@@ -297,10 +284,6 @@ final class XmlUtils
 
     /**
      * Converts an xml value to a PHP type.
-     *
-     * @param mixed $value
-     *
-     * @return mixed
      */
     public static function phpize($value)
     {
@@ -349,12 +332,9 @@ final class XmlUtils
     /**
      * Validates DOMDocument against a file or callback.
      *
-     * @param \DOMDocument $dom
-     * @param mixed        $schemaOrCallable should be a callable or a string
+     * @param mixed $schemaOrCallable should be a callable or a string
      *
      * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException
-     *
-     * @return void
      */
     private static function validateXmlDom(DOMDocument $dom, $schemaOrCallable): void
     {
@@ -397,12 +377,6 @@ final class XmlUtils
         }
     }
 
-    /**
-     * @param string $value
-     * @param int    $position
-     *
-     * @return int
-     */
     private static function transformToNumber(string $value, int $position): int
     {
         $raw = $value;

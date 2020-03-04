@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Http\Tests\Stream;
@@ -25,6 +25,7 @@ use Viserio\Contract\Http\Exception\RuntimeException;
  * @internal
  *
  * @small
+ * @coversNothing
  */
 final class AppendStreamTest extends MockeryTestCase
 {
@@ -36,7 +37,7 @@ final class AppendStreamTest extends MockeryTestCase
         $appendStream = new AppendStream();
 
         /** @var resource $handler */
-        $handler = \fopen('php://temp', 'w');
+        $handler = \fopen('php://temp', 'wb');
 
         /** @var \Mockery\MockInterface|\Psr\Http\Message\StreamInterface $streamMock */
         $streamMock = Mockery::mock(new Stream($handler));
@@ -65,7 +66,7 @@ final class AppendStreamTest extends MockeryTestCase
         $a = new AppendStream();
 
         /** @var resource $handler */
-        $handler = \fopen('php://temp', 'w');
+        $handler = \fopen('php://temp', 'wb');
 
         /** @var \Mockery\MockInterface|\Psr\Http\Message\StreamInterface $streamMock */
         $streamMock = Mockery::mock(new Stream($handler));
@@ -115,7 +116,7 @@ final class AppendStreamTest extends MockeryTestCase
     public function testDetachesEachStream(): void
     {
         /** @var resource $handle */
-        $handle = \fopen('php://temp', 'r');
+        $handle = \fopen('php://temp', 'rb');
 
         $s1 = Util::createStreamFor($handle);
         $s2 = Util::createStreamFor('bar');
@@ -141,7 +142,7 @@ final class AppendStreamTest extends MockeryTestCase
     public function testClosesEachStream(): void
     {
         /** @var resource $handle */
-        $handle = \fopen('php://temp', 'r');
+        $handle = \fopen('php://temp', 'rb');
 
         $s1 = Util::createStreamFor($handle);
         $s2 = Util::createStreamFor('bar');
@@ -209,7 +210,7 @@ final class AppendStreamTest extends MockeryTestCase
         self::assertEquals(6, $a->getSize());
 
         /** @var resource $handle */
-        $handle = \fopen('php://temp', 'r');
+        $handle = \fopen('php://temp', 'rb');
 
         /** @var \Mockery\MockInterface|\Psr\Http\Message\StreamInterface $streamMock */
         $streamMock = Mockery::mock(new Stream($handle));

@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Bridge\Twig\NodeVisitor;
@@ -47,8 +47,6 @@ class TranslationNodeVisitor extends AbstractNodeVisitor
 
     /**
      * Get a list of messages.
-     *
-     * @return array
      */
     public function getMessages(): array
     {
@@ -57,8 +55,6 @@ class TranslationNodeVisitor extends AbstractNodeVisitor
 
     /**
      * Enable node and clear messages.
-     *
-     * @return void
      */
     public function enable(): void
     {
@@ -68,8 +64,6 @@ class TranslationNodeVisitor extends AbstractNodeVisitor
 
     /**
      * Disable node and clear messages.
-     *
-     * @return void
      */
     public function disable(): void
     {
@@ -124,11 +118,6 @@ class TranslationNodeVisitor extends AbstractNodeVisitor
 
     /**
      * Read the translation domain from given arguments.
-     *
-     * @param \Twig\Node\Node $arguments
-     * @param string          $index
-     *
-     * @return null|string
      */
     private function getReadDomainFromArguments(Node $arguments, string $index): ?string
     {
@@ -145,10 +134,6 @@ class TranslationNodeVisitor extends AbstractNodeVisitor
 
     /**
      * Check if node has a domain value, else return undefined.
-     *
-     * @param \Twig\Node\Node $node
-     *
-     * @return null|string
      */
     private function getReadDomainFromNode(Node $node): ?string
     {

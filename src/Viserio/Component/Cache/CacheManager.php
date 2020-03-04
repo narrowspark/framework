@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Cache;
@@ -89,10 +89,6 @@ class CacheManager extends AbstractManager implements CacheManagerContract,
 
     /**
      * Create an instance of the Array cache driver.
-     *
-     * @param array $config
-     *
-     * @return \Cache\Adapter\PHPArray\ArrayCachePool
      */
     protected function createArrayDriver(array $config): ArrayCachePool
     {
@@ -102,12 +98,8 @@ class CacheManager extends AbstractManager implements CacheManagerContract,
     /**
      * Create an instance of the MongoDB cache driver.
      *
-     * @param array $config
-     *
      * @throws \MongoDB\Driver\Exception\RuntimeException
      * @throws \MongoDB\Driver\Exception\InvalidArgumentException
-     *
-     * @return \Cache\Adapter\MongoDB\MongoDBCachePool
      *
      * @codeCoverageIgnore
      */
@@ -137,10 +129,6 @@ class CacheManager extends AbstractManager implements CacheManagerContract,
     /**
      * Create an instance of the Redis cache driver.
      *
-     * @param array $config
-     *
-     * @return \Cache\Adapter\Redis\RedisCachePool
-     *
      * @codeCoverageIgnore
      */
     protected function createRedisDriver(array $config): RedisCachePool
@@ -154,10 +142,6 @@ class CacheManager extends AbstractManager implements CacheManagerContract,
     /**
      * Create an instance of the Predis cache driver.
      *
-     * @param array $config
-     *
-     * @return \Cache\Adapter\Predis\PredisCachePool
-     *
      * @codeCoverageIgnore
      */
     protected function createPredisDriver(array $config): PredisCachePool
@@ -169,10 +153,6 @@ class CacheManager extends AbstractManager implements CacheManagerContract,
 
     /**
      * Create an instance of the Flysystem cache driver.
-     *
-     * @param array $config
-     *
-     * @return \Cache\Adapter\Filesystem\FilesystemCachePool
      */
     protected function createFilesystemDriver(array $config): FilesystemCachePool
     {
@@ -183,10 +163,6 @@ class CacheManager extends AbstractManager implements CacheManagerContract,
 
     /**
      * Create an instance of the Memcached cache driver.
-     *
-     * @param array $config
-     *
-     * @return \Cache\Adapter\Memcached\MemcachedCachePool
      *
      * @codeCoverageIgnore
      */
@@ -201,10 +177,6 @@ class CacheManager extends AbstractManager implements CacheManagerContract,
     /**
      * Create an instance of the Memcache cache driver.
      *
-     * @param array $config
-     *
-     * @return \Cache\Adapter\Memcache\MemcacheCachePool
-     *
      * @codeCoverageIgnore
      */
     protected function createMemcacheDriver(array $config): MemcacheCachePool
@@ -217,10 +189,6 @@ class CacheManager extends AbstractManager implements CacheManagerContract,
 
     /**
      * Create an instance of the Void cache driver.
-     *
-     * @param array $config
-     *
-     * @return \Cache\Adapter\Void\VoidCachePool
      */
     protected function createNullDriver(array $config): VoidCachePool
     {
@@ -229,11 +197,6 @@ class CacheManager extends AbstractManager implements CacheManagerContract,
 
     /**
      * Create a prefixed cache pool with a namespace.
-     *
-     * @param \Cache\Hierarchy\HierarchicalPoolInterface $hierarchyPool
-     * @param string                                     $namespace
-     *
-     * @return \Cache\Namespaced\NamespacedCachePool
      */
     protected function getNamespacedPool(
         HierarchicalPoolInterface $hierarchyPool,

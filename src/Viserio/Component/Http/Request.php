@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Http;
@@ -30,8 +30,6 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
 
     /**
      * The request URI target (path + query string).
-     *
-     * @var null|string
      */
     protected ?string $requestTarget;
 
@@ -166,8 +164,6 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
 
     /**
      * Retrieve the host from the URI instance.
-     *
-     * @return void
      */
     private function updateHostFromUri(): void
     {
@@ -193,18 +189,13 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
         }
 
         // Ensure Host is the first header.
-        // See: http://tools.ietf.org/html/rfc7230#section-5.4
         $this->headers = ['Host' => [$host]] + $this->headers;
     }
 
     /**
      * Validate the HTTP method.
      *
-     * @param string $method
-     *
      * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException on invalid HTTP method
-     *
-     * @return string
      */
     private function filterMethod(string $method): string
     {
@@ -227,11 +218,7 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
      *
      * Otherwise, it raises an exception.
      *
-     * @param mixed $uri
-     *
      * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException
-     *
-     * @return \Psr\Http\Message\UriInterface
      */
     private function createUri($uri): UriInterface
     {

@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Http\Stream;
@@ -54,8 +54,6 @@ class MultipartStream extends AbstractStreamDecorator
 
     /**
      * Get the boundary.
-     *
-     * @return string
      */
     public function getBoundary(): string
     {
@@ -74,8 +72,6 @@ class MultipartStream extends AbstractStreamDecorator
      * Create the aggregate stream that will be used to upload the POST data.
      *
      * @param array<int|string, mixed> $elements
-     *
-     * @return \Psr\Http\Message\StreamInterface
      */
     private function createAppendStream(array $elements): StreamInterface
     {
@@ -95,8 +91,6 @@ class MultipartStream extends AbstractStreamDecorator
      * Get the headers needed before transferring the content of a POST file.
      *
      * @param array<int|string, int|string> $headers
-     *
-     * @return string
      */
     private function getHeaders(array $headers): string
     {
@@ -112,8 +106,6 @@ class MultipartStream extends AbstractStreamDecorator
     /**
      * @param \Viserio\Component\Http\Stream\AppendStream $stream
      * @param array<int|string, mixed>                    $element
-     *
-     * @return void
      */
     private function addElement(AppendStream $stream, array $element): void
     {
@@ -149,10 +141,7 @@ class MultipartStream extends AbstractStreamDecorator
     }
 
     /**
-     * @param string                            $name
-     * @param \Psr\Http\Message\StreamInterface $stream
-     * @param null|string                       $filename
-     * @param array<int|string, mixed>          $headers
+     * @param array<int|string, mixed> $headers
      *
      * @return array<int|string, mixed>
      */
@@ -199,8 +188,6 @@ class MultipartStream extends AbstractStreamDecorator
     /**
      * @param array<int|string, mixed> $headers
      * @param int|string               $key
-     *
-     * @return mixed
      */
     private function getHeader(array $headers, $key)
     {
@@ -221,10 +208,6 @@ class MultipartStream extends AbstractStreamDecorator
      * PHP's basename() does not properly support streams or filenames beginning with a non-US-ASCII character.
      *
      * @author Drupal 8.2
-     *
-     * @param string $path
-     *
-     * @return string
      */
     private static function basename(string $path): string
     {

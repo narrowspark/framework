@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Translation;
@@ -75,8 +75,6 @@ class TranslationManager implements LoggerAwareInterface, TranslationManagerCont
 
     /**
      * Create a new Translation instance.
-     *
-     * @param \Viserio\Contract\Translation\MessageFormatter $formatter
      */
     public function __construct(MessageFormatterContract $formatter)
     {
@@ -86,8 +84,6 @@ class TranslationManager implements LoggerAwareInterface, TranslationManagerCont
 
     /**
      * Gets the string dictating the default language.
-     *
-     * @return string
      */
     public function getLocale(): string
     {
@@ -96,8 +92,6 @@ class TranslationManager implements LoggerAwareInterface, TranslationManagerCont
 
     /**
      * Sets the string dictating the default language to translate into. (e.g. 'en').
-     *
-     * @param string $locale
      *
      * @return $this
      */
@@ -112,8 +106,6 @@ class TranslationManager implements LoggerAwareInterface, TranslationManagerCont
 
     /**
      * Get default fallback.
-     *
-     * @return null|\Viserio\Contract\Translation\MessageCatalogue
      */
     public function getDefaultFallback(): ?MessageCatalogueContract
     {
@@ -122,8 +114,6 @@ class TranslationManager implements LoggerAwareInterface, TranslationManagerCont
 
     /**
      * Set default fallback for all languages.
-     *
-     * @param \Viserio\Contract\Translation\MessageCatalogue $fallback
      *
      * @return $this
      */
@@ -136,8 +126,6 @@ class TranslationManager implements LoggerAwareInterface, TranslationManagerCont
 
     /**
      * Get directories.
-     *
-     * @return array
      */
     public function getDirectories(): array
     {
@@ -146,8 +134,6 @@ class TranslationManager implements LoggerAwareInterface, TranslationManagerCont
 
     /**
      * Set directories.
-     *
-     * @param array $directories
      *
      * @return $this
      */
@@ -162,8 +148,6 @@ class TranslationManager implements LoggerAwareInterface, TranslationManagerCont
 
     /**
      * Add directory.
-     *
-     * @param string $directory
      *
      * @return $this
      */
@@ -198,8 +182,6 @@ class TranslationManager implements LoggerAwareInterface, TranslationManagerCont
     /**
      * Add message catalogue.
      *
-     * @param \Viserio\Contract\Translation\MessageCatalogue $messageCatalogue
-     *
      * @return $this
      */
     public function addMessageCatalogue(MessageCatalogueContract $messageCatalogue): self
@@ -224,9 +206,6 @@ class TranslationManager implements LoggerAwareInterface, TranslationManagerCont
     /**
      * Set fallback for a language.
      *
-     * @param string                                         $lang
-     * @param \Viserio\Contract\Translation\MessageCatalogue $fallback
-     *
      * @throws \RuntimeException
      *
      * @return $this
@@ -240,10 +219,6 @@ class TranslationManager implements LoggerAwareInterface, TranslationManagerCont
 
     /**
      * Get fallback for a language.
-     *
-     * @param string $lang
-     *
-     * @return null|\Viserio\Contract\Translation\MessageCatalogue
      */
     public function getLanguageFallback(string $lang): ?MessageCatalogueContract
     {
@@ -271,13 +246,10 @@ class TranslationManager implements LoggerAwareInterface, TranslationManagerCont
     /**
      * Imports a language from given file path array.
      *
-     * @param array                           $filePaths
      * @param \Viserio\Contract\Parser\Loader $loader
      *
      * @throws \Viserio\Contract\Translation\Exception\InvalidArgumentException
      * @throws \Viserio\Contract\Parser\Exception\FileNotFoundException
-     *
-     * @return void
      */
     private function imports(array $filePaths, $loader): void
     {

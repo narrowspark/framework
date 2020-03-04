@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Routing\Tests\Generator;
@@ -27,6 +27,7 @@ use Viserio\Contract\Routing\UrlGenerator as UrlGeneratorContract;
  * @internal
  *
  * @small
+ * @coversNothing
  */
 final class UrlGeneratorTest extends MockeryTestCase
 {
@@ -284,10 +285,6 @@ final class UrlGeneratorTest extends MockeryTestCase
 
     /**
      * @dataProvider provideGetRelativePathCases
-     *
-     * @param mixed $sourcePath
-     * @param mixed $targetPath
-     * @param mixed $expectedPath
      */
     public function testGetRelativePath($sourcePath, $targetPath, $expectedPath): void
     {
@@ -451,12 +448,6 @@ final class UrlGeneratorTest extends MockeryTestCase
         self::assertSame('/index#?', $this->getGenerator($routes)->generate('test'));
     }
 
-    /**
-     * @param \Viserio\Component\Routing\Route\Collection $routes
-     * @param array                                       $serverVar
-     *
-     * @return \Viserio\Component\Routing\Generator\UrlGenerator
-     */
     protected function getGenerator(RouteCollection $routes, array $serverVar = []): UrlGenerator
     {
         $server = \array_merge(
@@ -477,11 +468,6 @@ final class UrlGeneratorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @param \Viserio\Component\Routing\Route $route
-     *
-     * @return \Viserio\Component\Routing\Route\Collection
-     */
     protected function getRoutes(Route $route): RouteCollection
     {
         $routes = new RouteCollection();

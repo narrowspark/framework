@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Profiler;
@@ -90,9 +90,6 @@ class AssetsRenderer implements AssetsRendererContract
 
     /**
      * Create a new file javascript renderer instance.
-     *
-     * @param bool        $jqueryIsUsed
-     * @param null|string $rootPath
      */
     public function __construct(bool $jqueryIsUsed = false, ?string $rootPath = null)
     {
@@ -240,8 +237,6 @@ class AssetsRenderer implements AssetsRendererContract
 
     /**
      * Render css and js into html elements.
-     *
-     * @return string
      */
     protected function renderIntoHtml(): string
     {
@@ -254,10 +249,7 @@ class AssetsRenderer implements AssetsRendererContract
     /**
      * Filters a tuple of (css, js) assets according to $type.
      *
-     * @param array       $array
-     * @param null|string $type  'css', 'js' or null for both
-     *
-     * @return array
+     * @param null|string $type 'css', 'js' or null for both
      */
     protected function filterAssetArray(array $array, ?string $type = null): array
     {
@@ -280,8 +272,6 @@ class AssetsRenderer implements AssetsRendererContract
      * Get the last modified time of any assets.
      *
      * @param string $type 'js' or 'css'
-     *
-     * @return int
      */
     protected function getModifiedTime(string $type): int
     {

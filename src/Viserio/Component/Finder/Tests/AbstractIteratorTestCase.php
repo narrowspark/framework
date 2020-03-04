@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Finder\Tests;
@@ -25,8 +25,6 @@ abstract class AbstractIteratorTestCase extends TestCase
     /**
      * @param array<int, false|string>                                      $expected
      * @param Traversable<int|string, \Viserio\Contract\Finder\SplFileInfo> $iterator
-     *
-     * @return void
      */
     protected function assertIterator(array $expected, Traversable $iterator): void
     {
@@ -94,8 +92,8 @@ abstract class AbstractIteratorTestCase extends TestCase
     /**
      * Same as AbstractIteratorTestCase::assertIterator with foreach usage.
      *
-     * @param string[]                          $expected
-     * @param Traversable<string, \SplFileInfo> $iterator
+     * @param string[]                         $expected
+     * @param Traversable<string, SplFileInfo> $iterator
      */
     protected function assertIteratorInForeach(array $expected, Traversable $iterator): void
     {
@@ -116,8 +114,8 @@ abstract class AbstractIteratorTestCase extends TestCase
     /**
      * Same as AbstractIteratorTestCase::assertOrderedIterator with foreach usage.
      *
-     * @param string[]                          $expected
-     * @param Traversable<string, \SplFileInfo> $iterator
+     * @param string[]                         $expected
+     * @param Traversable<string, SplFileInfo> $iterator
      */
     protected function assertOrderedIteratorInForeach(array $expected, Traversable $iterator): void
     {

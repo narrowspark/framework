@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Queue;
@@ -27,43 +27,31 @@ interface Job
 
     /**
      * Determine if the job has been deleted.
-     *
-     * @return bool
      */
     public function isDeleted(): bool;
 
     /**
      * Release the job back into the queue.
-     *
-     * @param int $delay
      */
     public function release(int $delay = 0);
 
     /**
      * Determine if the job was released back into the queue.
-     *
-     * @return bool
      */
     public function isReleased(): bool;
 
     /**
      * Determine if the job has been deleted or released.
-     *
-     * @return bool
      */
     public function isDeletedOrReleased(): bool;
 
     /**
      * Get the number of times the job has been attempted.
-     *
-     * @return int
      */
     public function attempts(): int;
 
     /**
      * Get the name of the queued job class.
-     *
-     * @return string
      */
     public function getName(): string;
 
@@ -74,29 +62,21 @@ interface Job
 
     /**
      * Get the name of the queue the job belongs to.
-     *
-     * @return string
      */
     public function getQueue(): string;
 
     /**
      * Get the raw body string for the job.
-     *
-     * @return string
      */
     public function getRawBody(): string;
 
     /**
      * Get the job identifier.
-     *
-     * @return string
      */
     public function getJobId(): string;
 
     /**
      * Get the resolved name of the queued job class.
-     *
-     * @return string
      */
     public function resolveName(): string;
 }

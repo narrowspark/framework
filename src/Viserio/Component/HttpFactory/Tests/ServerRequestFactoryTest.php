@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\HttpFactory\Tests;
@@ -24,6 +24,7 @@ use Viserio\Contract\Http\Exception\InvalidArgumentException;
  * @internal
  *
  * @small
+ * @coversNothing
  */
 final class ServerRequestFactoryTest extends TestCase
 {
@@ -75,9 +76,6 @@ final class ServerRequestFactoryTest extends TestCase
         $_COOKIE = self::$globalCookie;
     }
 
-    /**
-     * @return array
-     */
     public function dataMethods(): array
     {
         return [
@@ -110,8 +108,6 @@ final class ServerRequestFactoryTest extends TestCase
 
     /**
      * @dataProvider dataServer
-     *
-     * @param mixed $server
      */
     public function testCreateServerRequest($server): void
     {
@@ -125,8 +121,6 @@ final class ServerRequestFactoryTest extends TestCase
 
     /**
      * @dataProvider dataServer
-     *
-     * @param array $server
      */
     public function testCreateServerRequestFromArray(array $server): void
     {
@@ -140,8 +134,6 @@ final class ServerRequestFactoryTest extends TestCase
 
     /**
      * @dataProvider dataServer
-     *
-     * @param mixed $server
      */
     public function testCreateServerRequestWithUriObject($server): void
     {

@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Container\PhpParser\Reflection;
@@ -23,12 +23,9 @@ final class PrivatesCaller
      * Call a private method from a class.
      *
      * @param object|string     $object
-     * @param string            $methodName
      * @param array<int, mixed> $arguments
      *
      * @throws ReflectionException
-     *
-     * @return mixed
      */
     public static function callPrivateMethod($object, string $methodName, ...$arguments)
     {
@@ -45,12 +42,8 @@ final class PrivatesCaller
      * Call a private method with a reference from a class.
      *
      * @param object|string $object
-     * @param string        $methodName
-     * @param mixed         $argument
      *
      * @throws ReflectionException
-     *
-     * @return mixed
      */
     public static function callPrivateMethodWithReference($object, string $methodName, $argument)
     {
@@ -66,11 +59,8 @@ final class PrivatesCaller
 
     /**
      * @param object|string $object
-     * @param string        $methodName
      *
      * @throws ReflectionException
-     *
-     * @return ReflectionMethod
      */
     private static function createAccessibleMethodReflection($object, string $methodName): ReflectionMethod
     {

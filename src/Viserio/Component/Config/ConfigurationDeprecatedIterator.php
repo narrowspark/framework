@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Config;
@@ -22,9 +22,6 @@ class ConfigurationDeprecatedIterator extends IteratorIterator
 {
     /**
      * Create a new ConfigurationDeprecatedIterator instance.
-     *
-     * @param string      $class
-     * @param Traversable $iterator
      */
     public function __construct(string $class, Traversable $iterator)
     {
@@ -41,11 +38,7 @@ class ConfigurationDeprecatedIterator extends IteratorIterator
     /**
      * Check if deprecated keys can be found.
      *
-     * @param string            $class
-     * @param array             $deprecatedConfigs
      * @param array|Traversable $config
-     *
-     * @return void
      */
     private function validateDeprecatedKeys(string $class, array $deprecatedConfigs, $config): void
     {

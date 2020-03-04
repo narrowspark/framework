@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Config\Exception;
@@ -24,11 +24,7 @@ class DimensionNotFoundException extends OutOfBoundsException implements Excepti
     /**
      * Create a new DimensionNotFoundException instance.
      *
-     * @param string         $class
-     * @param string         $currentDimension Current configuration key
-     * @param null|string    $id
-     * @param int            $code
-     * @param null|Throwable $previous
+     * @param string $currentDimension Current configuration key
      */
     public function __construct(
         string $class,

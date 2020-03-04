@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Container;
@@ -171,8 +171,6 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
     /**
      * Set a custom invoker.
      *
-     * @param InvokerInterface $invoker
-     *
      * @return static
      */
     public function setInvoker(InvokerInterface $invoker)
@@ -194,8 +192,6 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
 
     /**
      * Gets service ids that existed at compile time.
-     *
-     * @return array
      */
     public function getRemovedIds(): array
     {
@@ -453,10 +449,6 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
 
     /**
      * Attempt to get a service from the stack of delegated backup containers.
-     *
-     * @param string $abstract
-     *
-     * @return mixed
      */
     protected function getFromDelegate(string $abstract)
     {
@@ -472,13 +464,9 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
     /**
      * As a separate method to allow "get()" to use the really fast `??` operator.
      *
-     * @param string $id
-     *
      *@throws \Viserio\Contract\Container\Exception\NotFoundException
      * @throws \Viserio\Contract\Container\Exception\CircularDependencyException
      * @throws Throwable
-     *
-     * @return mixed
      */
     protected function doGet(string $id)
     {
@@ -550,8 +538,6 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
      *
      * @codeCoverageIgnore
      *
-     * @param string $file
-     *
      * @return object The service created by the file
      */
     protected function load(string $file): object
@@ -596,12 +582,8 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
      * As a separate method to allow "getParameter()" to use the really fast `??` operator.
      * And a helper function to extend getParameter with dynamic parameter loading if needed.
      *
-     * @param string $id
-     *
      * @throws \Viserio\Contract\Container\Exception\InvalidArgumentException
      * @throws \Viserio\Contract\Container\Exception\NotFoundException
-     *
-     * @return mixed
      */
     protected function doGetParameter(string $id)
     {
@@ -654,8 +636,6 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
 
     /**
      * Configured invoker.
-     *
-     * @return \Invoker\InvokerInterface
      */
     private function getInvoker(): InvokerInterface
     {
@@ -676,9 +656,7 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
     /**
      * Autowires the constructor or a method.
      *
-     * @param ReflectionFunctionAbstract $reflectionMethod
-     * @param array                      $arguments
-     * @param null|string                $currentId
+     * @param null|string $currentId
      *
      * @throws \Viserio\Contract\Container\Exception\UnresolvableDependencyException
      * @throws ReflectionException

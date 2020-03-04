@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Finder\Tests\Filter;
@@ -20,13 +20,13 @@ use Viserio\Component\Finder\Tests\AbstractRealIteratorTestCase;
  * @internal
  *
  * @small
+ * @coversNothing
  */
 final class FileTypeFilterIteratorTest extends AbstractRealIteratorTestCase
 {
     /**
      * @dataProvider provideAcceptCases
      *
-     * @param int      $mode
      * @param string[] $expected
      */
     public function testAccept(int $mode, array $expected): void
@@ -74,9 +74,6 @@ final class FileTypeFilterIteratorTest extends AbstractRealIteratorTestCase
         yield [FileTypeFilterIterator::ONLY_DIRECTORIES, self::toAbsolute($onlyDirectories)];
     }
 
-    /**
-     * @return string
-     */
     protected static function getTempPath(): string
     {
         return dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'viserio_finder';

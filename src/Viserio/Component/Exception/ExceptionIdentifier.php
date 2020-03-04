@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Exception;
@@ -29,10 +29,6 @@ class ExceptionIdentifier
 
     /**
      * Identify the given exception.
-     *
-     * @param Throwable $exception
-     *
-     * @return string
      */
     public static function identify(Throwable $exception): string
     {
@@ -56,8 +52,6 @@ class ExceptionIdentifier
      * Generate v4 UUID.
      *
      * We're generating uuids according to the official v4 spec.
-     *
-     * @return string
      */
     private static function uuid4(): string
     {

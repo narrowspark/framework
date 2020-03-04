@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Bridge\Twig\Command;
@@ -59,8 +59,6 @@ class DebugCommand extends AbstractCommand
 
     /**
      * Create a DebugCommand instance.
-     *
-     * @param \Twig\Environment $environment
      */
     public function __construct(Environment $environment)
     {
@@ -124,13 +122,10 @@ class DebugCommand extends AbstractCommand
     /**
      * Get twig metadata.
      *
-     * @param string                                                                              $type
      * @param \Twig\Extension\GlobalsInterface|\Twig\TwigFilter|\Twig\TwigFunction|\Twig\TwigTest $entity
      *
      * @throws UnexpectedValueException
      * @throws ReflectionException
-     *
-     * @return mixed
      */
     private function getMetadata(string $type, $entity)
     {
@@ -199,10 +194,7 @@ class DebugCommand extends AbstractCommand
     /**
      * Transform metadata.
      *
-     * @param string                                                                              $type
      * @param \Twig\Extension\GlobalsInterface|\Twig\TwigFilter|\Twig\TwigFunction|\Twig\TwigTest $entity
-     *
-     * @return string
      */
     private function getPrettyMetadata(string $type, $entity): string
     {
@@ -241,10 +233,6 @@ class DebugCommand extends AbstractCommand
 
     /**
      * Get the loader paths.
-     *
-     * @param \Twig\Environment $twig
-     *
-     * @return array
      */
     private function getLoaderPaths(Environment $twig): array
     {
@@ -274,10 +262,6 @@ class DebugCommand extends AbstractCommand
 
     /**
      * Build configured path table.
-     *
-     * @param array $loaderPaths
-     *
-     * @return array
      */
     private function buildTableRows(array $loaderPaths): array
     {

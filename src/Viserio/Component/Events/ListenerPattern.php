@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Events;
@@ -34,15 +34,11 @@ class ListenerPattern
 
     /**
      * The event.
-     *
-     * @var mixed
      */
     protected $listener;
 
     /**
      * The listener provider.
-     *
-     * @var mixed
      */
     protected $provider;
 
@@ -80,10 +76,6 @@ class ListenerPattern
 
     /**
      * Create a new listener pattern instance.
-     *
-     * @param string $eventPattern
-     * @param mixed  $listener
-     * @param int    $priority
      */
     public function __construct(string $eventPattern, $listener, int $priority = 0)
     {
@@ -106,8 +98,6 @@ class ListenerPattern
 
     /**
      * Get the listener.
-     *
-     * @return mixed
      */
     public function getListener()
     {
@@ -121,8 +111,6 @@ class ListenerPattern
 
     /**
      * Get the event pattern.
-     *
-     * @return string
      */
     public function getEventPattern(): string
     {
@@ -131,11 +119,6 @@ class ListenerPattern
 
     /**
      * Adds this pattern's listener to an event.
-     *
-     * @param \Viserio\Contract\Events\EventManager $dispatcher
-     * @param string                                $eventName
-     *
-     * @return void
      */
     public function bind(EventManagerContract $dispatcher, string $eventName): void
     {
@@ -150,10 +133,6 @@ class ListenerPattern
     /**
      * Removes this pattern's listener from all events to which it was
      * previously added.
-     *
-     * @param \Viserio\Contract\Events\EventManager $dispatcher
-     *
-     * @return void
      */
     public function unbind(EventManagerContract $dispatcher): void
     {
@@ -166,10 +145,6 @@ class ListenerPattern
 
     /**
      * Tests if this pattern matches and event name.
-     *
-     * @param string $eventName
-     *
-     * @return bool
      */
     final public function test(string $eventName): bool
     {
@@ -178,10 +153,6 @@ class ListenerPattern
 
     /**
      * Transforms an event pattern into a regular expression.
-     *
-     * @param string $eventPattern
-     *
-     * @return string
      */
     private function createRegex(string $eventPattern): string
     {

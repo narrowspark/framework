@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Routing\Traits;
@@ -24,8 +24,6 @@ trait MiddlewareValidatorTrait
      * @param array|object|string $middleware
      *
      * @throws \Viserio\Contract\Routing\Exception\UnexpectedValueException
-     *
-     * @return void
      */
     protected function validateInput($middleware): void
     {
@@ -42,8 +40,6 @@ trait MiddlewareValidatorTrait
      * @param \Psr\Http\Server\MiddlewareInterface|string $middleware
      *
      * @throws \Viserio\Contract\Routing\Exception\UnexpectedValueException if \Psr\Http\Server\MiddlewareInterface was not found
-     *
-     * @return void
      */
     protected function validateMiddleware($middleware): void
     {
@@ -59,8 +55,6 @@ trait MiddlewareValidatorTrait
      * If input is a object returns full class name else the given string input.
      *
      * @param \Psr\Http\Server\MiddlewareInterface|string $middleware
-     *
-     * @return string
      */
     protected function getMiddlewareClassName($middleware): string
     {

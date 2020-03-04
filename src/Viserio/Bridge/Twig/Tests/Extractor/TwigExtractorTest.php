@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Bridge\Twig\Tests\Extractor;
@@ -30,6 +30,7 @@ use Viserio\Contract\Translation\TranslationManager as TranslationManagerContrac
  * @internal
  *
  * @small
+ * @coversNothing
  */
 final class TwigExtractorTest extends MockeryTestCase
 {
@@ -48,9 +49,6 @@ final class TwigExtractorTest extends MockeryTestCase
 
     /**
      * @dataProvider provideExtractCases
-     *
-     * @param mixed $template
-     * @param mixed $messages
      */
     public function testExtract($template, $messages): void
     {
@@ -103,9 +101,6 @@ final class TwigExtractorTest extends MockeryTestCase
 
     /**
      * @dataProvider provideExtractSyntaxErrorCases
-     *
-     * @param mixed  $resources
-     * @param string $dir
      */
     public function testExtractSyntaxError($resources, string $dir): void
     {
@@ -135,8 +130,6 @@ final class TwigExtractorTest extends MockeryTestCase
 
     /**
      * @dataProvider provideExtractWithFilesCases
-     *
-     * @param mixed $resource
      */
     public function testExtractWithFiles($resource): void
     {
@@ -171,9 +164,6 @@ final class TwigExtractorTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @return TwigExtractor
-     */
     private function getTwigExtractor(): TwigExtractor
     {
         $twig = new Environment(Mockery::mock(LoaderInterface::class));

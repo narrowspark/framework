@@ -38,6 +38,9 @@ $config = new Config($mainLicense->header(), [
     'static_lambda' => false,
     'final_public_method_for_abstract_class' => false,
     'final_class' => false,
+    'phpdoc_to_return_type' => false,
+    // both are needed
+    'date_time_immutable' => false,
     // @todo waiting for php-cs-fixer 2.16.2
     'global_namespace_import' => [
         'import_classes' => true,

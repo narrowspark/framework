@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Http;
@@ -57,29 +57,21 @@ class Stream implements StreamInterface
 
     /**
      * Is this stream readable?
-     *
-     * @var bool
      */
     protected bool $readable;
 
     /**
      * Is this stream writable?
-     *
-     * @var bool
      */
     protected bool $writable;
 
     /**
      * Is this stream seekable?
-     *
-     * @var bool
      */
     protected bool $seekable;
 
     /**
      * The size of the stream if known.
-     *
-     * @var null|int
      */
     protected ?int $size;
 
@@ -88,15 +80,11 @@ class Stream implements StreamInterface
 
     /**
      * Is this stream a pipe?
-     *
-     * @var null|bool
      */
     protected ?bool $isPipe;
 
     /**
      * Stream type of a open stream.
-     *
-     * @var string
      */
     protected string $streamType;
 
@@ -437,8 +425,6 @@ class Stream implements StreamInterface
 
     /**
      * Returns whether or not the stream is a pipe.
-     *
-     * @return bool
      */
     private function isPipe(): bool
     {

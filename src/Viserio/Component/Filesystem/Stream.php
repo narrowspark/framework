@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Filesystem;
@@ -79,8 +79,6 @@ final class Stream
      *
      * Is already another stream wrapper registered for the scheme,
      * a RuntimeException will be thrown.
-     *
-     * @return bool
      */
     public static function register(): bool
     {
@@ -102,8 +100,6 @@ final class Stream
      *
      * If unregistering fails, or if the URL wrapper for narrowspark.safe// was not
      * registered with this class, a RuntimeException will be thrown.
-     *
-     * @return void
      */
     public static function unregister(): void
     {
@@ -129,8 +125,6 @@ final class Stream
      * @param string      $mode        mode for opening
      * @param int         $options     options for opening
      * @param null|string $opened_path full path that was actually opened
-     *
-     * @return bool
      */
     public function stream_open(string $path, string $mode, int $options, ?string $opened_path = null): bool
     {
@@ -204,8 +198,6 @@ final class Stream
 
     /**
      * Close a resource.
-     *
-     * @return void
      */
     public function stream_close(): void
     {
@@ -234,8 +226,6 @@ final class Stream
     /**
      * Reads up to length bytes from the file.
      *
-     * @param int $length
-     *
      * @return bool|string
      */
     public function stream_read(int $length)
@@ -254,10 +244,6 @@ final class Stream
 
     /**
      * Writes the string to the file.
-     *
-     * @param string $data
-     *
-     * @return int
      */
     public function stream_write(string $data): int
     {
@@ -277,10 +263,6 @@ final class Stream
 
     /**
      * Truncates a file to a given length.
-     *
-     * @param int $size
-     *
-     * @return bool
      */
     public function stream_truncate(int $size): bool
     {
@@ -317,8 +299,6 @@ final class Stream
 
     /**
      * Returns true if the file pointer is at end-of-file.
-     *
-     * @return bool
      */
     public function stream_eof(): bool
     {
@@ -336,11 +316,6 @@ final class Stream
 
     /**
      * Sets the file position indicator for the file.
-     *
-     * @param int $offset
-     * @param int $whence
-     *
-     * @return bool
      */
     public function stream_seek(int $offset, int $whence = \SEEK_SET): bool
     {
@@ -378,9 +353,8 @@ final class Stream
     /**
      * Change stream options.
      *
-     * @param string $path
-     * @param int    $option STREAM_META_TOUCH, STREAM_META_OWNER_NAME, STREAM_META_OWNER, STREAM_META_GROUP_NAME, STREAM_META_GROUP, STREAM_META_ACCESS
-     * @param mixed  $args   variable arguments
+     * @param int   $option STREAM_META_TOUCH, STREAM_META_OWNER_NAME, STREAM_META_OWNER, STREAM_META_GROUP_NAME, STREAM_META_GROUP, STREAM_META_ACCESS
+     * @param mixed $args   variable arguments
      *
      * @return bool Returns TRUE on success or FALSE on failure
      */
@@ -420,9 +394,6 @@ final class Stream
     /**
      * Gets information about a file referenced by filename.
      *
-     * @param string $path
-     * @param int    $flags
-     *
      * @return array<int|string, false|int>|false
      */
     public function url_stat(string $path, int $flags)
@@ -436,10 +407,6 @@ final class Stream
     /**
      * Deletes a file.
      * On Windows unlink is not allowed till file is opened.
-     *
-     * @param string $path
-     *
-     * @return bool
      */
     public function unlink(string $path): bool
     {
@@ -448,12 +415,6 @@ final class Stream
 
     /**
      * Change stream options.
-     *
-     * @param int      $option
-     * @param int      $arg1
-     * @param null|int $arg2
-     *
-     * @return bool
      */
     public function stream_set_option(int $option, int $arg1, ?int $arg2): bool
     {
@@ -485,9 +446,6 @@ final class Stream
      * Set blocking/non-blocking mode on a stream.
      *
      * @param resource $stream
-     * @param bool     $mode
-     *
-     * @return bool
      */
     public function stream_set_blocking($stream, bool $mode): bool
     {
@@ -504,9 +462,6 @@ final class Stream
      * Sets write file buffering on the given stream.
      *
      * @param resource $stream
-     * @param int      $buffer
-     *
-     * @return int
      */
     public function stream_set_write_buffer($stream, int $buffer): int
     {
@@ -519,10 +474,6 @@ final class Stream
      * Set timeout period on a stream.
      *
      * @param resource $stream
-     * @param int      $seconds
-     * @param int      $microseconds
-     *
-     * @return bool
      */
     public function stream_set_timeout($stream, int $seconds, int $microseconds = 0): bool
     {
@@ -535,9 +486,6 @@ final class Stream
      * Checks handle and locks file.
      *
      * @param false|resource $handle
-     * @param int            $lock
-     *
-     * @return bool
      */
     private function checkAndLock($handle, int $lock): bool
     {
@@ -556,8 +504,6 @@ final class Stream
 
     /**
      * Error destructor.
-     *
-     * @return void
      */
     private function clean(): void
     {
@@ -580,10 +526,6 @@ final class Stream
 
     /**
      * Helper method to resolve a path from /foo/bar/. to /foo/bar.
-     *
-     * @param string $path
-     *
-     * @return string
      */
     private function resolvePath(string $path): string
     {

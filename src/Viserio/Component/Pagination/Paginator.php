@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Pagination;
@@ -55,9 +55,6 @@ class Paginator extends AbstractPaginator
 
     /**
      * Create a new paginator.
-     *
-     * @param \Viserio\Contract\Pagination\Adapter     $adapter
-     * @param \Psr\Http\Message\ServerRequestInterface $request
      */
     public function __construct(AdapterContract $adapter, ServerRequestInterface $request)
     {
@@ -74,9 +71,6 @@ class Paginator extends AbstractPaginator
     /**
      * Add a new presenter.
      *
-     * @param string                                 $key
-     * @param \Viserio\Contract\Pagination\Presenter $presenter
-     *
      * @return $this
      */
     public function addPresenter(string $key, PresenterContract $presenter): self
@@ -89,8 +83,6 @@ class Paginator extends AbstractPaginator
     /**
      * Set a default presenter.
      *
-     * @param string $presenter
-     *
      * @return $this
      */
     public function setDefaultPresenter(string $presenter): self
@@ -102,8 +94,6 @@ class Paginator extends AbstractPaginator
 
     /**
      * Get the default presenter.
-     *
-     * @return string
      */
     public function getDefaultPresenter(): string
     {
@@ -174,8 +164,6 @@ class Paginator extends AbstractPaginator
     /**
      * Manually indicate that the paginator does have more pages.
      *
-     * @param bool $value
-     *
      * @return $this
      *
      * @codeCoverageIgnore
@@ -189,8 +177,6 @@ class Paginator extends AbstractPaginator
 
     /**
      * Determine if there are more items in the data source.
-     *
-     * @return bool
      */
     public function hasMorePages(): bool
     {
@@ -209,8 +195,6 @@ class Paginator extends AbstractPaginator
 
     /**
      * Check for more pages. The last item will be sliced off.
-     *
-     * @return void
      */
     protected function checkForMorePages(): void
     {

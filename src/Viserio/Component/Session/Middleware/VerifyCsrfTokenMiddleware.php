@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Session\Middleware;
@@ -52,8 +52,6 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
 
     /**
      * Create a new session middleware.
-     *
-     * @param \Viserio\Component\Session\SessionManager $manager
      */
     public function __construct(SessionManager $manager)
     {
@@ -88,8 +86,6 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
 
     /**
      * Determine if the application is running unit tests.
-     *
-     * @return bool
      */
     protected function runningUnitTests(): bool
     {
@@ -98,10 +94,6 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
 
     /**
      * Determine if the session and input CSRF tokens match.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     *
-     * @return bool
      */
     protected function tokensMatch(ServerRequestInterface $request): bool
     {
@@ -129,12 +121,7 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
     /**
      * Add the CSRF token to the response cookies.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Psr\Http\Message\ResponseInterface      $response
-     *
      * @throws InvalidArgumentException
-     *
-     * @return \Psr\Http\Message\ResponseInterface
      */
     protected function addCookieToResponse(
         ServerRequestInterface $request,
@@ -158,10 +145,6 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
 
     /**
      * Determine if the HTTP request uses a ‘read’ verb.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     *
-     * @return bool
      */
     protected function isReading(ServerRequestInterface $request): bool
     {

@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Foundation;
@@ -48,8 +48,6 @@ final class BootstrapManager implements BootstrapManagerContract
 
     /**
      * Create a new bootstrap manger instance.
-     *
-     * @param \Viserio\Contract\Foundation\Kernel $kernel
      */
     public function __construct(KernelContract $kernel)
     {
@@ -116,13 +114,6 @@ final class BootstrapManager implements BootstrapManagerContract
 
     /**
      * Calls callbacks on bootstrap name.
-     *
-     * @param array                               $bootCallbacks
-     * @param \Viserio\Contract\Foundation\Kernel $kernel
-     * @param string                              $type
-     * @param string                              $bootstrap
-     *
-     * @return void
      */
     private function callCallbacks(array $bootCallbacks, KernelContract $kernel, string $type, string $bootstrap): void
     {

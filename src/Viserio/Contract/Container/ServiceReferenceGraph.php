@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Container;
@@ -27,17 +27,11 @@ interface ServiceReferenceGraph extends ResettableContract
     /**
      * Returns true if the graph can return an entry for the given identifier.
      * Returns false otherwise.
-     *
-     * @param string $id
-     *
-     * @return bool
      */
     public function hasNode(string $id): bool;
 
     /**
      * Gets a node by identifier.
-     *
-     * @param string $id
      *
      *@throws \Viserio\Contract\Container\Exception\InvalidArgumentException if no node matches the supplied identifier
      *
@@ -49,13 +43,8 @@ interface ServiceReferenceGraph extends ResettableContract
      * Connects 2 nodes together in the Graph.
      *
      * @param null|int|string $sourceId
-     * @param mixed           $sourceValue
-     * @param null|string     $destId
      * @param null|mixed      $destValue
      * @param null|mixed      $reference
-     * @param bool            $lazy
-     * @param bool            $weak
-     * @param bool            $byConstructor
      */
     public function connect(
         $sourceId,

@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Profiler\DataCollector\Bridge\Cache;
@@ -41,8 +41,6 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements Panel
      * @param \Viserio\Component\Profiler\DataCollector\Bridge\Cache\CacheDecorator $cache
      *
      * @throws \Viserio\Contract\Profiler\Exception\UnexpectedValueException
-     *
-     * @return void
      */
     public function addPool(CacheDecorator $cache): void
     {
@@ -146,8 +144,6 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements Panel
 
     /**
      * Method returns amount of logged Cache reads: "get" calls.
-     *
-     * @return array
      */
     public function getStatistics(): array
     {
@@ -156,8 +152,6 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements Panel
 
     /**
      * Method returns the statistic totals.
-     *
-     * @return array
      */
     public function getTotals(): array
     {
@@ -166,8 +160,6 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements Panel
 
     /**
      * Method returns all logged Cache call objects.
-     *
-     * @return int
      */
     public function getCalls(): int
     {
@@ -187,9 +179,6 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements Panel
         }
     }
 
-    /**
-     * @return array
-     */
     private function calculateStatistics(): array
     {
         $statistics = [];
@@ -245,9 +234,6 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements Panel
         return $statistics;
     }
 
-    /**
-     * @return array
-     */
     private function calculateTotalStatistics(): array
     {
         $statistics = $this->getStatistics();

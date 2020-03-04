@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Events;
@@ -55,10 +55,6 @@ class EventManager implements EventManagerContract
      *
      * The list is returned as an array, and the list of events are sorted by
      * their priority.
-     *
-     * @param null|string $eventName
-     *
-     * @return array
      *
      * @internal
      */
@@ -235,10 +231,6 @@ class EventManager implements EventManagerContract
 
     /**
      * Sort the listeners for a given event by priority.
-     *
-     * @param string $eventName
-     *
-     * @return void
      */
     protected function sortListeners(string $eventName): void
     {
@@ -265,10 +257,6 @@ class EventManager implements EventManagerContract
 
     /**
      * Binds all patterns that match the specified event name.
-     *
-     * @param string $eventName
-     *
-     * @return void
      */
     protected function bindPatterns(string $eventName): void
     {
@@ -294,11 +282,6 @@ class EventManager implements EventManagerContract
      *
      * This method cannot be used to remove a listener from a pattern that was
      * never registered.
-     *
-     * @param string $eventPattern
-     * @param mixed  $listener
-     *
-     * @return void
      */
     protected function removeListenerPattern(string $eventPattern, $listener): void
     {
@@ -318,10 +301,6 @@ class EventManager implements EventManagerContract
 
     /**
      * Checks whether a string contains any wildcard characters.
-     *
-     * @param string $subject
-     *
-     * @return bool
      */
     private function hasWildcards(string $subject): bool
     {
@@ -335,8 +314,6 @@ class EventManager implements EventManagerContract
      * dispatched.
      *
      * @param \Viserio\Component\Events\ListenerPattern $pattern
-     *
-     * @return void
      */
     private function addListenerPattern(ListenerPattern $pattern): void
     {

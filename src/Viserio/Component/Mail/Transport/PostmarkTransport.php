@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Mail\Transport;
@@ -51,9 +51,6 @@ class PostmarkTransport extends AbstractTransport
 
     /**
      * Create a new Postmark transport instance.
-     *
-     * @param \GuzzleHttp\Client $client
-     * @param string             $serverToken
      */
     public function __construct(Client $client, string $serverToken)
     {
@@ -63,8 +60,6 @@ class PostmarkTransport extends AbstractTransport
 
     /**
      * Get the API key being used by the transport.
-     *
-     * @return string
      */
     public function getServerToken(): string
     {
@@ -73,8 +68,6 @@ class PostmarkTransport extends AbstractTransport
 
     /**
      * Set the API Server Token being used by the transport.
-     *
-     * @param string $serverToken
      *
      * @return $this
      */
@@ -129,10 +122,6 @@ class PostmarkTransport extends AbstractTransport
 
     /**
      * Get the message ID from the response.
-     *
-     * @param null|\Psr\Http\Message\ResponseInterface $response
-     *
-     * @return string
      */
     protected function getMessageId(?ResponseInterface $response): string
     {
@@ -150,8 +139,6 @@ class PostmarkTransport extends AbstractTransport
      * to array of emails with names.
      *
      * @param string[] $emails
-     *
-     * @return array
      */
     protected function convertEmailsArray(array $emails): array
     {
@@ -171,10 +158,7 @@ class PostmarkTransport extends AbstractTransport
      * Excludes parts of type \Swift_Mime_Attachment as those
      * are handled later.
      *
-     * @param Swift_Mime_SimpleMessage $message
-     * @param string                   $mimeType
-     *
-     * @return null|Swift_Mime_SimpleMimeEntity
+     * @param string $mimeType
      */
     protected function getMIMEPart(Swift_Mime_SimpleMessage $message, $mimeType): ?Swift_Mime_SimpleMimeEntity
     {
@@ -189,10 +173,6 @@ class PostmarkTransport extends AbstractTransport
 
     /**
      * Convert a Swift Mime Message to a Postmark Payload.
-     *
-     * @param Swift_Mime_SimpleMessage $message
-     *
-     * @return array
      */
     protected function getMessagePayload(Swift_Mime_SimpleMessage $message): array
     {
@@ -206,11 +186,6 @@ class PostmarkTransport extends AbstractTransport
 
     /**
      * Applies the recipients of the message into the API Payload.
-     *
-     * @param array                    $payload
-     * @param Swift_Mime_SimpleMessage $message
-     *
-     * @return array
      */
     protected function processRecipients(array $payload, Swift_Mime_SimpleMessage $message): array
     {
@@ -248,11 +223,6 @@ class PostmarkTransport extends AbstractTransport
     /**
      * Applies the message parts and attachments
      * into the API Payload.
-     *
-     * @param array                    $payload
-     * @param Swift_Mime_SimpleMessage $message
-     *
-     * @return array
      */
     protected function processMessageParts(array $payload, Swift_Mime_SimpleMessage $message): array
     {
@@ -308,11 +278,6 @@ class PostmarkTransport extends AbstractTransport
 
     /**
      * Applies the headers into the API Payload.
-     *
-     * @param array                    $payload
-     * @param Swift_Mime_SimpleMessage $message
-     *
-     * @return array
      */
     protected function processHeaders(array $payload, Swift_Mime_SimpleMessage $message): array
     {

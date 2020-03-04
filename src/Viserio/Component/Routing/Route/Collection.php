@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Routing\Route;
@@ -101,8 +101,6 @@ class Collection implements RouteCollectionContract
 
     /**
      * Count the number of items in the collection.
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -111,10 +109,6 @@ class Collection implements RouteCollectionContract
 
     /**
      * Add the route to any look-up tables if necessary.
-     *
-     * @param \Viserio\Contract\Routing\Route $route
-     *
-     * @return void
      */
     protected function addLookups(RouteContract $route): void
     {

@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Mail;
@@ -78,9 +78,6 @@ class Mailer implements MailerContract
 
     /**
      * Create a new Mailer instance.
-     *
-     * @param Swift_Mailer $swiftMailer
-     * @param array        $data
      */
     public function __construct(Swift_Mailer $swiftMailer, array $data)
     {
@@ -123,10 +120,7 @@ class Mailer implements MailerContract
     /**
      * Set the global reply-to address and name.
      *
-     * @param string      $address
      * @param null|string $name
-     *
-     * @return void
      */
     public function alwaysReplyTo(string $address, $name = null): void
     {
@@ -197,8 +191,6 @@ class Mailer implements MailerContract
 
     /**
      * Get the Swift Mailer instance.
-     *
-     * @return Swift_Mailer
      */
     public function getSwiftMailer(): Swift_Mailer
     {
@@ -211,8 +203,6 @@ class Mailer implements MailerContract
      * @param array|string $view
      *
      * @throws \Viserio\Contract\Mail\Exception\UnexpectedValueException
-     *
-     * @return array
      */
     protected function parseView($view): array
     {
@@ -243,12 +233,6 @@ class Mailer implements MailerContract
 
     /**
      * Add the content to a given message.
-     *
-     * @param \Viserio\Contract\Mail\Message $message
-     * @param null|string                    $view
-     * @param null|string                    $plain
-     * @param null|string                    $raw
-     * @param array                          $data
      */
     protected function addContent(
         MessageContract $message,
@@ -276,10 +260,6 @@ class Mailer implements MailerContract
 
     /**
      * Send a Swift Message instance.
-     *
-     * @param Swift_Mime_SimpleMessage $message
-     *
-     * @return int
      */
     protected function sendSwiftMessage(Swift_Mime_SimpleMessage $message): int
     {
@@ -296,10 +276,6 @@ class Mailer implements MailerContract
 
     /**
      * Determines if the message can be sent.
-     *
-     * @param Swift_Mime_SimpleMessage $message
-     *
-     * @return bool
      */
     protected function shouldSendMessage(Swift_Mime_SimpleMessage $message): bool
     {
@@ -314,8 +290,6 @@ class Mailer implements MailerContract
      * Force the transport to re-connect.
      *
      * This will prevent errors in daemon queue situations.
-     *
-     * @return void
      */
     protected function forceReconnecting(): void
     {
@@ -324,8 +298,6 @@ class Mailer implements MailerContract
 
     /**
      * Create a new message instance.
-     *
-     * @return \Viserio\Contract\Mail\Message
      */
     protected function createMessage(): MessageContract
     {
@@ -351,12 +323,9 @@ class Mailer implements MailerContract
     /**
      * Call the provided message builder.
      *
-     * @param null|Closure|string            $callback
-     * @param \Viserio\Contract\Mail\Message $message
+     * @param null|Closure|string $callback
      *
      * @throws InvalidArgumentException
-     *
-     * @return mixed
      */
     protected function callMessageBuilder($callback, MessageContract $message)
     {
@@ -373,11 +342,6 @@ class Mailer implements MailerContract
 
     /**
      * Creates a view string for the email body.
-     *
-     * @param string $view
-     * @param array  $data
-     *
-     * @return string
      */
     protected function createView(string $view, array $data): string
     {

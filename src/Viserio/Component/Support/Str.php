@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Support;
@@ -44,10 +44,7 @@ class Str
      * The result is not cast, so the return value may be of type Stringy,
      * integer, boolean, etc.
      *
-     * @param string  $name
      * @param mixed[] $arguments
-     *
-     * @return mixed
      */
     public static function __callStatic(string $name, array $arguments)
     {
@@ -56,11 +53,6 @@ class Str
 
     /**
      * Cap a string with a single instance of a given value.
-     *
-     * @param string $value
-     * @param string $cap
-     *
-     * @return string
      */
     public static function finish(string $value, string $cap): string
     {
@@ -71,12 +63,6 @@ class Str
 
     /**
      * Limit the number of characters in a string.
-     *
-     * @param string $value
-     * @param int    $limit
-     * @param string $end
-     *
-     * @return string
      */
     public static function limit(string $value, int $limit = 100, string $end = '...'): string
     {
@@ -89,12 +75,6 @@ class Str
 
     /**
      * Limit the number of words in a string.
-     *
-     * @param string $value
-     * @param int    $words
-     * @param string $end
-     *
-     * @return string
      */
     public static function words(string $value, int $words = 100, string $end = '...'): string
     {
@@ -109,11 +89,6 @@ class Str
 
     /**
      * Parse a Class@method style callback into class and method.
-     *
-     * @param string $callback
-     * @param string $default
-     *
-     * @return array
      */
     public static function parseCallback(string $callback, string $default): array
     {
@@ -125,8 +100,6 @@ class Str
      *
      * @param int    $length     How many characters do you want?
      * @param string $characters Which characters to choose from
-     *
-     * @return string
      */
     public static function random(int $length = 64, string $characters = CharacterType::PRINTABLE_ASCII): string
     {
@@ -143,10 +116,6 @@ class Str
 
     /**
      * Convert a string to kebab case.
-     *
-     * @param string $value
-     *
-     * @return string
      */
     public static function kebab(string $value): string
     {
@@ -157,11 +126,6 @@ class Str
      * Convert a string to snake case.
      *
      * @see https://en.wikipedia.org/wiki/Snake_case
-     *
-     * @param string $value
-     * @param string $delimiter
-     *
-     * @return string
      */
     public static function snake(string $value, string $delimiter = '_'): string
     {
@@ -183,10 +147,6 @@ class Str
 
     /**
      * Convert a value to studly caps case.
-     *
-     * @param string $value
-     *
-     * @return string
      */
     public static function studly(string $value): string
     {
@@ -204,11 +164,6 @@ class Str
 
     /**
      * Get the plural form of an English word.
-     *
-     * @param string $value
-     * @param int    $count
-     *
-     * @return string
      */
     public static function plural(string $value, int $count = 2): string
     {
@@ -217,10 +172,6 @@ class Str
 
     /**
      * Get the singular form of an English word.
-     *
-     * @param string $value
-     *
-     * @return string
      */
     public static function singular(string $value): string
     {
@@ -229,12 +180,6 @@ class Str
 
     /**
      * Replace the first occurrence of a given value in the string.
-     *
-     * @param string $search
-     * @param string $replace
-     * @param string $subject
-     *
-     * @return string
      */
     public static function replaceFirst(string $search, string $replace, string $subject): string
     {
@@ -249,12 +194,6 @@ class Str
 
     /**
      * Replace the last occurrence of a given value in the string.
-     *
-     * @param string $search
-     * @param string $replace
-     * @param string $subject
-     *
-     * @return string
      */
     public static function replaceLast(string $search, string $replace, string $subject): string
     {
@@ -266,12 +205,7 @@ class Str
     /**
      * Helper function for replaceLast and replaceFirst.
      *
-     * @param string   $subject
-     * @param string   $replace
      * @param bool|int $position
-     * @param string   $search
-     *
-     * @return string
      */
     private static function replaceByPosition(string $subject, string $replace, $position, string $search): string
     {
@@ -284,10 +218,6 @@ class Str
 
     /**
      * Normalize screaming snake/kebab case value to regular snake/kebab case.
-     *
-     * @param string $value
-     *
-     * @return string
      */
     private static function normalizeScreamingCase(string $value): string
     {

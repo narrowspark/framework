@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Bridge\Twig\Node;
@@ -30,12 +30,7 @@ class TransNode extends Node
     /**
      * Create a new trans node instance.
      *
-     * @param \Twig\Node\Node                               $body
-     * @param \Twig\Node\Node                               $domain
-     * @param null|\Twig\Node\Expression\AbstractExpression $vars
-     * @param null|\Twig\Node\Expression\AbstractExpression $locale
-     * @param int                                           $lineNumber
-     * @param null|string                                   $tag
+     * @param \Twig\Node\Node $domain
      */
     public function __construct(
         Node $body,
@@ -124,12 +119,6 @@ class TransNode extends Node
 
     /**
      * Compile string with given variables.
-     *
-     * @param \Twig\Node\Node                       $body
-     * @param \Twig\Node\Expression\ArrayExpression $vars
-     * @param bool                                  $ignoreStrictCheck
-     *
-     * @return array
      */
     protected function compileString(Node $body, ArrayExpression $vars, bool $ignoreStrictCheck = false): array
     {

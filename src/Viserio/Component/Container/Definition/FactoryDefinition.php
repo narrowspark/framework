@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Container\Definition;
@@ -48,9 +48,7 @@ final class FactoryDefinition extends AbstractDefinition implements FactoryDefin
     /**
      * Create a new Method Definition instance.
      *
-     * @param string       $name
      * @param array|string $value
-     * @param int          $type
      *
      * @throws \Viserio\Contract\Container\Exception\BindingResolutionException
      */
@@ -86,8 +84,6 @@ final class FactoryDefinition extends AbstractDefinition implements FactoryDefin
      *
      * @param array|string $method The formatting for the string looks like Class@Method or Class::Method
      *                             and for the array [[Class, 'Method'] or [new Class, 'Method']]
-     *
-     * @return array
      */
     public static function splitFactory($method): array
     {

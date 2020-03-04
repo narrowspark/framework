@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Parser\Tests\Util;
@@ -30,6 +30,7 @@ use Viserio\Contract\Parser\Exception\InvalidArgumentException;
  * @internal
  *
  * @small
+ * @coversNothing
  */
 final class XmlUtilsTest extends MockeryTestCase
 {
@@ -186,9 +187,6 @@ final class XmlUtilsTest extends MockeryTestCase
      * @dataProvider provideConvertDomToArrayCases
      *
      * @param null|array<int, mixed>|string $expected
-     * @param string                        $xml
-     * @param bool                          $root
-     * @param bool                          $checkPrefix
      */
     public function testConvertDomToArray($expected, string $xml, bool $root = false, bool $checkPrefix = true): void
     {
@@ -229,9 +227,6 @@ final class XmlUtilsTest extends MockeryTestCase
 
     /**
      * @dataProvider providePhpizeCases
-     *
-     * @param mixed $expected
-     * @param mixed $value
      */
     public function testPhpize($expected, $value): void
     {
@@ -287,7 +282,9 @@ final class XmlUtilsTest extends MockeryTestCase
         XmlUtils::loadFile($file->url());
     }
 
-    // test for issue https://github.com/symfony/symfony/issues/9731
+    /**
+     * test for issue https://github.com/symfony/symfony/issues/9731
+     */
     public function testLoadWrongEmptyXMLWithErrorHandler(): void
     {
         $file = vfsStream::newFile('foo.xml')->withContent(

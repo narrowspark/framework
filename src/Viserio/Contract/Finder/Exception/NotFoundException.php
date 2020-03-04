@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Finder\Exception;
@@ -39,12 +39,6 @@ class NotFoundException extends BaseException implements Exception
 
     /**
      * Create a new DirectoryNotFoundException instance.
-     *
-     * @param string         $type
-     * @param null|string    $message
-     * @param int            $code
-     * @param null|Throwable $previous
-     * @param null|string    $path
      */
     public function __construct(
         string $type,
@@ -69,8 +63,6 @@ class NotFoundException extends BaseException implements Exception
 
     /**
      * Get the file or directory path.
-     *
-     * @return null|string
      */
     public function getPath(): ?string
     {
@@ -79,8 +71,6 @@ class NotFoundException extends BaseException implements Exception
 
     /**
      * Check if exception is a file exception.
-     *
-     * @return bool
      */
     public function isFile(): bool
     {
@@ -89,8 +79,6 @@ class NotFoundException extends BaseException implements Exception
 
     /**
      * Check if exception is a dir exception.
-     *
-     * @return bool
      */
     public function isDir(): bool
     {

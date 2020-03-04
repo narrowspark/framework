@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Mail\Transport;
@@ -57,10 +57,6 @@ abstract class AbstractTransport implements Swift_Transport
 
     /**
      * Register a plug-in with the transport.
-     *
-     * @param Swift_Events_EventListener $plugin
-     *
-     * @return void
      */
     public function registerPlugin(Swift_Events_EventListener $plugin): void
     {
@@ -69,10 +65,6 @@ abstract class AbstractTransport implements Swift_Transport
 
     /**
      * Iterate through registered plugins and execute plugins' methods.
-     *
-     * @param Swift_Mime_SimpleMessage $message
-     *
-     * @return void
      */
     protected function beforeSendPerformed(Swift_Mime_SimpleMessage $message): void
     {
@@ -87,10 +79,6 @@ abstract class AbstractTransport implements Swift_Transport
 
     /**
      * Get the number of recipients.
-     *
-     * @param Swift_Mime_SimpleMessage $message
-     *
-     * @return int
      */
     protected function numberOfRecipients(Swift_Mime_SimpleMessage $message): int
     {
@@ -103,10 +91,6 @@ abstract class AbstractTransport implements Swift_Transport
 
     /**
      * Iterate through registered plugins and execute plugins' methods.
-     *
-     * @param Swift_Mime_SimpleMessage $message
-     *
-     * @return void
      */
     protected function sendPerformed(Swift_Mime_SimpleMessage $message): void
     {

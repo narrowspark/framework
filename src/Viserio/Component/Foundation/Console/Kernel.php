@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Foundation\Console;
@@ -45,8 +45,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      * List of allowed bootstrap types.
      *
      * @internal
-     *
-     * @var array
      */
     protected static array $allowedBootstrapTypes = ['global', 'console'];
 
@@ -62,12 +60,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
         parent::__construct();
     }
 
-    /**
-     * @param string $method
-     * @param array  $arguments
-     *
-     * @return mixed
-     */
     public function __call(string $method, array $arguments)
     {
         $this->bootstrap();
@@ -114,8 +106,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
 
     /**
      * Get the output for the last run command.
-     *
-     * @return string
      */
     public function getOutput(): string
     {
@@ -126,10 +116,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
 
     /**
      * Register the given command with the console application.
-     *
-     * @param \Symfony\Component\Console\Command\Command $command
-     *
-     * @return void
      */
     public function registerCommand(SymfonyCommand $command): void
     {
@@ -140,8 +126,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
 
     /**
      * Get the cerebro application instance.
-     *
-     * @return \Viserio\Component\Console\Application
      */
     protected function getConsole(): Cerebro
     {
@@ -154,10 +138,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
 
     /**
      * Report the exception to the exception handler.
-     *
-     * @param Throwable $exception
-     *
-     * @return void
      */
     protected function reportException(Throwable $exception): void
     {
@@ -172,9 +152,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      * Report the exception to the exception handler.
      *
      * @param null|\Symfony\Component\Console\Output\OutputInterface $output
-     * @param Throwable                                              $exception
-     *
-     * @return void
      */
     protected function renderException($output, Throwable $exception): void
     {

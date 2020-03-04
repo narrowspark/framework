@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Support;
@@ -22,8 +22,6 @@ interface Resettable
      * initial state. This usually means clearing any internal buffers and forwarding
      * the call to internal dependencies. All properties of the object should be put
      * back to the same state it had when it was first ready to use.
-     *
-     * @return void
      */
     public function reset(): void;
 }

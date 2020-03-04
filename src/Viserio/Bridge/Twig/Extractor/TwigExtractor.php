@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Bridge\Twig\Extractor;
@@ -74,11 +74,7 @@ class TwigExtractor extends AbstractFileExtractor
     /**
      * Extract translations from template string.
      *
-     * @param string $template
-     *
      * @throws \Twig\Error\SyntaxError
-     *
-     * @return array
      */
     protected function extractTemplate(string $template): array
     {
@@ -135,10 +131,6 @@ class TwigExtractor extends AbstractFileExtractor
 
     /**
      * Check if file is a php file.
-     *
-     * @param string $file
-     *
-     * @return bool
      */
     private function isTwigFile(string $file): bool
     {

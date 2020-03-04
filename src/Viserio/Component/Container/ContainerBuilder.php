@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Container;
@@ -73,36 +73,26 @@ final class ContainerBuilder implements ContainerBuilderContract
 
     /**
      * The container's parameters.
-     *
-     * @var array
      */
     private array $parameters = [];
 
     /**
      * All of the used tags.
-     *
-     * @var array
      */
     private array $usedTags = [];
 
     /**
      * The extension closures for services.
-     *
-     * @var array
      */
     private array $extenders = [];
 
     /**
      * Whether the container has already been built.
-     *
-     * @var bool
      */
     private bool $locked = false;
 
     /**
      * Removed definition ids.
-     *
-     * @var array
      */
     private array $removedIds = [];
 
@@ -229,8 +219,6 @@ final class ContainerBuilder implements ContainerBuilderContract
      * Returns the log.
      *
      * @internal
-     *
-     * @return array
      */
     public function getLogs(): array
     {
@@ -265,10 +253,6 @@ final class ContainerBuilder implements ContainerBuilderContract
      * Get a hash from the given value.
      *
      * @internal
-     *
-     * @param string $name
-     *
-     * @return string
      */
     public static function getHash(string $name): string
     {
@@ -308,8 +292,6 @@ final class ContainerBuilder implements ContainerBuilderContract
     /**
      * Returns the initialized conditionals.
      *
-     * @param mixed $value
-     *
      * @return array An array of uninitialized conditionals
      *
      * @internal
@@ -331,8 +313,6 @@ final class ContainerBuilder implements ContainerBuilderContract
 
     /**
      * Clear the container of all services and resolved instances.
-     *
-     * @return void
      */
     public function reset(): void
     {
@@ -634,8 +614,6 @@ final class ContainerBuilder implements ContainerBuilderContract
      * Compiles the container.
      *
      * @throws \LogicException
-     *
-     * @return void
      */
     public function compile(): void
     {
@@ -737,11 +715,6 @@ final class ContainerBuilder implements ContainerBuilderContract
      *
      * @internal
      *
-     * @param string $name
-     * @param mixed  $value
-     * @param int    $type
-     * @param bool   $throw
-     *
      * @throws \Viserio\Contract\Container\Exception\InvalidArgumentException
      *
      * @return ClosureDefinition|FactoryDefinition|IteratorDefinition|ObjectDefinition|UndefinedDefinition
@@ -789,9 +762,6 @@ final class ContainerBuilder implements ContainerBuilderContract
 
     /**
      * Check if the given name is not empty.
-     *
-     * @param string $abstract
-     * @param string $type
      *
      * @throws \Viserio\Contract\Container\Exception\InvalidArgumentException
      */

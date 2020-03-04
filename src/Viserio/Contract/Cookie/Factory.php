@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Cookie;
@@ -18,13 +18,6 @@ interface Factory
     /**
      * Create a new cookie instance.
      *
-     * @param string           $name
-     * @param null|string      $value
-     * @param int              $second
-     * @param null|string      $path
-     * @param null|string      $domain
-     * @param bool             $secure
-     * @param bool             $httpOnly
      * @param null|bool|string $sameSite
      *
      * @return \Viserio\Contract\Cookie\Cookie
@@ -43,12 +36,6 @@ interface Factory
     /**
      * Create a cookie that lasts "forever" (five years).
      *
-     * @param string           $name
-     * @param null|string      $value
-     * @param null|string      $path
-     * @param null|string      $domain
-     * @param bool             $secure
-     * @param bool             $httpOnly
      * @param null|bool|string $sameSite
      *
      * @return \Viserio\Contract\Cookie\Cookie
@@ -65,10 +52,6 @@ interface Factory
 
     /**
      * Expire the given cookie.
-     *
-     * @param string      $name
-     * @param null|string $path
-     * @param null|string $domain
      *
      * @return \Viserio\Contract\Cookie\Cookie
      */

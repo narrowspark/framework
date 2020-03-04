@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Provider\Twig\Command;
@@ -47,17 +47,11 @@ class LintCommand extends BaseLintCommand implements ProvidesDefaultConfigContra
 
     /**
      * Twig file extension name.
-     *
-     * @var string
      */
     private string $fileExtension;
 
     /**
      * Create a DebugCommand instance.
-     *
-     * @param \Twig\Environment             $environment
-     * @param \Viserio\Contract\View\Finder $finder
-     * @param string                        $fileExtension
      */
     public function __construct(Environment $environment, FinderContract $finder, string $fileExtension)
     {
@@ -157,12 +151,6 @@ class LintCommand extends BaseLintCommand implements ProvidesDefaultConfigContra
 
     /**
      * Gets an array of argument files to lint.
-     *
-     * @param array $paths
-     * @param array $searchDirectories
-     * @param array $files
-     *
-     * @return array
      */
     protected function findArgumentFiles(array $paths, array $searchDirectories, array $files): array
     {

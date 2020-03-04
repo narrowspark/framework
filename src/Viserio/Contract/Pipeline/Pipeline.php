@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Pipeline;
@@ -19,10 +19,6 @@ interface Pipeline
 {
     /**
      * Set the traveler object being sent on the pipeline.
-     *
-     * @param mixed $traveler
-     *
-     * @return self
      */
     public function send($traveler): self;
 
@@ -30,26 +26,16 @@ interface Pipeline
      * Set the array of stages.
      *
      * @param array|mixed $stages
-     *
-     * @return self
      */
     public function through($stages): self;
 
     /**
      * Run the pipeline with a final destination callback.
-     *
-     * @param Closure $destination
-     *
-     * @return mixed
      */
     public function then(Closure $destination);
 
     /**
      * Set the method to call on the stages.
-     *
-     * @param string $method
-     *
-     * @return self
      */
     public function via(string $method): self;
 }

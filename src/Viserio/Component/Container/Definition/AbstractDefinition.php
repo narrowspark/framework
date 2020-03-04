@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Container\Definition;
@@ -31,79 +31,56 @@ abstract class AbstractDefinition implements DefinitionContract, TagAwareDefinit
 
     /**
      * The service name.
-     *
-     * @var string
      */
     protected string $name;
 
     /**
      * The hash of this definition.
-     *
-     * @var string
      */
     protected string $hash;
 
     /**
      * The service value.
-     *
-     * @var mixed
      */
     protected $value;
 
     /**
      * Check if the service is lazy.
-     *
-     * @var bool
      */
     protected bool $isLazy = false;
 
     /**
      * Check if the service is public.
-     *
-     * @var bool
      */
     protected bool $isPublic = false;
 
     /**
      * Check if the service is a internal php class or function.
-     *
-     * @var bool
      */
     protected bool $isInternal = false;
 
     /**
      * The service type.
-     *
-     * @var int
      */
     protected int $type;
 
     /**
      * Check if the value is added on runtime.
-     *
-     * @var bool
      */
     protected bool $synthetic = false;
 
     /**
      * Returns the list of tags.
-     *
-     * @var array
      */
     protected array $tags = [];
 
     /**
      * List of definition conditions.
-     *
-     * @var array
      */
     protected array $conditions = [];
 
     /**
      * Extend this class to create new Definitions.
-     *
-     * @param string $name
-     * @param int    $type
      */
     public function __construct(string $name, int $type)
     {
@@ -132,8 +109,6 @@ abstract class AbstractDefinition implements DefinitionContract, TagAwareDefinit
 
     /**
      * Get the definition hash.
-     *
-     * @return string
      */
     public function getHash(): string
     {
@@ -178,8 +153,6 @@ abstract class AbstractDefinition implements DefinitionContract, TagAwareDefinit
      * Check if the service is is a internal php class or function.
      *
      * @internal
-     *
-     * @return bool
      */
     public function isInternal(): bool
     {
@@ -274,8 +247,6 @@ abstract class AbstractDefinition implements DefinitionContract, TagAwareDefinit
      * Set the service internal.
      *
      * @internal
-     *
-     * @param bool $bool
      *
      * @return static
      */

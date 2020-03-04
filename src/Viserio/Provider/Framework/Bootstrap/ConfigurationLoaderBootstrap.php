@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Provider\Framework\Bootstrap;
@@ -94,8 +94,6 @@ class ConfigurationLoaderBootstrap extends AbstractFilesLoaderBootstrap implemen
     }
 
     /**
-     * @param string $path
-     *
      * @return array<int|string, mixed>
      */
     protected static function load(string $path): array
@@ -106,10 +104,7 @@ class ConfigurationLoaderBootstrap extends AbstractFilesLoaderBootstrap implemen
     /**
      * Load parameter into container from a given path.
      *
-     * @param string                                                                                                    $path
      * @param \Viserio\Contract\Container\ContainerBuilder&\Viserio\Contract\Container\ServiceProvider\ContainerBuilder $containerBuilder
-     *
-     * @return void
      */
     private static function setParameters(string $path, $containerBuilder): void
     {

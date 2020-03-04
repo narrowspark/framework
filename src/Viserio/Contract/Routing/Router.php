@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Routing;
@@ -35,7 +35,6 @@ interface Router
     /**
      * Register a new GET route with the router.
      *
-     * @param string                    $uri
      * @param null|array|Closure|string $action
      *
      * @return \Viserio\Contract\Routing\Route
@@ -45,7 +44,6 @@ interface Router
     /**
      * Register a new POST route with the router.
      *
-     * @param string                    $uri
      * @param null|array|Closure|string $action
      *
      * @return \Viserio\Contract\Routing\Route
@@ -55,7 +53,6 @@ interface Router
     /**
      * Register a new PUT route with the router.
      *
-     * @param string                    $uri
      * @param null|array|Closure|string $action
      *
      * @return \Viserio\Contract\Routing\Route
@@ -65,7 +62,6 @@ interface Router
     /**
      * Register a new PATCH route with the router.
      *
-     * @param string                    $uri
      * @param null|array|Closure|string $action
      *
      * @return \Viserio\Contract\Routing\Route
@@ -75,7 +71,6 @@ interface Router
     /**
      * Register a new HEAD route with the router.
      *
-     * @param string                    $uri
      * @param null|array|Closure|string $action
      *
      * @return \Viserio\Contract\Routing\Route
@@ -85,7 +80,6 @@ interface Router
     /**
      * Register a new DELETE route with the router.
      *
-     * @param string                    $uri
      * @param null|array|Closure|string $action
      *
      * @return \Viserio\Contract\Routing\Route
@@ -95,7 +89,6 @@ interface Router
     /**
      * Register a new OPTIONS route with the router.
      *
-     * @param string                    $uri
      * @param null|array|Closure|string $action
      *
      * @return \Viserio\Contract\Routing\Route
@@ -105,7 +98,6 @@ interface Router
     /**
      * Register a new route responding to all verbs.
      *
-     * @param string                    $uri
      * @param null|array|Closure|string $action
      *
      * @return \Viserio\Contract\Routing\Route
@@ -116,7 +108,6 @@ interface Router
      * Register a new route with the given verbs.
      *
      * @param array|string              $methods
-     * @param string                    $uri
      * @param null|array|Closure|string $action
      *
      * @return \Viserio\Contract\Routing\Route
@@ -125,100 +116,63 @@ interface Router
 
     /**
      * Set a global where pattern on all routes.
-     *
-     * @param string $key
-     * @param string $pattern
-     *
-     * @return self
      */
     public function pattern(string $key, string $pattern): self;
 
     /**
      * Set a group of global where patterns on all routes.
-     *
-     * @param array $patterns
-     *
-     * @return self
      */
     public function patterns(array $patterns): self;
 
     /**
      * Get the global "where" patterns.
-     *
-     * @return array
      */
     public function getPatterns(): array;
 
     /**
      * Defines the supplied parameter name to be globally associated with the expression.
-     *
-     * @param string $parameterName
-     * @param string $expression
-     *
-     * @return self
      */
     public function addParameter(string $parameterName, string $expression): self;
 
     /**
      * Removes the global expression associated with the supplied parameter name.
-     *
-     * @param string $name
-     *
-     * @return void
      */
     public function removeParameter(string $name): void;
 
     /**
      * Get all global parameters for all routes.
-     *
-     * @return array
      */
     public function getParameters(): array;
 
     /**
      * Create a route group with shared attributes.
      *
-     * @param array          $attributes
      * @param Closure|string $routes
-     *
-     * @return void
      */
     public function group(array $attributes, $routes): void;
 
     /**
      * Merge the given array with the last group stack.
-     *
-     * @param array $new
-     *
-     * @return array
      */
     public function mergeWithLastGroup(array $new): array;
 
     /**
      * Get the suffix from the last group on the stack.
-     *
-     * @return string
      */
     public function getLastGroupSuffix(): string;
 
     /**
      * Get the prefix from the last group on the stack.
-     *
-     * @return string
      */
     public function getLastGroupPrefix(): string;
 
     /**
      * Determine if the router currently has a group stack.
-     *
-     * @return bool
      */
     public function hasGroupStack(): bool;
 
     /**
      * Get the current group stack for the router.
-     *
-     * @return array
      */
     public function getGroupStack(): array;
 
@@ -238,10 +192,6 @@ interface Router
 
     /**
      * Dispatch router for HTTP request.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     *
-     * @return \Psr\Http\Message\ResponseInterface
      */
     public function dispatch(ServerRequestInterface $request): ResponseInterface;
 
@@ -254,19 +204,11 @@ interface Router
 
     /**
      * Register an array of resource controllers.
-     *
-     * @param array $resources
-     *
-     * @return void
      */
     public function resources(array $resources): void;
 
     /**
      * Route a resource to a controller.
-     *
-     * @param string $name
-     * @param string $controller
-     * @param array  $options
      *
      * @return \Viserio\Contract\Routing\PendingResourceRegistration
      */

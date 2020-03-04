@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\HttpFoundation;
@@ -36,8 +36,6 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      * List of allowed bootstrap types.
      *
      * @internal
-     *
-     * @var array
      */
     protected static array $allowedBootstrapTypes = ['global', 'http'];
 
@@ -88,11 +86,6 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
 
     /**
      * Convert request into response.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface   $serverRequest
-     * @param null|\Viserio\Contract\Events\EventManager $events
-     *
-     * @return \Psr\Http\Message\ResponseInterface
      */
     protected function handleRequest(
         ServerRequestInterface $serverRequest,
@@ -119,10 +112,6 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
 
     /**
      * Report the exception to the exception handler.
-     *
-     * @param Throwable $exception
-     *
-     * @return void
      */
     protected function reportException(Throwable $exception): void
     {
@@ -135,11 +124,6 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
 
     /**
      * Render the exception to a response.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param Throwable                                $exception
-     *
-     * @return \Psr\Http\Message\ResponseInterface
      */
     protected function renderException(ServerRequestInterface $request, Throwable $exception): ResponseInterface
     {
@@ -154,10 +138,6 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
 
     /**
      * Send the given request through the middleware / router.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     *
-     * @return \Psr\Http\Message\ResponseInterface
      */
     protected function sendRequestThroughRouter(ServerRequestInterface $request): ResponseInterface
     {
@@ -179,11 +159,6 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
 
     /**
      * Pipes the request through given middleware and dispatch a response.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Viserio\Contract\Routing\Router         $router
-     *
-     * @return \Psr\Http\Message\ResponseInterface
      */
     protected function pipeRequestThroughMiddlewareAndRouter(
         ServerRequestInterface $request,

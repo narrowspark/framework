@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Container\Traits;
@@ -24,10 +24,6 @@ trait ReflectorHelpersTrait
 {
     /**
      * Returns the type of a reflector.
-     *
-     * @param ReflectionFunctionAbstract $reflectionFunction
-     * @param null|ReflectionParameter   $reflectionParameter
-     * @param bool                       $noBuiltin
      *
      * @return null|string The FQCN or builtin name of the type hint, or null when the type hint references an invalid self|parent context
      */
@@ -80,9 +76,6 @@ trait ReflectorHelpersTrait
      * Get the reflection arguments.
      *
      * @param ReflectionClass|ReflectionObject $reflection
-     * @param string                           $errorMessage
-     *
-     * @return null|ReflectionFunctionAbstract
      */
     protected function getConstructor(ReflectionClass $reflection, string $errorMessage): ?ReflectionFunctionAbstract
     {

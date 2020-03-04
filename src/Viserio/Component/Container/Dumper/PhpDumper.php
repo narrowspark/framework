@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Container\Dumper;
@@ -101,8 +101,6 @@ final class PhpDumper implements DumperContract
 
     /**
      * Cache for preload tag check.
-     *
-     * @var array
      */
     private static array $preloadCache = [];
 
@@ -132,29 +130,21 @@ final class PhpDumper implements DumperContract
 
     /**
      * List of preload classes.
-     *
-     * @var array
      */
     private array $preloadClasses = [];
 
     /**
      * Counted variable.
-     *
-     * @var int
      */
     private int $variableCount = 0;
 
     /**
      * Array space counter for multidimensional arrays.
-     *
-     * @var int
      */
     private int $arraySpaceCount = 2;
 
     /**
      * A check if the container should be a file container.
-     *
-     * @var bool
      */
     private bool $asFiles = false;
 
@@ -175,8 +165,6 @@ final class PhpDumper implements DumperContract
 
     /**
      * List of uninitialized references.
-     *
-     * @var array
      */
     private array $uninitializedServices = [];
 
@@ -191,8 +179,6 @@ final class PhpDumper implements DumperContract
 
     /**
      * Check if container should be dump in debug mode.
-     *
-     * @var bool
      */
     private bool $debug = false;
 
@@ -221,8 +207,6 @@ final class PhpDumper implements DumperContract
 
     /**
      * Tag that identifies the services that are always needed.
-     *
-     * @var string
      */
     private string $preloadTag;
 
@@ -234,10 +218,6 @@ final class PhpDumper implements DumperContract
 
     /**
      * Create a new PhpDumper instance.
-     *
-     * @param \Viserio\Contract\Container\ContainerBuilder $container
-     * @param null|\PhpParser\Parser                       $phpParser
-     * @param null|\PhpParser\PrettyPrinter\Standard       $printer
      */
     public function __construct(
         ContainerBuilderContract $container,
@@ -255,10 +235,6 @@ final class PhpDumper implements DumperContract
 
     /**
      * Sets the dumper to be used when dumping proxies in the generated container.
-     *
-     * @param \Viserio\Contract\Container\LazyProxy\Dumper $proxyDumper
-     *
-     * @return \Viserio\Contract\Container\Dumper\Dumper
      */
     public function setProxyDumper(LazyProxyContract $proxyDumper): DumperContract
     {
@@ -269,11 +245,6 @@ final class PhpDumper implements DumperContract
 
     /**
      * Helps to write generated container code to file.
-     *
-     * @param string $fileName
-     * @param string $fileContent
-     *
-     * @return bool
      */
     public static function dumpCodeToFile(string $fileName, string $fileContent): bool
     {
@@ -474,8 +445,6 @@ final class PhpDumper implements DumperContract
      * Remove any elements where the value is empty.
      *
      * @param array $array the array to walk
-     *
-     * @return array
      */
     private function removeEmptyValues(array &$array): array
     {
@@ -494,8 +463,6 @@ final class PhpDumper implements DumperContract
 
     /**
      * Compiling the parameters to a protected parameter variable for the container.
-     *
-     * @return string
      */
     private function addParameters(): string
     {
@@ -517,8 +484,6 @@ final class PhpDumper implements DumperContract
 
     /**
      * Compiling the dynamic parameters to a protected dynamic parameter variables for the container.
-     *
-     * @return string
      */
     private function addDynamicParameters(): string
     {
@@ -537,8 +502,6 @@ final class PhpDumper implements DumperContract
      * Check if value is a dynamic value.
      *
      * @param bool|float|int|string $value
-     *
-     * @return bool
      */
     private function isRuntimeParameterValue($value): bool
     {
@@ -551,8 +514,6 @@ final class PhpDumper implements DumperContract
      * @throws ReflectionException
      * @throws \Viserio\Contract\Container\Exception\NotFoundException
      * @throws \Viserio\Contract\Container\Exception\CircularDependencyException
-     *
-     * @return string
      */
     private function addServices(): string
     {
@@ -599,8 +560,6 @@ final class PhpDumper implements DumperContract
 
     /**
      * Compiling the deprecated aliases.
-     *
-     * @return string
      */
     private function addDeprecatedAliases(): string
     {
@@ -630,14 +589,11 @@ final class PhpDumper implements DumperContract
     /**
      * Dump method with doc header and inline services.
      *
-     * @param string                                                                                                                      $id
      * @param ClosureDefinitionContract|DefinitionContract|FactoryDefinitionContract|ObjectDefinitionContract|UndefinedDefinitionContract $definition
      *
      *@throws \Viserio\Contract\Container\Exception\CircularDependencyException
      * @throws \Viserio\Contract\Container\Exception\NotFoundException
      * @throws ReflectionException
-     *
-     * @return array
      */
     private function addService(string $id, $definition): array
     {
@@ -737,14 +693,9 @@ final class PhpDumper implements DumperContract
     }
 
     /**
-     * @param \Viserio\Contract\Container\Definition\Definition $definition
-     * @param bool                                              $isProxy
-     *
      *@throws \Viserio\Contract\Container\Exception\NotFoundException
      * @throws \Viserio\Contract\Container\Exception\CircularDependencyException
      * @throws ReflectionException
-     *
-     * @return string
      */
     private function addServiceInclude(DefinitionContract $definition, bool $isProxy): string
     {
@@ -797,14 +748,9 @@ final class PhpDumper implements DumperContract
     /**
      * Add a inline service to the code.
      *
-     * @param \Viserio\Contract\Container\Definition\Definition                                                                  $definition
      * @param null|\Viserio\Component\Container\Definition\ReferenceDefinition|\Viserio\Contract\Container\Definition\Definition $inlineDef
-     * @param bool                                                                                                               $forConstructor
-     * @param bool                                                                                                               $isProxy
      *
      *@throws \Viserio\Contract\Container\Exception\NotFoundException
-     *
-     * @return string
      */
     private function addInlineService(
         DefinitionContract $definition,
@@ -911,15 +857,9 @@ final class PhpDumper implements DumperContract
     /**
      * Add a new service instance to the code.
      *
-     * @param \Viserio\Contract\Container\Definition\Definition $definition
-     * @param bool                                              $isSimpleInstance
-     * @param bool                                              $isProxy
-     *
      *@throws \Viserio\Contract\Container\Exception\NotFoundException
      * @throws \Viserio\Contract\Container\Exception\InvalidArgumentException
      * @throws \Viserio\Contract\Container\Exception\RuntimeException
-     *
-     * @return string
      */
     private function addServiceInstance(
         DefinitionContract $definition,
@@ -974,11 +914,8 @@ final class PhpDumper implements DumperContract
 
     /**
      * @param object|string $class
-     * @param array         $lineage
      *
      * @throws ReflectionException
-     *
-     * @return void
      */
     private function collectLineage($class, array &$lineage): void
     {
@@ -1017,8 +954,6 @@ final class PhpDumper implements DumperContract
 
     /**
      * Add removed ids to the container.
-     *
-     * @return string
      */
     private function addRemovedIds(): string
     {
@@ -1057,8 +992,6 @@ final class PhpDumper implements DumperContract
 
     /**
      * Add dynamic processing of parameters to the container.
-     *
-     * @return string
      */
     private function addDynamicParameterMethods(): string
     {
@@ -1108,11 +1041,6 @@ final class PhpDumper implements DumperContract
         );
     }
 
-    /**
-     * @param string $directory
-     *
-     * @return void
-     */
     private static function createCompilationDirectory(string $directory): void
     {
         if (! \is_dir($directory) && ! \mkdir($directory, 0777, true) && ! \is_dir($directory)) {
@@ -1126,15 +1054,6 @@ final class PhpDumper implements DumperContract
 
     /**
      * Generate a container method.
-     *
-     * @param string      $uniqueMethodName
-     * @param string      $content
-     * @param null|string $return
-     * @param array       $parameters
-     * @param null|string $visibility
-     * @param bool        $static
-     *
-     * @return string
      */
     private function generateMethod(
         string $uniqueMethodName,
@@ -1168,13 +1087,7 @@ final class PhpDumper implements DumperContract
     /**
      * Returns the start of the class.
      *
-     * @param string      $class
-     * @param string      $parentClass
-     * @param null|string $namespace
-     *
      * @throws ReflectionException
-     *
-     * @return string
      */
     private function getClassStartForCompiledClass(string $class, string $parentClass, ?string $namespace): string
     {
@@ -1225,9 +1138,6 @@ final class PhpDumper implements DumperContract
         return $code . "{$eol}    }";
     }
 
-    /**
-     * @return string
-     */
     private function addMethodMap(): string
     {
         $definitions = $this->containerBuilder->getDefinitions();
@@ -1260,9 +1170,6 @@ final class PhpDumper implements DumperContract
         return \sprintf("{$eol}        \$this->methodMapping = [{$eol}%s        ];", \implode('', $methods));
     }
 
-    /**
-     * @return string
-     */
     private function addFileMap(): string
     {
         $definitions = $this->containerBuilder->getDefinitions();
@@ -1287,8 +1194,6 @@ final class PhpDumper implements DumperContract
 
     /**
      * Create the alias property for the container.
-     *
-     * @return string
      */
     private function addAliases(): string
     {
@@ -1316,8 +1221,6 @@ final class PhpDumper implements DumperContract
 
     /**
      * Create the uninitialized services list for the container.
-     *
-     * @return string
      */
     private function addUninitializedServices(): string
     {
@@ -1341,8 +1244,6 @@ final class PhpDumper implements DumperContract
 
     /**
      * Adds synthetic ids to the compiled container.
-     *
-     * @return string
      */
     private function addSyntheticIds(): string
     {
@@ -1377,8 +1278,6 @@ final class PhpDumper implements DumperContract
      * @throws \Viserio\Contract\Container\Exception\CircularDependencyException
      * @throws ReflectionException
      * @throws \Viserio\Contract\Container\Exception\NotFoundException
-     *
-     * @return string
      */
     private function addInlineRequires(): string
     {
@@ -1418,10 +1317,6 @@ final class PhpDumper implements DumperContract
 
     /**
      * Return the end of the class.
-     *
-     * @param null|string $namespace
-     *
-     * @return string
      */
     private function getClassEndForCompiledClass(?string $namespace): string
     {
@@ -1466,14 +1361,7 @@ final class PhpDumper implements DumperContract
     }
 
     /**
-     * @param \Viserio\Contract\Container\Definition\Definition $definition
-     * @param array                                             $arguments
-     * @param bool                                              $forConstructor
-     * @param bool                                              $isProxy
-     *
      *@throws \Viserio\Contract\Container\Exception\NotFoundException
-     *
-     * @return string
      */
     private function addInlineVariables(
         DefinitionContract $definition,
@@ -1500,14 +1388,7 @@ final class PhpDumper implements DumperContract
     /**
      * Add inline reference code.
      *
-     * @param \Viserio\Contract\Container\Definition\Definition $definition
-     * @param string                                            $targetId
-     * @param bool                                              $forConstructor
-     * @param bool                                              $isProxy
-     *
      *@throws \Viserio\Contract\Container\Exception\NotFoundException
-     *
-     * @return string
      */
     private function addInlineReference(
         DefinitionContract $definition,
@@ -1573,9 +1454,6 @@ final class PhpDumper implements DumperContract
     /**
      * @param string                                                  $sourceId
      * @param \Viserio\Contract\Container\ServiceReferenceGraphEdge[] $edges
-     * @param array                                                   $checkedNodes
-     * @param array                                                   $currentPath
-     * @param bool                                                    $byConstructor
      */
     private function analyzeCircularReferences(
         $sourceId,
@@ -1605,12 +1483,6 @@ final class PhpDumper implements DumperContract
         unset($currentPath[$sourceId]);
     }
 
-    /**
-     * @param string $sourceId
-     * @param array  $currentPath
-     * @param mixed  $byConstructor
-     * @param array  $subPath
-     */
     private function connectCircularReferences(
         string $sourceId,
         array &$currentPath,
@@ -1630,13 +1502,6 @@ final class PhpDumper implements DumperContract
         unset($currentPath[$sourceId], $subPath[$sourceId]);
     }
 
-    /**
-     * @param string $id
-     * @param array  $currentPath
-     * @param bool   $byConstructor
-     *
-     * @return void
-     */
     private function addCircularReferences(string $id, array $currentPath, bool $byConstructor): void
     {
         $currentPath[$id] = $byConstructor;
@@ -1664,12 +1529,7 @@ final class PhpDumper implements DumperContract
     }
 
     /**
-     * @param array                 $arguments
-     * @param null|SplObjectStorage $definitions
-     * @param array                 $calls
-     * @param bool                  $byConstructor
-     *
-     * @return SplObjectStorage
+     * @param bool $byConstructor
      */
     private function getDefinitionsFromArguments(
         array $arguments,
@@ -1738,14 +1598,7 @@ final class PhpDumper implements DumperContract
     }
 
     /**
-     * @param array  $options
-     * @param array  $proxyClasses
-     * @param string $code
-     * @param string $classEndCode
-     *
      * @throws ReflectionException
-     *
-     * @return array
      */
     private function generateFileContainer(
         array $options,
@@ -1844,8 +1697,6 @@ final class PhpDumper implements DumperContract
      * Generate proxy classes.
      *
      * @throws ReflectionException
-     *
-     * @return array
      */
     private function generateProxyClasses(): array
     {
@@ -1905,8 +1756,6 @@ final class PhpDumper implements DumperContract
     }
 
     /**
-     * @param array $services
-     *
      * @return null|Generator
      */
     private function generateServiceFiles(array $services): Generator
@@ -1941,11 +1790,6 @@ final class PhpDumper implements DumperContract
 
     /**
      * Compile know values to executable php code for the compiled container.
-     *
-     * @param mixed $value
-     * @param bool  $interpolate
-     *
-     * @return string
      */
     private function compileValue($value, bool $interpolate = true): string
     {
@@ -2137,10 +1981,6 @@ final class PhpDumper implements DumperContract
      * Compile class properties.
      *
      * @param \Viserio\Component\Container\Definition\ConditionDefinition|\Viserio\Contract\Container\Definition\FactoryDefinition|\Viserio\Contract\Container\Definition\ObjectDefinition|\Viserio\Contract\Container\Definition\UndefinedDefinition $definition
-     * @param string                                                                                                                                                                                                                                  $variableName
-     * @param bool                                                                                                                                                                                                                                    $isProxy
-     *
-     * @return string
      */
     private function addServiceProperties($definition, string $variableName = 'instance', bool $isProxy = false): string
     {
@@ -2178,13 +2018,8 @@ final class PhpDumper implements DumperContract
      * Compile object method calls to php code.
      *
      * @param \Viserio\Contract\Container\Definition\Definition&\Viserio\Contract\Container\Definition\MethodCallsAwareDefinition $definition
-     * @param string                                                                                                              $variableName
-     * @param null|string                                                                                                         $sharedNonLazyId
-     * @param bool                                                                                                                $isProxy
      *
      *@throws \Viserio\Contract\Container\Exception\NotFoundException
-     *
-     * @return string
      */
     private function addServiceMethodCalls(
         $definition,
@@ -2241,10 +2076,6 @@ final class PhpDumper implements DumperContract
 
     /**
      * Dumps a string to a literal (aka PHP Code) class value.
-     *
-     * @param string $class
-     *
-     * @return string
      */
     private function generateLiteralClass(string $class): string
     {
@@ -2255,12 +2086,6 @@ final class PhpDumper implements DumperContract
 
     /**
      * Insert string before specified position.
-     *
-     * @param string $string
-     * @param string $insertStr
-     * @param int    $position
-     *
-     * @return string
      */
     private function doInsertStringBeforePosition(string $string, string $insertStr, int $position): string
     {
@@ -2269,10 +2094,6 @@ final class PhpDumper implements DumperContract
 
     /**
      * Analyze a closure.
-     *
-     * @param Closure $closure
-     *
-     * @return string
      */
     private function compileClosure(Closure $closure): string
     {
@@ -2376,11 +2197,7 @@ final class PhpDumper implements DumperContract
     /**
      * Analyze a closure.
      *
-     * @param string $className
-     *
      * @throws ReflectionException
-     *
-     * @return array
      */
     private function compileAnonymousObject(string $className): array
     {
@@ -2469,9 +2286,6 @@ final class PhpDumper implements DumperContract
      * Applies missing namespaces to used classes.
      *
      * @param \PhpParser\Node\Expr\New_|\PhpParser\Node\Name|\PhpParser\Node\Stmt|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\TraitUse $node
-     * @param \Viserio\Component\Container\PhpParser\NodeVisitor\UsesCollectorNodeVisitor                                                        $usesCollectorNodeVisitor
-     *
-     * @return void
      */
     private function applyNamespaceToClass($node, UsesCollectorNodeVisitor $usesCollectorNodeVisitor): void
     {
@@ -2512,11 +2326,8 @@ final class PhpDumper implements DumperContract
      * Compile Iterator to a php string code.
      *
      * @param array|Traversable $values
-     * @param bool              $interpolate
      *
      * @throws \Viserio\Contract\Container\Exception\NotFoundException
-     *
-     * @return string
      */
     private function compileIterator($values, bool $interpolate = true): string
     {
@@ -2561,11 +2372,6 @@ final class PhpDumper implements DumperContract
 
     /**
      * Compile Factroy Definition to a php string code.
-     *
-     * @param \Viserio\Contract\Container\Definition\FactoryDefinition $value
-     * @param bool                                                     $interpolate
-     *
-     * @return string
      */
     private function compileFactoryDefinition(FactoryDefinitionContract $value, bool $interpolate = true): string
     {
@@ -2627,12 +2433,7 @@ final class PhpDumper implements DumperContract
     /**
      * Compile Reference Definition to a php string code.
      *
-     * @param \Viserio\Contract\Container\Definition\ReferenceDefinition $reference
-     * @param bool                                                       $interpolate
-     *
      * @throws \Viserio\Contract\Container\Exception\NotFoundException
-     *
-     * @return string
      */
     private function compileReferenceDefinition(
         ReferenceDefinitionContract $reference,
@@ -2694,10 +2495,6 @@ final class PhpDumper implements DumperContract
 
     /**
      * Check if the node is used only once.
-     *
-     * @param \Viserio\Contract\Container\ServiceReferenceGraphNode $node
-     *
-     * @return bool
      */
     private function isSingleUsePrivateNode(ServiceReferenceGraphNodeContract $node): bool
     {
@@ -2728,8 +2525,6 @@ final class PhpDumper implements DumperContract
 
     /**
      * Returns the next available variable name to use.
-     *
-     * @return string
      */
     private function getNextVariableName(): string
     {
@@ -2767,14 +2562,9 @@ final class PhpDumper implements DumperContract
     /**
      * Returns the service wrapped in a if condition.
      *
-     * @param mixed                                                                                                                                   $value
-     * @param string                                                                                                                                  $code
-     * @param bool                                                                                                                                    $isGenerator
      * @param null|ClosureDefinition|ConditionDefinition|DefinitionContract|FactoryDefinition|IteratorDefinition|ObjectDefinition|UndefinedDefinition $definition
      *
      *@throws \Viserio\Contract\Container\Exception\NotFoundException
-     *
-     * @return string
      */
     private function wrapServiceConditionals(
         $value,
@@ -2800,11 +2590,7 @@ final class PhpDumper implements DumperContract
     /**
      * Returns the condition for the if wrap.
      *
-     * @param mixed $value
-     *
      *@throws \Viserio\Contract\Container\Exception\NotFoundException
-     *
-     * @return string
      */
     private function getServiceConditionals($value): string
     {
@@ -2835,12 +2621,6 @@ final class PhpDumper implements DumperContract
 
     /**
      * Compile a array to php code.
-     *
-     * @param array $values
-     * @param bool  $skip
-     * @param bool  $interpolate
-     *
-     * @return string
      */
     private function compileArray(array $values, bool $skip = false, bool $interpolate = true): string
     {
@@ -2875,11 +2655,6 @@ final class PhpDumper implements DumperContract
         return \sprintf('[' . $eol . '%s' . $eol . \str_repeat('    ', $this->arraySpaceCount) . ']', \implode('' . $eol, $code));
     }
 
-    /**
-     * @param string $name
-     *
-     * @return string
-     */
     private function compileParameter(string $name): string
     {
         if ($this->containerBuilder->hasParameter($name)) {
@@ -2901,11 +2676,6 @@ final class PhpDumper implements DumperContract
 
     /**
      * Compile parameters array to php code.
-     *
-     * @param array  $values
-     * @param string $path
-     *
-     * @return string
      */
     private function compileParameters(array $values, string $path = ''): string
     {
@@ -2945,11 +2715,6 @@ final class PhpDumper implements DumperContract
         return \sprintf('[' . $eol . '%s' . $eol . \str_repeat('    ', $this->arraySpaceCount) . ']', \implode('' . $eol, $code));
     }
 
-    /**
-     * @param mixed $value
-     *
-     * @return string
-     */
     private function export($value): string
     {
         if (\is_int($value) || \is_float($value)) {
@@ -3057,11 +2822,7 @@ final class PhpDumper implements DumperContract
     /**
      * Wrap a code in a if condition.
      *
-     * @param string                                                                                                                                  $code
-     * @param string                                                                                                                                  $condition
      * @param null|ClosureDefinition|ConditionDefinition|DefinitionContract|FactoryDefinition|IteratorDefinition|ObjectDefinition|UndefinedDefinition $definition
-     *
-     * @return string
      */
     private function wrapInConditional(string $code, string $condition, $definition = null): string
     {
@@ -3086,13 +2847,8 @@ final class PhpDumper implements DumperContract
 
     /**
      * @param \Viserio\Contract\Container\Definition\Definition $inlineDef
-     * @param string                                            $name
-     * @param bool                                              $isProxy
-     * @param null|string                                       $sharedNonLazyId
      *
      *@throws \Viserio\Contract\Container\Exception\NotFoundException
-     *
-     * @return string
      */
     private function addDefinitionCondition($inlineDef, string $name, bool $isProxy, ?string $sharedNonLazyId): string
     {
@@ -3118,9 +2874,6 @@ final class PhpDumper implements DumperContract
                  */
                 private $isPublic;
 
-                /**
-                 * @param bool $isPublic
-                 */
                 public function __construct(bool $isPublic)
                 {
                     $this->isPublic = $isPublic;
@@ -3164,8 +2917,6 @@ final class PhpDumper implements DumperContract
      *
      *@throws \Viserio\Contract\Container\Exception\NotFoundException
      * @throws \Viserio\Contract\Container\Exception\CircularDependencyException
-     *
-     * @return bool
      */
     private function isTrivialInstance($definition): bool
     {
@@ -3220,10 +2971,6 @@ final class PhpDumper implements DumperContract
 
     /**
      * Validate the given dumper options.
-     *
-     * @param array $options
-     *
-     * @return void
      */
     private function validateDumperOptions(array $options): void
     {
@@ -3267,8 +3014,6 @@ final class PhpDumper implements DumperContract
      *
      *@throws \Viserio\Contract\Container\Exception\NotFoundException
      * @throws \Viserio\Contract\Container\Exception\CircularDependencyException
-     *
-     * @return string
      */
     private function getCorrectLineageClass($definition): string
     {
@@ -3300,8 +3045,6 @@ final class PhpDumper implements DumperContract
      * @param string $path
      *
      * @throws \LogicException
-     *
-     * @return string
      */
     private static function normalizePath($path): string
     {
@@ -3316,8 +3059,6 @@ final class PhpDumper implements DumperContract
      * Returns the found autoload file path or null if not.
      *
      * @throws ReflectionException
-     *
-     * @return null|string
      */
     private function getAutoloadFile(): ?string
     {
@@ -3355,14 +3096,7 @@ final class PhpDumper implements DumperContract
     /**
      * Generates a preload.php file for PHP 7.4.
      *
-     * @param array       $code
-     * @param null|string $autoloadFile
-     * @param string      $hash
-     * @param string      $class
-     *
      * @throws ReflectionException
-     *
-     * @return array
      */
     private function generatePreloadFile(array $code, ?string $autoloadFile, string $hash, string $class): array
     {
@@ -3400,13 +3134,6 @@ EOF;
 
     /**
      * Process parameters to find runtime parameters.
-     *
-     * @param mixed      $value
-     * @param null|array $runtimeParameters
-     * @param null|array $dynamicParameterMapper
-     * @param bool       $isDynamic
-     *
-     * @return void
      */
     private function processRuntimeParameters(
         $value,
@@ -3442,10 +3169,6 @@ EOF;
 
     /**
      * Check if the definition is a preload one.
-     *
-     * @param mixed $definition
-     *
-     * @return bool
      */
     private function isPreload($definition): bool
     {

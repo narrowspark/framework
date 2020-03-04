@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Translation;
@@ -17,15 +17,11 @@ interface TransChecker
 {
     /**
      * Get the default locale being used.
-     *
-     * @return string
      */
     public function getDefaultLocale(): string;
 
     /**
      * Set the locales that need to be checked.
-     *
-     * @param array $locales
      *
      * @return static
      */
@@ -33,15 +29,11 @@ interface TransChecker
 
     /**
      * Get the locales to check.
-     *
-     * @return array
      */
     public function getLocales(): array;
 
     /**
      * Set the locals that are ignored on the check.
-     *
-     * @param array $ignored
      *
      * @return static
      */
@@ -49,15 +41,11 @@ interface TransChecker
 
     /**
      * Get the ignored translation attributes.
-     *
-     * @return array
      */
     public function getIgnoredTranslations(): array;
 
     /**
      * Check the missing translations.
-     *
-     * @return array
      */
     public function check(): array;
 }

@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Bridge\Twig\NodeVisitor;
@@ -31,8 +31,6 @@ class Scope
 
     /**
      * Create a new Scope instance.
-     *
-     * @param null|self $parent
      */
     public function __construct(?self $parent = null)
     {
@@ -41,8 +39,6 @@ class Scope
 
     /**
      * Opens a new child scope.
-     *
-     * @return self
      */
     public function enter(): self
     {
@@ -51,8 +47,6 @@ class Scope
 
     /**
      * Closes current scope and returns parent one.
-     *
-     * @return null|self
      */
     public function leave(): ?self
     {
@@ -63,9 +57,6 @@ class Scope
 
     /**
      * Stores data into current scope.
-     *
-     * @param string $key
-     * @param mixed  $value
      *
      * @throws LogicException
      *
@@ -84,10 +75,6 @@ class Scope
 
     /**
      * Tests if a data is visible from current scope.
-     *
-     * @param string $key
-     *
-     * @return bool
      */
     public function has(string $key): bool
     {
@@ -104,11 +91,6 @@ class Scope
 
     /**
      * Returns data visible from current scope.
-     *
-     * @param string $key
-     * @param mixed  $default
-     *
-     * @return mixed
      */
     public function get(string $key, $default = null)
     {

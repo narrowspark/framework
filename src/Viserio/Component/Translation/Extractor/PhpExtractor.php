@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Translation\Extractor;
@@ -60,8 +60,6 @@ class PhpExtractor extends AbstractFileExtractor
 
     /**
      * {@inheritdoc}
-     *
-     * @param mixed $resource
      */
     public function extract($resource): array
     {
@@ -89,10 +87,6 @@ class PhpExtractor extends AbstractFileExtractor
 
     /**
      * Normalizes a token.
-     *
-     * @param mixed $token
-     *
-     * @return string
      */
     protected function normalizeToken($token): string
     {
@@ -105,10 +99,6 @@ class PhpExtractor extends AbstractFileExtractor
 
     /**
      * Extracts trans message from PHP tokens.
-     *
-     * @param array $tokens
-     *
-     * @return array
      */
     protected function parseTokens(array $tokens): array
     {
@@ -162,8 +152,6 @@ class PhpExtractor extends AbstractFileExtractor
      * @param string $file
      *
      * @throws \InvalidArgumentException
-     *
-     * @return bool
      */
     protected function canBeExtracted($file): bool
     {
@@ -172,8 +160,6 @@ class PhpExtractor extends AbstractFileExtractor
 
     /**
      * @param array|string $directory
-     *
-     * @return array
      */
     protected function extractFromDirectory($directory): array
     {
@@ -193,10 +179,6 @@ class PhpExtractor extends AbstractFileExtractor
 
     /**
      * Seeks to a non-whitespace token.
-     *
-     * @param Iterator $tokenIterator
-     *
-     * @return void
      */
     private function seekToNextRelevantToken(Iterator $tokenIterator): void
     {
@@ -209,11 +191,6 @@ class PhpExtractor extends AbstractFileExtractor
         }
     }
 
-    /**
-     * @param Iterator $tokenIterator
-     *
-     * @return void
-     */
     private function skipMethodArgument(Iterator $tokenIterator): void
     {
         $openBraces = 0;
@@ -238,10 +215,6 @@ class PhpExtractor extends AbstractFileExtractor
     /**
      * Extracts the message from the iterator while the tokens
      * match allowed message tokens.
-     *
-     * @param Iterator $tokenIterator
-     *
-     * @return string
      */
     private function getValue(Iterator $tokenIterator): string
     {
@@ -282,10 +255,6 @@ class PhpExtractor extends AbstractFileExtractor
 
     /**
      * Check if file is a php file.
-     *
-     * @param string $file
-     *
-     * @return bool
      */
     private function isPhpFile(string $file): bool
     {

@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Bus;
@@ -31,22 +31,16 @@ class Dispatcher implements DispatcherContract
 
     /**
      * The pipes to send commands through before dispatching.
-     *
-     * @var array
      */
     protected array $pipes = [];
 
     /**
      * All of the command-to-handler mappings.
-     *
-     * @var array
      */
     protected array $mappings = [];
 
     /**
      * The method to call on handler.
-     *
-     * @var string
      */
     protected string $method = 'handle';
 
@@ -59,8 +53,6 @@ class Dispatcher implements DispatcherContract
 
     /**
      * Create a new command dispatcher instance.
-     *
-     * @param \Psr\Container\ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
@@ -167,12 +159,7 @@ class Dispatcher implements DispatcherContract
     /**
      * Get the given handler segment for the given command.
      *
-     * @param object $command
-     * @param int    $segment
-     *
      * @throws \Viserio\Contract\Bus\Exception\InvalidArgumentException
-     *
-     * @return string
      */
     protected function inflectSegment(object $command, int $segment): string
     {

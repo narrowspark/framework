@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Config\Command;
@@ -21,11 +21,6 @@ use Viserio\Contract\Config\RequiresMandatoryConfig as RequiresMandatoryConfigCo
 
 class ConfigReader
 {
-    /**
-     * @param ReflectionClass $reflectionClass
-     *
-     * @return array
-     */
     public function readConfig(ReflectionClass $reflectionClass): array
     {
         $interfaces = \array_flip($reflectionClass->getInterfaceNames());
@@ -70,12 +65,6 @@ class ConfigReader
 
     /**
      * Read the mandatory config.
-     *
-     * @param string $className
-     * @param array  $dimensions
-     * @param array  $mandatoryConfig
-     *
-     * @return array
      */
     protected function readMandatoryOption(string $className, array $dimensions, array $mandatoryConfig): array
     {
@@ -96,11 +85,6 @@ class ConfigReader
 
     /**
      * Builds a multidimensional config array.
-     *
-     * @param array $dimensions
-     * @param mixed $value
-     *
-     * @return array
      */
     private function buildMultidimensionalArray(array $dimensions, $value): array
     {

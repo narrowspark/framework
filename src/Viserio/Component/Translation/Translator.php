@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Translation;
@@ -71,9 +71,6 @@ class Translator implements LoggerAwareInterface, TranslatorContract
 
     /**
      * Create new Translator instance.
-     *
-     * @param \Viserio\Contract\Translation\MessageCatalogue $catalogue
-     * @param \Viserio\Contract\Translation\MessageFormatter $formatter
      *
      * @throws InvalidArgumentException If a locale contains invalid characters
      */
@@ -171,8 +168,6 @@ class Translator implements LoggerAwareInterface, TranslatorContract
 
     /**
      * Get all collected messages.
-     *
-     * @return array
      */
     public function getCollectedMessages(): array
     {
@@ -181,10 +176,6 @@ class Translator implements LoggerAwareInterface, TranslatorContract
 
     /**
      * Apply helpers.
-     *
-     * @param string $translation
-     *
-     * @return mixed
      */
     protected function applyHelpers(string $translation)
     {
@@ -209,10 +200,6 @@ class Translator implements LoggerAwareInterface, TranslatorContract
 
     /**
      * Filter a helper from string.
-     *
-     * @param string $translation
-     *
-     * @return array
      */
     protected function filterHelpersFromString(string $translation): array
     {
@@ -241,10 +228,6 @@ class Translator implements LoggerAwareInterface, TranslatorContract
 
     /**
      * Apply filter on string.
-     *
-     * @param string $translation
-     *
-     * @return string
      */
     protected function applyFilters(string $translation): string
     {
@@ -261,11 +244,6 @@ class Translator implements LoggerAwareInterface, TranslatorContract
 
     /**
      * Logs for missing translations.
-     *
-     * @param string $id
-     * @param string $domain
-     *
-     * @return void
      */
     protected function log(string $id, string $domain): void
     {
@@ -290,14 +268,6 @@ class Translator implements LoggerAwareInterface, TranslatorContract
 
     /**
      * Collect messages about all translations.
-     *
-     * @param null|string $locale
-     * @param string      $domain
-     * @param string      $id
-     * @param string      $translation
-     * @param array       $parameters
-     *
-     * @return void
      */
     protected function collectMessage(
         ?string $locale,

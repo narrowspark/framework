@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Http\Stream;
@@ -23,8 +23,6 @@ abstract class AbstractStreamDecorator implements StreamInterface
 {
     /**
      * Create a new stream instance.
-     *
-     * @param \Psr\Http\Message\StreamInterface $stream
      */
     public function __construct(StreamInterface $stream)
     {
@@ -38,8 +36,6 @@ abstract class AbstractStreamDecorator implements StreamInterface
      * @param string $name name of the property (allows "stream" only)
      *
      * @throws \Viserio\Contract\Http\Exception\UnexpectedValueException
-     *
-     * @return StreamInterface
      */
     public function __get($name): StreamInterface
     {
@@ -76,8 +72,6 @@ abstract class AbstractStreamDecorator implements StreamInterface
      *
      * @param string                   $method Missing method name
      * @param array<int|string, mixed> $args   Method arguments
-     *
-     * @return mixed
      */
     public function __call(string $method, array $args)
     {
@@ -203,8 +197,6 @@ abstract class AbstractStreamDecorator implements StreamInterface
      * Implement in subclasses to dynamically create streams when requested.
      *
      * @throws \Viserio\Contract\Http\Exception\BadMethodCallException
-     *
-     * @return \Psr\Http\Message\StreamInterface
      */
     protected function createStream(): StreamInterface
     {

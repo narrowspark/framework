@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Profiler;
@@ -49,11 +49,6 @@ class TemplateManager implements RenderableContract
 
     /**
      * Create a new template manager instance.
-     *
-     * @param array  $collectors
-     * @param string $templatePath
-     * @param string $token
-     * @param array  $icons
      */
     public function __construct(array $collectors, string $templatePath, string $token, array $icons = [])
     {
@@ -65,10 +60,6 @@ class TemplateManager implements RenderableContract
 
     /**
      * Escapes a string for output in an HTML document.
-     *
-     * @param string $raw
-     *
-     * @return string
      */
     public static function escape(string $raw): string
     {
@@ -117,8 +108,6 @@ class TemplateManager implements RenderableContract
 
     /**
      * Sort all datas from collectors.
-     *
-     * @return array
      */
     public function getSortedData(): array
     {

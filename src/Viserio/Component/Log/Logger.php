@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Log;
@@ -47,8 +47,6 @@ class Logger extends LogLevel implements PsrLoggerInterface
 
     /**
      * Create a new log writer instance.
-     *
-     * @param \Monolog\Logger $logger
      */
     public function __construct(Monolog $logger)
     {
@@ -58,12 +56,7 @@ class Logger extends LogLevel implements PsrLoggerInterface
     /**
      * Call Monolog with the given method and parameters.
      *
-     * @param string $method
-     * @param array  $parameters
-     *
      * @throws \Psr\Log\InvalidArgumentException
-     *
-     * @return mixed
      */
     public function __call(string $method, array $parameters)
     {
@@ -73,13 +66,7 @@ class Logger extends LogLevel implements PsrLoggerInterface
     /**
      * Logs with an arbitrary level.
      *
-     * @param mixed $level
-     * @param mixed $message
-     * @param array $context
-     *
      * @throws \Psr\Log\InvalidArgumentException
-     *
-     * @return void
      */
     public function log($level, $message, array $context = []): void
     {
@@ -103,8 +90,6 @@ class Logger extends LogLevel implements PsrLoggerInterface
 
     /**
      * Get the underlying Monolog instance.
-     *
-     * @return \Monolog\Logger
      */
     public function getMonolog(): Monolog
     {
@@ -113,8 +98,6 @@ class Logger extends LogLevel implements PsrLoggerInterface
 
     /**
      * Format the parameters for the logger.
-     *
-     * @param mixed $message
      *
      * @return null|bool|float|int|object|string
      */

@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Container;
@@ -57,36 +57,26 @@ final class PipelineConfig
 
     /**
      * List of the after removing pipelines.
-     *
-     * @var array
      */
     private array $afterRemovingPipelines = [];
 
     /**
      * List of the before optimization pipelines.
-     *
-     * @var array
      */
     private array $beforeOptimizationPipelines = [];
 
     /**
      * List of the before removing pipelines.
-     *
-     * @var array
      */
     private array $beforeRemovingPipelines = [];
 
     /**
      * List of the optimization pipelines.
-     *
-     * @var array
      */
     private array $optimizationPipelines = [];
 
     /**
      * List of the removing pipelines.
-     *
-     * @var array
      */
     private array $removingPipelines = [];
 
@@ -146,8 +136,6 @@ final class PipelineConfig
      * Sets the AfterRemoving pipelines.
      *
      * @param \Viserio\Contract\Container\Pipe[] $pipelines
-     *
-     * @return void
      */
     public function setAfterRemovingPipelines(array $pipelines): void
     {
@@ -168,8 +156,6 @@ final class PipelineConfig
      * Sets the BeforeOptimization pipelines.
      *
      * @param \Viserio\Contract\Container\Pipe[] $pipelines
-     *
-     * @return void
      */
     public function setBeforeOptimizationPipelines(array $pipelines): void
     {
@@ -190,8 +176,6 @@ final class PipelineConfig
      * Sets the BeforeRemoving pipelines.
      *
      * @param \Viserio\Contract\Container\Pipe[] $pipelines
-     *
-     * @return void
      */
     public function setBeforeRemovingPipelines(array $pipelines): void
     {
@@ -212,8 +196,6 @@ final class PipelineConfig
      * Sets the Optimization pipelines.
      *
      * @param \Viserio\Contract\Container\Pipe[] $pipelines
-     *
-     * @return void
      */
     public function setOptimizationPipelines(array $pipelines): void
     {
@@ -234,8 +216,6 @@ final class PipelineConfig
      * Sets the Removing pipelines.
      *
      * @param \Viserio\Contract\Container\Pipe[] $pipelines
-     *
-     * @return void
      */
     public function setRemovingPipelines(array $pipelines): void
     {
@@ -250,8 +230,6 @@ final class PipelineConfig
      * @param int                              $priority Used to sort the pipelines
      *
      * @throws \Viserio\Contract\Container\Exception\InvalidArgumentException when a pipeline type doesn't exist
-     *
-     * @return void
      */
     public function addPipe(
         PipeContract $pipeline,
@@ -299,8 +277,6 @@ final class PipelineConfig
 
     /**
      * Sort pipelines by priority.
-     *
-     * @param array $pipelines
      *
      * @return \Viserio\Contract\Container\Pipe[]
      */

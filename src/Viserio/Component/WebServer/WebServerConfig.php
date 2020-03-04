@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\WebServer;
@@ -34,10 +34,6 @@ final class WebServerConfig implements ProvidesDefaultConfigContract, RequiresCo
 
     /**
      * Create a new WebServerOptions instance.
-     *
-     * @param string                                             $documentRoot
-     * @param string                                             $environment
-     * @param \Viserio\Component\Console\Command\AbstractCommand $command
      */
     public function __construct(string $documentRoot, string $environment, AbstractCommand $command)
     {
@@ -124,8 +120,6 @@ final class WebServerConfig implements ProvidesDefaultConfigContract, RequiresCo
 
     /**
      * Return the path to the document folder, where you can find the index.php.
-     *
-     * @return string
      */
     public function getDocumentRoot(): string
     {
@@ -134,8 +128,6 @@ final class WebServerConfig implements ProvidesDefaultConfigContract, RequiresCo
 
     /**
      * Return the environment.
-     *
-     * @return string
      */
     public function getEnv(): string
     {
@@ -144,8 +136,6 @@ final class WebServerConfig implements ProvidesDefaultConfigContract, RequiresCo
 
     /**
      * Returns the router file.
-     *
-     * @return string
      */
     public function getRouter(): string
     {
@@ -154,8 +144,6 @@ final class WebServerConfig implements ProvidesDefaultConfigContract, RequiresCo
 
     /**
      * Returns the given host name or the default 127.0.0.1.
-     *
-     * @return string
      */
     public function getHostname(): string
     {
@@ -164,8 +152,6 @@ final class WebServerConfig implements ProvidesDefaultConfigContract, RequiresCo
 
     /**
      * Returns the given port or a found free port between 8000 and 8100.
-     *
-     * @return string
      */
     public function getPort(): string
     {
@@ -174,8 +160,6 @@ final class WebServerConfig implements ProvidesDefaultConfigContract, RequiresCo
 
     /**
      * Return the full address of the hostname:port.
-     *
-     * @return string
      */
     public function getAddress(): string
     {
@@ -184,8 +168,6 @@ final class WebServerConfig implements ProvidesDefaultConfigContract, RequiresCo
 
     /**
      * Check if xdebug should be used.
-     *
-     * @return bool
      */
     public function hasXdebug(): bool
     {
@@ -194,8 +176,6 @@ final class WebServerConfig implements ProvidesDefaultConfigContract, RequiresCo
 
     /**
      * Return a path to the pid file it it was given.
-     *
-     * @return null|string
      */
     public function getPidFile(): ?string
     {
@@ -204,8 +184,6 @@ final class WebServerConfig implements ProvidesDefaultConfigContract, RequiresCo
 
     /**
      * Contains resolved hostname if available.
-     *
-     * @return null|string
      */
     public function getDisplayAddress(): ?string
     {
@@ -223,12 +201,7 @@ final class WebServerConfig implements ProvidesDefaultConfigContract, RequiresCo
     /**
      * Finds the front controller in root path.
      *
-     * @param string $documentRoot
-     * @param string $env
-     *
      * @throws \Viserio\Contract\WebServer\Exception\InvalidArgumentException
-     *
-     * @return string
      */
     private static function findFrontController(string $documentRoot, string $env): string
     {
@@ -246,11 +219,7 @@ final class WebServerConfig implements ProvidesDefaultConfigContract, RequiresCo
     /**
      * Finds a host and port.
      *
-     * @param array $config
-     *
      * @throws \Viserio\Contract\WebServer\Exception\InvalidArgumentException
-     *
-     * @return array
      */
     private static function findHostnameAndPort(array $config): array
     {
@@ -274,10 +243,6 @@ final class WebServerConfig implements ProvidesDefaultConfigContract, RequiresCo
 
     /**
      * Searching for the port between 8000 and 8100.
-     *
-     * @param string $host
-     *
-     * @return string
      */
     private static function findBestPort(string $host): string
     {

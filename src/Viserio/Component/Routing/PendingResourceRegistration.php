@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Routing;
@@ -55,9 +55,6 @@ class PendingResourceRegistration implements PendingResourceRegistrationContract
      * Create a new pending resource registration instance.
      *
      * @param \Viserio\Component\Routing\ResourceRegistrar $registrar
-     * @param string                                       $name
-     * @param string                                       $controller
-     * @param array                                        $options
      */
     public function __construct(ResourceRegistrar $registrar, string $name, string $controller, array $options)
     {
@@ -169,8 +166,6 @@ class PendingResourceRegistration implements PendingResourceRegistrationContract
      *
      * @throws RuntimeException if wrong input is given
      * @throws LogicException   if \Psr\Http\Server\MiddlewareInterface was not found
-     *
-     * @return void
      */
     private function validateGivenMiddleware($middleware): void
     {

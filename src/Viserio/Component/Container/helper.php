@@ -3,21 +3,17 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 if (! \function_exists('is_class')) {
     /**
      * Verify that the contents of a variable is a class.
-     *
-     * @param mixed $value
-     *
-     * @return bool
      */
     function is_class($value): bool
     {
@@ -28,10 +24,6 @@ if (! \function_exists('is_class')) {
 if (! \function_exists('is_anonymous_class')) {
     /**
      * Verify that the contents of a variable is a class.
-     *
-     * @param mixed $value
-     *
-     * @return bool
      */
     function is_anonymous_class($value): bool
     {
@@ -42,10 +34,6 @@ if (! \function_exists('is_anonymous_class')) {
 if (! \function_exists('is_invokable')) {
     /**
      * Verify that the contents of a variable can be called as a function.
-     *
-     * @param mixed $value
-     *
-     * @return bool
      */
     function is_invokable($value): bool
     {
@@ -58,8 +46,6 @@ if (! \function_exists('is_method')) {
      * Verify that the contents of a variable is a class method.
      *
      * @param array<object|string, string>|string $value
-     *
-     * @return bool
      */
     function is_method($value): bool
     {
@@ -70,10 +56,6 @@ if (! \function_exists('is_method')) {
 if (! \function_exists('is_static_method')) {
     /**
      * Verify that the contents of a variable is a class static method.
-     *
-     * @param mixed $value
-     *
-     * @return bool
      */
     function is_static_method($value): bool
     {
@@ -84,10 +66,6 @@ if (! \function_exists('is_static_method')) {
 if (! \function_exists('is_function')) {
     /**
      * Verify that the contents of a variable is a function.
-     *
-     * @param mixed $value
-     *
-     * @return bool
      */
     function is_function($value): bool
     {

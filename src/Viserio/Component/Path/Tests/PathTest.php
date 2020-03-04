@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Path\Tests;
@@ -268,9 +268,6 @@ final class PathTest extends TestCase
 
     /**
      * @dataProvider provideCanonicalizeCases
-     *
-     * @param string $path
-     * @param string $canonicalized
      */
     public function testCanonicalize(string $path, string $canonicalized): void
     {
@@ -365,9 +362,6 @@ final class PathTest extends TestCase
 
     /**
      * @dataProvider provideGetDirectoryCases
-     *
-     * @param string $path
-     * @param string $directory
      */
     public function testGetDirectory(string $path, string $directory): void
     {
@@ -418,10 +412,6 @@ final class PathTest extends TestCase
 
     /**
      * @dataProvider provideGetFilenameWithoutExtensionCases
-     *
-     * @param string      $path
-     * @param null|string $extension
-     * @param string      $filename
      */
     public function testGetFilenameWithoutExtension(string $path, ?string $extension, string $filename): void
     {
@@ -458,10 +448,6 @@ final class PathTest extends TestCase
 
     /**
      * @dataProvider provideGetExtensionCases
-     *
-     * @param string $path
-     * @param bool   $forceLowerCase
-     * @param string $extension
      */
     public function testGetExtension(string $path, bool $forceLowerCase, string $extension): void
     {
@@ -533,10 +519,7 @@ final class PathTest extends TestCase
     /**
      * @dataProvider provideHasExtensionCases
      *
-     * @param bool                 $hasExtension
-     * @param string               $path
      * @param null|string|string[] $extension
-     * @param bool                 $ignoreCase
      */
     public function testHasExtension(bool $hasExtension, string $path, $extension, bool $ignoreCase): void
     {
@@ -575,10 +558,6 @@ final class PathTest extends TestCase
 
     /**
      * @dataProvider provideChangeExtensionCases
-     *
-     * @param string $path
-     * @param string $extension
-     * @param string $pathExpected
      */
     public function testChangeExtension(string $path, string $extension, string $pathExpected): void
     {
@@ -623,9 +602,6 @@ final class PathTest extends TestCase
 
     /**
      * @dataProvider provideIsAbsolutePathTests
-     *
-     * @param string $path
-     * @param bool   $isAbsolute
      */
     public function testIsAbsolute(string $path, bool $isAbsolute): void
     {
@@ -634,9 +610,6 @@ final class PathTest extends TestCase
 
     /**
      * @dataProvider provideIsAbsolutePathTests
-     *
-     * @param string $path
-     * @param bool   $isAbsolute
      */
     public function testIsRelative(string $path, bool $isAbsolute): void
     {
@@ -685,9 +658,6 @@ final class PathTest extends TestCase
 
     /**
      * @dataProvider provideGetRootCases
-     *
-     * @param string $path
-     * @param string $root
      */
     public function testGetRoot(string $path, string $root): void
     {
@@ -830,10 +800,6 @@ final class PathTest extends TestCase
 
     /**
      * @dataProvider provideMakeAbsoluteCases
-     *
-     * @param string $relativePath
-     * @param string $basePath
-     * @param string $absolutePath
      */
     public function testMakeAbsolute(string $relativePath, string $basePath, string $absolutePath): void
     {
@@ -899,9 +865,6 @@ final class PathTest extends TestCase
 
     /**
      * @dataProvider provideAbsolutePathsWithDifferentRoots
-     *
-     * @param string $basePath
-     * @param string $absolutePath
      */
     public function testMakeAbsoluteDoesNotFailIfDifferentRoot(string $basePath, string $absolutePath): void
     {
@@ -1054,10 +1017,6 @@ final class PathTest extends TestCase
 
     /**
      * @dataProvider provideMakeRelativeCases
-     *
-     * @param string $absolutePath
-     * @param string $basePath
-     * @param string $relativePath
      */
     public function testMakeRelative(string $absolutePath, string $basePath, string $relativePath): void
     {
@@ -1081,9 +1040,6 @@ final class PathTest extends TestCase
 
     /**
      * @dataProvider provideAbsolutePathsWithDifferentRoots
-     *
-     * @param string $absolutePath
-     * @param string $basePath
      */
     public function testMakeRelativeFailsIfDifferentRoot(string $absolutePath, string $basePath): void
     {
@@ -1110,9 +1066,6 @@ final class PathTest extends TestCase
 
     /**
      * @dataProvider provideIsLocalCases
-     *
-     * @param string $path
-     * @param bool   $isLocal
      */
     public function testIsLocal(string $path, bool $isLocal): void
     {
@@ -1424,10 +1377,6 @@ final class PathTest extends TestCase
 
     /**
      * @dataProvider provideIsBasePathCases
-     *
-     * @param string $path
-     * @param string $ofPath
-     * @param bool   $result
      */
     public function testIsBasePath(string $path, string $ofPath, bool $result): void
     {
@@ -1564,7 +1513,6 @@ final class PathTest extends TestCase
      * @dataProvider provideJoinCases
      *
      * @param array<int, string> $paths
-     * @param string             $result
      */
     public function testJoin(array $paths, string $result): void
     {
@@ -1641,9 +1589,6 @@ final class PathTest extends TestCase
 
     /**
      * @dataProvider provideCanonicalizeWithHomeForUnixCases
-     *
-     * @param string $path
-     * @param string $canonicalized
      */
     public function testCanonicalizeWithHomeForUnix(string $path, string $canonicalized): void
     {
@@ -1652,9 +1597,6 @@ final class PathTest extends TestCase
 
     /**
      * @dataProvider provideCanonicalizeWithHomeForWindowsCases
-     *
-     * @param mixed $path
-     * @param mixed $canonicalized
      */
     public function testCanonicalizeWithHomeForWindows($path, $canonicalized): void
     {

@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Mail\Transport;
@@ -34,9 +34,6 @@ class MandrillTransport extends AbstractTransport
 
     /**
      * Create a new Mandrill transport instance.
-     *
-     * @param \GuzzleHttp\Client $client
-     * @param string             $key
      */
     public function __construct(Client $client, string $key)
     {
@@ -46,8 +43,6 @@ class MandrillTransport extends AbstractTransport
 
     /**
      * Get the API key being used by the transport.
-     *
-     * @return string
      */
     public function getKey(): string
     {
@@ -56,8 +51,6 @@ class MandrillTransport extends AbstractTransport
 
     /**
      * Set the API key being used by the transport.
-     *
-     * @param string $key
      *
      * @return $this
      */
@@ -104,10 +97,6 @@ class MandrillTransport extends AbstractTransport
     /**
      * Get all the addresses this email should be sent to,
      * including "to", "cc" and "bcc" addresses.
-     *
-     * @param Swift_Mime_SimpleMessage $message
-     *
-     * @return array
      */
     protected function getToAddresses(Swift_Mime_SimpleMessage $message): array
     {
