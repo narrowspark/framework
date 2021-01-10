@@ -40,7 +40,6 @@
         "viserio/support": "^1.0@dev"
     },
     "provide": {
-        "psr/http-message": "^1.0.0",
         "psr/http-message-implementation": "^1.0",
         "psr/log-implementation": "^1.0"
     },
