@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Container\Tests\Unit\PhpParser\NodeVisitor;
@@ -43,9 +43,6 @@ final class MagicConstantVisitorTest extends MockeryTestCase
 
     /**
      * @dataProvider provideDataFromClosureLocationGetsUsedCases
-     *
-     * @param string $original
-     * @param string $result
      */
     public function testDataFromClosureLocationGetsUsed(string $original, string $result): void
     {
@@ -68,10 +65,6 @@ final class MagicConstantVisitorTest extends MockeryTestCase
     }
 
     /**
-     * @param string      $class
-     * @param null|string $type
-     * @param null|string $attribute
-     *
      * @return \Mockery\MockInterface|\PhpParser\Node\Scalar\MagicConst
      */
     public function getMockParserNode(string $class, ?string $type = null, ?string $attribute = null)

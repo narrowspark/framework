@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Config\Tests\Unit\Traits;
@@ -17,13 +17,13 @@ use ArrayIterator;
 use Exception;
 use IteratorIterator;
 use RuntimeException;
-use Viserio\Component\Config\Tests\Fixture\ConnectionComponentDefaultOptionsWithMandatoryConfigurationAndStringValidator;
-use Viserio\Component\Config\Tests\Fixture\ConnectionDefaultOptionsWithMandatoryConfigurationAndStringValidator;
-use Viserio\Component\Config\Tests\Fixture\ConnectionDefaultOptionsWithMandatoryConfigurationAndTwoLevelArrayAndTwoValidator;
-use Viserio\Component\Config\Tests\Fixture\ConnectionDefaultOptionsWithMandatoryConfigurationAndTwoLevelArrayValidator;
-use Viserio\Component\Config\Tests\Fixture\ConnectionDefaultOptionsWithMandatoryConfigurationAndTwoValidator;
-use Viserio\Component\Config\Tests\Fixture\ConnectionDefaultOptionsWithMandatoryConfigurationAndValidator;
-use Viserio\Component\Config\Tests\Fixture\ConnectionDefaultOptionsWithMandatoryNullValueConfigurationAndStringValidator;
+use Viserio\Component\Config\Tests\Fixture\ConnectionComponentDefaultConfigWithMandatoryConfigurationAndStringValidator;
+use Viserio\Component\Config\Tests\Fixture\ConnectionDefaultConfigWithMandatoryConfigurationAndStringValidator;
+use Viserio\Component\Config\Tests\Fixture\ConnectionDefaultConfigWithMandatoryConfigurationAndTwoLevelArrayAndTwoValidator;
+use Viserio\Component\Config\Tests\Fixture\ConnectionDefaultConfigWithMandatoryConfigurationAndTwoLevelArrayValidator;
+use Viserio\Component\Config\Tests\Fixture\ConnectionDefaultConfigWithMandatoryConfigurationAndTwoValidator;
+use Viserio\Component\Config\Tests\Fixture\ConnectionDefaultConfigWithMandatoryConfigurationAndValidator;
+use Viserio\Component\Config\Tests\Fixture\ConnectionDefaultConfigWithMandatoryNullValueConfigurationAndStringValidator;
 use Viserio\Component\Config\Tests\Fixture\DontValidatedDefaultConfigurationFixture;
 use Viserio\Component\Config\Tests\Fixture\InvalidValidatedComponentConfigurationFixture;
 use Viserio\Component\Config\Tests\Fixture\ValidatedComponentConfigurationFixture;
@@ -64,7 +64,7 @@ trait ConfigurationValidatorIteratorTestTrait
         $this->expectExceptionMessage('need to be a string');
 
         $this->getConfigurationIterator(
-            ConnectionDefaultOptionsWithMandatoryConfigurationAndValidator::class,
+            ConnectionDefaultConfigWithMandatoryConfigurationAndValidator::class,
             new ArrayIterator(['driverClass' => 1])
         );
     }
@@ -75,7 +75,7 @@ trait ConfigurationValidatorIteratorTestTrait
         $this->expectExceptionMessage('need to be a string');
 
         $this->getConfigurationIterator(
-            ConnectionDefaultOptionsWithMandatoryConfigurationAndTwoValidator::class,
+            ConnectionDefaultConfigWithMandatoryConfigurationAndTwoValidator::class,
             new ArrayIterator(['driverClass' => 'foo', 'test1' => 9000])
         );
     }
@@ -86,7 +86,7 @@ trait ConfigurationValidatorIteratorTestTrait
         $this->expectExceptionMessage('need to be a string');
 
         $this->getConfigurationIterator(
-            ConnectionDefaultOptionsWithMandatoryConfigurationAndTwoLevelArrayValidator::class,
+            ConnectionDefaultConfigWithMandatoryConfigurationAndTwoLevelArrayValidator::class,
             new ArrayIterator(['driverClass' => ['connection' => 1]])
         );
     }
@@ -97,7 +97,7 @@ trait ConfigurationValidatorIteratorTestTrait
         $this->expectExceptionMessage('need to be a string');
 
         $this->getConfigurationIterator(
-            ConnectionDefaultOptionsWithMandatoryConfigurationAndTwoLevelArrayAndTwoValidator::class,
+            ConnectionDefaultConfigWithMandatoryConfigurationAndTwoLevelArrayAndTwoValidator::class,
             new ArrayIterator([
                 'driverClass' => [
                     'connection' => 'foo',
@@ -112,10 +112,10 @@ trait ConfigurationValidatorIteratorTestTrait
     public function testValidatorResolvingShouldCallDefaultStringValidator(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid configuration value provided for [driverClass]; Expected [string], but got [integer], in [' . ConnectionDefaultOptionsWithMandatoryConfigurationAndStringValidator::class . '].');
+        $this->expectExceptionMessage('Invalid configuration value provided for [driverClass]; Expected [string], but got [integer], in [' . ConnectionDefaultConfigWithMandatoryConfigurationAndStringValidator::class . '].');
 
         $this->getConfigurationIterator(
-            ConnectionDefaultOptionsWithMandatoryConfigurationAndStringValidator::class,
+            ConnectionDefaultConfigWithMandatoryConfigurationAndStringValidator::class,
             new ArrayIterator(['driverClass' => 1])
         );
     }
@@ -140,10 +140,10 @@ trait ConfigurationValidatorIteratorTestTrait
     public function testValidatorResolvingShouldCallStringValidatorWithSupportedDefaultConfigurationAndMandatoryConfiguration(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid configuration value provided for [driverClass]; Expected [string], but got [integer], in [Viserio\Component\Config\Tests\Fixture\ConnectionComponentDefaultOptionsWithMandatoryConfigurationAndStringValidator].');
+        $this->expectExceptionMessage('Invalid configuration value provided for [driverClass]; Expected [string], but got [integer], in [Viserio\Component\Config\Tests\Fixture\ConnectionComponentDefaultConfigWithMandatoryConfigurationAndStringValidator].');
 
         $this->getConfigurationIterator(
-            ConnectionComponentDefaultOptionsWithMandatoryConfigurationAndStringValidator::class,
+            ConnectionComponentDefaultConfigWithMandatoryConfigurationAndStringValidator::class,
             new ArrayIterator([
                 'vendor' => [
                     'package' => [
@@ -289,10 +289,10 @@ trait ConfigurationValidatorIteratorTestTrait
     public function testValidatorResolvingShouldThrowExceptionOnNullValueIfStringIsRequired(): void
     {
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Invalid configuration value provided for [driverClass]; Expected [string], but got [NULL], in [Viserio\Component\Config\Tests\Fixture\ConnectionDefaultOptionsWithMandatoryNullValueConfigurationAndStringValidator].');
+        $this->expectExceptionMessage('Invalid configuration value provided for [driverClass]; Expected [string], but got [NULL], in [Viserio\Component\Config\Tests\Fixture\ConnectionDefaultConfigWithMandatoryNullValueConfigurationAndStringValidator].');
 
         $this->getConfigurationIterator(
-            ConnectionDefaultOptionsWithMandatoryNullValueConfigurationAndStringValidator::class,
+            ConnectionDefaultConfigWithMandatoryNullValueConfigurationAndStringValidator::class,
             new ArrayIterator([
                 'driverClass' => null,
             ])

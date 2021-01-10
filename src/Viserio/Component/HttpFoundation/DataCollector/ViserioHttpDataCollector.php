@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\HttpFoundation\DataCollector;
@@ -71,9 +71,6 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements AssetAwa
 
     /**
      * Create a new viserio request and response data collector instance.
-     *
-     * @param \Viserio\Contract\Routing\Router $router
-     * @param string                           $routeDirPath
      */
     public function __construct(RouterContract $router, string $routeDirPath)
     {
@@ -260,11 +257,6 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements AssetAwa
 
     /**
      * Prepare request and response cookie infos and create a cookie tab.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
-     * @param \Psr\Http\Message\ResponseInterface      $response
-     *
-     * @return array
      */
     protected function createCookieTab(ServerRequestInterface $serverRequest, ResponseInterface $response): array
     {
@@ -304,10 +296,6 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements AssetAwa
 
     /**
      * Get the route information for a given route.
-     *
-     * @param \Viserio\Contract\Routing\Route $route
-     *
-     * @return array
      */
     protected function getRouteInformation(RouteContract $route): array
     {
@@ -350,10 +338,6 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements AssetAwa
 
     /**
      * Prepare request attributes, check of route object.
-     *
-     * @param array $attributes
-     *
-     * @return array
      */
     protected function prepareRequestAttributes(array $attributes): array
     {
@@ -383,10 +367,6 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements AssetAwa
 
     /**
      * Prepare request headers.
-     *
-     * @param array $headers
-     *
-     * @return array
      */
     protected function prepareRequestHeaders(array $headers): array
     {
@@ -406,10 +386,6 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements AssetAwa
     /**
      * Prepare server parameter.
      * Hide all keys with a _KEY|_PASSWORD|_PW|_SECRET in it.
-     *
-     * @param array $params
-     *
-     * @return array
      */
     protected function prepareServerParams(array $params): array
     {
@@ -428,10 +404,6 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements AssetAwa
 
     /**
      * Post Parameters from parsed body.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     *
-     * @return array
      */
     private function getParsedBody(ServerRequestInterface $request): array
     {

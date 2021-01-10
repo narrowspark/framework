@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Finder\Filter;
@@ -58,10 +58,6 @@ abstract class AbstractMultiplePcreFilterIterator extends FilterIterator
      * If there is no regexps defined in the class, this method will accept the string.
      * Such case can be handled by child classes before calling the method if they want to
      * apply a different behavior.
-     *
-     * @param string $string
-     *
-     * @return bool
      */
     protected function isAccepted(string $string): bool
     {
@@ -89,10 +85,6 @@ abstract class AbstractMultiplePcreFilterIterator extends FilterIterator
 
     /**
      * Checks whether the string is a regex.
-     *
-     * @param string $string
-     *
-     * @return bool
      */
     protected function isRegex(string $string): bool
     {

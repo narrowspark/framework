@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Routing\Matcher;
@@ -35,7 +35,6 @@ class RegexMatcher extends AbstractMatcher
     /**
      * Create a new regex segment matcher instance.
      *
-     * @param string    $regex
      * @param array|int $parameterKeyGroupMap
      */
     public function __construct(string $regex, $parameterKeyGroupMap)
@@ -56,8 +55,6 @@ class RegexMatcher extends AbstractMatcher
 
     /**
      * Returns the used regex.
-     *
-     * @return string
      */
     public function getRegex(): string
     {
@@ -66,8 +63,6 @@ class RegexMatcher extends AbstractMatcher
 
     /**
      * Returns the parameters key group array.
-     *
-     * @return array
      */
     public function getParameterKeyGroupMap(): array
     {
@@ -76,8 +71,6 @@ class RegexMatcher extends AbstractMatcher
 
     /**
      * Counted parameters keys.
-     *
-     * @return int
      */
     public function getGroupCount(): int
     {

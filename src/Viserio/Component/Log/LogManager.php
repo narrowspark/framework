@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Log;
@@ -106,8 +106,6 @@ class LogManager extends AbstractManager implements LoggerInterface,
     /**
      * Adds a processor on to the stack.
      *
-     * @param callable $callback
-     *
      * @return $this
      */
     public function pushProcessor(callable $callback): self
@@ -119,10 +117,6 @@ class LogManager extends AbstractManager implements LoggerInterface,
 
     /**
      * Get a log channel instance.
-     *
-     * @param null|string $channel
-     *
-     * @return mixed
      */
     public function getChannel(?string $channel = null)
     {
@@ -165,10 +159,6 @@ class LogManager extends AbstractManager implements LoggerInterface,
 
     /**
      * Create a new, on-demand aggregate logger instance.
-     *
-     * @param array $config
-     *
-     * @return \Psr\Log\LoggerInterface
      */
     protected function createStackDriver(array $config): LoggerInterface
     {
@@ -177,10 +167,6 @@ class LogManager extends AbstractManager implements LoggerInterface,
 
     /**
      * Create a aggregate log driver instance.
-     *
-     * @param array $config
-     *
-     * @return \Psr\Log\LoggerInterface
      */
     protected function createAggregateDriver(array $config): LoggerInterface
     {
@@ -200,8 +186,6 @@ class LogManager extends AbstractManager implements LoggerInterface,
      *
      * @throws Exception
      * @throws \InvalidArgumentException
-     *
-     * @return \Psr\Log\LoggerInterface
      */
     protected function createEmergencyDriver(): LoggerInterface
     {
@@ -220,12 +204,8 @@ class LogManager extends AbstractManager implements LoggerInterface,
     /**
      * Create an instance of the single file log driver.
      *
-     * @param array $config
-     *
      * @throws Exception
      * @throws \InvalidArgumentException
-     *
-     * @return \Psr\Log\LoggerInterface
      */
     protected function createSingleDriver(array $config): LoggerInterface
     {
@@ -244,11 +224,7 @@ class LogManager extends AbstractManager implements LoggerInterface,
     /**
      * Create an instance of the daily file log driver.
      *
-     * @param array $config
-     *
      * @throws \InvalidArgumentException
-     *
-     * @return \Psr\Log\LoggerInterface
      */
     protected function createDailyDriver(array $config): LoggerInterface
     {
@@ -268,11 +244,7 @@ class LogManager extends AbstractManager implements LoggerInterface,
     /**
      * Create an instance of the syslog log driver.
      *
-     * @param array $config
-     *
      * @throws \InvalidArgumentException
-     *
-     * @return \Psr\Log\LoggerInterface
      */
     protected function createSyslogDriver(array $config): LoggerInterface
     {
@@ -289,11 +261,7 @@ class LogManager extends AbstractManager implements LoggerInterface,
     /**
      * Create an instance of the "error log" log driver.
      *
-     * @param array $config
-     *
      * @throws \InvalidArgumentException
-     *
-     * @return \Psr\Log\LoggerInterface
      */
     protected function createErrorlogDriver(array $config): LoggerInterface
     {
@@ -309,11 +277,7 @@ class LogManager extends AbstractManager implements LoggerInterface,
     /**
      * Create an instance of the Slack log driver.
      *
-     * @param array $config
-     *
      * @throws \InvalidArgumentException
-     *
-     * @return \Psr\Log\LoggerInterface
      */
     protected function createSlackDriver(array $config): LoggerInterface
     {
@@ -337,11 +301,7 @@ class LogManager extends AbstractManager implements LoggerInterface,
     /**
      * Create a custom log driver instance.
      *
-     * @param array $config
-     *
      * @throws \Viserio\Contract\Log\Exception\RuntimeException
-     *
-     * @return \Psr\Log\LoggerInterface
      */
     protected function createCustomDriver(array $config): LoggerInterface
     {
@@ -364,11 +324,7 @@ class LogManager extends AbstractManager implements LoggerInterface,
     /**
      * Create an instance of any handler available in Monolog.
      *
-     * @param array $config
-     *
      * @throws \InvalidArgumentException
-     *
-     * @return \Psr\Log\LoggerInterface
      */
     protected function createMonologDriver(array $config): LoggerInterface
     {
@@ -405,8 +361,6 @@ class LogManager extends AbstractManager implements LoggerInterface,
 
     /**
      * Returns a line formatter with included stacktraces.
-     *
-     * @return \Monolog\Formatter\LineFormatter
      */
     protected function getConfiguredLineFormatter(): LineFormatter
     {
@@ -447,11 +401,6 @@ class LogManager extends AbstractManager implements LoggerInterface,
 
     /**
      * Push given processors to monolog.
-     *
-     * @param array           $config
-     * @param \Monolog\Logger $driver
-     *
-     * @return \Monolog\Logger
      */
     protected function pushProcessorsToMonolog(array $config, Monolog $driver): Monolog
     {
@@ -470,10 +419,6 @@ class LogManager extends AbstractManager implements LoggerInterface,
 
     /**
      * Extract the log channel from the given configuration.
-     *
-     * @param array $config
-     *
-     * @return string
      */
     private function parseChannel(array $config): string
     {
@@ -482,8 +427,6 @@ class LogManager extends AbstractManager implements LoggerInterface,
 
     /**
      * Return the file path for some logger.
-     *
-     * @return string
      */
     private function getFilePath(): string
     {

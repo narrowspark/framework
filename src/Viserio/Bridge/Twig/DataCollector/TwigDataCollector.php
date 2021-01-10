@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Bridge\Twig\DataCollector;
@@ -51,9 +51,6 @@ class TwigDataCollector extends AbstractDataCollector implements AssetAwareContr
 
     /**
      * Create new twig collector instance.
-     *
-     * @param \Twig\Profiler\Profile $profile
-     * @param \Twig\Environment      $twigEnvironment
      */
     public function __construct(Profile $profile, Environment $twigEnvironment)
     {
@@ -63,8 +60,6 @@ class TwigDataCollector extends AbstractDataCollector implements AssetAwareContr
 
     /**
      * Get twig profile.
-     *
-     * @return \Twig\Profiler\Profile
      */
     public function getProfile(): Profile
     {
@@ -93,8 +88,6 @@ class TwigDataCollector extends AbstractDataCollector implements AssetAwareContr
 
     /**
      * Get duration time.
-     *
-     * @return float
      */
     public function getTime(): float
     {
@@ -103,8 +96,6 @@ class TwigDataCollector extends AbstractDataCollector implements AssetAwareContr
 
     /**
      * Get counted templates.
-     *
-     * @return int
      */
     public function getTemplateCount(): int
     {
@@ -113,8 +104,6 @@ class TwigDataCollector extends AbstractDataCollector implements AssetAwareContr
 
     /**
      * Get counted templates.
-     *
-     * @return array
      */
     public function getTemplates(): array
     {
@@ -123,8 +112,6 @@ class TwigDataCollector extends AbstractDataCollector implements AssetAwareContr
 
     /**
      * Get counted blocks.
-     *
-     * @return int
      */
     public function getBlockCount(): int
     {
@@ -133,8 +120,6 @@ class TwigDataCollector extends AbstractDataCollector implements AssetAwareContr
 
     /**
      * Get counted macros.
-     *
-     * @return int
      */
     public function getMacroCount(): int
     {
@@ -143,8 +128,6 @@ class TwigDataCollector extends AbstractDataCollector implements AssetAwareContr
 
     /**
      * List of twig file paths.
-     *
-     * @return array
      */
     public function getTemplatePaths(): array
     {
@@ -153,8 +136,6 @@ class TwigDataCollector extends AbstractDataCollector implements AssetAwareContr
 
     /**
      * Get a html call graph.
-     *
-     * @return \Twig\Markup
      *
      * @codeCoverageIgnore
      */
@@ -270,10 +251,6 @@ class TwigDataCollector extends AbstractDataCollector implements AssetAwareContr
 
     /**
      * Get computed data.
-     *
-     * @param string $index
-     *
-     * @return mixed
      */
     private function getComputedData(string $index)
     {
@@ -286,10 +263,6 @@ class TwigDataCollector extends AbstractDataCollector implements AssetAwareContr
 
     /**
      * Generate Compute data.
-     *
-     * @param \Twig\Profiler\Profile $profile
-     *
-     * @return array
      */
     private function generateComputeData(Profile $profile): array
     {

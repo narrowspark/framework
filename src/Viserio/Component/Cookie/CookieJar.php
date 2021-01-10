@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Cookie;
@@ -128,10 +128,6 @@ class CookieJar implements JarContract
     /**
      * Set the default path and domain for the jar.
      *
-     * @param string $path
-     * @param string $domain
-     * @param bool   $secure
-     *
      * @return $this
      */
     public function setDefaultPathAndDomain(string $path, string $domain, bool $secure = false): self
@@ -151,12 +147,6 @@ class CookieJar implements JarContract
 
     /**
      * Get the path and domain, or the default values.
-     *
-     * @param null|string $path
-     * @param null|string $domain
-     * @param bool        $secure
-     *
-     * @return array
      */
     protected function getPathAndDomain(?string $path, ?string $domain, bool $secure = false): array
     {

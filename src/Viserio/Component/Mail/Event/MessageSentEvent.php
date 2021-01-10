@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Mail\Event;
@@ -24,10 +24,6 @@ class MessageSentEvent implements EventContract
 
     /**
      * Create a new message sent event.
-     *
-     * @param \Viserio\Contract\Mail\Mailer $mailer
-     * @param Swift_Mime_SimpleMessage      $message
-     * @param int                           $recipients
      */
     public function __construct(MailerContract $mailer, Swift_Mime_SimpleMessage $message, int $recipients)
     {
@@ -38,8 +34,6 @@ class MessageSentEvent implements EventContract
 
     /**
      * Get swift message.
-     *
-     * @return Swift_Mime_SimpleMessage
      */
     public function getMessage(): Swift_Mime_SimpleMessage
     {
@@ -48,8 +42,6 @@ class MessageSentEvent implements EventContract
 
     /**
      * Get recipients.
-     *
-     * @return int
      */
     public function getRecipients(): int
     {

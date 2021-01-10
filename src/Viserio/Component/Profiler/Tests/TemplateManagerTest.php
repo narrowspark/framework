@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Profiler\Tests;
@@ -22,14 +22,13 @@ use Swift_SmtpTransport;
 use Viserio\Component\Profiler\AssetsRenderer;
 use Viserio\Component\Profiler\DataCollector\AjaxRequestsDataCollector;
 use Viserio\Component\Profiler\DataCollector\Bridge\SwiftMailDataCollector;
-use Viserio\Component\Profiler\DataCollector\PhpInfoDataCollector;
 use Viserio\Component\Profiler\TemplateManager;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
  *
  * @small
+ * @coversNothing
  */
 final class TemplateManagerTest extends MockeryTestCase
 {
@@ -71,34 +70,6 @@ final class TemplateManagerTest extends MockeryTestCase
             $this->removeId($template->render())
         );
     }
-
-//    public function testRenderWithCollector(): void
-//    {
-//        $collector = new PhpInfoDataCollector();
-//        $collector->collect(
-//            Mockery::mock(ServerRequestInterface::class),
-//            Mockery::mock(ResponseInterface::class)
-//        );
-//
-//        $assets = new AssetsRenderer();
-//        $template = new TemplateManager(
-//            [
-//                'php-info-data-collector' => [
-//                    'collector' => $collector,
-//                ],
-//            ],
-//            \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . 'profiler.html.php',
-//            'fds4f6as',
-//            $assets->getIcons()
-//        );
-//
-//        require_once __DIR__ . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'View' . DIRECTORY_SEPARATOR . 'profilewithcollector.html.php';
-//
-//        self::assertSame(
-//            $this->removeId($text),
-//            $this->removeId($template->render())
-//        );
-//    }
 
     public function testRenderWithAjaxRequestsDataCollector(): void
     {

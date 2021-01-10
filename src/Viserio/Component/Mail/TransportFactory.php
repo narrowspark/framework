@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Mail;
@@ -50,8 +50,6 @@ class TransportFactory implements LoggerAwareInterface
 
     /**
      * Get all of the created "transports".
-     *
-     * @return array
      */
     public function getTransports(): array
     {
@@ -61,12 +59,7 @@ class TransportFactory implements LoggerAwareInterface
     /**
      * Get a transport instance.
      *
-     * @param string $transport
-     * @param array  $config
-     *
      * @throws \Viserio\Contract\Mail\Exception\InvalidArgumentException
-     *
-     * @return Swift_Transport
      */
     public function getTransport(string $transport, array $config): Swift_Transport
     {
@@ -83,12 +76,7 @@ class TransportFactory implements LoggerAwareInterface
     /**
      * Make a new transport instance.
      *
-     * @param string $transport
-     * @param array  $config
-     *
      * @throws \Viserio\Contract\Mail\Exception\InvalidArgumentException
-     *
-     * @return Swift_Transport
      */
     public function createTransport(string $transport, array $config): Swift_Transport
     {
@@ -101,10 +89,6 @@ class TransportFactory implements LoggerAwareInterface
 
     /**
      * Check if the given transport is supported.
-     *
-     * @param string $transport
-     *
-     * @return bool
      */
     public function hasTransport(string $transport): bool
     {
@@ -124,12 +108,7 @@ class TransportFactory implements LoggerAwareInterface
     /**
      * Make a new driver instance.
      *
-     * @param array  $config
-     * @param string $method
-     *
      * @throws \Viserio\Contract\Mail\Exception\InvalidArgumentException
-     *
-     * @return Swift_Transport
      */
     protected function create(array $config, string $method): Swift_Transport
     {
@@ -146,11 +125,6 @@ class TransportFactory implements LoggerAwareInterface
 
     /**
      * Call a custom connection / driver creator.
-     *
-     * @param string $extension
-     * @param array  $config
-     *
-     * @return mixed
      */
     protected function callCustomCreator(string $extension, array $config = [])
     {
@@ -159,8 +133,6 @@ class TransportFactory implements LoggerAwareInterface
 
     /**
      * Create an instance of the Log Swift Transport driver.
-     *
-     * @return \Viserio\Component\Mail\Transport\LogTransport
      */
     protected function createLogTransport(): LogTransport
     {
@@ -169,8 +141,6 @@ class TransportFactory implements LoggerAwareInterface
 
     /**
      * Create an instance of the Log Swift Transport driver.
-     *
-     * @return \Viserio\Component\Mail\Transport\ArrayTransport
      */
     protected function createArrayTransport(): ArrayTransport
     {
@@ -179,10 +149,6 @@ class TransportFactory implements LoggerAwareInterface
 
     /**
      * Create an instance of the Sendmail Swift Transport driver.
-     *
-     * @param array $config
-     *
-     * @return Swift_SendmailTransport
      */
     protected function createSendmailTransport(array $config): Swift_SendmailTransport
     {
@@ -191,10 +157,6 @@ class TransportFactory implements LoggerAwareInterface
 
     /**
      * Create an instance of the SMTP Swift Transport driver.
-     *
-     * @param array $config
-     *
-     * @return Swift_SmtpTransport
      */
     protected function createSmtpTransport(array $config): Swift_SmtpTransport
     {
@@ -226,10 +188,6 @@ class TransportFactory implements LoggerAwareInterface
 
     /**
      * Create an instance of the Mailgun Swift Transport driver.
-     *
-     * @param array $config
-     *
-     * @return \Viserio\Component\Mail\Transport\MailgunTransport
      */
     protected function createMailgunTransport(array $config): MailgunTransport
     {
@@ -243,10 +201,6 @@ class TransportFactory implements LoggerAwareInterface
 
     /**
      * Create an instance of the Mandrill Swift Transport driver.
-     *
-     * @param array $config
-     *
-     * @return \Viserio\Component\Mail\Transport\MandrillTransport
      */
     protected function createMandrillTransport(array $config): MandrillTransport
     {
@@ -258,10 +212,6 @@ class TransportFactory implements LoggerAwareInterface
 
     /**
      * Create an instance of the SparkPost Swift Transport driver.
-     *
-     * @param array $config
-     *
-     * @return \Viserio\Component\Mail\Transport\SparkPostTransport
      */
     protected function createSparkPostTransport(array $config): SparkPostTransport
     {
@@ -276,11 +226,7 @@ class TransportFactory implements LoggerAwareInterface
     /**
      * Create an instance of the Amazon SES Swift Transport driver.
      *
-     * @param array $config
-     *
      * @throws \InvalidArgumentException
-     *
-     * @return \Viserio\Component\Mail\Transport\SesTransport
      */
     protected function createSesTransport(array $config): SesTransport
     {
@@ -298,10 +244,6 @@ class TransportFactory implements LoggerAwareInterface
 
     /**
      * Get a fresh Guzzle HTTP client instance.
-     *
-     * @param array $config
-     *
-     * @return \GuzzleHttp\Client
      */
     protected function getHttpClient(array $config): HttpClient
     {

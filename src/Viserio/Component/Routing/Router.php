@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Routing;
@@ -68,8 +68,6 @@ class Router implements RouterContract
 
     /**
      * Create a new Router instance.
-     *
-     * @param \Viserio\Contract\Routing\Dispatcher $dispatcher
      */
     public function __construct(DispatcherContract $dispatcher)
     {
@@ -358,10 +356,7 @@ class Router implements RouterContract
      * Add a route to the underlying route collection.
      *
      * @param array|string              $methods
-     * @param string                    $uri
      * @param null|array|Closure|string $action
-     *
-     * @return \Viserio\Contract\Routing\Route
      */
     protected function addRoute($methods, string $uri, $action): RouteContract
     {
@@ -372,10 +367,6 @@ class Router implements RouterContract
      * Create a new route instance.
      *
      * @param array|string $methods
-     * @param string       $uri
-     * @param mixed        $action
-     *
-     * @return \Viserio\Contract\Routing\Route
      */
     protected function createRoute($methods, string $uri, $action): RouteContract
     {
@@ -409,10 +400,6 @@ class Router implements RouterContract
 
     /**
      * Add the necessary where clauses to the route based on its initial registration.
-     *
-     * @param \Viserio\Contract\Routing\Route $route
-     *
-     * @return void
      */
     protected function addWhereClausesToRoute(RouteContract $route): void
     {
@@ -426,10 +413,6 @@ class Router implements RouterContract
 
     /**
      * Merge the group stack with the controller action.
-     *
-     * @param \Viserio\Contract\Routing\Route $route
-     *
-     * @return void
      */
     protected function mergeGroupAttributesIntoRoute(RouteContract $route): void
     {
@@ -442,8 +425,6 @@ class Router implements RouterContract
      * Determine if the action is routing to a controller.
      *
      * @param array|Closure|string $action
-     *
-     * @return bool
      */
     protected function actionReferencesController($action): bool
     {
@@ -458,8 +439,6 @@ class Router implements RouterContract
      * Add a controller based route action to the action array.
      *
      * @param array|string $action
-     *
-     * @return array
      */
     protected function convertToControllerAction($action): array
     {
@@ -478,10 +457,6 @@ class Router implements RouterContract
 
     /**
      * Prepend the last group uses onto the use clause.
-     *
-     * @param string $uses
-     *
-     * @return string
      */
     protected function prependGroupNamespace(string $uses): string
     {
@@ -494,10 +469,6 @@ class Router implements RouterContract
 
     /**
      * Prefix the given URI with the last prefix.
-     *
-     * @param string $uri
-     *
-     * @return string
      */
     protected function prefix(string $uri): string
     {
@@ -516,10 +487,6 @@ class Router implements RouterContract
 
     /**
      * Suffix the given URI with the last suffix.
-     *
-     * @param string $uri
-     *
-     * @return string
      */
     protected function suffix(string $uri): string
     {
@@ -528,10 +495,6 @@ class Router implements RouterContract
 
     /**
      * Update the group stack with the given attributes.
-     *
-     * @param array $attributes
-     *
-     * @return void
      */
     protected function updateGroupStack(array $attributes): void
     {

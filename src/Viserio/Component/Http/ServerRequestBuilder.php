@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Http;
@@ -60,8 +60,6 @@ final class ServerRequestBuilder
      * @param null|\Psr\Http\Message\StreamInterface|resource|string $body    Typically stdIn
      *
      * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException if no valid method or URI can be determined
-     *
-     * @return \Psr\Http\Message\ServerRequestInterface
      */
     public function createFromArray(
         array $server,
@@ -94,8 +92,6 @@ final class ServerRequestBuilder
 
     /**
      * @param array<int|string, mixed> $server
-     *
-     * @return string
      */
     private function getMethodFromServer(array $server): string
     {
@@ -112,8 +108,6 @@ final class ServerRequestBuilder
      * @param array<int|string, mixed> $server
      *
      * @throws \Viserio\Contract\Http\Exception\UnexpectedValueException
-     *
-     * @return string
      */
     private function marshalProtocolVersion(array $server): string
     {

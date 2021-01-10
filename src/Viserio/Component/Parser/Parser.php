@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Parser;
@@ -80,11 +80,6 @@ class Parser
 
     /**
      * Add a new mime type with extension.
-     *
-     * @param string $mimeType
-     * @param string $extension
-     *
-     * @return void
      */
     public function addMimeType(string $mimeType, string $extension): void
     {
@@ -93,11 +88,6 @@ class Parser
 
     /**
      * Add a new parser.
-     *
-     * @param \Viserio\Contract\Parser\Parser $parser
-     * @param string                          $extension
-     *
-     * @return void
      */
     public function addParser(ParserContract $parser, string $extension): void
     {
@@ -106,8 +96,6 @@ class Parser
 
     /**
      * Parse given file path or content string.
-     *
-     * @param string $payload
      *
      * @throws \Viserio\Contract\Parser\Exception\RuntimeException      if an error occurred during reading
      * @throws \Viserio\Contract\Parser\Exception\NotSupportedException if a mime type is not supported
@@ -137,11 +125,7 @@ class Parser
     /**
      * Get supported parser on extension or mime type.
      *
-     * @param string $type
-     *
      * @throws \Viserio\Contract\Parser\Exception\NotSupportedException
-     *
-     * @return \Viserio\Contract\Parser\Parser
      */
     public function getParser(string $type): ParserContract
     {
@@ -164,8 +148,6 @@ class Parser
 
     /**
      * Auto detect the payload data type using finfo and pathinfo.
-     *
-     * @param string $payload
      *
      * @return string Tries to return the short format code (xml, json, ...) else the mime type
      */

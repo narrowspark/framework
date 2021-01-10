@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Translation;
@@ -46,8 +46,6 @@ interface MessageCatalogue
      * @param string $id          The message id
      * @param string $translation The messages translation
      * @param string $domain      The domain name
-     *
-     * @return void
      */
     public function set(string $id, string $translation, string $domain = 'messages'): void;
 
@@ -86,18 +84,11 @@ interface MessageCatalogue
      *
      * @param array  $messages An array of translations
      * @param string $domain   The domain name
-     *
-     * @return void
      */
     public function replace(array $messages, string $domain = 'messages'): void;
 
     /**
      * Removes a record.
-     *
-     * @param string $messages
-     * @param string $domain
-     *
-     * @return void
      */
     public function remove(string $messages, string $domain = 'messages'): void;
 
@@ -106,8 +97,6 @@ interface MessageCatalogue
      *
      * @param array  $messages An array of translations
      * @param string $domain   The domain name
-     *
-     * @return void
      */
     public function add(array $messages, string $domain = 'messages'): void;
 
@@ -119,8 +108,6 @@ interface MessageCatalogue
      * @param self $catalogue A MessageCatalogue instance
      *
      * @throws \Viserio\Contract\Translation\Exception\LogicException
-     *
-     * @return void
      */
     public function addCatalogue(MessageCatalogue $catalogue): void;
 
@@ -133,8 +120,6 @@ interface MessageCatalogue
      * @param self $catalogue A MessageCatalogue instance
      *
      * @throws \Viserio\Contract\Translation\Exception\LogicException
-     *
-     * @return void
      */
     public function addFallbackCatalogue(MessageCatalogue $catalogue): void;
 
@@ -149,8 +134,6 @@ interface MessageCatalogue
      * Set parent.
      *
      * @param self $parent
-     *
-     * @return self
      */
     public function setParent(MessageCatalogue $parent): self;
 }

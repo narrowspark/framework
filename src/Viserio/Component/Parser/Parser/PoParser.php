@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Parser\Parser;
@@ -104,11 +104,11 @@ class PoParser implements ParserContract
             $data = (string) ($splitLine[1] ?? '');
 
             switch ($key) {
-                case '#': // # Translator comments
+                case '#':
                     $entry['tcomment'][] = self::convertString($data);
 
                     break;
-                case '#.': // #. Comments extracted from source code
+                case '#.':
                     $entry['ccomment'][] = self::convertString($data);
 
                     break;
@@ -200,10 +200,6 @@ class PoParser implements ParserContract
 
     /**
      * Convert a string from its PO representation.
-     *
-     * @param string $value
-     *
-     * @return string
      */
     private static function convertString(string $value): string
     {
@@ -235,8 +231,6 @@ class PoParser implements ParserContract
      * Checks if entry is a header.
      *
      * @param array<int|string, mixed> $entry
-     *
-     * @return bool
      */
     private static function isHeader(array $entry): bool
     {
@@ -270,8 +264,6 @@ class PoParser implements ParserContract
      * and possible continuations of a header entry.
      *
      * @param string $line Line to parse
-     *
-     * @return bool
      */
     private static function isHeaderDefinition(string $line): bool
     {
@@ -281,7 +273,6 @@ class PoParser implements ParserContract
     /**
      * Export reference infos.
      *
-     * @param string                   $data
      * @param array<int|string, mixed> $entry
      *
      * @return array<int|string, mixed>
@@ -322,9 +313,6 @@ class PoParser implements ParserContract
     /**
      * Export obsolete entries.
      *
-     * @param null|string              $lastPreviousKey
-     * @param null|string              $tmpKey
-     * @param string                   $str
      * @param array<int|string, mixed> $entry
      *
      * @return array<int|string, mixed>
@@ -360,11 +348,7 @@ class PoParser implements ParserContract
     /**
      * Export previous entries.
      *
-     * @param null|string              $lastPreviousKey
-     * @param null|string              $tmpKey
-     * @param string                   $str
      * @param array<int|string, mixed> $entry
-     * @param string                   $key
      *
      * @return array<int|string, mixed>
      */
@@ -397,11 +381,7 @@ class PoParser implements ParserContract
      * Export multi-lines from given line.
      * Throws a exception if state is not found or broken comment is given.
      *
-     * @param null|string              $state
      * @param array<int|string, mixed> $entry
-     * @param string                   $line
-     * @param string                   $key
-     * @param int                      $i
      *
      * @throws \Viserio\Contract\Parser\Exception\ParseException
      *

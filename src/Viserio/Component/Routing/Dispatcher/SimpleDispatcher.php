@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Routing\Dispatcher;
@@ -54,10 +54,6 @@ class SimpleDispatcher implements DispatcherContract
 
     /**
      * Refresh cache file on development.
-     *
-     * @param bool $refreshCache
-     *
-     * @return void
      */
     public function refreshCache(bool $refreshCache): void
     {
@@ -66,10 +62,6 @@ class SimpleDispatcher implements DispatcherContract
 
     /**
      * Set the cache path for compiled routes.
-     *
-     * @param string $path
-     *
-     * @return void
      */
     public function setCachePath(string $path): void
     {
@@ -78,8 +70,6 @@ class SimpleDispatcher implements DispatcherContract
 
     /**
      * Get the cache path for the compiled routes.
-     *
-     * @return string
      */
     public function getCachePath(): string
     {
@@ -127,13 +117,6 @@ class SimpleDispatcher implements DispatcherContract
 
     /**
      * Handle dispatching of a found route.
-     *
-     * @param \Viserio\Contract\Routing\RouteCollection $routes
-     * @param \Psr\Http\Message\ServerRequestInterface  $request
-     * @param string                                    $identifier
-     * @param array                                     $segments
-     *
-     * @return \Psr\Http\Message\ResponseInterface
      */
     protected function handleFound(
         RouteCollectionContract $routes,
@@ -161,11 +144,6 @@ class SimpleDispatcher implements DispatcherContract
 
     /**
      * Run the given route.
-     *
-     * @param \Viserio\Contract\Routing\Route          $route
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     *
-     * @return \Psr\Http\Message\ResponseInterface
      */
     protected function runRoute(RouteContract $route, ServerRequestInterface $request): ResponseInterface
     {
@@ -174,10 +152,6 @@ class SimpleDispatcher implements DispatcherContract
 
     /**
      * Prepare the request uri path.
-     *
-     * @param string $path
-     *
-     * @return string
      */
     protected function prepareUriPath(string $path): string
     {
@@ -192,10 +166,6 @@ class SimpleDispatcher implements DispatcherContract
 
     /**
      * Generates a router file with all routes.
-     *
-     * @param \Viserio\Contract\Routing\RouteCollection $routes
-     *
-     * @return void
      */
     protected function generateRouterFile(RouteCollectionContract $routes): void
     {
@@ -208,11 +178,7 @@ class SimpleDispatcher implements DispatcherContract
     /**
      * Generate a cache directory.
      *
-     * @param string $directory
-     *
      * @throws \Viserio\Contract\Routing\Exception\RuntimeException
-     *
-     * @return void
      */
     private static function generateDirectory(string $directory): void
     {

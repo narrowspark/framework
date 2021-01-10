@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Filesystem;
@@ -949,9 +949,6 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
     /**
      * @internal
      *
-     * @param int    $type
-     * @param string $msg
-     *
      * @return bool;
      */
     public static function handleError(int $type, string $msg): bool
@@ -963,13 +960,9 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
     }
 
     /**
-     * @param string $origin
-     * @param string $target
      * @param string $linkType Name of the link type, typically 'symbolic' or 'hard'
      *
      * @throws \Viserio\Contract\Filesystem\Exception\IOException
-     *
-     * @return void
      */
     private function linkException(string $origin, string $target, string $linkType): void
     {
@@ -985,9 +978,7 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
     /**
      * Parse the given visibility value.
      *
-     * @param string           $path
      * @param float|int|string $visibility
-     * @param null|string      $type
      *
      * @throws \Viserio\Contract\Filesystem\Exception\InvalidArgumentException
      *
@@ -1021,11 +1012,7 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
      *
      * Call the given callable with given args, but throws an ErrorException when an error/warning/notice is triggered.
      *
-     * @param callable $func
-     *
      * @throws Throwable
-     *
-     * @return mixed
      */
     private static function box(callable $func)
     {
@@ -1052,11 +1039,7 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
     /**
      * Check if the given dir path exists.
      *
-     * @param string $dirname
-     *
      * @throws \Viserio\Contract\Filesystem\Exception\NotFoundException
-     *
-     * @return void
      */
     private function ensureDirectoryExist(string $dirname): void
     {
@@ -1068,13 +1051,10 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
     /**
      * Changing visibility on a given file path.
      *
-     * @param string                    $path
      * @param array<string, int|string> $config
      *
      * @throws \Viserio\Contract\Filesystem\Exception\NotFoundException
      * @throws \Viserio\Contract\Filesystem\Exception\IOException
-     *
-     * @return void
      */
     private function changeFileVisibility(string $path, array $config): void
     {
@@ -1091,14 +1071,11 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
     /**
      * Gets all of the files or directories at the input path.
      *
-     * @param string $directory
-     * @param string $method
-     * @param bool   $isRecursive    Whether or not we should recurse through child directories
-     * @param bool   $shoHiddenFiles
+     * @param bool $isRecursive Whether or not we should recurse through child directories
      *
      * @throws \Viserio\Contract\Finder\Exception\NotFoundException
      *
-     * @return Iterator<string, \SplFileInfo>
+     * @return Iterator<string, SplFileInfo>
      */
     private function listContents(
         string $directory,
@@ -1137,8 +1114,6 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
      * Check if stream is seekable.
      *
      * @param resource $resource
-     *
-     * @return bool
      */
     private static function isSeekableStream($resource): bool
     {

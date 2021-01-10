@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Routing\Tests\Router;
@@ -88,11 +88,6 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
 
     /**
      * @dataProvider provideRouterCases
-     *
-     * @param mixed $httpMethod
-     * @param mixed $uri
-     * @param mixed $expectedResult
-     * @param mixed $status
      */
     public function testRouter($httpMethod, $uri, $expectedResult, $status = 200): void
     {
@@ -106,11 +101,6 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
         self::assertSame($status, $actualResult->getStatusCode());
     }
 
-    /**
-     * @param \Viserio\Contract\Routing\Router $router
-     *
-     * @return void
-     */
     abstract protected function definitions(RouterContract $router): void;
 
     abstract protected static function provideRouterCases(): iterable;

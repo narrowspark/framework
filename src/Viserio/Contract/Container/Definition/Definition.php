@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Container\Definition;
@@ -28,15 +28,11 @@ interface Definition extends ChangeAwareDefinition, DeprecatedDefinition
 
     /**
      * Get the definition hash.
-     *
-     * @return string
      */
     public function getHash(): string;
 
     /**
      * Set the binding name.
-     *
-     * @param string $id
      *
      * @return static
      */
@@ -44,15 +40,11 @@ interface Definition extends ChangeAwareDefinition, DeprecatedDefinition
 
     /**
      * Get the binding name.
-     *
-     * @return string
      */
     public function getName(): string;
 
     /**
      * Check if the binding is lazy.
-     *
-     * @return bool
      */
     public function isLazy(): bool;
 
@@ -60,22 +52,16 @@ interface Definition extends ChangeAwareDefinition, DeprecatedDefinition
      * Check if the binding is public.
      *
      * - synthetic services are always public.
-     *
-     * @return bool
      */
     public function isPublic(): bool;
 
     /**
      * Check if the binding is shared.
-     *
-     * @return bool
      */
     public function isShared(): bool;
 
     /**
      * Set the binding lazy.
-     *
-     * @param bool $bool
      *
      * @return static
      */
@@ -84,23 +70,17 @@ interface Definition extends ChangeAwareDefinition, DeprecatedDefinition
     /**
      * Set the binding public.
      *
-     * @param bool $bool
-     *
      * @return static
      */
     public function setPublic(bool $bool);
 
     /**
      * Get the service value.
-     *
-     * @return mixed
      */
     public function getValue();
 
     /**
      * Set a new value for the definition.
-     *
-     * @param mixed $value
      *
      * @return static
      */
@@ -109,16 +89,12 @@ interface Definition extends ChangeAwareDefinition, DeprecatedDefinition
     /**
      * Whether this definition is synthetic, that is not constructed by the
      * container, but dynamically injected.
-     *
-     * @return bool
      */
     public function isSynthetic(): bool;
 
     /**
      * Sets whether this definition is synthetic, that is not constructed by the
      * container, but dynamically injected.
-     *
-     * @param bool $boolean
      *
      * @return static
      */
@@ -141,25 +117,17 @@ interface Definition extends ChangeAwareDefinition, DeprecatedDefinition
     public function setConditions(array $conditions);
 
     /**
-     * @param \Viserio\Contract\Container\Argument\ConditionArgument $condition
-     *
      * @return static
      */
     public function addCondition(ConditionArgument $condition);
 
     /**
      * Get type of definition.
-     *
-     * @return int
      */
     public function getType(): int;
 
     /**
      * Set type of definition.
-     *
-     * @param int $type
-     *
-     * @return void
      */
     public function setType(int $type): void;
 }

@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Container\PhpParser;
@@ -62,8 +62,6 @@ final class PrettyPrinter extends Standard
 
     /**
      * @param null|\PhpParser\Node|\PhpParser\Node[] $node
-     *
-     * @return string
      */
     public function prettyPrint($node): string
     {
@@ -90,10 +88,6 @@ final class PrettyPrinter extends Standard
      * - or the end of the string
      *
      * Prevents `Vendor\Class` => `Vendor\\Class`.
-     *
-     * @param string $string
-     *
-     * @return string
      */
     protected function pSingleQuotedString(string $string): string
     {
@@ -102,10 +96,6 @@ final class PrettyPrinter extends Standard
 
     /**
      * Add space after "use (".
-     *
-     * @param \PhpParser\Node\Expr\Closure $node
-     *
-     * @return string
      */
     protected function pExpr_Closure(Closure $node): string
     {
@@ -117,10 +107,6 @@ final class PrettyPrinter extends Standard
      *
      * Before: return [['item']];
      * After: yield ['item'];
-     *
-     * @param \PhpParser\Node\Expr\Yield_ $node
-     *
-     * @return string
      */
     protected function pExpr_Yield(Yield_ $node): string
     {
@@ -143,10 +129,6 @@ final class PrettyPrinter extends Standard
     /**
      * Print arrays in short [] by default,
      * to prevent manual explicit array shortening.
-     *
-     * @param \PhpParser\Node\Expr\Array_ $node
-     *
-     * @return string
      */
     protected function pExpr_Array(Array_ $node): string
     {
@@ -161,10 +143,6 @@ final class PrettyPrinter extends Standard
      * Allows PHP 7.3 trailing comma in multiline args.
      *
      * @see printArgs() bellow
-     *
-     * @param \PhpParser\Node\Expr\FuncCall $node
-     *
-     * @return string
      */
     protected function pExpr_FuncCall(FuncCall $node): string
     {
@@ -175,10 +153,6 @@ final class PrettyPrinter extends Standard
      * Allows PHP 7.3 trailing comma in multiline args.
      *
      * @see printArgs() bellow
-     *
-     * @param \PhpParser\Node\Expr\MethodCall $node
-     *
-     * @return string
      */
     protected function pExpr_MethodCall(MethodCall $node): string
     {
@@ -194,10 +168,6 @@ final class PrettyPrinter extends Standard
      * Allows PHP 7.3 trailing comma in multiline args.
      *
      * @see printArgs() bellow
-     *
-     * @param \PhpParser\Node\Expr\StaticCall $node
-     *
-     * @return string
      */
     protected function pExpr_StaticCall(StaticCall $node): string
     {
@@ -213,11 +183,7 @@ final class PrettyPrinter extends Standard
     /**
      * Fixes escaping of regular patterns.
      *
-     * @param \PhpParser\Node\Scalar\String_ $node
-     *
      * @throws Exception
-     *
-     * @return string
      */
     protected function pScalar_String(String_ $node): string
     {
@@ -234,10 +200,6 @@ final class PrettyPrinter extends Standard
      * "...$params) : ReturnType"
      * ↓
      * "...$params): ReturnType".
-     *
-     * @param \PhpParser\Node\Stmt\ClassMethod $node
-     *
-     * @return string
      */
     protected function pStmt_ClassMethod(ClassMethod $node): string
     {
@@ -262,8 +224,6 @@ final class PrettyPrinter extends Standard
      * changes) adds 4 spaces onto that. This is why we don't
      * also need to handle indent levels of 5, 9, etc: these
      * do not occur (at least in the code we generate);
-     *
-     * @param int $level
      */
     protected function setIndentLevel(int $level): void
     {
@@ -280,8 +240,6 @@ final class PrettyPrinter extends Standard
      * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      *
      * @throws ReflectionException
-     *
-     * @return string
      */
     private function printArgs($node): string
     {

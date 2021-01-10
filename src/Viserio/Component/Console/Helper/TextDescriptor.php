@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Console\Helper;
@@ -27,11 +27,7 @@ class TextDescriptor implements DescriptorInterface
     /**
      * Describes an object if supported.
      *
-     * @param \Symfony\Component\Console\Output\OutputInterface         $output
      * @param object|\Viserio\Component\Console\Command\AbstractCommand $object
-     * @param array                                                     $options
-     *
-     * @return void
      */
     public function describe(OutputInterface $output, $object, array $options = []): void
     {
@@ -59,9 +55,6 @@ class TextDescriptor implements DescriptorInterface
 
     /**
      * Describes the application title.
-     *
-     * @param \Viserio\Component\Console\Application            $application
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
     private function describeTitle(Application $application, OutputInterface $output): void
     {
@@ -88,10 +81,6 @@ class TextDescriptor implements DescriptorInterface
 
     /**
      * Describes the application title.
-     *
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     *
-     * @return void
      */
     private function describeUsage(OutputInterface $output): void
     {
@@ -103,12 +92,6 @@ class TextDescriptor implements DescriptorInterface
 
     /**
      * Describes the application commands.
-     *
-     * @param \Viserio\Component\Console\Application             $application
-     * @param \Viserio\Component\Console\Command\AbstractCommand $command
-     * @param array                                              $options
-     *
-     * @return void
      */
     private function describeCommands(Application $application, AbstractCommand $command, array $options): void
     {
@@ -148,10 +131,6 @@ class TextDescriptor implements DescriptorInterface
 
     /**
      * Sort all application commands on namespace.
-     *
-     * @param array $commands
-     *
-     * @return array
      */
     private function getNamespaceSortedCommandInfos(array $commands): array
     {
@@ -178,9 +157,6 @@ class TextDescriptor implements DescriptorInterface
         return $namespaceSortedInfos;
     }
 
-    /**
-     * @return TableStyle
-     */
     private static function getZeroBorderStyle(): TableStyle
     {
         $style = new TableStyle();

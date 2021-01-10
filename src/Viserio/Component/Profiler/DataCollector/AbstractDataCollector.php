@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Profiler\DataCollector;
@@ -67,8 +67,6 @@ abstract class AbstractDataCollector implements DataCollectorContract
 
     /**
      * Get all collected data.
-     *
-     * @return array
      */
     public function getData(): array
     {
@@ -104,10 +102,6 @@ abstract class AbstractDataCollector implements DataCollectorContract
     /**
      * Add measurement to float time.
      *
-     * @param float $seconds
-     *
-     * @return string
-     *
      * @codeCoverageIgnore
      */
     protected function formatDuration(float $seconds): string
@@ -133,8 +127,6 @@ abstract class AbstractDataCollector implements DataCollectorContract
      *         ['value'] string          Adds the content.
      *
      * @param array $data (See above)
-     *
-     * @return string
      */
     protected function createTooltipGroup(array $data): string
     {
@@ -173,8 +165,6 @@ abstract class AbstractDataCollector implements DataCollectorContract
      *     ['content'] string    Tab content.
      *
      * @param array $data (See above)
-     *
-     * @return string
      */
     protected function createTabs(array $data): string
     {
@@ -198,11 +188,6 @@ abstract class AbstractDataCollector implements DataCollectorContract
 
     /**
      * Creates a table.
-     *
-     * @param array $data
-     * @param array $settings
-     *
-     * @return string
      */
     protected function createTable(array $data, array $settings = []): string
     {
@@ -255,10 +240,6 @@ abstract class AbstractDataCollector implements DataCollectorContract
 
     /**
      * Create a dropdown menu content.
-     *
-     * @param array $data
-     *
-     * @return string
      */
     protected function createDropdownMenuContent(array $data): string
     {
@@ -291,11 +272,6 @@ abstract class AbstractDataCollector implements DataCollectorContract
 
     /**
      * Create a metrics.
-     *
-     * @param array       $data
-     * @param null|string $name
-     *
-     * @return string
      */
     protected function createMetrics(array $data, ?string $name = null): string
     {
@@ -315,10 +291,6 @@ abstract class AbstractDataCollector implements DataCollectorContract
 
     /**
      * Converts the variable into a serializable Data instance.
-     *
-     * @param mixed $var
-     *
-     * @return null|string
      */
     protected function cloneVar($var): ?string
     {
@@ -338,8 +310,6 @@ abstract class AbstractDataCollector implements DataCollectorContract
 
     /**
      * Get the cloner used for dumping variables.
-     *
-     * @return \Symfony\Component\VarDumper\Cloner\AbstractCloner
      */
     private static function getCloner(): AbstractCloner
     {
@@ -358,8 +328,6 @@ abstract class AbstractDataCollector implements DataCollectorContract
 
     /**
      * Get a HtmlDumper instance.
-     *
-     * @return \Symfony\Component\VarDumper\Dumper\HtmlDumper
      */
     private static function getDumper(): HtmlDumper
     {
@@ -373,11 +341,6 @@ abstract class AbstractDataCollector implements DataCollectorContract
         return self::$htmlDumper;
     }
 
-    /**
-     * @param mixed $var
-     *
-     * @return mixed
-     */
     private function decorateVar($var)
     {
         if (\is_array($var)) {

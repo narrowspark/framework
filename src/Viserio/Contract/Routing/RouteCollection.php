@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Routing;
@@ -29,8 +29,6 @@ interface RouteCollection extends Countable
     /**
      * Find the first route matching a given identifier.
      *
-     * @param string $identifier
-     *
      * @throws \Viserio\Contract\Routing\Exception\RuntimeException
      *
      * @return \Viserio\Contract\Routing\Route
@@ -39,17 +37,11 @@ interface RouteCollection extends Countable
 
     /**
      * Determine if the route collection contains a given named route.
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public function hasNamedRoute(string $name): bool;
 
     /**
      * Get a route instance by its name.
-     *
-     * @param string $name
      *
      * @return null|\Viserio\Contract\Routing\Route
      */
@@ -58,16 +50,12 @@ interface RouteCollection extends Countable
     /**
      * Get a route instance by its controller action.
      *
-     * @param string $action
-     *
      * @return null|\Viserio\Contract\Routing\Route
      */
     public function getByAction(string $action): ?Route;
 
     /**
      * Get all of the routes in the collection.
-     *
-     * @return array
      */
     public function getRoutes(): array;
 }

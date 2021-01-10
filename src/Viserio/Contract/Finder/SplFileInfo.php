@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Finder;
@@ -78,27 +78,17 @@ interface SplFileInfo
     public function getSubPathname(): string;
 
     /**
-     * @param string $directory
-     *
      * @throws \Viserio\Contract\Finder\Exception\NotFoundException
-     *
-     * @return string
      */
     public function getRelativeFilePathFromDirectory(string $directory): string;
 
     /**
      * Check if the file path ends with the given string.
-     *
-     * @param string $string
-     *
-     * @return bool
      */
     public function endsWith(string $string): bool;
 
     /**
      * Return the given path without a extension.
-     *
-     * @return string
      */
     public function getFilenameWithoutExtension(): string;
 
@@ -113,15 +103,11 @@ interface SplFileInfo
 
     /**
      * Normalize the path.
-     *
-     * @return string
      */
     public function getNormalizedPathname(): string;
 
     /**
      * Normalize the real path.
-     *
-     * @return string
      */
     public function getNormalizedRealPath(): string;
 }

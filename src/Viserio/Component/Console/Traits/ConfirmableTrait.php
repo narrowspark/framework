@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Console\Traits;
@@ -25,10 +25,7 @@ trait ConfirmableTrait
     /**
      * Confirm before proceeding with the action.
      *
-     * @param string            $warning
      * @param null|bool|Closure $callback
-     *
-     * @return bool
      */
     public function confirmToProceed(string $warning = 'Application is in Production mode!', $callback = null): bool
     {
@@ -60,17 +57,12 @@ trait ConfirmableTrait
     /**
      * Confirm a question with the user.
      *
-     * @param string $question
-     * @param bool   $default
-     *
      * @return bool|string
      */
     abstract public function confirm(string $question, bool $default = false);
 
     /**
      * Get the default confirmation callback.
-     *
-     * @return Closure
      */
     protected function getDefaultConfirmCallback(): Closure
     {

@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Parser;
@@ -73,11 +73,6 @@ class Dumper
 
     /**
      * Add a new mime type with extension.
-     *
-     * @param string $mimeType
-     * @param string $extension
-     *
-     * @return void
      */
     public function addMimeType(string $mimeType, string $extension): void
     {
@@ -86,11 +81,6 @@ class Dumper
 
     /**
      * Add a new dumper.
-     *
-     * @param \Viserio\Contract\Parser\Dumper $dumper
-     * @param string                          $extension
-     *
-     * @return void
      */
     public function addDumper(DumperContract $dumper, string $extension): void
     {
@@ -101,12 +91,9 @@ class Dumper
      * Dump data in your choosing format.
      *
      * @param array<int|string, mixed> $data
-     * @param string                   $format
      *
      * @throws \Viserio\Contract\Parser\Exception\DumpException
      * @throws \Viserio\Contract\Parser\Exception\NotSupportedException
-     *
-     * @return string
      */
     public function dump(array $data, string $format): string
     {
@@ -118,11 +105,7 @@ class Dumper
     /**
      * Get supported dumper on extension or mime type.
      *
-     * @param string $type
-     *
      * @throws \Viserio\Contract\Parser\Exception\NotSupportedException
-     *
-     * @return \Viserio\Contract\Parser\Dumper
      */
     public function getDumper(string $type): DumperContract
     {

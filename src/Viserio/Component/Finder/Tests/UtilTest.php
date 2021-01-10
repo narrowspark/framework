@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Finder\Tests;
@@ -28,9 +28,6 @@ final class UtilTest extends TestCase
 {
     /**
      * @dataProvider provideToRegExCases
-     *
-     * @param mixed $path
-     * @param mixed $isMatch
      */
     public function testToRegEx($path, $isMatch): void
     {
@@ -41,9 +38,6 @@ final class UtilTest extends TestCase
 
     /**
      * @dataProvider provideToRegExDoubleWildcardCases
-     *
-     * @param mixed $path
-     * @param mixed $isMatch
      */
     public function testToRegExDoubleWildcard($path, $isMatch): void
     {
@@ -89,9 +83,11 @@ final class UtilTest extends TestCase
         ];
     }
 
-    // From the PHP manual: To specify a literal single quote, escape it with a
-    // backslash (\). To specify a literal backslash, double it (\\).
-    // All other instances of backslash will be treated as a literal backslash
+    /**
+     * From the PHP manual: To specify a literal single quote, escape it with a
+     * backslash (\). To specify a literal backslash, double it (\\).
+     * All other instances of backslash will be treated as a literal backslash
+     */
     public function testEscapedWildcard(): void
     {
         // evaluates to "\*"
@@ -460,9 +456,6 @@ final class UtilTest extends TestCase
 
     /**
      * @dataProvider provideGetStaticPrefixCases
-     *
-     * @param mixed $glob
-     * @param mixed $prefix
      */
     public function testGetStaticPrefix($glob, $prefix): void
     {
@@ -510,9 +503,6 @@ final class UtilTest extends TestCase
 
     /**
      * @dataProvider provideBasePaths
-     *
-     * @param mixed $glob
-     * @param mixed $basePath
      */
     public function testGetBasePath($glob, $basePath): void
     {
@@ -521,9 +511,6 @@ final class UtilTest extends TestCase
 
     /**
      * @dataProvider provideBasePaths
-     *
-     * @param mixed $glob
-     * @param mixed $basePath
      */
     public function testGetBasePathStream($glob, $basePath): void
     {
@@ -600,7 +587,6 @@ final class UtilTest extends TestCase
     /**
      * @dataProvider providePatternsCases
      *
-     * @param string        $pattern
      * @param array<string> $expectedSequence
      */
     public function testPatterns(string $pattern, array $expectedSequence): void

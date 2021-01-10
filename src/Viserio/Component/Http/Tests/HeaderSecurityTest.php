@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Http\Tests;
@@ -29,6 +29,7 @@ use Viserio\Component\Http\HeaderSecurity;
  * @internal
  *
  * @small
+ * @coversNothing
  */
 final class HeaderSecurityTest extends TestCase
 {
@@ -64,9 +65,6 @@ final class HeaderSecurityTest extends TestCase
 
     /**
      * @dataProvider provideFiltersValuesPerRfc7230Cases
-     *
-     * @param string $value
-     * @param string $expected
      */
     public function testFiltersValuesPerRfc7230(string $value, string $expected): void
     {
@@ -109,9 +107,6 @@ final class HeaderSecurityTest extends TestCase
 
     /**
      * @dataProvider provideValidatesValuesPerRfc7230Cases
-     *
-     * @param string $value
-     * @param bool   $assertion
      */
     public function testValidatesValuesPerRfc7230(string $value, bool $assertion): void
     {
@@ -146,8 +141,6 @@ final class HeaderSecurityTest extends TestCase
 
     /**
      * @dataProvider provideAssertValidRaisesExceptionForInvalidValueCases
-     *
-     * @param string $value
      */
     public function testAssertValidRaisesExceptionForInvalidValue(string $value): void
     {

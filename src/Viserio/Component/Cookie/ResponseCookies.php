@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Cookie;
@@ -22,8 +22,6 @@ final class ResponseCookies extends AbstractCookieCollector
 {
     /**
      * Create a new cookie collection instance.
-     *
-     * @param array $cookies
      *
      * @throws \Viserio\Contract\Cookie\Exception\InvalidArgumentException
      */
@@ -41,11 +39,7 @@ final class ResponseCookies extends AbstractCookieCollector
     /**
      * Creates a Cookie instance from a Set-Cookie header value.
      *
-     * @param \Psr\Http\Message\ResponseInterface $response
-     *
      * @throws \Viserio\Contract\Cookie\Exception\InvalidArgumentException
-     *
-     * @return self
      */
     public static function fromResponse(ResponseInterface $response): self
     {
@@ -56,10 +50,6 @@ final class ResponseCookies extends AbstractCookieCollector
 
     /**
      * Render Cookies into a response.
-     *
-     * @param \Psr\Http\Message\ResponseInterface $response
-     *
-     * @return \Psr\Http\Message\ResponseInterface
      */
     public function renderIntoSetCookieHeader(ResponseInterface $response): ResponseInterface
     {
@@ -74,10 +64,6 @@ final class ResponseCookies extends AbstractCookieCollector
 
     /**
      * Creates a Cookie instance from a Set-Cookie header value.
-     *
-     * @param string $string
-     *
-     * @return \Viserio\Contract\Cookie\Cookie
      */
     protected static function fromStringCookie(string $string): CookieContract
     {

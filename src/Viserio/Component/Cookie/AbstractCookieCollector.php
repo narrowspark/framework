@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Cookie;
@@ -26,10 +26,6 @@ abstract class AbstractCookieCollector
 
     /**
      * Checking if request cookie exist.
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public function has(string $name): bool
     {
@@ -38,8 +34,6 @@ abstract class AbstractCookieCollector
 
     /**
      * Get a request cookie.
-     *
-     * @param string $name
      *
      * @return null|\Viserio\Component\Cookie\Cookie|\Viserio\Contract\Cookie\Cookie
      */
@@ -54,8 +48,6 @@ abstract class AbstractCookieCollector
 
     /**
      * Get all request cookies.
-     *
-     * @return array
      */
     public function getAll(): array
     {
@@ -86,8 +78,6 @@ abstract class AbstractCookieCollector
     /**
      * Remove a request cookie.
      *
-     * @param string $name
-     *
      * @return $this
      */
     public function remove(string $name): self
@@ -105,10 +95,6 @@ abstract class AbstractCookieCollector
 
     /**
      * Split string on attributes delimiter to array.
-     *
-     * @param string $string
-     *
-     * @return array
      */
     protected static function splitOnAttributeDelimiter(string $string): array
     {
@@ -117,10 +103,6 @@ abstract class AbstractCookieCollector
 
     /**
      * Split a string to array.
-     *
-     * @param string $string
-     *
-     * @return array
      */
     protected static function splitCookiePair(string $string): array
     {

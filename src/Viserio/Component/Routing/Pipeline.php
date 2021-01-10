@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Routing;
@@ -47,13 +47,7 @@ class Pipeline extends BasePipeline
     /**
      * Resolve from container.
      *
-     * @param mixed  $traveler
-     * @param mixed  $stack
-     * @param string $stage
-     *
      * @throws \Viserio\Contract\Routing\Exception\RuntimeException
-     *
-     * @return mixed
      */
     protected function sliceThroughContainer($traveler, $stack, string $stage)
     {
@@ -74,10 +68,6 @@ class Pipeline extends BasePipeline
 
     /**
      * Private delegate callable middleware for the pipe.
-     *
-     * @param callable $middleware
-     *
-     * @return \Psr\Http\Server\RequestHandlerInterface
      */
     private function getRequestHandlerMiddleware(callable $middleware): RequestHandlerInterface
     {
@@ -87,8 +77,6 @@ class Pipeline extends BasePipeline
 
             /**
              * Create a new delegate callable middleware instance.
-             *
-             * @param callable $middleware
              */
             public function __construct(callable $middleware)
             {

@@ -65,12 +65,11 @@ jobs:
           fetch-depth: 2
 
       - name: "Setup PHP"
-        uses: shivammathur/setup-php@1.8.2
+        uses: shivammathur/setup-php@2.1.0
         with:
-          php-version: 7.4
+          php-version: "7.4.2"
           extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, inotify, pcntl, posix
-          pecl: true
-          tools: composer, composer-prefetcher, cs2pr
+          tools: composer, composer-prefetcher, cs2pr, pecl
 
       - name: "Configure Container"
         env:
@@ -105,4 +104,4 @@ jobs:
           $COMPOSER_UP
           echo ::endgroup::
 
-          ./vendor/bin/phpstan analyse -c ./phpstan.neon --memory-limit=-1 --error-format=checkstyle | cs2pr
+          php -d memory_limit=-1 vendor/bin/phpstan analyse --error-format=checkstyle | cs2pr

@@ -20,14 +20,13 @@ jobs:
           fetch-depth: 2
 
       - name: "Setup PHP"
-        uses: shivammathur/setup-php@1.8.2
+        uses: shivammathur/setup-php@2.1.0
         with:
-          php-version: "7.4"
-          extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl, pdo, pdo_sqlite, inotify, pcntl, posix, xdebug
+          php-version: "7.4.2"
+          extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl, pdo, pdo_sqlite, inotify, pcntl, posix
           ini-values: pcov.directory=api, date.timezone=Europe/Berlin, opcache.enable_cli=1, serialize_precision=14
-          coverage: none
-          pecl: true
-          tools: composer, composer-prefetcher
+          coverage: pcov
+          tools: composer, composer-prefetcher, pecl
 
       - name: Install Xdebug
         run: sudo pecl install -f xdebug-2.9.0

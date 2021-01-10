@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Parser\Parser;
@@ -58,8 +58,6 @@ class XliffParser implements ParserContract
     /**
      * Extract messages and metadata from DOMDocument into a MessageCatalogue.
      *
-     * @param \DOMDocument $dom
-     *
      * @throws \Viserio\Contract\Parser\Exception\ParseException
      *
      * @return array<int|string, mixed>
@@ -85,7 +83,7 @@ class XliffParser implements ParserContract
 
         $xml->registerXPathNamespace('xliff', 'urn:oasis:names:tc:xliff:document:1.2');
 
-        /** @var \SimpleXMLElement $trans */
+        /** @var SimpleXMLElement $trans */
         foreach ((array) $xml->xpath('//xliff:trans-unit') as $trans) {
             $attributes = $trans->attributes();
             $id = (string) ($attributes['resname'] ?? $trans->source ?? '');
@@ -125,9 +123,6 @@ class XliffParser implements ParserContract
     /**
      * Parse xliff notes.
      *
-     * @param SimpleXMLElement $noteElement
-     * @param null|string      $encoding
-     *
      * @return array<int|string, mixed>
      */
     private static function parseNotes(SimpleXMLElement $noteElement, ?string $encoding = null): array
@@ -156,8 +151,6 @@ class XliffParser implements ParserContract
     /**
      * Extract messages and metadata from DOMDocument into a MessageCatalogue.
      *
-     * @param DOMDocument $dom
-     *
      * @throws \Viserio\Contract\Parser\Exception\ParseException
      *
      * @return array<int|string, mixed>
@@ -183,7 +176,7 @@ class XliffParser implements ParserContract
 
         $xml->registerXPathNamespace('xliff', 'urn:oasis:names:tc:xliff:document:2.0');
 
-        /** @var \SimpleXMLElement $unit */
+        /** @var SimpleXMLElement $unit */
         foreach ((array) $xml->xpath('//xliff:unit') as $unit) {
             $unitAttr = (array) $unit->attributes();
             $unitAttr = \reset($unitAttr);
@@ -236,8 +229,6 @@ class XliffParser implements ParserContract
      *
      * @param string      $content  String to decode
      * @param null|string $encoding Target encoding
-     *
-     * @return string
      */
     private static function utf8ToCharset(string $content, ?string $encoding = null): string
     {

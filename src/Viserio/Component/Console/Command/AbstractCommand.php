@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Console\Command;
@@ -124,8 +124,6 @@ abstract class AbstractCommand extends BaseCommand
     /**
      * Get the output implementation.
      *
-     * @return \Symfony\Component\Console\Style\SymfonyStyle
-     *
      * @codeCoverageIgnore
      */
     public function getOutput(): SymfonyStyle
@@ -137,8 +135,6 @@ abstract class AbstractCommand extends BaseCommand
      * Get the verbosity level in terms of Symfony's OutputInterface level.
      *
      * @param null|int|string $level
-     *
-     * @return int
      */
     public function getVerbosity($level = null): int
     {
@@ -157,8 +153,6 @@ abstract class AbstractCommand extends BaseCommand
      * Set the verbosity level.
      *
      * @param int|string $level
-     *
-     * @return void
      */
     public function setVerbosity($level): void
     {
@@ -167,10 +161,6 @@ abstract class AbstractCommand extends BaseCommand
 
     /**
      * Set a Invoker instance.
-     *
-     * @param \Invoker\InvokerInterface $invoker
-     *
-     * @return void
      */
     public function setInvoker(InvokerInterface $invoker): void
     {
@@ -179,8 +169,6 @@ abstract class AbstractCommand extends BaseCommand
 
     /**
      * Gets the application instance for this command.
-     *
-     * @return null|\Viserio\Component\Console\Application
      */
     public function getApplication(): ?Application
     {
@@ -189,11 +177,6 @@ abstract class AbstractCommand extends BaseCommand
 
     /**
      * Run the console command.
-     *
-     * @param \Symfony\Component\Console\Input\InputInterface   $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     *
-     * @return int
      */
     public function run(InputInterface $input, OutputInterface $output): int
     {
@@ -208,11 +191,6 @@ abstract class AbstractCommand extends BaseCommand
 
     /**
      * Call another console command.
-     *
-     * @param string $command
-     * @param array  $arguments
-     *
-     * @return int
      */
     public function call(string $command, array $arguments = []): int
     {
@@ -221,11 +199,6 @@ abstract class AbstractCommand extends BaseCommand
 
     /**
      * Call another console command silently.
-     *
-     * @param string $command
-     * @param array  $arguments
-     *
-     * @return int
      */
     public function callSilent(string $command, array $arguments = []): int
     {
@@ -234,8 +207,6 @@ abstract class AbstractCommand extends BaseCommand
 
     /**
      * Get the value of a command argument.
-     *
-     * @param null|string $key
      *
      * @return null|array|string
      */
@@ -251,8 +222,6 @@ abstract class AbstractCommand extends BaseCommand
     /**
      * Get the value of a command option.
      *
-     * @param null|string $key
-     *
      * @return null|array|string
      */
     public function option(?string $key = null)
@@ -266,11 +235,6 @@ abstract class AbstractCommand extends BaseCommand
 
     /**
      * Check if a command option is set.
-     *
-     * @param string $key
-     * @param bool   $checkShortName
-     *
-     * @return bool
      */
     public function hasOption(string $key, bool $checkShortName = true): bool
     {
@@ -290,9 +254,6 @@ abstract class AbstractCommand extends BaseCommand
     /**
      * Confirm a question with the user.
      *
-     * @param string $question
-     * @param bool   $default
-     *
      * @return bool|string
      */
     public function confirm(string $question, bool $default = false)
@@ -302,11 +263,6 @@ abstract class AbstractCommand extends BaseCommand
 
     /**
      * Prompt the user for input.
-     *
-     * @param string      $question
-     * @param null|string $default
-     *
-     * @return null|string
      */
     public function ask(string $question, ?string $default = null): ?string
     {
@@ -316,11 +272,7 @@ abstract class AbstractCommand extends BaseCommand
     /**
      * Prompt the user for input with auto completion.
      *
-     * @param string $question
-     * @param array  $choices
      * @param string $default
-     *
-     * @return null|string
      */
     public function anticipate(string $question, array $choices, ?string $default = null): ?string
     {
@@ -329,12 +281,6 @@ abstract class AbstractCommand extends BaseCommand
 
     /**
      * Prompt the user for input with auto completion.
-     *
-     * @param string      $question
-     * @param array       $choices
-     * @param null|string $default
-     *
-     * @return null|string
      */
     public function askWithCompletion(string $question, array $choices, ?string $default = null): ?string
     {
@@ -347,11 +293,6 @@ abstract class AbstractCommand extends BaseCommand
 
     /**
      * Prompt the user for input but hide the answer from the console.
-     *
-     * @param string $question
-     * @param bool   $fallback
-     *
-     * @return string
      */
     public function secret(string $question, bool $fallback = true): string
     {
@@ -364,14 +305,6 @@ abstract class AbstractCommand extends BaseCommand
 
     /**
      * Give the user a single choice from an array of answers.
-     *
-     * @param string      $question
-     * @param array       $choices
-     * @param null|string $default
-     * @param mixed       $attempts
-     * @param bool        $multiple
-     *
-     * @return null|string
      */
     public function choice(
         string $question,
@@ -390,12 +323,7 @@ abstract class AbstractCommand extends BaseCommand
     /**
      * Format input to textual table.
      *
-     * @param array                                     $headers
      * @param array|\Viserio\Contract\Support\Arrayable $rows
-     * @param string                                    $style
-     * @param array                                     $columnStyles
-     *
-     * @return void
      */
     public function table(array $headers, $rows, string $style = 'default', array $columnStyles = []): void
     {
@@ -417,11 +345,8 @@ abstract class AbstractCommand extends BaseCommand
     /**
      * Write a string as standard output.
      *
-     * @param string          $string
      * @param null|string     $style          The output style of the string
      * @param null|int|string $verbosityLevel
-     *
-     * @return void
      */
     public function line(string $string, ?string $style = null, $verbosityLevel = null): void
     {
@@ -432,10 +357,7 @@ abstract class AbstractCommand extends BaseCommand
     /**
      * Write a string as information output.
      *
-     * @param string          $string
      * @param null|int|string $verbosityLevel
-     *
-     * @return void
      */
     public function info(string $string, $verbosityLevel = null): void
     {
@@ -445,10 +367,7 @@ abstract class AbstractCommand extends BaseCommand
     /**
      * Write a string as comment output.
      *
-     * @param string          $string
      * @param null|int|string $verbosityLevel
-     *
-     * @return void
      */
     public function comment(string $string, $verbosityLevel = null): void
     {
@@ -458,10 +377,7 @@ abstract class AbstractCommand extends BaseCommand
     /**
      * Write a string as question output.
      *
-     * @param string          $string
      * @param null|int|string $verbosityLevel
-     *
-     * @return void
      */
     public function question(string $string, $verbosityLevel = null): void
     {
@@ -471,10 +387,7 @@ abstract class AbstractCommand extends BaseCommand
     /**
      * Write a string as error output.
      *
-     * @param string          $string
      * @param null|int|string $verbosityLevel
-     *
-     * @return void
      */
     public function error(string $string, $verbosityLevel = null): void
     {
@@ -484,10 +397,7 @@ abstract class AbstractCommand extends BaseCommand
     /**
      * Write a string as warning output.
      *
-     * @param string          $string
      * @param null|int|string $verbosityLevel
-     *
-     * @return void
      */
     public function warn(string $string, $verbosityLevel = null): void
     {
@@ -501,10 +411,6 @@ abstract class AbstractCommand extends BaseCommand
 
     /**
      * Write a string in an alert box.
-     *
-     * @param string $string
-     *
-     * @return void
      */
     public function alert(string $string): void
     {
@@ -520,10 +426,7 @@ abstract class AbstractCommand extends BaseCommand
     /**
      * Write a string as task output.
      *
-     * @param string   $string
-     * @param callable $callable
-     *
-     * @return void
+     * @param string $string
      */
     public function task($string, callable $callable): void
     {
@@ -538,8 +441,6 @@ abstract class AbstractCommand extends BaseCommand
      * @param string          $href
      * @param null|string     $string
      * @param null|int|string $verbosity
-     *
-     * @return void
      */
     public function hyperlink($href, $string = null, $verbosity = null): void
     {
@@ -548,11 +449,6 @@ abstract class AbstractCommand extends BaseCommand
 
     /**
      * Format a string as a hyperlink.
-     *
-     * @param string      $href
-     * @param null|string $string
-     *
-     * @return string
      */
     protected function getHyperlink(string $href, ?string $string = null): string
     {
@@ -563,8 +459,6 @@ abstract class AbstractCommand extends BaseCommand
      * Get the container instance.
      *
      * @throws \Viserio\Contract\Console\Exception\LogicException
-     *
-     * @return \Psr\Container\ContainerInterface
      */
     protected function getContainer(): ContainerInterface
     {
@@ -592,8 +486,6 @@ abstract class AbstractCommand extends BaseCommand
 
     /**
      * Get the console command arguments.
-     *
-     * @return array
      */
     protected function getArguments(): array
     {
@@ -602,8 +494,6 @@ abstract class AbstractCommand extends BaseCommand
 
     /**
      * Get the console command options.
-     *
-     * @return array
      */
     protected function getOptions(): array
     {
@@ -615,8 +505,6 @@ abstract class AbstractCommand extends BaseCommand
      *
      * @throws \Symfony\Component\Console\Exception\LogicException
      * @throws \Viserio\Contract\Console\Exception\InvalidCommandExpression
-     *
-     * @return void
      */
     private function configureUsingFluentDefinition(): void
     {
@@ -635,8 +523,6 @@ abstract class AbstractCommand extends BaseCommand
 
     /**
      * Specify the arguments and options on the command.
-     *
-     * @return void
      */
     private function specifyParameters(): void
     {

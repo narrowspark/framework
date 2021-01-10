@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Provider\Twig\Tests\NodeVisitor;
@@ -30,6 +30,7 @@ use Viserio\Bridge\Twig\NodeVisitor\TranslationNodeVisitor;
  * @internal
  *
  * @small
+ * @coversNothing
  */
 final class TranslationNodeVisitorTest extends MockeryTestCase
 {
@@ -48,9 +49,6 @@ final class TranslationNodeVisitorTest extends MockeryTestCase
 
     /**
      * @dataProvider provideMessagesExtractionCases
-     *
-     * @param \Twig\Node\Node $node
-     * @param array           $expectedMessages
      */
     public function testMessagesExtraction(Node $node, array $expectedMessages): void
     {
@@ -92,13 +90,6 @@ final class TranslationNodeVisitorTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @param string      $message
-     * @param null|string $domain
-     * @param null|array  $arguments
-     *
-     * @return \Twig\Node\Expression\FilterExpression
-     */
     private static function getTransFilter(
         string $message,
         ?string $domain = null,
@@ -119,12 +110,6 @@ final class TranslationNodeVisitorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @param string      $message
-     * @param null|string $domain
-     *
-     * @return \Viserio\Bridge\Twig\Node\TransNode
-     */
     private static function getTransTag(string $message, ?string $domain = null): TransNode
     {
         return new TransNode(

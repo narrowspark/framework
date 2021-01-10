@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Container\Tests\Integration\Pipeline;
@@ -73,9 +73,6 @@ final class CheckDefinitionConditionsPipeTest extends TestCase
         self::assertStringContainsString('Removed condition from [closure]; reason: Definition is missing implementation of [Viserio\Contract\Container\Definition\MethodCallsAwareDefinition] or [Viserio\Contract\Container\Definition\PropertiesAwareDefinition] interface.', $container->getLogs()[0]);
     }
 
-    /**
-     * @param \Viserio\Contract\Container\ContainerBuilder $container
-     */
     private function process(ContainerBuilderContract $container): void
     {
         $pipe = new CheckDefinitionConditionsPipe();

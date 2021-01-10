@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Mail\Transport;
@@ -51,11 +51,6 @@ class SparkPostTransport extends AbstractTransport
 
     /**
      * Create a new SparkPost transport instance.
-     *
-     * @param \GuzzleHttp\Client $client
-     * @param string             $key
-     * @param array              $options
-     * @param null|string        $endpoint
      */
     public function __construct(Client $client, string $key, array $options = [], ?string $endpoint = null)
     {
@@ -67,8 +62,6 @@ class SparkPostTransport extends AbstractTransport
 
     /**
      * Get the API key being used by the transport.
-     *
-     * @return string
      */
     public function getKey(): string
     {
@@ -77,8 +70,6 @@ class SparkPostTransport extends AbstractTransport
 
     /**
      * Set the API key being used by the transport.
-     *
-     * @param string $key
      *
      * @return $this
      */
@@ -91,8 +82,6 @@ class SparkPostTransport extends AbstractTransport
 
     /**
      * Get the transmission options being used by the transport.
-     *
-     * @return array
      */
     public function getOptions(): array
     {
@@ -101,8 +90,6 @@ class SparkPostTransport extends AbstractTransport
 
     /**
      * Set the transmission options being used by the transport.
-     *
-     * @param array $options
      *
      * @return $this
      */
@@ -161,10 +148,6 @@ class SparkPostTransport extends AbstractTransport
 
     /**
      * Get the transmission ID from the response.
-     *
-     * @param \Psr\Http\Message\ResponseInterface $response
-     *
-     * @return null|string
      */
     protected function getTransmissionId(ResponseInterface $response): ?string
     {
@@ -185,10 +168,6 @@ class SparkPostTransport extends AbstractTransport
      * Get all the addresses this message should be sent to.
      *
      * Note that SparkPost still respects CC, BCC headers in raw message itself.
-     *
-     * @param Swift_Mime_SimpleMessage $message
-     *
-     * @return array
      */
     protected function getRecipients(Swift_Mime_SimpleMessage $message): array
     {

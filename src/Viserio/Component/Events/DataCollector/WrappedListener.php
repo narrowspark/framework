@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Events\DataCollector;
@@ -37,7 +37,7 @@ class WrappedListener
     /**
      * Given event listener.
      *
-     * @var array|\Closure|string
+     * @var array|Closure|string
      */
     private $listener;
 
@@ -75,9 +75,7 @@ class WrappedListener
     /**
      * Create a new WrappedListener instance.
      *
-     * @param array|\Closure|string                                              $listener
-     * @param null|string                                                        $name
-     * @param \Symfony\Component\Stopwatch\Stopwatch                             $stopwatch
+     * @param array|Closure|string                                               $listener
      * @param null|\Viserio\Component\Events\DataCollector\TraceableEventManager $eventManager
      */
     public function __construct(
@@ -101,11 +99,6 @@ class WrappedListener
         }
     }
 
-    /**
-     * @param \Viserio\Contract\Events\Event $event
-     *
-     * @return void
-     */
     public function __invoke(EventContract $event): void
     {
         $this->called = true;
@@ -125,8 +118,6 @@ class WrappedListener
 
     /**
      * Get a pretty info string about the called event.
-     *
-     * @return string
      */
     public function getPretty(): string
     {
@@ -145,8 +136,6 @@ class WrappedListener
 
     /**
      * Was the event called?
-     *
-     * @return bool
      */
     public function wasCalled(): bool
     {
@@ -155,10 +144,6 @@ class WrappedListener
 
     /**
      * Get information's about given event.
-     *
-     * @param string $eventName
-     *
-     * @return array
      */
     public function getInfo(string $eventName): array
     {
@@ -174,9 +159,7 @@ class WrappedListener
     }
 
     /**
-     * @param array|\Closure|string $listener
-     *
-     * @return void
+     * @param array|Closure|string $listener
      */
     private function analyzeListener($listener): void
     {

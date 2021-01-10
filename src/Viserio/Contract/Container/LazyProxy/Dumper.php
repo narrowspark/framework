@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Container\LazyProxy;
@@ -20,29 +20,18 @@ interface Dumper
 {
     /**
      * Inspects whether the given definitions should produce lazy instantiation logic in the dumped container.
-     *
-     * @param \Viserio\Contract\Container\Definition\Definition $definition
-     *
-     * @return bool
      */
     public function isSupported(DefinitionContract $definition): bool;
 
     /**
      * Generates the code for the lazy code.
-     *
-     * @param \Viserio\Contract\Container\Definition\ObjectDefinition $definition
-     *
-     * @return string
      */
     public function getProxyCode(ObjectDefinitionContract $definition): string;
 
     /**
      * Generates the code to be used to instantiate a proxy in the dumped factory code.
      *
-     * @param \Viserio\Contract\Container\Definition\ObjectDefinition $definition
-     * @param string                                                  $factoryCode The code to execute to create the service
-     *
-     * @return string
+     * @param string $factoryCode The code to execute to create the service
      */
     public function getProxyFactoryCode(ObjectDefinitionContract $definition, string $factoryCode): string;
 }

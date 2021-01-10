@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Config\Tests\Unit\Traits;
@@ -30,8 +30,6 @@ trait ConfigurationMandatoryIteratorTestTrait
 {
     /**
      * @dataProvider provideConfigurationMandatoryIteratorConfigCases
-     *
-     * @param mixed $config
      */
     public function testMandatoryResolving($config): void
     {
@@ -48,8 +46,6 @@ trait ConfigurationMandatoryIteratorTestTrait
 
     /**
      * @dataProvider provideConfigurationMandatoryIteratorConfigCases
-     *
-     * @param mixed $config
      */
     public function testMandatoryResolvingShouldResolveWithId($config): void
     {
@@ -68,8 +64,6 @@ trait ConfigurationMandatoryIteratorTestTrait
 
     /**
      * @dataProvider provideConfigurationMandatoryIteratorConfigCases
-     *
-     * @param mixed $config
      */
     public function testMandatoryResolvingShouldThrowAMandatoryConfigNotFoundExceptionIfMandatoryConfigurationIsMissing(
         $config
@@ -88,8 +82,6 @@ trait ConfigurationMandatoryIteratorTestTrait
 
     /**
      * @dataProvider provideConfigurationMandatoryIteratorConfigCases
-     *
-     * @param mixed $config
      */
     public function testMandatoryResolvingShouldThrowAMandatoryConfigNotFoundExceptionIfRecursiveMandatoryConfigurationIsMissing(
         $config
@@ -108,8 +100,6 @@ trait ConfigurationMandatoryIteratorTestTrait
 
     /**
      * @dataProvider provideConfigurationMandatoryIteratorConfigCases
-     *
-     * @param mixed $config
      */
     public function testMandatoryResolvingShouldResolveRecursiveMandatoryConfiguration($config): void
     {
@@ -163,12 +153,10 @@ trait ConfigurationMandatoryIteratorTestTrait
 
     /**
      * @dataProvider provideConfigurationMandatoryIteratorConfigCases
-     *
-     * @param mixed $config
      */
     public function testMandatoryConfigResolvingShouldReturnDataWithProvidedDefaultConfigPart1($config): void
     {
-        $defaultOptions = ConnectionComponentDefaultConfigMandatoryContainedIdConfiguration::getDefaultConfig();
+        $defaultConfig = ConnectionComponentDefaultConfigMandatoryContainedIdConfiguration::getDefaultConfig();
 
         unset($config['doctrine']['connection']['orm_default']['params']['host'], $config['doctrine']['connection']['orm_default']['params']['port']);
 
@@ -182,8 +170,8 @@ trait ConfigurationMandatoryIteratorTestTrait
 
         self::assertCount(2, $array);
         self::assertArrayHasKey('params', $array);
-        self::assertSame($array['params']['host'], $defaultOptions['params']['host']);
-        self::assertSame($array['params']['port'], $defaultOptions['params']['port']);
+        self::assertSame($array['params']['host'], $defaultConfig['params']['host']);
+        self::assertSame($array['params']['port'], $defaultConfig['params']['port']);
         self::assertSame(
             $array['params']['user'],
             $config['doctrine']['connection']['orm_default']['params']['user']
@@ -192,12 +180,10 @@ trait ConfigurationMandatoryIteratorTestTrait
 
     /**
      * @dataProvider provideConfigurationMandatoryIteratorConfigCases
-     *
-     * @param mixed $config
      */
     public function testMandatoryConfigResolvingShouldReturnDataWithProvidedDefaultConfigPart2($config): void
     {
-        $defaultOptions = ConnectionComponentDefaultConfigMandatoryContainedIdConfiguration::getDefaultConfig();
+        $defaultConfig = ConnectionComponentDefaultConfigMandatoryContainedIdConfiguration::getDefaultConfig();
 
         // remove main index key
         unset($config['doctrine']['connection']['orm_default']['params']);
@@ -212,14 +198,12 @@ trait ConfigurationMandatoryIteratorTestTrait
 
         self::assertCount(2, $array);
         self::assertArrayHasKey('params', $array);
-        self::assertSame($array['params']['host'], $defaultOptions['params']['host']);
-        self::assertSame($array['params']['port'], $defaultOptions['params']['port']);
+        self::assertSame($array['params']['host'], $defaultConfig['params']['host']);
+        self::assertSame($array['params']['port'], $defaultConfig['params']['port']);
     }
 
     /**
      * @dataProvider provideConfigurationMandatoryIteratorConfigCases
-     *
-     * @param mixed $config
      */
     public function testMandatoryConfigResolvingShouldNotOverwriteProvidedConfig($config): void
     {

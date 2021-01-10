@@ -1,12 +1,11 @@
 {
     "name": "viserio/config",
     "type": "library",
-    "description": "The Viserio Options Resolver package.",
+    "description": "The Viserio Config package.",
     "keywords": [
         "narrowspark",
         "viserio",
-        "options",
-        "option",
+        "config",
         "component",
         "resolver",
         "configuration"
@@ -36,10 +35,9 @@
     "require-dev": {
         "mikey179/vfsstream": "^1.6.8",
         "mockery/mockery": "^1.2.4",
-        "narrowspark/coding-standard": "^3.4.0",
+        "narrowspark/coding-standard": "^4.0.0",
         "narrowspark/testing-helper": "^8.0.2",
         "phpunit/phpunit": "8.2.*",
-        "slam/phpstan-extensions": "^4.0.0",
         "symfony/var-exporter": "^4.3.8 || ^5.0.0",
         "viserio/console": "^1.0@dev",
         "viserio/container": "^1.0@dev",

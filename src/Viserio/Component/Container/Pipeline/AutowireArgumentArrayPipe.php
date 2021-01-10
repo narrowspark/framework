@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Container\Pipeline;
@@ -88,12 +88,6 @@ class AutowireArgumentArrayPipe implements PipeContract
         }
     }
 
-    /**
-     * @param \Viserio\Contract\Container\ContainerBuilder      $containerBuilder
-     * @param \Viserio\Contract\Container\Definition\Definition $definition
-     *
-     * @return bool
-     */
     private function shouldSkipDefinition(
         ContainerBuilderContract $containerBuilder,
         DefinitionContract $definition
@@ -138,11 +132,7 @@ class AutowireArgumentArrayPipe implements PipeContract
     }
 
     /**
-     * @param \Viserio\Contract\Container\ContainerBuilder                                                                     $containerBuilder
-     * @param ReflectionMethod                                                                                                 $reflectionMethod
      * @param \Viserio\Contract\Container\Definition\FactoryDefinition|\Viserio\Contract\Container\Definition\ObjectDefinition $definition
-     *
-     * @return void
      */
     private function processParameters(
         ContainerBuilderContract $containerBuilder,
@@ -162,11 +152,7 @@ class AutowireArgumentArrayPipe implements PipeContract
     }
 
     /**
-     * @param ReflectionMethod                                                                                                 $reflectionMethod
      * @param \Viserio\Contract\Container\Definition\FactoryDefinition|\Viserio\Contract\Container\Definition\ObjectDefinition $definition
-     * @param ReflectionParameter                                                                                              $reflectionParameter
-     *
-     * @return bool
      */
     private function shouldSkipParameter(
         ReflectionMethod $reflectionMethod,
@@ -208,12 +194,6 @@ class AutowireArgumentArrayPipe implements PipeContract
         return false;
     }
 
-    /**
-     * @param string           $parameterName
-     * @param ReflectionMethod $reflectionMethod
-     *
-     * @return null|string
-     */
     private function resolveParameterType(string $parameterName, ReflectionMethod $reflectionMethod): ?string
     {
         $parameterDocTypeRegex = '#@param[ \t]+(?<type>[\w\\\\]+)\[\][ \t]+\$' . $parameterName . '#';
@@ -249,9 +229,6 @@ class AutowireArgumentArrayPipe implements PipeContract
     }
 
     /**
-     * @param \Viserio\Contract\Container\ContainerBuilder $containerBuilder
-     * @param string                                       $type
-     *
      * @return \Viserio\Contract\Container\Definition\Definition[]
      */
     private function findAllByType(ContainerBuilderContract $containerBuilder, string $type): array

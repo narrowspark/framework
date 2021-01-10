@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Support\Traits;
@@ -20,8 +20,6 @@ trait BytesFormatTrait
 {
     /**
      * Convert a number string to bytes.
-     *
-     * @param string $number
      *
      * @throws InvalidArgumentException
      * @throws OutOfBoundsException
@@ -72,11 +70,7 @@ trait BytesFormatTrait
      * - but the value has only one delimiter, such as "234,56", then it is impossible to know whether it is decimal
      *   separator or not. Only knowing the right format would allow this.
      *
-     * @param string $number
-     *
      * @throws InvalidArgumentException
-     *
-     * @return string
      */
     private static function convertToNumber(string $number): string
     {

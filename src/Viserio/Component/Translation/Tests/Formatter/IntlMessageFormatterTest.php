@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Translation\Tests\Formatter;
@@ -22,6 +22,7 @@ use Viserio\Contract\Translation\Exception\CannotInstantiateFormatterException;
  * @internal
  *
  * @small
+ * @coversNothing
  */
 final class IntlMessageFormatterTest extends TestCase
 {
@@ -60,10 +61,6 @@ female {She avoids bugs} }', 'en', [1]));
 
     /**
      * @dataProvider provideFormatCases
-     *
-     * @param mixed $expected
-     * @param mixed $message
-     * @param mixed $arguments
      */
     public function testFormat($expected, $message, $arguments): void
     {

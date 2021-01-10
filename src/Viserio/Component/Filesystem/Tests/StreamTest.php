@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Filesystem\Tests;
@@ -55,7 +55,7 @@ final class StreamTest extends TestCase
     public function testBasicBehavior(): void
     {
         /** @var resource $handle actually it creates temporary file */
-        $handle = \fopen(Stream::PROTOCOL . '://myfile.txt', 'x');
+        $handle = \fopen(Stream::PROTOCOL . '://myfile.txt', 'xb');
 
         \fwrite($handle, 'atomic and safe');
 
@@ -171,9 +171,6 @@ final class StreamTest extends TestCase
     /**
      * @dataProvider provideStressCases
      *
-     * @param bool $delete
-     * @param int  $notFoundCounter
-     *
      * @throws Exception
      */
     public function testStress(bool $delete, int $notFoundCounter): void
@@ -230,10 +227,6 @@ final class StreamTest extends TestCase
 
     /**
      * Get the owner of a file.
-     *
-     * @param string $filepath
-     *
-     * @return string
      */
     protected function getFileOwner(string $filepath): string
     {
@@ -252,10 +245,6 @@ final class StreamTest extends TestCase
 
     /**
      * Get the group of a file.
-     *
-     * @param string $filepath
-     *
-     * @return string
      */
     protected function getFileGroup(string $filepath): string
     {
@@ -274,8 +263,6 @@ final class StreamTest extends TestCase
 
     /**
      * Check if posix_isatty is supported, if not skip the test.
-     *
-     * @return void
      */
     private function markAsSkippedIfPosixIsMissing(): void
     {
@@ -291,11 +278,6 @@ final class StreamTest extends TestCase
         return \md5($s, true) . $s;
     }
 
-    /**
-     * @param string $s
-     *
-     * @return bool
-     */
     private function checkStr(string $s): bool
     {
         return \strpos($s, \md5(\substr($s, 16), true)) === 0;

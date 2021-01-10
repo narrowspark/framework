@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Exception;
@@ -122,8 +122,7 @@ class ErrorHandler implements HandlerContract,
     /**
      * Create a new error handler instance.
      *
-     * @param array|ArrayAccess             $config
-     * @param null|\Psr\Log\LoggerInterface $logger
+     * @param array|ArrayAccess $config
      */
     public function __construct($config, ?LoggerInterface $logger = null)
     {
@@ -139,8 +138,6 @@ class ErrorHandler implements HandlerContract,
 
     /**
      * Get the transformer exceptions.
-     *
-     * @return array
      */
     public function getTransformers(): array
     {
@@ -179,8 +176,6 @@ class ErrorHandler implements HandlerContract,
     /**
      * Determine if the exception shouldn't be reported.
      *
-     * @param Throwable $exception
-     *
      * @return $this
      */
     public function addShouldntReport(Throwable $exception): HandlerContract
@@ -192,10 +187,6 @@ class ErrorHandler implements HandlerContract,
 
     /**
      * Report or log an exception.
-     *
-     * @param Throwable $exception
-     *
-     * @return void
      */
     public function report(Throwable $exception): void
     {
@@ -226,8 +217,6 @@ class ErrorHandler implements HandlerContract,
 
     /**
      * Add the transformed instance.
-     *
-     * @param \Viserio\Contract\Exception\Transformer $transformer
      *
      * @return $this
      */
@@ -279,11 +268,7 @@ class ErrorHandler implements HandlerContract,
      * Note: Fatal error exceptions must
      * be handled differently since they are not normal exceptions.
      *
-     * @param Throwable $exception
-     *
      * @throws Throwable
-     *
-     * @return void
      *
      * @internal
      *
@@ -306,8 +291,6 @@ class ErrorHandler implements HandlerContract,
      * Shutdown registered function for handling PHP fatal errors.
      *
      * @throws Throwable
-     *
-     * @return void
      *
      * @internal
      */
@@ -343,8 +326,6 @@ class ErrorHandler implements HandlerContract,
 
     /**
      * Register the PHP error handler.
-     *
-     * @return void
      */
     protected function registerErrorHandler(): void
     {
@@ -353,8 +334,6 @@ class ErrorHandler implements HandlerContract,
 
     /**
      * Register the PHP exception handler.
-     *
-     * @return void
      */
     protected function registerExceptionHandler(): void
     {
@@ -370,8 +349,6 @@ class ErrorHandler implements HandlerContract,
 
     /**
      * Register the PHP shutdown handler.
-     *
-     * @return void
      */
     protected function registerShutdownHandler(): void
     {
@@ -412,10 +389,6 @@ class ErrorHandler implements HandlerContract,
 
     /**
      * Get the transformed exception.
-     *
-     * @param Throwable $exception
-     *
-     * @return Throwable
      */
     protected function getTransformed(Throwable $exception): Throwable
     {
@@ -432,10 +405,6 @@ class ErrorHandler implements HandlerContract,
 
     /**
      * Transform's the given array to a key (class name) value (object/class name) array.
-     *
-     * @param array $data
-     *
-     * @return array
      */
     protected function transformArray(array $data): array
     {
@@ -454,8 +423,6 @@ class ErrorHandler implements HandlerContract,
 
     /**
      * The default error transformers.
-     *
-     * @return array
      */
     protected function getErrorTransformer(): array
     {
@@ -468,10 +435,6 @@ class ErrorHandler implements HandlerContract,
 
     /**
      * Get the exception level.
-     *
-     * @param Throwable $exception
-     *
-     * @return string
      */
     private function getLevel(Throwable $exception): string
     {
@@ -490,10 +453,6 @@ class ErrorHandler implements HandlerContract,
 
     /**
      * Determine if the exception is in the "do not report" list.
-     *
-     * @param Throwable $exception
-     *
-     * @return bool
      */
     private function shouldntReport(Throwable $exception): bool
     {

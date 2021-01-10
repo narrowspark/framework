@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Filesystem\Tests;
@@ -455,11 +455,8 @@ abstract class AbstractFilesystemTestCase extends TestCase
     /**
      * @dataProvider provideGetAndSetVisibilityCases
      *
-     * @param int                   $expectedFile
      * @param null|float|int|string $chmodFile
-     * @param int                   $expectedDir
      * @param null|float|int|string $chmodDir
-     * @param int                   $unmask
      */
     public function testGetAndSetVisibility(
         int $expectedFile,
@@ -532,8 +529,6 @@ abstract class AbstractFilesystemTestCase extends TestCase
 
     /**
      * @dataProvider provideSetVisibilityToThrowInvalidArgumentExceptionCases
-     *
-     * @param mixed $visibility
      */
     public function testSetVisibilityToThrowInvalidArgumentException($visibility): void
     {
@@ -761,9 +756,6 @@ abstract class AbstractFilesystemTestCase extends TestCase
         self::assertEquals('Foo Bar', $this->filesystem->read($this->createFile(__FUNCTION__, 'Foo Bar')));
     }
 
-    /**
-     * @todo fix this test for docker run
-     */
     public function testReadThrowIOException(): void
     {
         if (\array_key_exists(__FUNCTION__, $this->skippedTests)) {
@@ -863,10 +855,6 @@ abstract class AbstractFilesystemTestCase extends TestCase
 
     /**
      * @dataProvider providePermissionCases
-     *
-     * @param int $chmod
-     * @param int $umask
-     * @param int $expectedChmod
      */
     public function testWriteWithVisibility(int $chmod, int $umask, int $expectedChmod): void
     {
@@ -893,10 +881,6 @@ abstract class AbstractFilesystemTestCase extends TestCase
      * @requires OS Darwin|Linux
      *
      * @dataProvider providePermissionCases
-     *
-     * @param int $chmod
-     * @param int $umask
-     * @param int $expectedChmod
      */
     public function testWriteStreamWithVisibility(int $chmod, int $umask, int $expectedChmod): void
     {
@@ -927,10 +911,6 @@ abstract class AbstractFilesystemTestCase extends TestCase
 
     /**
      * @dataProvider providePermissionCases
-     *
-     * @param int $chmod
-     * @param int $umask
-     * @param int $expectedChmod
      */
     public function testAppendStreamWithVisibility(int $chmod, int $umask, int $expectedChmod): void
     {
@@ -1350,9 +1330,6 @@ abstract class AbstractFilesystemTestCase extends TestCase
         self::assertSame($dir, $this->filesystem->changeExtension($dir, 'php'));
     }
 
-    /**
-     * @todo fix this test for docker run
-     */
     public function testIsWritable(): void
     {
         if (\array_key_exists(__FUNCTION__, $this->skippedTests)) {
@@ -2155,10 +2132,6 @@ abstract class AbstractFilesystemTestCase extends TestCase
 
     /**
      * Get the owner uid of a file.
-     *
-     * @param string $filepath
-     *
-     * @return int
      */
     protected function getFileOwnerId(string $filepath): int
     {
@@ -2175,10 +2148,6 @@ abstract class AbstractFilesystemTestCase extends TestCase
 
     /**
      * Get the group uid of a file.
-     *
-     * @param string $filepath
-     *
-     * @return int
      */
     protected function getFileGroupId(string $filepath): int
     {
@@ -2194,14 +2163,7 @@ abstract class AbstractFilesystemTestCase extends TestCase
     }
 
     /**
-     * @param string      $name
-     * @param null|string $content
      * @param null|string $at
-     * @param null|int    $chmod
-     * @param null|int    $chgrp
-     * @param null|int    $time
-     *
-     * @return string
      */
     abstract protected function createFile(
         string $name,
@@ -2212,20 +2174,8 @@ abstract class AbstractFilesystemTestCase extends TestCase
         ?int $time = null
     ): string;
 
-    /**
-     * @param string      $name
-     * @param null|string $childOf
-     * @param null|int    $chmod
-     *
-     * @return string
-     */
     abstract protected function createDir(string $name, ?string $childOf = null, ?int $chmod = null): string;
 
-    /**
-     * @param int $size
-     *
-     * @return string
-     */
     abstract protected function createFileContent(int $size): string;
 
     /**
@@ -2233,8 +2183,6 @@ abstract class AbstractFilesystemTestCase extends TestCase
      *
      * @param int    $expectedFilePerms Expected file permissions as three digits (i.e. 755)
      * @param string $filePath
-     *
-     * @return void
      */
     private function assertFilePermissions($expectedFilePerms, $filePath): void
     {
@@ -2249,10 +2197,6 @@ abstract class AbstractFilesystemTestCase extends TestCase
 
     /**
      * Get the owner of a file.
-     *
-     * @param string $filepath
-     *
-     * @return string
      */
     private function getFileOwner(string $filepath): string
     {
@@ -2263,10 +2207,6 @@ abstract class AbstractFilesystemTestCase extends TestCase
 
     /**
      * Get the group of a file.
-     *
-     * @param string $filepath
-     *
-     * @return string
      */
     private function getFileGroup(string $filepath): string
     {
@@ -2277,8 +2217,6 @@ abstract class AbstractFilesystemTestCase extends TestCase
 
     /**
      * Check if link is supported, if not skip the test.
-     *
-     * @return void
      */
     private function markAsSkippedIfLinkIsMissing(): void
     {
@@ -2295,8 +2233,6 @@ abstract class AbstractFilesystemTestCase extends TestCase
      * Check if symbolic link is supported, if not skip the test.
      *
      * @param bool $relative
-     *
-     * @return void
      */
     private function markAsSkippedIfSymlinkIsMissing($relative = false): void
     {
@@ -2304,7 +2240,6 @@ abstract class AbstractFilesystemTestCase extends TestCase
             self::markTestSkipped('symlink requires "Create symbolic links" privilege on Windows');
         }
 
-        // https://bugs.php.net/69473
         if ($relative && \PHP_OS_FAMILY === 'Windows' && 1 === \PHP_ZTS) {
             self::markTestSkipped('symlink does not support relative paths on thread safe Windows PHP versions');
         }
@@ -2312,8 +2247,6 @@ abstract class AbstractFilesystemTestCase extends TestCase
 
     /**
      * Check if chmod is supported, if not skip the test.
-     *
-     * @return void
      */
     private function markAsSkippedIfChmodIsMissing(): void
     {
@@ -2324,8 +2257,6 @@ abstract class AbstractFilesystemTestCase extends TestCase
 
     /**
      * Check if posix_isatty is supported, if not skip the test.
-     *
-     * @return void
      */
     private function markAsSkippedIfPosixIsMissing(): void
     {
@@ -2336,10 +2267,6 @@ abstract class AbstractFilesystemTestCase extends TestCase
 
     /**
      * Normalize the given path (transform each blackslash into a real directory separator).
-     *
-     * @param string $path
-     *
-     * @return string
      */
     private function normalize(string $path): string
     {

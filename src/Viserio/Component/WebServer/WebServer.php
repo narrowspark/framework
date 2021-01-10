@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\WebServer;
@@ -34,10 +34,6 @@ final class WebServer
 
     /**
      * @param \Viserio\Component\WebServer\WebServerConfig $config
-     * @param bool                                         $disableOutput
-     * @param null|callable                                $callback
-     *
-     * @return void
      */
     public static function run(WebServerConfig $config, bool $disableOutput = true, ?callable $callback = null): void
     {
@@ -75,9 +71,6 @@ final class WebServer
      * Starts a local web server in the background.
      *
      * @param \Viserio\Component\WebServer\WebServerConfig $config
-     * @param null|string                                  $pidFile
-     *
-     * @return int
      */
     public static function start(WebServerConfig $config, ?string $pidFile = null): int
     {
@@ -125,10 +118,6 @@ final class WebServer
 
     /**
      * Stop a running web server.
-     *
-     * @param null|string $pidFile
-     *
-     * @return void
      */
     public static function stop(?string $pidFile = null): void
     {
@@ -143,8 +132,6 @@ final class WebServer
 
     /**
      * Get the address from the pid file.
-     *
-     * @param null|string $pidFile
      *
      * @return bool|string
      */
@@ -161,10 +148,6 @@ final class WebServer
 
     /**
      * Check if a server is running.
-     *
-     * @param null|string $pidFile
-     *
-     * @return bool
      */
     public static function isRunning(?string $pidFile = null): bool
     {
@@ -194,8 +177,6 @@ final class WebServer
      * Create a new server command process.
      *
      * @param \Viserio\Component\WebServer\WebServerConfig $config
-     *
-     * @return \Symfony\Component\Process\Process
      */
     private static function createServerProcess(WebServerConfig $config): Process
     {
@@ -220,8 +201,6 @@ final class WebServer
 
     /**
      * Get the default pid file path.
-     *
-     * @return string
      */
     private static function getDefaultPidFile(): string
     {

@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Http\Stream;
@@ -58,8 +58,6 @@ class LimitStream extends AbstractStreamDecorator
      * @param int $offset Offset to seek to and begin byte limiting from
      *
      * @throws \Viserio\Contract\Http\Exception\RuntimeException if the stream cannot be seeked
-     *
-     * @return void
      */
     public function setOffset(int $offset): void
     {
@@ -85,8 +83,6 @@ class LimitStream extends AbstractStreamDecorator
      *
      * @param int $limit number of bytes to allow to be read from the stream.
      *                   Use -1 for no limit
-     *
-     * @return void
      */
     public function setLimit(int $limit): void
     {

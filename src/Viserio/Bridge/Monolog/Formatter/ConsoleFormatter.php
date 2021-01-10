@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Bridge\Monolog\Formatter;
@@ -68,8 +68,6 @@ class ConsoleFormatter implements FormatterInterface
 
     /**
      * Stream data.
-     *
-     * @var mixed
      */
     private $outputBuffer;
 
@@ -95,8 +93,6 @@ class ConsoleFormatter implements FormatterInterface
      *   * date_format: The format of the outputted date string;
      *   * colors: If true, the log string contains ANSI code to add color;
      *   * multiline: If false, "context" and "extra" are dumped on one line.
-     *
-     * @param array $options
      */
     public function __construct(array $options = [])
     {
@@ -169,12 +165,6 @@ class ConsoleFormatter implements FormatterInterface
 
     /**
      * @internal
-     *
-     * @param mixed $line
-     * @param mixed $depth
-     * @param mixed $indentPad
-     *
-     * @return void
      */
     public function echoLine($line, $depth, $indentPad): void
     {
@@ -185,8 +175,6 @@ class ConsoleFormatter implements FormatterInterface
 
     /**
      * Return a anonymous class with a castObject function.
-     *
-     * @return object
      *
      * @codeCoverageIgnore
      */
@@ -205,14 +193,6 @@ class ConsoleFormatter implements FormatterInterface
                 $this->options = $options;
             }
 
-            /**
-             * @param mixed                                    $value
-             * @param array                                    $array
-             * @param \Symfony\Component\VarDumper\Cloner\Stub $stub
-             * @param mixed                                    $isNested
-             *
-             * @return array
-             */
             public function castObject($value, array $array, Stub $stub, $isNested): array
             {
                 if ((bool) $this->options['multiline']) {
@@ -231,10 +211,6 @@ class ConsoleFormatter implements FormatterInterface
 
     /**
      * Replace message and context place holder.
-     *
-     * @param array $record
-     *
-     * @return array
      */
     private function replacePlaceHolder(array $record): array
     {
@@ -262,11 +238,6 @@ class ConsoleFormatter implements FormatterInterface
 
     /**
      * Dump console data.
-     *
-     * @param mixed     $data
-     * @param null|bool $colors
-     *
-     * @return string
      */
     private function dumpData($data, ?bool $colors = null): string
     {

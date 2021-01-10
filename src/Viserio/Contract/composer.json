@@ -58,8 +58,7 @@
     "require-dev": {
         "mockery/mockery": "^1.2.4",
         "narrowspark/testing-helper": "^8.0.2",
-        "narrowspark/coding-standard": "^3.4.0",
-        "slam/phpstan-extensions": "^4.0.0",
+        "narrowspark/coding-standard": "^4.0.0",
         "phpunit/phpunit": "8.2.*",
         "psr/cache": "^1.0.1",
         "psr/container": "^1.0.0",

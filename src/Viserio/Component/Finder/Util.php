@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Finder;
@@ -178,13 +178,11 @@ final class Util
      * glob returned by {@link getStaticPrefix()} to reduce the number of calls
      * to the expensive {@link preg_match()}.
      *
-     * @param string $glob                      The canonical glob. The glob should contain forward
-     *                                          slashes as directory separators only. It must not
-     *                                          contain any "." or ".." segments. Use the
-     *                                          "Path::canonicalize" to canonicalize globs
-     *                                          prior to calling this method.
-     * @param string $delimiter
-     * @param bool   $checkForAbsolutePathOrUri
+     * @param string $glob The canonical glob. The glob should contain forward
+     *                     slashes as directory separators only. It must not
+     *                     contain any "." or ".." segments. Use the
+     *                     "Path::canonicalize" to canonicalize globs
+     *                     prior to calling this method.
      *
      * @throws \Viserio\Contract\Finder\Exception\InvalidArgumentException
      *
@@ -329,9 +327,6 @@ final class Util
      * @license   http://framework.zend.com/license/new-bsd New BSD License
      *
      * @see https://github.com/zendframework/zend-stdlib/issues/58
-     *
-     * @param string $pattern
-     * @param int    $flags
      *
      * @return false|string[]
      */

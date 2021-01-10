@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Profiler\Provider;
@@ -112,11 +112,6 @@ class ProfilerServiceProvider implements AliasServiceProviderContract,
 
     /**
      * Register profiler asset controllers.
-     *
-     * @param \Psr\Container\ContainerInterface          $container
-     * @param null|\Viserio\Contract\Events\EventManager $eventManager
-     *
-     * @return null|\Viserio\Contract\Events\EventManager
      */
     public static function extendEventManager(
         ContainerInterface $container,
@@ -165,9 +160,6 @@ class ProfilerServiceProvider implements AliasServiceProviderContract,
     /**
      * Register profiler asset controllers.
      *
-     * @param \Psr\Container\ContainerInterface     $container
-     * @param null|\Viserio\Contract\Routing\Router $router
-     *
      * @return null|\Viserio\Contract\Routing\Router
      */
     public static function extendRouter(ContainerInterface $container, ?RouterContract $router = null): RouterContract
@@ -196,12 +188,6 @@ class ProfilerServiceProvider implements AliasServiceProviderContract,
 
     /**
      * Register base collectors.
-     *
-     * @param \Psr\Container\ContainerInterface   $container
-     * @param \Viserio\Contract\Profiler\Profiler $profiler
-     * @param array                               $options
-     *
-     * @return void
      */
     protected static function registerBaseCollectors(
         ContainerInterface $container,
@@ -229,12 +215,6 @@ class ProfilerServiceProvider implements AliasServiceProviderContract,
 
     /**
      * Register all found collectors in config.
-     *
-     * @param \Psr\Container\ContainerInterface   $container
-     * @param \Viserio\Contract\Profiler\Profiler $profiler
-     * @param array                               $options
-     *
-     * @return void
      */
     private static function registerCollectorsFromConfig(
         ContainerInterface $container,

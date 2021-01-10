@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Container\Exception;
@@ -33,12 +33,6 @@ class NotFoundException extends Exception implements NotFoundExceptionInterface
 
     /**
      * Create a new NotFoundException instance.
-     *
-     * @param string         $id
-     * @param null|string    $sourceId
-     * @param null|Exception $previous
-     * @param array          $alternatives
-     * @param null|string    $message
      */
     public function __construct(
         string $id,
@@ -72,25 +66,17 @@ class NotFoundException extends Exception implements NotFoundExceptionInterface
 
     /**
      * Get service id.
-     *
-     * @return string
      */
     public function getId(): string
     {
         return $this->id;
     }
 
-    /**
-     * @return null|string
-     */
     public function getSourceId(): ?string
     {
         return $this->sourceId;
     }
 
-    /**
-     * @return array
-     */
     public function getAlternatives(): array
     {
         return $this->alternatives;

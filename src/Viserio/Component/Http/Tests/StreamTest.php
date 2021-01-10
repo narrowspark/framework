@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Http\Tests;
@@ -25,6 +25,7 @@ use Viserio\Contract\Http\Exception\UnexpectedValueException;
  * @internal
  *
  * @small
+ * @coversNothing
  */
 final class StreamTest extends MockeryTestCase
 {
@@ -339,13 +340,7 @@ final class StreamTest extends MockeryTestCase
     /**
      * @dataProvider provideForReadableStreamsCases
      *
-     * @param string $mode
-     * @param string $func
-     * @param bool   $createFile
-     *
      * @throws \Exception
-     *
-     * @return void
      */
     public function testForReadableStreams(string $mode, string $func, bool $createFile = false): void
     {
@@ -451,13 +446,7 @@ final class StreamTest extends MockeryTestCase
     /**
      * @dataProvider provideForWritableStreamsCases
      *
-     * @param string $mode
-     * @param string $func
-     * @param bool   $createFile
-     *
      * @throws \Exception
-     *
-     * @return void
      */
     public function testForWritableStreams(string $mode, string $func, bool $createFile = false): void
     {
@@ -572,7 +561,7 @@ final class StreamTest extends MockeryTestCase
         self::assertFalse(NSA::invokeMethod($stream, 'isPipe'));
 
         /** @var resource $handler */
-        $handler = \fopen(__FILE__, 'r');
+        $handler = \fopen(__FILE__, 'rb');
 
         $fileStream = new Stream($handler);
 
@@ -682,9 +671,6 @@ final class StreamTest extends MockeryTestCase
         self::assertSame('ar', \trim((string) $stream));
     }
 
-    /**
-     * @param Stream $stream
-     */
     private static function assertStreamStateAfterClosedOrDetached(Stream $stream): void
     {
         self::assertFalse($stream->isReadable());
@@ -746,7 +732,6 @@ use Viserio\Component\Http\Tests\StreamTest;
 
 /**
  * @param resource $handle
- * @param int      $length
  *
  * @return false|string
  */

@@ -20,16 +20,19 @@ jobs:
           fetch-depth: 2
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@1.8.2
+        uses: shivammathur/setup-php@2.1.0
         with:
-          php-version: 7.4
+          php-version: "7.4.2"
           extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo
           tools: composer, composer-prefetcher, cs2pr
 
-      - name: "Install Narrowspark coding standard and Annotate a Github Pull Request"
-        run: composer global require narrowspark/coding-standard:3.4.0 --no-interaction --no-progress --profile --no-suggest --optimize-autoloader
+      - name: "Install Narrowspark coding standard"
+        run: |
+          composer global require narrowspark/coding-standard:3.4.0 --no-interaction --no-progress --profile --no-suggest --optimize-autoloader
+          # can be removed if bug with ClassAttributesSeparationFixer is fixed in newer version
+          composer global require friendsofphp/php-cs-fixer:2.16.x-dev
 
       - name: "lint php code"
         run: |
           cd $GITHUB_WORKSPACE
-          /home/runner/.composer/vendor/bin/php-cs-fixer fix --config=$GITHUB_WORKSPACE/.php_cs -v --dry-run --stop-on-violation --format=checkstyle | cs2pr
+          /home/runner/.composer/vendor/bin/php-cs-fixer fix --config=$GITHUB_WORKSPACE/.php_cs -v --dry-run --format=checkstyle | cs2pr

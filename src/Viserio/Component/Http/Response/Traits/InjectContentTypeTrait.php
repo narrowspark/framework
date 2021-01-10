@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Http\Response\Traits;
@@ -18,7 +18,6 @@ trait InjectContentTypeTrait
     /**
      * Inject the provided Content-Type, if none is already present.
      *
-     * @param string                   $contentType
      * @param array<int|string, mixed> $headers
      *
      * @return array<int|string, mixed> Headers with injected Content-Type

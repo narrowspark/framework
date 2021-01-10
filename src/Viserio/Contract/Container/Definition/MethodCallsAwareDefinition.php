@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Container\Definition;
@@ -17,15 +17,11 @@ interface MethodCallsAwareDefinition
 {
     /**
      * Gets the methods to call after service initialization.
-     *
-     * @return array
      */
     public function getMethodCalls(): array;
 
     /**
      * Sets the methods to call after service initialization.
-     *
-     * @param array $calls
      *
      * @return static
      */
@@ -57,8 +53,6 @@ interface MethodCallsAwareDefinition
      * Check if the current definition has a given method to call after service initialization.
      *
      * @param string $method The method name to search for
-     *
-     * @return bool
      */
     public function hasMethodCall($method): bool;
 }

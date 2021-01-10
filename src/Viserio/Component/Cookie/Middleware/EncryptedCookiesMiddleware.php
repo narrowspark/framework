@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Cookie\Middleware;
@@ -45,8 +45,6 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
 
     /**
      * Create a new encrypt Cookies instance.
-     *
-     * @param \ParagonIE\Halite\Symmetric\EncryptionKey $key
      */
     public function __construct(EncryptionKey $key)
     {
@@ -55,8 +53,6 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
 
     /**
      * Hide this from var_dump(), etc.
-     *
-     * @return array
      */
     public function __debugInfo(): array
     {
@@ -79,10 +75,6 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
 
     /**
      * Decrypt the cookies on the request.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     *
-     * @return \Psr\Http\Message\ServerRequestInterface
      */
     protected function decrypt(ServerRequestInterface $request): ServerRequestInterface
     {
@@ -112,10 +104,6 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
 
     /**
      * Encrypt the cookies on an outgoing response.
-     *
-     * @param \Psr\Http\Message\ResponseInterface $response
-     *
-     * @return \Psr\Http\Message\ResponseInterface
      */
     protected function encrypt(ResponseInterface $response): ResponseInterface
     {
@@ -148,11 +136,6 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
 
     /**
      * Duplicate a cookie with a new value.
-     *
-     * @param \Viserio\Contract\Cookie\Cookie $cookie
-     * @param string                          $value
-     *
-     * @return \Viserio\Contract\Cookie\Cookie
      */
     protected function duplicate(CookieContract $cookie, string $value): CookieContract
     {
@@ -169,10 +152,6 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
 
     /**
      * Determine whether encryption has been disabled for the given cookie.
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     protected function isDisabled(string $name): bool
     {

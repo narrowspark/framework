@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Events\DataCollector;
@@ -64,7 +64,6 @@ class TraceableEventManager implements EventManagerContract, LoggerAwareInterfac
      * Create a new TraceableEventManager instance.
      *
      * @param null|\Viserio\Component\Events\EventManager $eventManager
-     * @param \Symfony\Component\Stopwatch\Stopwatch      $stopwatch
      *
      * @throws \Viserio\Contract\Events\Exception\RuntimeException
      */
@@ -77,11 +76,6 @@ class TraceableEventManager implements EventManagerContract, LoggerAwareInterfac
 
     /**
      * Proxy all method calls to the original event manager.
-     *
-     * @param string $method
-     * @param array  $parameters
-     *
-     * @return mixed
      */
     public function __call(string $method, array $parameters)
     {
@@ -232,8 +226,6 @@ class TraceableEventManager implements EventManagerContract, LoggerAwareInterfac
 
     /**
      * Resets this to its initial state.
-     *
-     * @return void
      */
     public function reset(): void
     {
@@ -268,11 +260,6 @@ class TraceableEventManager implements EventManagerContract, LoggerAwareInterfac
         return $this->eventManager->getListenerPriority($eventName, $listener);
     }
 
-    /**
-     * @param string $eventName
-     *
-     * @return void
-     */
     private function preProcess(string $eventName): void
     {
         if (\count($this->eventManager->getListeners($eventName)) === 0) {
@@ -290,9 +277,6 @@ class TraceableEventManager implements EventManagerContract, LoggerAwareInterfac
         }
     }
 
-    /**
-     * @param string $eventName
-     */
     private function postProcess(string $eventName): void
     {
         unset($this->wrappedListeners[$eventName]);
@@ -334,12 +318,6 @@ class TraceableEventManager implements EventManagerContract, LoggerAwareInterfac
         }
     }
 
-    /**
-     * @param array $a
-     * @param array $b
-     *
-     * @return int
-     */
     private function sortListenersByPriority(array $a, array $b): int
     {
         if (\is_int($a['priority']) && ! \is_int($b['priority'])) {

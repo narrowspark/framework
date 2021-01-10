@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Pipeline;
@@ -28,8 +28,6 @@ class Pipeline implements PipelineContract
 
     /**
      * The object being passed through the pipeline.
-     *
-     * @var mixed
      */
     protected $traveler;
 
@@ -93,8 +91,6 @@ class Pipeline implements PipelineContract
 
     /**
      * Get a Closure that represents a slice of the application onion.
-     *
-     * @return Closure
      */
     protected function getSlice(): Closure
     {
@@ -137,10 +133,6 @@ class Pipeline implements PipelineContract
 
     /**
      * Get the initial slice to begin the stack call.
-     *
-     * @param Closure $destination
-     *
-     * @return Closure
      */
     protected function getInitialSlice(Closure $destination): Closure
     {
@@ -151,10 +143,6 @@ class Pipeline implements PipelineContract
 
     /**
      * Parse full pipe string to get name and parameters.
-     *
-     * @param string $stage
-     *
-     * @return array
      */
     protected function parseStageString(string $stage): array
     {
@@ -170,13 +158,7 @@ class Pipeline implements PipelineContract
     /**
      * Resolve from container.
      *
-     * @param mixed  $traveler
-     * @param mixed  $stack
-     * @param string $stage
-     *
      * @throws \Viserio\Contract\Pipeline\Exception\RuntimeException
-     *
-     * @return mixed
      */
     protected function sliceThroughContainer($traveler, $stack, string $stage)
     {

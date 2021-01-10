@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Console\Tests;
@@ -57,6 +57,7 @@ use Viserio\Contract\Events\EventManager as EventManagerContract;
  * @internal
  *
  * @small
+ * @coversNothing
  */
 final class ApplicationTest extends MockeryTestCase
 {
@@ -876,8 +877,6 @@ final class ApplicationTest extends MockeryTestCase
 
     /**
      * Fixture method.
-     *
-     * @param OutputInterface $output
      */
     public function foo(OutputInterface $output): void
     {
@@ -892,11 +891,6 @@ final class ApplicationTest extends MockeryTestCase
         parent::allowMockingNonExistentMethods(true);
     }
 
-    /**
-     * @param bool $skipCommand
-     *
-     * @return \Viserio\Contract\Events\EventManager
-     */
     private function getDispatcher(bool $skipCommand = false): EventManagerContract
     {
         $dispatcher = new EventManager();
@@ -930,8 +924,6 @@ final class ApplicationTest extends MockeryTestCase
      * @param int|string $expected
      *
      * @throws Exception
-     *
-     * @return void
      */
     private function assertOutputIs($command, $expected): void
     {

@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Profiler\DataCollector\Bridge\PDO;
@@ -35,8 +35,6 @@ class TraceablePDODecorater extends PDO
 
     /**
      * Create a new TraceablePDODecorater instance.
-     *
-     * @param PDO $pdo
      */
     public function __construct(PDO $pdo)
     {
@@ -46,8 +44,6 @@ class TraceablePDODecorater extends PDO
 
     /**
      * Returns the list of executed statements as TracedStatement objects.
-     *
-     * @return array
      */
     public function getExecutedStatements(): array
     {
@@ -88,8 +84,6 @@ class TraceablePDODecorater extends PDO
 
     /**
      * {@inheritdoc}
-     *
-     * @param mixed $statement
      */
     public function exec($statement)
     {
@@ -172,8 +166,6 @@ class TraceablePDODecorater extends PDO
 
     /**
      * Returns the accumulated execution time of statements.
-     *
-     * @return int
      */
     public function getAccumulatedStatementsDuration(): int
     {
@@ -184,8 +176,6 @@ class TraceablePDODecorater extends PDO
 
     /**
      * Returns the peak memory usage while performing statements.
-     *
-     * @return int
      */
     public function getMemoryUsage(): int
     {
@@ -196,8 +186,6 @@ class TraceablePDODecorater extends PDO
 
     /**
      * Returns the peak memory usage while performing statements.
-     *
-     * @return int
      */
     public function getPeakMemoryUsage(): int
     {
@@ -210,8 +198,6 @@ class TraceablePDODecorater extends PDO
 
     /**
      * Returns the list of failed statements.
-     *
-     * @return array
      */
     public function getFailedExecutedStatements(): array
     {
@@ -222,12 +208,6 @@ class TraceablePDODecorater extends PDO
 
     /**
      * Profiles a call to a PDO method.
-     *
-     * @param string $method
-     * @param string $sql
-     * @param array  $args
-     *
-     * @return mixed
      */
     protected function profileCall(string $method, string $sql, array $args)
     {

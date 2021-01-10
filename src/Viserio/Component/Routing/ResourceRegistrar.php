@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Routing;
@@ -75,8 +75,6 @@ class ResourceRegistrar
 
     /**
      * Create a new resource registrar instance.
-     *
-     * @param \Viserio\Contract\Routing\Router $router
      */
     public function __construct(RouterContract $router)
     {
@@ -85,8 +83,6 @@ class ResourceRegistrar
 
     /**
      * Get the global parameter map.
-     *
-     * @return array
      */
     public static function getParameters(): array
     {
@@ -95,10 +91,6 @@ class ResourceRegistrar
 
     /**
      * Set the global parameter mapping.
-     *
-     * @param array $parameters
-     *
-     * @return void
      */
     public static function setParameters(array $parameters = []): void
     {
@@ -107,10 +99,6 @@ class ResourceRegistrar
 
     /**
      * Set or unset the unmapped global parameters to singular.
-     *
-     * @param bool $singular
-     *
-     * @return void
      */
     public static function singularParameters(bool $singular = true): void
     {
@@ -119,8 +107,6 @@ class ResourceRegistrar
 
     /**
      * Get the action verbs used in the resource URIs.
-     *
-     * @return array
      */
     public static function getVerbs(): array
     {
@@ -129,10 +115,6 @@ class ResourceRegistrar
 
     /**
      * Set the action verbs used in the resource URIs.
-     *
-     * @param array $verbs
-     *
-     * @return void
      */
     public static function setVerbs(array $verbs): void
     {
@@ -141,12 +123,6 @@ class ResourceRegistrar
 
     /**
      * Route a resource to a controller.
-     *
-     * @param string $name
-     * @param string $controller
-     * @param array  $options
-     *
-     * @return void
      */
     public function register(string $name, string $controller, array $options = []): void
     {
@@ -188,11 +164,6 @@ class ResourceRegistrar
 
     /**
      * Get the base resource URI for a given resource.
-     *
-     * @param string $resource
-     * @param array  $options
-     *
-     * @return string
      */
     public function getResourceUri(string $resource, array $options): string
     {
@@ -218,10 +189,6 @@ class ResourceRegistrar
 
     /**
      * Format a resource parameter for usage.
-     *
-     * @param string $value
-     *
-     * @return string
      */
     public function getResourceWildcard(string $value): string
     {
@@ -238,12 +205,6 @@ class ResourceRegistrar
 
     /**
      * Build a set of prefixed resource routes.
-     *
-     * @param string $name
-     * @param string $controller
-     * @param array  $options
-     *
-     * @return void
      */
     protected function prefixedResource(string $name, string $controller, array $options): void
     {
@@ -261,10 +222,6 @@ class ResourceRegistrar
 
     /**
      * Extract the resource and prefix from a resource name.
-     *
-     * @param string $name
-     *
-     * @return array
      */
     protected function getResourcePrefix(string $name): array
     {
@@ -280,11 +237,6 @@ class ResourceRegistrar
 
     /**
      * Get the applicable resource methods.
-     *
-     * @param array $defaults
-     * @param array $options
-     *
-     * @return array
      */
     protected function getResourceMethods(array $defaults, array $options): array
     {
@@ -301,13 +253,6 @@ class ResourceRegistrar
 
     /**
      * Add the index method for a resourceful route.
-     *
-     * @param string $name
-     * @param string $base
-     * @param string $controller
-     * @param array  $options
-     *
-     * @return Route
      */
     protected function addResourceIndex(string $name, string $base, string $controller, array $options): Route
     {
@@ -320,13 +265,6 @@ class ResourceRegistrar
 
     /**
      * Add the create method for a resourceful route.
-     *
-     * @param string $name
-     * @param string $base
-     * @param string $controller
-     * @param array  $options
-     *
-     * @return Route
      */
     protected function addResourceCreate(string $name, string $base, string $controller, array $options): Route
     {
@@ -339,11 +277,6 @@ class ResourceRegistrar
 
     /**
      * Add the store method for a resourceful route.
-     *
-     * @param string $name
-     * @param string $base
-     * @param string $controller
-     * @param array  $options
      *
      * @return Route
      */
@@ -359,11 +292,6 @@ class ResourceRegistrar
     /**
      * Add the show method for a resourceful route.
      *
-     * @param string $name
-     * @param string $base
-     * @param string $controller
-     * @param array  $options
-     *
      * @return Route
      */
     protected function addResourceShow(string $name, string $base, string $controller, array $options): RouteContract
@@ -377,11 +305,6 @@ class ResourceRegistrar
 
     /**
      * Add the edit method for a resourceful route.
-     *
-     * @param string $name
-     * @param string $base
-     * @param string $controller
-     * @param array  $options
      *
      * @return Route
      */
@@ -397,11 +320,6 @@ class ResourceRegistrar
     /**
      * Add the update method for a resourceful route.
      *
-     * @param string $name
-     * @param string $base
-     * @param string $controller
-     * @param array  $options
-     *
      * @return Route
      */
     protected function addResourceUpdate(string $name, string $base, string $controller, array $options): RouteContract
@@ -416,11 +334,6 @@ class ResourceRegistrar
     /**
      * Add the destroy method for a resourceful route.
      *
-     * @param string $name
-     * @param string $base
-     * @param string $controller
-     * @param array  $options
-     *
      * @return Route
      */
     protected function addResourceDestroy(string $name, string $base, string $controller, array $options): RouteContract
@@ -434,11 +347,6 @@ class ResourceRegistrar
 
     /**
      * Get the URI for a nested resource segment array.
-     *
-     * @param array $segments
-     * @param array $options
-     *
-     * @return string
      */
     protected function getNestedResourceUri(array $segments, array $options): string
     {
@@ -459,13 +367,6 @@ class ResourceRegistrar
 
     /**
      * Get the action array for a resource route.
-     *
-     * @param string $resource
-     * @param string $controller
-     * @param string $method
-     * @param array  $options
-     *
-     * @return array
      */
     protected function getResourceAction(string $resource, string $controller, string $method, array $options): array
     {
@@ -486,12 +387,6 @@ class ResourceRegistrar
 
     /**
      * Get the name for a given resource.
-     *
-     * @param string $resource
-     * @param string $method
-     * @param array  $options
-     *
-     * @return string
      */
     protected function getResourceRouteName(string $resource, string $method, array $options): string
     {

@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Log\DataCollector;
@@ -157,8 +157,6 @@ class LoggerDataCollector extends AbstractDataCollector implements PanelAwareCon
 
     /**
      * Get log error priorities.
-     *
-     * @return array
      */
     public function getPriorities(): array
     {
@@ -167,8 +165,6 @@ class LoggerDataCollector extends AbstractDataCollector implements PanelAwareCon
 
     /**
      * Get counted errors.
-     *
-     * @return int
      */
     public function getCountedErrors(): int
     {
@@ -177,8 +173,6 @@ class LoggerDataCollector extends AbstractDataCollector implements PanelAwareCon
 
     /**
      * Get counted deprecations.
-     *
-     * @return int
      */
     public function getCountedDeprecations(): int
     {
@@ -187,8 +181,6 @@ class LoggerDataCollector extends AbstractDataCollector implements PanelAwareCon
 
     /**
      * Get counted warnings.
-     *
-     * @return int
      */
     public function getCountedWarnings(): int
     {
@@ -197,8 +189,6 @@ class LoggerDataCollector extends AbstractDataCollector implements PanelAwareCon
 
     /**
      * Get counted screams.
-     *
-     * @return int
      */
     public function getCountedScreams(): int
     {
@@ -207,8 +197,6 @@ class LoggerDataCollector extends AbstractDataCollector implements PanelAwareCon
 
     /**
      * Get counted logs.
-     *
-     * @return int
      */
     public function getCountedLogs(): int
     {
@@ -217,8 +205,6 @@ class LoggerDataCollector extends AbstractDataCollector implements PanelAwareCon
 
     /**
      * Returns collected logs.
-     *
-     * @return array
      */
     public function getLogs(): array
     {
@@ -241,8 +227,6 @@ class LoggerDataCollector extends AbstractDataCollector implements PanelAwareCon
 
     /**
      * Returns a DebugProcessor instance if one is registered with this logger.
-     *
-     * @return null|\Viserio\Bridge\Monolog\Processor\DebugProcessor
      */
     private function getDebugLogger(): ?DebugProcessor
     {
@@ -257,10 +241,6 @@ class LoggerDataCollector extends AbstractDataCollector implements PanelAwareCon
 
     /**
      * Undocumented function.
-     *
-     * @param array $logs
-     *
-     * @return array
      */
     private function sanitizeLogs(array $logs): array
     {
@@ -293,10 +273,6 @@ class LoggerDataCollector extends AbstractDataCollector implements PanelAwareCon
 
     /**
      * Find silenced or deprecation in error log.
-     *
-     * @param array $log
-     *
-     * @return bool
      */
     private function isSilencedOrDeprecationErrorLog(array $log): bool
     {
@@ -319,8 +295,6 @@ class LoggerDataCollector extends AbstractDataCollector implements PanelAwareCon
 
     /**
      * Get computed log error levels.
-     *
-     * @return array
      */
     private function getComputedErrorsCount(): array
     {
@@ -368,8 +342,6 @@ class LoggerDataCollector extends AbstractDataCollector implements PanelAwareCon
 
     /**
      * Group log level together.
-     *
-     * @return array
      */
     private function groupLogLevels(): array
     {

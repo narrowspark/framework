@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Validation;
@@ -48,11 +48,6 @@ class Validator implements ValidatorContract
 
     /**
      * Add your own rule's namespace.
-     *
-     * @param string $namespace
-     * @param bool   $overwrite
-     *
-     * @return void
      *
      * @codeCoverageIgnore
      */
@@ -129,10 +124,6 @@ class Validator implements ValidatorContract
 
     /**
      * Parse the data array.
-     *
-     * @param array $data
-     *
-     * @return array
      */
     protected function parseData(array $data): array
     {
@@ -152,8 +143,6 @@ class Validator implements ValidatorContract
      * Create a rule object.
      *
      * @param array|string $rules
-     *
-     * @return \Respect\Validation\Validator
      */
     protected function createRule($rules): RespectValidator
     {
@@ -187,13 +176,7 @@ class Validator implements ValidatorContract
     /**
      * Create a validator instance.
      *
-     * @param array $rules
-     * @param array $notRules
-     * @param array $optionalRules
-     *
      * @throws RuntimeException
-     *
-     * @return \Respect\Validation\Validator
      */
     protected function createValidator(array &$rules, array $notRules, array $optionalRules): RespectValidator
     {
@@ -218,11 +201,6 @@ class Validator implements ValidatorContract
 
     /**
      * Create a negative or optional validator instance.
-     *
-     * @param string $filter
-     * @param array  $rules
-     *
-     * @return \Respect\Validation\Validator
      */
     protected function createNegativeOrOptionalValidator(string $filter, array $rules): RespectValidator
     {
@@ -242,11 +220,6 @@ class Validator implements ValidatorContract
 
     /**
      * Chain validator to a chained validator object.
-     *
-     * @param \Respect\Validation\Validator $class
-     * @param array                         $rules
-     *
-     * @return \Respect\Validation\Validator
      */
     protected function createChainableValidators(RespectValidator $class, array $rules): RespectValidator
     {
@@ -277,10 +250,6 @@ class Validator implements ValidatorContract
 
     /**
      * Parse a string based rule.
-     *
-     * @param string $rules
-     *
-     * @return array
      */
     protected function parseStringRule(string $rules): array
     {
@@ -300,11 +269,6 @@ class Validator implements ValidatorContract
 
     /**
      * Parse a parameter list.
-     *
-     * @param string $rule
-     * @param string $parameter
-     *
-     * @return array
      */
     protected function parseParameters(string $rule, string $parameter): array
     {

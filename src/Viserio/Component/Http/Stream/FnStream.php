@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Http\Stream;
@@ -63,11 +63,7 @@ class FnStream implements StreamInterface
     /**
      * Lazily determine which methods are not implemented.
      *
-     * @param mixed $name
-     *
      * @throws \Viserio\Contract\Http\Exception\BadMethodCallException
-     *
-     * @return void
      */
     public function __get($name): void
     {
@@ -105,8 +101,6 @@ class FnStream implements StreamInterface
      *
      * @param \Psr\Http\Message\StreamInterface                                            $stream  Stream to decorate
      * @param array<string, array<int, \Psr\Http\Message\StreamInterface|string>|callable> $methods Hash of method name to a closure
-     *
-     * @return self
      */
     public static function decorate(StreamInterface $stream, array $methods): self
     {

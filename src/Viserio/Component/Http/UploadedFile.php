@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Http;
@@ -41,50 +41,36 @@ class UploadedFile implements UploadedFileInterface
      * The client-provided full path to the file.
      *
      * @note this is public to maintain BC with 3.1.0 and earlier.
-     *
-     * @var null|string
      */
     public ?string $file;
 
     /**
      * The client-provided file name.
-     *
-     * @var string
      */
     protected string $name;
 
     /**
      * The client-provided media type of the file.
-     *
-     * @var string
      */
     protected string $type;
 
     /**
      * The size of the file in bytes.
-     *
-     * @var int
      */
     protected int $size;
 
     /**
      * A valid PHP UPLOAD_ERR_xxx code for the file upload.
-     *
-     * @var int
      */
     protected int $error;
 
     /**
      * An optional StreamInterface wrapping the file resource.
-     *
-     * @var null|\Psr\Http\Message\StreamInterface
      */
     protected ?StreamInterface $stream;
 
     /**
      * Indicates if the uploaded file has already been moved.
-     *
-     * @var bool
      */
     protected bool $moved = false;
 
@@ -112,10 +98,6 @@ class UploadedFile implements UploadedFileInterface
      * Create a new uploaded file instance.
      *
      * @param \Psr\Http\Message\StreamInterface|resource|string $streamOrFile
-     * @param int                                               $size
-     * @param int                                               $errorStatus
-     * @param null|string                                       $clientFilename
-     * @param null|string                                       $clientMediaType
      *
      * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException
      */
@@ -248,11 +230,7 @@ class UploadedFile implements UploadedFileInterface
     /**
      * Check if error is a int or a array, then set it.
      *
-     * @param int $error
-     *
      * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException
-     *
-     * @return void
      */
     private function setError(int $error): void
     {
@@ -266,11 +244,7 @@ class UploadedFile implements UploadedFileInterface
     /**
      * Set the fill the right variable.
      *
-     * @param mixed $streamOrFile
-     *
      * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException
-     *
-     * @return void
      */
     private function setStreamOrFile($streamOrFile): void
     {
@@ -297,10 +271,6 @@ class UploadedFile implements UploadedFileInterface
 
     /**
      * Check if is a string or is empty.
-     *
-     * @param mixed $param
-     *
-     * @return bool
      */
     private function isStringNotEmpty($param): bool
     {
@@ -309,8 +279,6 @@ class UploadedFile implements UploadedFileInterface
 
     /**
      * Return true if there is no upload error.
-     *
-     * @return bool
      */
     private function isOk(): bool
     {
@@ -321,8 +289,6 @@ class UploadedFile implements UploadedFileInterface
      * Validate retrieve stream.
      *
      * @throws \Viserio\Contract\Http\Exception\RuntimeException if is moved or not ok
-     *
-     * @return void
      */
     private function validateActive(): void
     {

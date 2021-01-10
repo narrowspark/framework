@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Container\ServiceProvider;
@@ -26,7 +26,6 @@ interface ContainerBuilder
     /**
      * Register a binding with the container.
      *
-     * @param string                           $abstract
      * @param null|array|Closure|object|string $concrete
      *
      * @return ClosureDefinitionContract|DefinitionContract|FactoryDefinitionContract|ObjectDefinitionContract|UndefinedDefinitionContract
@@ -39,7 +38,6 @@ interface ContainerBuilder
      * Sometimes, you may wish to bind something into the container that should only be resolved once
      * and the same instance should be returned on subsequent calls into the container.
      *
-     * @param string                           $abstract
      * @param null|array|Closure|object|string $concrete
      *
      * @return ClosureDefinitionContract|DefinitionContract|FactoryDefinitionContract|ObjectDefinitionContract|UndefinedDefinitionContract
@@ -48,11 +46,6 @@ interface ContainerBuilder
 
     /**
      * Register a new Parameter to the container.
-     *
-     * @param string $id
-     * @param mixed  $value
-     *
-     * @return \Viserio\Contract\Container\Definition\Definition
      */
     public function setParameter(string $id, $value): DefinitionContract;
 
@@ -60,17 +53,11 @@ interface ContainerBuilder
      * Removes an definition from the container.
      *
      * @param string $abstract Identifier of the entry to remove
-     *
-     * @return void
      */
     public function remove(string $abstract): void;
 
     /**
      * Removes a parameter from the container.
-     *
-     * @param string $id
-     *
-     * @return void
      */
     public function removeParameter(string $id): void;
 
@@ -79,18 +66,11 @@ interface ContainerBuilder
      * Returns false otherwise.
      *
      * @param string $id identifier of the entry to look for
-     *
-     * @return bool
      */
     public function has(string $id): bool;
 
     /**
      * Alias a type to a different name.
-     *
-     * @param string $original
-     * @param string $alias
-     *
-     * @return \Viserio\Contract\Container\Definition\AliasDefinition
      */
     public function setAlias(string $original, string $alias): AliasDefinitionContract;
 
@@ -98,17 +78,11 @@ interface ContainerBuilder
      * Removes an alias.
      *
      * @param string $alias The alias to remove
-     *
-     * @return void
      */
     public function removeAlias(string $alias): void;
 
     /**
      * Overwrite the aliases.
-     *
-     * @param array $aliases
-     *
-     * @return void
      */
     public function setAliases(array $aliases): void;
 }

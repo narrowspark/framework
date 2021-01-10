@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Routing\Dispatcher;
@@ -46,10 +46,6 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher implements MiddlewareAw
 
     /**
      * Register middleware groups.
-     *
-     * @param array $groups
-     *
-     * @return void
      */
     public function setMiddlewareGroups(array $groups): void
     {
@@ -70,11 +66,6 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher implements MiddlewareAw
 
     /**
      * Register a group of middleware.
-     *
-     * @param string $name
-     * @param array  $middleware
-     *
-     * @return void
      */
     public function setMiddlewareGroup(string $name, array $middleware): void
     {
@@ -83,10 +74,6 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher implements MiddlewareAw
 
     /**
      * Set a list of middleware priorities.
-     *
-     * @param array $middlewarePriorities
-     *
-     * @return void
      */
     public function setMiddlewarePriorities(array $middlewarePriorities): void
     {
@@ -95,8 +82,6 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher implements MiddlewareAw
 
     /**
      * Get a list of middleware priorities.
-     *
-     * @return array
      */
     public function getMiddlewarePriorities(): array
     {
@@ -105,8 +90,6 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher implements MiddlewareAw
 
     /**
      * Get a middleware list.
-     *
-     * @return array
      */
     public function getMiddleware(): array
     {
@@ -115,11 +98,6 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher implements MiddlewareAw
 
     /**
      * Run the given route within a Stack "onion" instance.
-     *
-     * @param \Viserio\Contract\Routing\Route          $route
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     *
-     * @return \Psr\Http\Message\ResponseInterface
      */
     protected function runRoute(RouteContract $route, ServerRequestInterface $request): ResponseInterface
     {
@@ -138,10 +116,6 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher implements MiddlewareAw
 
     /**
      * Gather the middleware for the given route.
-     *
-     * @param \Viserio\Contract\Routing\Route $route
-     *
-     * @return array
      */
     protected function gatherRouteMiddleware(RouteContract $route): array
     {
@@ -170,11 +144,6 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher implements MiddlewareAw
 
     /**
      * Applies the callback to the elements of the given arrays.
-     *
-     * @param array    $array
-     * @param callable $callback
-     *
-     * @return array
      */
     protected static function map(array $array, callable $callback): array
     {
@@ -192,10 +161,7 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher implements MiddlewareAw
     /**
      * Convert a multi-dimensional array into a single-dimensional array without keys.
      *
-     * @param array $array
-     * @param int   $depth
-     *
-     * @return array
+     * @param int $depth
      */
     protected static function flatten(array $array, $depth = \INF): array
     {

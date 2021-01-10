@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Parser\Dumper;
@@ -81,8 +81,6 @@ class XliffDumper implements DumperContract
      * Dump xliff version 1.
      *
      * @param array<int|string, mixed> $data
-     *
-     * @return string
      */
     private static function dumpXliffVersion1(array $data): string
     {
@@ -169,8 +167,6 @@ class XliffDumper implements DumperContract
      * Dump xliff version 2.
      *
      * @param array<int|string, mixed> $data
-     *
-     * @return string
      */
     private static function dumpXliffVersion2(array $data): string
     {

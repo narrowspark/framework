@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Cron;
@@ -142,8 +142,6 @@ class Cron implements CronContract
 
     /**
      * Create a new cron instance.
-     *
-     * @param string $command
      */
     public function __construct(string $command)
     {
@@ -199,8 +197,6 @@ class Cron implements CronContract
 
     /**
      * Get the working directory.
-     *
-     * @return string
      */
     public function getPath(): string
     {
@@ -209,8 +205,6 @@ class Cron implements CronContract
 
     /**
      * Set working directory.
-     *
-     * @param string $path
      *
      * @return $this
      */
@@ -279,8 +273,6 @@ class Cron implements CronContract
 
     /**
      * Determine if the cron job runs in maintenance mode.
-     *
-     * @return bool
      */
     public function runsInMaintenanceMode(): bool
     {
@@ -742,8 +734,6 @@ class Cron implements CronContract
 
     /**
      * Check if os is windows.
-     *
-     * @return bool
      */
     protected function isWindows(): bool
     {
@@ -752,10 +742,6 @@ class Cron implements CronContract
 
     /**
      * Finalize the event's command syntax with the correct user.
-     *
-     * @param string $command
-     *
-     * @return string
      */
     protected function ensureCorrectUser(string $command): string
     {
@@ -763,11 +749,9 @@ class Cron implements CronContract
             return 'sudo -u ' . $this->user . ' -- sh -c \'' . $command . '\'';
         }
 
-        // http://de2.php.net/manual/en/function.exec.php#56599
         // The "start" command will start a detached process, a similar effect to &. The "/B" option prevents
         // start from opening a new terminal window if the program you are running is a console application.
         if ($this->user && $this->isWindows()) {
-            // https://superuser.com/questions/42537/is-there-any-sudo-command-for-windows
             // Options for runas : [{/profile|/noprofile}] [/env] [/netonly] [/smartcard] [/showtrustlevels] [/trustlevel] /user:UserAccountName
 
             return 'runas ' . $this->user . 'start /B ' . $command;
@@ -783,7 +767,6 @@ class Cron implements CronContract
     /**
      * Splice the given value into the given position of the expression.
      *
-     * @param int        $position
      * @param int|string $value
      *
      * @return static
@@ -798,8 +781,6 @@ class Cron implements CronContract
 
     /**
      * Get the default output depending on the OS.
-     *
-     * @return string
      */
     protected function getDefaultOutput(): string
     {
@@ -808,8 +789,6 @@ class Cron implements CronContract
 
     /**
      * Determine if the Cron expression passes.
-     *
-     * @return bool
      */
     protected function expressionPasses(): bool
     {
@@ -866,8 +845,6 @@ class Cron implements CronContract
 
     /**
      * Call all of the "before" callbacks for the cron job.
-     *
-     * @return void
      */
     protected function callBeforeCallbacks(): void
     {
@@ -878,8 +855,6 @@ class Cron implements CronContract
 
     /**
      * Call all of the "after" callbacks for the cron job.
-     *
-     * @return void
      */
     protected function callAfterCallbacks(): void
     {
@@ -890,8 +865,6 @@ class Cron implements CronContract
 
     /**
      * Get the mutex name for the scheduled command.
-     *
-     * @return string
      */
     protected function getMutexName(): string
     {
@@ -900,11 +873,6 @@ class Cron implements CronContract
 
     /**
      * Schedule the cron job to run between start and end time.
-     *
-     * @param string $startTime
-     * @param string $endTime
-     *
-     * @return Closure
      */
     protected function inTimeInterval(string $startTime, string $endTime): Closure
     {
@@ -922,11 +890,6 @@ class Cron implements CronContract
 
     /**
      * Check if startTime and endTime are before and after midnight.
-     *
-     * @param string $startTime
-     * @param string $endTime
-     *
-     * @return bool
      */
     private function isMidnightBetween(string $startTime, string $endTime): bool
     {

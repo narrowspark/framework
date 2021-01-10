@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\View\Engine;
@@ -63,9 +63,6 @@ class PhpEngine implements EngineContract
     /**
      * Handle a view exception.
      *
-     * @param Throwable $exception
-     * @param int       $obLevel
-     *
      * @throws Throwable
      */
     protected function handleViewException(Throwable $exception, int $obLevel): void
@@ -81,8 +78,6 @@ class PhpEngine implements EngineContract
      * Get a ErrorException instance.
      *
      * @param ParseError|Throwable|TypeError $exception
-     *
-     * @return ErrorException
      */
     private function getErrorException($exception): ErrorException
     {

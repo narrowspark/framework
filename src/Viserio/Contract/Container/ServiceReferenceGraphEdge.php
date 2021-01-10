@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Contract\Container;
@@ -31,29 +31,21 @@ interface ServiceReferenceGraphEdge
 
     /**
      * Returns the value of the edge.
-     *
-     * @return mixed
      */
     public function getValue();
 
     /**
      * Returns true if the edge is lazy, meaning it's a dependency not requiring direct instantiation.
-     *
-     * @return bool
      */
     public function isLazy(): bool;
 
     /**
      * Returns true if the edge is weak, meaning it shouldn't prevent removing the target service.
-     *
-     * @return bool
      */
     public function isWeak(): bool;
 
     /**
      * Returns true if the edge links with a constructor argument.
-     *
-     * @return bool
      */
     public function isReferencedByConstructor(): bool;
 }

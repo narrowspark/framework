@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Http\Tests\Constraint;
@@ -21,9 +21,6 @@ class Immutable extends PHPUnitConstraint
     /** @var object */
     private $new;
 
-    /**
-     * @param object $new
-     */
     public function __construct(object $new)
     {
         $this->new = $new;
@@ -32,8 +29,6 @@ class Immutable extends PHPUnitConstraint
     /**
      * Asserts two objects are the same type but not the same instance.
      *
-     * @param object $original
-     * @param object $new
      * @param string $message
      */
     public static function assertImmutable(object $original, object $new, $message = ''): void

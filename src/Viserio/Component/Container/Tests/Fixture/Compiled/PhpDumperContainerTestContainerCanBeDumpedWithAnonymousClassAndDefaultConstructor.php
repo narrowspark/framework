@@ -35,9 +35,6 @@ final class PhpDumperContainerTestContainerCanBeDumpedWithAnonymousClassAndDefau
     {
         $this->text = $text;
     }
-    /**
-     * @return null|string
-     */
     public function getText(): ?string
     {
         return $this->text;

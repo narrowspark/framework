@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Finder\Iterator;
@@ -70,8 +70,7 @@ class SortableIterator implements IteratorAggregate
      * Create a new SortableIterator instance.
      *
      * @param Traversable<int|string, SplFileInfo> $iterator
-     * @param callable|Closure|int                 $sort         The sort type (SORT_BY_NAME, SORT_BY_TYPE, or a PHP callback)
-     * @param bool                                 $reverseOrder
+     * @param callable|Closure|int                 $sort     The sort type (SORT_BY_NAME, SORT_BY_TYPE, or a PHP callback)
      *
      * @throws \Viserio\Contract\Finder\Exception\InvalidArgumentException
      */
@@ -136,7 +135,7 @@ class SortableIterator implements IteratorAggregate
     /**
      * Retrieve an external iterator.
      *
-     * @return Traversable<int|string, \SplFileInfo>
+     * @return Traversable<int|string, SplFileInfo>
      */
     public function getIterator(): Traversable
     {

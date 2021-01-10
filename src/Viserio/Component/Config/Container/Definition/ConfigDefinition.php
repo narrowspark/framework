@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Config\Container\Definition;
@@ -17,8 +17,6 @@ final class ConfigDefinition
 {
     /**
      * Name of the config aware class.
-     *
-     * @var string
      */
     private string $class;
 
@@ -29,9 +27,6 @@ final class ConfigDefinition
 
     /**
      * Create a new ConfigDefinition instance.
-     *
-     * @param string      $configClass
-     * @param null|string $configId
      */
     public function __construct(string $configClass, ?string $configId = null)
     {
@@ -41,8 +36,6 @@ final class ConfigDefinition
 
     /**
      * Return the config aware class.
-     *
-     * @return string
      */
     public function getClass(): string
     {
@@ -59,17 +52,12 @@ final class ConfigDefinition
         return $this->id;
     }
 
-    /**
-     * @return null|string
-     */
     public function getKey(): ?string
     {
         return $this->key;
     }
 
     /**
-     * @param null|string $key
-     *
      * @return $this
      */
     public function setKey(?string $key): self

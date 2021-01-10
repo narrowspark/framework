@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Container\Helper;
@@ -37,9 +37,6 @@ final class Reflection
 
     /**
      * Expands class name into full name.
-     *
-     * @param string          $name
-     * @param ReflectionClass $rc
      *
      * @throws \Viserio\Contract\Container\Exception\InvalidArgumentException
      */
@@ -80,8 +77,6 @@ final class Reflection
     }
 
     /**
-     * @param ReflectionClass $class
-     *
      * @return array of [alias => class]
      */
     public static function getUseStatements(ReflectionClass $class): array
@@ -106,11 +101,6 @@ final class Reflection
 
     /**
      * Parses PHP code to [class => [alias => class, ...]].
-     *
-     * @param string      $code
-     * @param null|string $forClass
-     *
-     * @return array
      */
     private static function parseUseStatements(string $code, ?string $forClass = null): array
     {
@@ -133,7 +123,6 @@ final class Reflection
                     $uses = [];
 
                     break;
-
                 case \T_CLASS:
                 case \T_INTERFACE:
                 case \T_TRAIT:
@@ -148,7 +137,6 @@ final class Reflection
                     }
 
                     break;
-
                 case \T_USE:
                     while (! $class && ($name = self::fetch($tokens, [\T_STRING, \T_NS_SEPARATOR]))) {
                         $name = \ltrim($name, '\\');
@@ -179,14 +167,12 @@ final class Reflection
                     }
 
                     break;
-
                 case \T_CURLY_OPEN:
                 case \T_DOLLAR_OPEN_CURLY_BRACES:
                 case '{':
                     $level++;
 
                     break;
-
                 case '}':
                     if ($level === $classLevel) {
                         $class = $classLevel = null;
@@ -199,10 +185,7 @@ final class Reflection
     }
 
     /**
-     * @param array           $tokens
      * @param string|string[] $take
-     *
-     * @return null|string
      */
     private static function fetch(array &$tokens, $take): ?string
     {

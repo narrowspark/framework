@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Container\LazyProxy;
@@ -113,11 +113,6 @@ class ProxyDumper implements DumperContract
         return "        {$instantiation} \$this->createProxy('{$proxyClass}', {$static}function () {{$eol}            return {$proxyClass}::staticProxyConstructor({$static}function (&\$wrappedInstance, \\ProxyManager\\Proxy\\LazyLoadingInterface \$proxy) {{$eol}{$factoryCode}{$eol}                \$proxy->setProxyInitializer(null);{$eol}{$eol}                return true;{$eol}            });{$eol}        });";
     }
 
-    /**
-     * @param \Viserio\Contract\Container\Definition\ObjectDefinition $definition
-     *
-     * @return \Zend\Code\Generator\ClassGenerator
-     */
     private function generateProxyClass(ObjectDefinitionContract $definition): ClassGenerator
     {
         $generatedClass = new ClassGenerator($this->getProxyClassName($definition));
@@ -130,9 +125,6 @@ class ProxyDumper implements DumperContract
         return $generatedClass;
     }
 
-    /**
-     * @return string
-     */
     private static function getProxyManagerVersion(): string
     {
         return \defined(Version::class . '::VERSION') ? Version::VERSION : Version::getVersion();
@@ -140,10 +132,6 @@ class ProxyDumper implements DumperContract
 
     /**
      * Produces the proxy class name for the given definition.
-     *
-     * @param \Viserio\Contract\Container\Definition\ObjectDefinition $definition
-     *
-     * @return string
      */
     private function getProxyClassName(ObjectDefinitionContract $definition): string
     {
@@ -152,11 +140,6 @@ class ProxyDumper implements DumperContract
         return \preg_replace('/^.*\\\\/', '', $class) . '_' . $this->getIdentifierSuffix($definition);
     }
 
-    /**
-     * @param \Viserio\Contract\Container\Definition\ObjectDefinition $definition
-     *
-     * @return string
-     */
     private function getIdentifierSuffix(ObjectDefinitionContract $definition): string
     {
         return ContainerBuilder::getHash($this->proxyGenerator->getProxifiedClass($definition));

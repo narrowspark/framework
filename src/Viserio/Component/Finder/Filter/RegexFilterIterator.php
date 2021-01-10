@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Finder\Filter;
@@ -95,8 +95,6 @@ class RegexFilterIterator extends FilterIterator
 
     /**
      * Rewind the iterator to the first position.
-     *
-     * @return void
      */
     public function rewind(): void
     {
@@ -127,8 +125,6 @@ class RegexFilterIterator extends FilterIterator
      * Advances to the next match.
      *
      * @see Iterator::next()
-     *
-     * @return void
      */
     public function next(): void
     {

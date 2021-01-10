@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         operating-system: [windows-latest]
-        php-versions: ["7.4"]
+        php-versions: ["7.4.2"]
         dependencies: ["highest", "lowest"]
 
     name: "PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }} OS and with ${{ matrix.dependencies }} dependencies"
@@ -26,13 +26,13 @@ jobs:
           fetch-depth: 2
 
       - name: "Setup PHP"
-        uses: shivammathur/setup-php@1.8.2
+        uses: shivammathur/setup-php@2.1.0
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl, pdo, pdo_sqlite
           ini-values: post_max_size=256M, date.timezone=Europe/Berlin, opcache.enable_cli=1, serialize_precision=14
-          pecl: true
-          tools: composer, composer-prefetcher
+          coverage: none
+          tools: composer, composer-prefetcher, pecl
 
       - name: "Configure container"
         env:

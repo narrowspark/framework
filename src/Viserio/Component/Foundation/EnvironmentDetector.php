@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Foundation;
@@ -20,8 +20,6 @@ class EnvironmentDetector implements EnvironmentContract
 {
     /**
      * Indicates if the application is running in the console.
-     *
-     * @var null|bool
      */
     protected ?bool $isRunningInConsole = null;
 
@@ -95,11 +93,6 @@ class EnvironmentDetector implements EnvironmentContract
     /**
      * Set the application environment from command-line arguments.
      *
-     * @param Closure $callback
-     * @param array   $args
-     * @param Closure $filter
-     * @param string  $method
-     *
      * @return bool|string
      */
     protected function detectConsoleEnvironment(Closure $callback, array $args, Closure $filter, string $method)
@@ -118,8 +111,6 @@ class EnvironmentDetector implements EnvironmentContract
     /**
      * Set the application environment for a web request.
      *
-     * @param Closure $callback
-     *
      * @return bool|string
      */
     protected function detectWebEnvironment(Closure $callback)
@@ -129,8 +120,6 @@ class EnvironmentDetector implements EnvironmentContract
 
     /**
      * Set the debug mode for a application.
-     *
-     * @param Closure $callback
      *
      * @return bool|string
      */
@@ -142,10 +131,7 @@ class EnvironmentDetector implements EnvironmentContract
     /**
      * Get the environment argument from the console.
      *
-     * @param array   $args
      * @param Closure $callback
-     *
-     * @return null|string
      */
     protected function getEnvironmentArgument(array $args, $callback): ?string
     {

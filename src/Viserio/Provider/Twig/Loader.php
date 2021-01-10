@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Provider\Twig;
@@ -53,9 +53,6 @@ class Loader implements LoaderInterface
 
     /**
      * Create a new twig loader instance.
-     *
-     * @param \Viserio\Contract\View\Finder           $finder
-     * @param \Viserio\Contract\Filesystem\Filesystem $filesystem
      */
     public function __construct(FinderContract $finder, ContractFilesystem $filesystem)
     {
@@ -65,10 +62,6 @@ class Loader implements LoaderInterface
 
     /**
      * Set file extension for the twig loader.
-     *
-     * @param string $extension
-     *
-     * @return \Twig\Loader\LoaderInterface
      *
      * @codeCoverageIgnore
      */
@@ -134,11 +127,7 @@ class Loader implements LoaderInterface
     /**
      * Return path to template without the need for the extension.
      *
-     * @param string $name
-     *
      * @throws \Twig\Error\LoaderError
-     *
-     * @return string
      */
     public function findTemplate(string $name): string
     {
@@ -164,10 +153,6 @@ class Loader implements LoaderInterface
 
     /**
      * Normalize the Twig template name to a name the ViewFinder can use.
-     *
-     * @param string $name
-     *
-     * @return string
      */
     protected function normalizeName(string $name): string
     {

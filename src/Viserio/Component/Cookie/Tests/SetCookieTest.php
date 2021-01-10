@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Cookie\Tests;
@@ -46,8 +46,6 @@ final class SetCookieTest extends TestCase
 
     /**
      * @dataProvider provideInstantiationThrowsExceptionIfCookieNameContainsInvalidCharactersCases
-     *
-     * @param mixed $name
      */
     public function testInstantiationThrowsExceptionIfCookieNameContainsInvalidCharacters($name): void
     {
@@ -72,8 +70,6 @@ final class SetCookieTest extends TestCase
 
     /**
      * @dataProvider provideInstantiationThrowsExceptionIfCookieValueContainsInvalidCharactersCases
-     *
-     * @param mixed $value
      */
     public function testInstantiationThrowsExceptionIfCookieValueContainsInvalidCharacters($value): void
     {
@@ -377,6 +373,7 @@ final class SetCookieTest extends TestCase
     {
         $time = new DateTime('Fri, 20-May-2011 15:25:52 GMT');
         $cookie = new SetCookie('foo', 'bar', $time, '/', '.myfoodomain.com', true, true, SetCookie::SAMESITE_STRICT);
+
         self::assertEquals(
             'foo=bar; Expires=' . (new Chronos(\gmdate('D, d-M-Y H:i:s', $time->getTimestamp())))->toCookieString() . '; Path=/; Domain=myfoodomain.com; Secure; HttpOnly; SameSite=strict',
             $cookie->__toString(),
@@ -384,16 +381,18 @@ final class SetCookieTest extends TestCase
         );
 
         $cookie = new SetCookie('foo', null, 1, '/admin/', '.myfoodomain.com', false, true);
+
         self::assertEquals(
             'foo=deleted; Expires=' . (new Chronos(\gmdate(
                 'D, d-M-Y H:i:s T',
                 Chronos::now()->getTimestamp() - 31536001
-            )))->toCookieString() . '; Path=/admin; Domain=myfoodomain.com; Max-Age=1; HttpOnly',
+            )))->setTimezone('UTC')->toCookieString() . '; Path=/admin; Domain=myfoodomain.com; Max-Age=1; HttpOnly',
             $cookie->__toString(),
             '->__toString() returns string representation of a cleared cookie if value is NULL'
         );
 
         $cookie = new SetCookie('foo');
+
         self::assertEquals(
             'foo=deleted; Expires=' . (new Chronos(\gmdate(
                 'D, d-M-Y H:i:s T',

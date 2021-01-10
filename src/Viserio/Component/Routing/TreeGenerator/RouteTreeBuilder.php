@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Routing\TreeGenerator;
@@ -23,8 +23,6 @@ final class RouteTreeBuilder
      * Creates a route tree from the supplied routes.
      *
      * @param \Viserio\Contract\Routing\Route[] $routes
-     *
-     * @return array
      */
     public function build(array $routes): array
     {
@@ -72,14 +70,8 @@ final class RouteTreeBuilder
      * Adds a route to the node tree.
      *
      * @param \Viserio\Component\Routing\TreeGenerator\RouteTreeNode $node
-     * @param \Viserio\Contract\Routing\Route                        $route
-     * @param array                                                  $segments
-     * @param int                                                    $segmentDepth
-     * @param array                                                  $parameterIndexNameMap
      *
      * @throws \Viserio\Contract\Routing\Exception\RuntimeException
-     *
-     * @return void
      */
     private function addRouteToNode(
         RouteTreeNode $node,
@@ -113,9 +105,6 @@ final class RouteTreeBuilder
      * Get the right Matcher.
      *
      * @param \Viserio\Component\Routing\Matcher\ParameterMatcher|\Viserio\Contract\Routing\SegmentMatcher $firstSegment
-     * @param array                                                                                        $parameterIndexNameMap
-     *
-     * @return \Viserio\Contract\Routing\SegmentMatcher
      */
     private function getMatcher($firstSegment, array &$parameterIndexNameMap): SegmentMatcherContract
     {

@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Routing\TreeGenerator;
@@ -35,8 +35,7 @@ final class RouteTreeCompiler
     /**
      * Create a new tree route compailer instance.
      *
-     * @param \Viserio\Component\Routing\TreeGenerator\RouteTreeBuilder             $treeBuilder
-     * @param \Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer $treeOptimizer
+     * @param \Viserio\Component\Routing\TreeGenerator\RouteTreeBuilder $treeBuilder
      */
     public function __construct(RouteTreeBuilder $treeBuilder, RouteTreeOptimizer $treeOptimizer)
     {
@@ -46,10 +45,6 @@ final class RouteTreeCompiler
 
     /**
      * Complie all added routes to a router handler.
-     *
-     * @param array $routes
-     *
-     * @return string
      */
     public function compile(array $routes): string
     {
@@ -72,11 +67,6 @@ final class RouteTreeCompiler
 
     /**
      * Creating a template for the router class.
-     *
-     * @param string $rootRoute
-     * @param string $body
-     *
-     * @return string
      */
     private function createRouterClassTemplate(string $rootRoute, string $body): string
     {
@@ -101,7 +91,6 @@ PHP;
      * Compile the counter for the segments check.
      *
      * @param \Viserio\Component\Routing\TreeGenerator\PHPCodeCollection $code
-     * @param array                                                      $routeTree
      */
     private function compileRouteTree(PHPCodeCollection $code, array $routeTree): void
     {
@@ -149,8 +138,6 @@ PHP;
      *
      * @param \Viserio\Component\Routing\TreeGenerator\PHPCodeCollection      $code
      * @param \Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection $nodes
-     * @param array                                                           $segmentVariables
-     * @param array                                                           $parameters
      */
     private function compileSegmentNodes(
         PHPCodeCollection $code,
@@ -207,7 +194,6 @@ PHP;
      *
      * @param \Viserio\Component\Routing\TreeGenerator\PHPCodeCollection   $code
      * @param \Viserio\Component\Routing\TreeGenerator\MatchedRouteDataMap $routeDataMap
-     * @param array                                                        $parameters
      */
     private function compiledRouteHttpMethodMatch(
         PHPCodeCollection $code,
@@ -283,8 +269,6 @@ PHP;
      * Compile the found route data.
      *
      * @param \Viserio\Component\Routing\TreeGenerator\PHPCodeCollection $code
-     * @param array                                                      $foundRoute
-     * @param array                                                      $parameterExpressions
      */
     private function compileFoundRoute(PHPCodeCollection $code, array $foundRoute, array $parameterExpressions): void
     {

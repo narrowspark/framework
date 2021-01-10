@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Routing\Event;
@@ -25,10 +25,6 @@ class RouteMatchedEvent implements EventContract
 
     /**
      * Create a new route matched event.
-     *
-     * @param \Viserio\Contract\Routing\Dispatcher     $dispatcher
-     * @param \Viserio\Contract\Routing\Route          $route
-     * @param \Psr\Http\Message\ServerRequestInterface $request
      */
     public function __construct(DispatcherContract $dispatcher, RouteContract $route, ServerRequestInterface $request)
     {
@@ -39,8 +35,6 @@ class RouteMatchedEvent implements EventContract
 
     /**
      * Get matched route instance.
-     *
-     * @return \Viserio\Contract\Routing\Route
      */
     public function getRoute(): RouteContract
     {
@@ -49,8 +43,6 @@ class RouteMatchedEvent implements EventContract
 
     /**
      * Get server request instance.
-     *
-     * @return \Psr\Http\Message\ServerRequestInterface
      */
     public function getServerRequest(): ServerRequestInterface
     {

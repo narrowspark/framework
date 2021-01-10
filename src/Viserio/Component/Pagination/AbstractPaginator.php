@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Pagination;
@@ -101,11 +101,6 @@ abstract class AbstractPaginator implements ArrayableContract,
 
     /**
      * Make dynamic calls into the collection.
-     *
-     * @param string $method
-     * @param array  $parameters
-     *
-     * @return mixed
      *
      * @codeCoverageIgnore
      */
@@ -286,8 +281,6 @@ abstract class AbstractPaginator implements ArrayableContract,
     /**
      * Get an iterator for the items.
      *
-     * @return ArrayIterator
-     *
      * @codeCoverageIgnore
      */
     public function getIterator(): ArrayIterator
@@ -307,8 +300,6 @@ abstract class AbstractPaginator implements ArrayableContract,
 
     /**
      * Get the number of items for the current page.
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -368,8 +359,6 @@ abstract class AbstractPaginator implements ArrayableContract,
     /**
      * Set the paginator's underlying collection.
      *
-     * @param \Narrowspark\Collection\Collection $collection
-     *
      * @return $this
      *
      * @codeCoverageIgnore
@@ -384,8 +373,6 @@ abstract class AbstractPaginator implements ArrayableContract,
     /**
      * Get the paginator's underlying collection.
      *
-     * @return \Narrowspark\Collection\Collection
-     *
      * @codeCoverageIgnore
      */
     public function getCollection(): Collection
@@ -395,10 +382,6 @@ abstract class AbstractPaginator implements ArrayableContract,
 
     /**
      * Determine if the given item exist.
-     *
-     * @param mixed $key
-     *
-     * @return bool
      *
      * @codeCoverageIgnore
      */
@@ -410,10 +393,6 @@ abstract class AbstractPaginator implements ArrayableContract,
     /**
      * Get the item at the given offset.
      *
-     * @param mixed $key
-     *
-     * @return mixed
-     *
      * @codeCoverageIgnore
      */
     public function offsetGet($key)
@@ -423,9 +402,6 @@ abstract class AbstractPaginator implements ArrayableContract,
 
     /**
      * Set the item at the given offset.
-     *
-     * @param mixed $key
-     * @param mixed $value
      *
      * @codeCoverageIgnore
      */
@@ -437,8 +413,6 @@ abstract class AbstractPaginator implements ArrayableContract,
     /**
      * Unset the item at the given key.
      *
-     * @param mixed $key
-     *
      * @codeCoverageIgnore
      */
     public function offsetUnset($key): void
@@ -448,8 +422,6 @@ abstract class AbstractPaginator implements ArrayableContract,
 
     /**
      * Build the full fragment portion of a URL.
-     *
-     * @return string
      */
     protected function buildFragment(): string
     {
@@ -458,8 +430,6 @@ abstract class AbstractPaginator implements ArrayableContract,
 
     /**
      * Add an array of query string values.
-     *
-     * @param array $keys
      *
      * @return $this
      */
@@ -474,10 +444,6 @@ abstract class AbstractPaginator implements ArrayableContract,
 
     /**
      * Determine if the given value is a valid page number.
-     *
-     * @param int $page
-     *
-     * @return bool
      */
     protected function isValidPageNumber(int $page): bool
     {
@@ -486,8 +452,6 @@ abstract class AbstractPaginator implements ArrayableContract,
 
     /**
      * Resolve the current page or return the default value.
-     *
-     * @return int
      */
     protected function resolveCurrentPage(): int
     {
@@ -508,10 +472,6 @@ abstract class AbstractPaginator implements ArrayableContract,
     /**
      * At least check if the input string does not have null-byte
      * and is a UTF-8 valid string.
-     *
-     * @param array $query
-     *
-     * @return array
      */
     private function secureInput(array $query): array
     {

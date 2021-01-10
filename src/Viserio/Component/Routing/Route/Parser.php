@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Routing\Route;
@@ -33,13 +33,10 @@ final class Parser
      *     \Viserio\Component\Routing\Matcher\StaticMatcher{ $value => 'create' },
      * ]
      *
-     * @param string   $route
      * @param string[] $conditions
      *
      * @throws \Viserio\Contract\Routing\Exception\InvalidArgumentException
      * @throws \Viserio\Contract\Routing\Exception\InvalidRoutePatternException
-     *
-     * @return array
      */
     public static function parse(string $route, array $conditions): array
     {
@@ -71,15 +68,7 @@ final class Parser
     /**
      * Validate and match uri parameters.
      *
-     * @param string $route
-     * @param string $patternSegment
-     * @param array  $conditions
-     * @param array  $matches
-     * @param array  $names
-     *
      * @throws \Viserio\Contract\Routing\Exception\InvalidRoutePatternException
-     *
-     * @return bool
      */
     private static function matchRouteParameters(
         string $route,
@@ -145,11 +134,6 @@ final class Parser
 
     /**
      * Generate a segment regex.
-     *
-     * @param array $matches
-     * @param array $parameterPatterns
-     *
-     * @return string
      */
     private static function generateRegex(array $matches, array $parameterPatterns): string
     {

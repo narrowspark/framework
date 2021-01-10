@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\HttpFoundation\Exception;
@@ -42,11 +42,6 @@ class MaintenanceModeException extends ServiceUnavailableException
 
     /**
      * Create a new MaintenanceModeException instance.
-     *
-     * @param int            $time
-     * @param null|int       $retryAfter
-     * @param null|string    $message
-     * @param null|Throwable $previous
      */
     public function __construct(
         int $time,
@@ -67,8 +62,6 @@ class MaintenanceModeException extends ServiceUnavailableException
 
     /**
      * Get time when the application went down.
-     *
-     * @return \Cake\Chronos\Chronos
      */
     public function getWentDownAt(): Chronos
     {
@@ -77,8 +70,6 @@ class MaintenanceModeException extends ServiceUnavailableException
 
     /**
      * Get retry after down.
-     *
-     * @return int
      */
     public function getRetryAfter(): int
     {
@@ -87,8 +78,6 @@ class MaintenanceModeException extends ServiceUnavailableException
 
     /**
      * Get the time when the application is available.
-     *
-     * @return \Cake\Chronos\Chronos
      */
     public function getWillBeAvailableAt(): Chronos
     {

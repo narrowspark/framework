@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Console\Tests\Container\Pipeline\Compiled;
@@ -54,8 +54,6 @@ final class AddConsoleCommandPipeContainerTestProcess extends \Viserio\Component
 
     /**
      * Returns the public Symfony\Component\Console\CommandLoader\CommandLoaderInterface shared service.
-     *
-     * @return \Viserio\Component\Console\CommandLoader\IteratorCommandLoader
      */
     protected function getce817e8bdc75399a693ba45b876c457a0f7fd422258f7d4eabc553987c2fbd31(): \Viserio\Component\Console\CommandLoader\IteratorCommandLoader
     {
@@ -68,8 +66,6 @@ final class AddConsoleCommandPipeContainerTestProcess extends \Viserio\Component
 
     /**
      * Returns the public Viserio\Component\Console\Application shared service.
-     *
-     * @return \Viserio\Component\Console\Application
      */
     protected function get206058a713a7172158e11c9d996f6a067c294ab0356ae6697060f162e057445a(): \Viserio\Component\Console\Application
     {
@@ -86,8 +82,6 @@ final class AddConsoleCommandPipeContainerTestProcess extends \Viserio\Component
 
     /**
      * Returns the public Viserio\Component\Console\Tests\Fixture\GoodbyeCommand shared service.
-     *
-     * @return \Viserio\Component\Console\Tests\Fixture\GoodbyeCommand
      */
     protected function gete6d96f60dc8eecd0ddc5d0637aa311884d82fd79d6e6c399780330b9c32ec6ee(): \Viserio\Component\Console\Tests\Fixture\GoodbyeCommand
     {
@@ -100,8 +94,6 @@ final class AddConsoleCommandPipeContainerTestProcess extends \Viserio\Component
 
     /**
      * Returns the public Viserio\Component\Console\Tests\Fixture\HelloCommand shared service.
-     *
-     * @return \Viserio\Component\Console\Tests\Fixture\HelloCommand
      */
     protected function getfc4803a678ce90c6fc6f0e95d290dfc6611678e8fba62563a448e7693b5f92d8(): \Viserio\Component\Console\Tests\Fixture\HelloCommand
     {
@@ -114,8 +106,6 @@ final class AddConsoleCommandPipeContainerTestProcess extends \Viserio\Component
 
     /**
      * Returns the public Viserio\Component\Console\Tests\Fixture\LazyWhiner shared service.
-     *
-     * @return \Viserio\Component\Console\Tests\Fixture\LazyWhiner
      */
     protected function geta24ae0504e8b69758f9ed0f3c6dab87df4b462bbae555494e87c372521f25a31(): \Viserio\Component\Console\Tests\Fixture\LazyWhiner
     {
@@ -124,8 +114,6 @@ final class AddConsoleCommandPipeContainerTestProcess extends \Viserio\Component
 
     /**
      * Returns the public console.command.ids service.
-     *
-     * @return array
      */
     protected function getdbce155f9c0e95dbd4bfbfaadab27eb79915789fa80c6c65068ccf60c9ef9e18(): array
     {

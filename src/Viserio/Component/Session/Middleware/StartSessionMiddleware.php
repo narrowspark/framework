@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Session\Middleware;
@@ -68,8 +68,6 @@ class StartSessionMiddleware implements MiddlewareInterface
 
     /**
      * Create a new session middleware.
-     *
-     * @param \Viserio\Component\Session\SessionManager $manager
      */
     public function __construct(SessionManager $manager)
     {
@@ -105,10 +103,6 @@ class StartSessionMiddleware implements MiddlewareInterface
 
     /**
      * Start the session for the given request.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     *
-     * @return \Viserio\Contract\Session\Store
      */
     protected function startSession(ServerRequestInterface $request): StoreContract
     {
@@ -134,11 +128,6 @@ class StartSessionMiddleware implements MiddlewareInterface
 
     /**
      * Store the current URL for the request if necessary.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Viserio\Contract\Session\Store          $session
-     *
-     * @return \Viserio\Contract\Session\Store
      */
     protected function storeCurrentUrl(ServerRequestInterface $request, StoreContract $session): StoreContract
     {
@@ -153,10 +142,6 @@ class StartSessionMiddleware implements MiddlewareInterface
 
     /**
      * Remove the garbage from the session if necessary.
-     *
-     * @param \Viserio\Contract\Session\Store $session
-     *
-     * @return void
      */
     protected function collectGarbage(StoreContract $session): void
     {
@@ -174,13 +159,7 @@ class StartSessionMiddleware implements MiddlewareInterface
     /**
      * Add the session cookie to the application response.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Psr\Http\Message\ResponseInterface      $response
-     * @param \Viserio\Contract\Session\Store          $session
-     *
      * @throws \Viserio\Contract\Cookie\Exception\InvalidArgumentException
-     *
-     * @return \Psr\Http\Message\ResponseInterface
      */
     protected function addCookieToResponse(
         ServerRequestInterface $request,

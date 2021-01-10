@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\View;
@@ -64,10 +64,6 @@ class View implements ArrayAccess, ViewContract
     /**
      * Create a new view instance.
      *
-     * @param \Viserio\Contract\View\Factory            $factory
-     * @param \Viserio\Contract\View\Engine             $engine
-     * @param string                                    $view
-     * @param array                                     $fileInfo
      * @param array|\Viserio\Contract\Support\Arrayable $data
      */
     public function __construct(
@@ -89,7 +85,6 @@ class View implements ArrayAccess, ViewContract
      * Set a piece of data on the view.
      *
      * @param string $key
-     * @param mixed  $value
      */
     public function __set($key, $value): void
     {
@@ -100,8 +95,6 @@ class View implements ArrayAccess, ViewContract
      * Check if a piece of data is bound to the view.
      *
      * @param string $key
-     *
-     * @return bool
      */
     public function __isset($key): bool
     {
@@ -112,8 +105,6 @@ class View implements ArrayAccess, ViewContract
      * Remove a piece of bound data from the view.
      *
      * @param string $key
-     *
-     * @return void
      */
     public function __unset($key): void
     {
@@ -123,12 +114,7 @@ class View implements ArrayAccess, ViewContract
     /**
      * Dynamically bind parameters to the view.
      *
-     * @param string $method
-     * @param array  $parameters
-     *
      * @throws BadMethodCallException
-     *
-     * @return \Viserio\Contract\View\View
      */
     public function __call(string $method, array $parameters): ViewContract
     {
@@ -141,8 +127,6 @@ class View implements ArrayAccess, ViewContract
 
     /**
      * Get the string contents of the view.
-     *
-     * @return string
      */
     public function __toString(): string
     {
@@ -246,8 +230,6 @@ class View implements ArrayAccess, ViewContract
 
     /**
      * Get file extension.
-     *
-     * @return string
      */
     public function getExtension(): string
     {
@@ -258,8 +240,6 @@ class View implements ArrayAccess, ViewContract
      * Determine if a piece of data is bound.
      *
      * @param string $key
-     *
-     * @return bool
      */
     public function offsetExists($key): bool
     {
@@ -270,8 +250,6 @@ class View implements ArrayAccess, ViewContract
      * Get a piece of bound data to the view.
      *
      * @param string $key
-     *
-     * @return mixed
      */
     public function offsetGet($key)
     {
@@ -282,7 +260,6 @@ class View implements ArrayAccess, ViewContract
      * Set a piece of data on the view.
      *
      * @param string $key
-     * @param mixed  $value
      */
     public function offsetSet($key, $value): void
     {
@@ -303,8 +280,6 @@ class View implements ArrayAccess, ViewContract
      * Get a piece of data from the view.
      *
      * @param string $key
-     *
-     * @return mixed
      */
     public function &__get($key)
     {
@@ -313,8 +288,6 @@ class View implements ArrayAccess, ViewContract
 
     /**
      * Get the evaluated contents of the view.
-     *
-     * @return string
      */
     protected function getContents(): string
     {
@@ -323,8 +296,6 @@ class View implements ArrayAccess, ViewContract
 
     /**
      * Get the data bound to the view instance.
-     *
-     * @return array
      */
     protected function gatherData(): array
     {

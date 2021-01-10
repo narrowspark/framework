@@ -3,4 +3,3 @@ vendor/
 Tests/prod.log
 
 composer.lock
-phpunit.xml

@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Profiler\DataCollector;
@@ -49,8 +49,6 @@ class TimeDataCollector extends AbstractDataCollector
 
     /**
      * Create new time collector instance.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
      */
     public function __construct(ServerRequestInterface $serverRequest)
     {
@@ -68,8 +66,6 @@ class TimeDataCollector extends AbstractDataCollector
     /**
      * Returns the request start time.
      *
-     * @return float
-     *
      * @codeCoverageIgnore
      */
     public function getRequestStartTime(): float
@@ -80,8 +76,6 @@ class TimeDataCollector extends AbstractDataCollector
     /**
      * Returns the request end time.
      *
-     * @return float
-     *
      * @codeCoverageIgnore
      */
     public function getRequestEndTime(): float
@@ -91,8 +85,6 @@ class TimeDataCollector extends AbstractDataCollector
 
     /**
      * Returns an array of all measures.
-     *
-     * @return array
      */
     public function getMeasures(): array
     {
@@ -149,8 +141,6 @@ class TimeDataCollector extends AbstractDataCollector
 
     /**
      * Returns the duration of a request.
-     *
-     * @return float
      */
     public function getRequestDuration(): float
     {
@@ -167,8 +157,6 @@ class TimeDataCollector extends AbstractDataCollector
      * @param string      $name      Internal name, used to stop the measure
      * @param null|string $label     Public name
      * @param null|string $collector The source of the collector
-     *
-     * @return void
      */
     public function startMeasure(string $name, ?string $label = null, ?string $collector = null): void
     {
@@ -183,10 +171,6 @@ class TimeDataCollector extends AbstractDataCollector
 
     /**
      * Check a measure exists.
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public function hasStartedMeasure(string $name): bool
     {
@@ -196,12 +180,7 @@ class TimeDataCollector extends AbstractDataCollector
     /**
      * Stops a measure.
      *
-     * @param string $name
-     * @param array  $params
-     *
      * @throws RuntimeException
-     *
-     * @return void
      */
     public function stopMeasure(string $name, array $params = []): void
     {
@@ -224,14 +203,6 @@ class TimeDataCollector extends AbstractDataCollector
 
     /**
      * Adds a measure.
-     *
-     * @param string      $label
-     * @param float       $start
-     * @param float       $end
-     * @param array       $params
-     * @param null|string $collector
-     *
-     * @return void
      */
     public function addMeasure(
         string $label,

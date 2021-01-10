@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Profiler;
@@ -79,8 +79,6 @@ class Profiler implements LoggerAwareInterface, ProfilerContract
 
     /**
      * Create new Profiler instance.
-     *
-     * @param \Viserio\Contract\Profiler\AssetsRenderer $assetsRenderer
      */
     public function __construct(AssetsRendererContract $assetsRenderer)
     {
@@ -115,8 +113,6 @@ class Profiler implements LoggerAwareInterface, ProfilerContract
 
     /**
      * Returns a AssetsRenderer for this instance.
-     *
-     * @return \Viserio\Contract\Profiler\AssetsRenderer
      */
     public function getAssetsRenderer(): AssetsRendererContract
     {
@@ -143,8 +139,6 @@ class Profiler implements LoggerAwareInterface, ProfilerContract
 
     /**
      * Disables the profiler.
-     *
-     * @return void
      */
     public function disable(): void
     {
@@ -153,8 +147,6 @@ class Profiler implements LoggerAwareInterface, ProfilerContract
 
     /**
      * Enables the profiler.
-     *
-     * @return void
      */
     public function enable(): void
     {
@@ -234,11 +226,6 @@ class Profiler implements LoggerAwareInterface, ProfilerContract
     /**
      * Injects the web debug toolbar into the given Response.
      *
-     * @param \Psr\Http\Message\ResponseInterface $response
-     * @param string                              $token
-     *
-     * @return \Psr\Http\Message\ResponseInterface
-     *
      * @see https://github.com/symfony/ProfilerBundle/blob/master/EventListener/WebDebugToolbarListener.php
      */
     protected function injectProfiler(ResponseInterface $response, string $token): ResponseInterface
@@ -267,8 +254,6 @@ class Profiler implements LoggerAwareInterface, ProfilerContract
     /**
      * Determine if we are running in the console.
      *
-     * @return bool
-     *
      * @codeCoverageIgnore
      */
     protected function runningInConsole(): bool
@@ -278,12 +263,6 @@ class Profiler implements LoggerAwareInterface, ProfilerContract
 
     /**
      * Collect data and create a new profile and save it.
-     *
-     * @param string                                   $token
-     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
-     * @param \Psr\Http\Message\ResponseInterface      $response
-     *
-     * @return void
      */
     private function collectData(
         string $token,
@@ -319,10 +298,6 @@ class Profiler implements LoggerAwareInterface, ProfilerContract
 
     /**
      * Create template.
-     *
-     * @param string $token
-     *
-     * @return string
      */
     private function createTemplate(string $token): string
     {
@@ -339,10 +314,6 @@ class Profiler implements LoggerAwareInterface, ProfilerContract
 
     /**
      * Check if response is a html response.
-     *
-     * @param \Psr\Http\Message\ResponseInterface $response
-     *
-     * @return bool
      */
     private function isHtmlResponse(ResponseInterface $response): bool
     {
@@ -351,17 +322,6 @@ class Profiler implements LoggerAwareInterface, ProfilerContract
 
     /**
      * Create profile with all datas.
-     *
-     * @param string $token
-     * @param string $ip
-     * @param string $method
-     * @param string $url
-     * @param int    $statusCode
-     * @param float  $time
-     * @param string $date
-     * @param array  $collectors
-     *
-     * @return void
      */
     private function createProfile(
         string $token,

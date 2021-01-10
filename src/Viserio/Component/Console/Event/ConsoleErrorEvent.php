@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Console\Event;
@@ -25,11 +25,6 @@ final class ConsoleErrorEvent extends ConsoleEvent
 {
     /**
      * Create a new console error event.
-     *
-     * @param null|\Symfony\Component\Console\Command\Command   $command
-     * @param \Symfony\Component\Console\Input\InputInterface   $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param Throwable                                         $error
      */
     public function __construct(?Command $command, InputInterface $input, OutputInterface $output, Throwable $error)
     {
@@ -57,10 +52,6 @@ final class ConsoleErrorEvent extends ConsoleEvent
      * Replaces the thrown exception.
      *
      * This exception will be thrown if no response is set in the event.
-     *
-     * @param Throwable $error
-     *
-     * @return void
      */
     public function setError(Throwable $error): void
     {
@@ -74,8 +65,6 @@ final class ConsoleErrorEvent extends ConsoleEvent
      * @param int $exitCode The command exit code
      *
      * @throws ReflectionException
-     *
-     * @return void
      */
     public function setExitCode(int $exitCode): void
     {

@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Session;
@@ -120,9 +120,6 @@ class Store implements StoreContract
 
     /**
      * Create a new session instance.
-     *
-     * @param string                 $name
-     * @param SessionHandlerContract $handler
      */
     public function __construct(string $name, SessionHandlerContract $handler)
     {
@@ -529,8 +526,6 @@ class Store implements StoreContract
 
     /**
      * Get the CSRF token value.
-     *
-     * @return string
      */
     public function getToken(): string
     {
@@ -545,8 +540,6 @@ class Store implements StoreContract
 
     /**
      * Regenerate the CSRF token value.
-     *
-     * @return void
      */
     public function regenerateToken(): void
     {
@@ -573,8 +566,6 @@ class Store implements StoreContract
      * Determine if this is a valid session ID.
      *
      * @param string $id
-     *
-     * @return bool
      */
     protected function isValidId($id): bool
     {
@@ -583,8 +574,6 @@ class Store implements StoreContract
 
     /**
      * Updates last trace timestamp.
-     *
-     * @return void
      */
     protected function updateLastTrace(): void
     {
@@ -593,8 +582,6 @@ class Store implements StoreContract
 
     /**
      * Get a new, random session ID.
-     *
-     * @return string
      */
     protected function generateSessionId(): string
     {
@@ -605,8 +592,6 @@ class Store implements StoreContract
      * Check if session has already started.
      *
      * @throws \Viserio\Contract\Session\Exception\SessionNotStartedException
-     *
-     * @return void
      */
     protected function checkIfSessionHasStarted(): void
     {
@@ -619,8 +604,6 @@ class Store implements StoreContract
      * Prepare the raw string data from the session.
      *
      * @param string $data
-     *
-     * @return array
      */
     protected function prepareForReadFromHandler($data): array
     {
@@ -635,10 +618,6 @@ class Store implements StoreContract
 
     /**
      * Prepare the session data for storage.
-     *
-     * @param string $data
-     *
-     * @return string
      */
     protected function prepareForWriteToHandler(string $data): string
     {
@@ -647,10 +626,6 @@ class Store implements StoreContract
 
     /**
      * Merge new flash keys into the new flash array.
-     *
-     * @param array $keys
-     *
-     * @return void
      */
     private function mergeNewFlashes(array $keys): void
     {
@@ -661,10 +636,6 @@ class Store implements StoreContract
 
     /**
      * Remove the given keys from the old flash data.
-     *
-     * @param array $keys
-     *
-     * @return void
      */
     private function removeFromOldFlashData(array $keys): void
     {
@@ -673,8 +644,6 @@ class Store implements StoreContract
 
     /**
      * Determine if session id should be regenerated? (based on requestsCount or regenerationTrace).
-     *
-     * @return bool
      */
     private function shouldRegenerateId(): bool
     {
@@ -693,8 +662,6 @@ class Store implements StoreContract
 
     /**
      * Load the session data from the handler.
-     *
-     * @return bool
      */
     private function loadSession(): bool
     {
@@ -719,8 +686,6 @@ class Store implements StoreContract
 
     /**
      * Read the session data from the handler.
-     *
-     * @return array
      */
     private function readFromHandler(): array
     {
@@ -735,8 +700,6 @@ class Store implements StoreContract
 
     /**
      * Write values to handler.
-     *
-     * @return void
      */
     private function writeToHandler(): void
     {
@@ -760,8 +723,6 @@ class Store implements StoreContract
 
     /**
      * Generate a fingerprint string.
-     *
-     * @return string
      */
     private function generateFingerprint(): string
     {
@@ -776,8 +737,6 @@ class Store implements StoreContract
 
     /**
      * Get time stamp.
-     *
-     * @return int
      */
     private function getTimestamp(): int
     {

@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Routing;
@@ -52,8 +52,6 @@ class Route implements RouteContract
 
     /**
      * The controller instance.
-     *
-     * @var mixed
      */
     protected $controller;
 
@@ -89,7 +87,6 @@ class Route implements RouteContract
      * Create a new Route instance.
      *
      * @param array|string       $methods
-     * @param string             $uri
      * @param null|array|Closure $action
      */
     public function __construct($methods, string $uri, $action)
@@ -116,8 +113,6 @@ class Route implements RouteContract
      * Dynamically access route parameters.
      *
      * @param string $key
-     *
-     * @return mixed
      */
     public function __get($key)
     {
@@ -184,8 +179,6 @@ class Route implements RouteContract
 
     /**
      * Get route identifier.
-     *
-     * @return string
      */
     public function getIdentifier(): string
     {
@@ -194,10 +187,6 @@ class Route implements RouteContract
 
     /**
      * Set a Invoker instance.
-     *
-     * @param \Invoker\InvokerInterface $invoker
-     *
-     * @return void
      */
     public function setInvoker(InvokerInterface $invoker): void
     {
@@ -417,9 +406,6 @@ class Route implements RouteContract
      * Parse arguments to the where method into an array.
      *
      * @param array|string $name
-     * @param null|string  $expression
-     *
-     * @return array
      */
     protected function parseWhere($name, ?string $expression): array
     {
@@ -438,8 +424,6 @@ class Route implements RouteContract
 
     /**
      * Get the bound route controller middleware.
-     *
-     * @return array
      */
     protected function getControllerMiddleware(): array
     {
@@ -458,8 +442,6 @@ class Route implements RouteContract
 
     /**
      * Get the bound route controller disabled middleware.
-     *
-     * @return array
      */
     protected function getControllerDisabledMiddleware(): array
     {
@@ -478,8 +460,6 @@ class Route implements RouteContract
 
     /**
      * Checks whether the route's action is a controller.
-     *
-     * @return bool
      */
     protected function isControllerAction(): bool
     {
@@ -488,8 +468,6 @@ class Route implements RouteContract
 
     /**
      * Get the controller method used for the route.
-     *
-     * @return string
      */
     protected function getControllerMethod(): string
     {

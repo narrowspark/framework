@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Routing\Command;
@@ -56,8 +56,6 @@ class RouteListCommand extends AbstractCommand
 
     /**
      * Create a new route command instance.
-     *
-     * @param \Viserio\Contract\Routing\Router $router
      */
     public function __construct(RouterContract $router)
     {
@@ -84,8 +82,6 @@ class RouteListCommand extends AbstractCommand
 
     /**
      * Compile the routes into a displayable format.
-     *
-     * @return array
      */
     protected function getRoutes(): array
     {
@@ -112,10 +108,6 @@ class RouteListCommand extends AbstractCommand
 
     /**
      * Get the route information for a given route.
-     *
-     * @param \Viserio\Contract\Routing\Route $route
-     *
-     * @return null|array
      */
     protected function getRouteInformation(RouteContract $route): ?array
     {
@@ -132,10 +124,6 @@ class RouteListCommand extends AbstractCommand
 
     /**
      * Filter the route by URI and / or name.
-     *
-     * @param array $route
-     *
-     * @return null|array
      */
     protected function filterRoute(array $route): ?array
     {
@@ -154,11 +142,6 @@ class RouteListCommand extends AbstractCommand
 
     /**
      * Sort the array using the given callback.
-     *
-     * @param array    $array
-     * @param callable $callback
-     *
-     * @return array
      */
     protected static function sort(array $array, callable $callback): array
     {

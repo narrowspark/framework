@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Support\Http;
@@ -39,8 +39,6 @@ final class ClientIp
 
     /**
      * Create ClientIp instance.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
      */
     public function __construct(ServerRequestInterface $serverRequest)
     {
@@ -49,8 +47,6 @@ final class ClientIp
 
     /**
      * Returns client IP address.
-     *
-     * @return null|string
      */
     public function getIpAddress(): ?string
     {
@@ -80,10 +76,6 @@ final class ClientIp
 
     /**
      * Check that a given string is a valid IP address.
-     *
-     * @param string $ip
-     *
-     * @return bool
      */
     private function isValidIpAddress(string $ip): bool
     {
@@ -93,10 +85,7 @@ final class ClientIp
     /**
      * Find out the client's IP address from the headers available to us.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
-     * @param string                                   $header        Header name
-     *
-     * @return string
+     * @param string $header Header name
      */
     private function getFirstIpAddressFromHeader(ServerRequestInterface $serverRequest, string $header): string
     {

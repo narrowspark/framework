@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Session\Handler;
@@ -366,8 +366,6 @@ class PdoSessionHandler extends AbstractSessionHandler
      * @param string $sessionData
      *
      * @throws PDOException
-     *
-     * @return bool
      */
     public function updateTimestamp($sessionId, $sessionData): bool
     {
@@ -568,8 +566,6 @@ class PdoSessionHandler extends AbstractSessionHandler
 
     /**
      * Return a PDO instance.
-     *
-     * @return PDO
      */
     private function getConnection(): PDO
     {
@@ -584,8 +580,6 @@ class PdoSessionHandler extends AbstractSessionHandler
      * Lazy-connects to the database.
      *
      * @param string $dsn DSN string
-     *
-     * @return void
      */
     private function connect(string $dsn): void
     {
@@ -676,8 +670,6 @@ class PdoSessionHandler extends AbstractSessionHandler
      *       - for oci using DBMS_LOCK.REQUEST
      *       - for sqlsrv using sp_getapplock with LockOwner = Session
      *
-     * @param string $sessionId
-     *
      * @throws \DomainException When an unsupported PDO driver is used
      *
      * @return PDOStatement The statement that needs to be executed later to release the lock
@@ -766,12 +758,6 @@ class PdoSessionHandler extends AbstractSessionHandler
 
     /**
      * Returns a merge/upsert (i.e. insert or update) statement when supported by the database for writing session data.
-     *
-     * @param string $sessionId
-     * @param string $data
-     * @param int    $maxlifetime
-     *
-     * @return null|PDOStatement
      */
     private function getMergeStatement(string $sessionId, string $data, int $maxlifetime): ?PDOStatement
     {

@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Console\Command;
@@ -56,9 +56,6 @@ final class CommandResolver
 
     /**
      * Create a new command resolver instance.
-     *
-     * @param \Viserio\Component\Support\Invoker     $invoker
-     * @param \Viserio\Component\Console\Application $console
      */
     public function __construct(Invoker $invoker, Application $console)
     {
@@ -122,9 +119,6 @@ final class CommandResolver
     /**
      * Create a new command.
      *
-     * @param string   $expression
-     * @param callable $callable
-     *
      * @throws \Symfony\Component\Console\Exception\LogicException
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      * @throws \Viserio\Contract\Console\Exception\InvalidCommandExpression
@@ -150,8 +144,6 @@ final class CommandResolver
      * @param callable|string                                  $callable
      *
      * @throws \Invoker\Exception\NotCallableException
-     *
-     * @return array
      */
     private function defaultsViaReflection(StringCommand $command, $callable): array
     {
@@ -188,12 +180,8 @@ final class CommandResolver
     /**
      * Check if callable is valid.
      *
-     * @param mixed $callable
-     *
      * @throws ReflectionException
      * @throws \Viserio\Contract\Console\Exception\InvalidArgumentException
-     *
-     * @return void
      */
     private function assertCallableIsValid($callable): void
     {
@@ -214,11 +202,7 @@ final class CommandResolver
     /**
      * Check if the callable represents a static call to a non-static method.
      *
-     * @param mixed $callable
-     *
      * @throws ReflectionException
-     *
-     * @return bool
      */
     private function isStaticCallToNonStaticMethod($callable): bool
     {

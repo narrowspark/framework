@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Parser\Dumper;
@@ -35,8 +35,6 @@ class IniDumper implements DumperContract
 
     /**
      * Get nest separator.
-     *
-     * @return string
      */
     public function getNestSeparator(): string
     {
@@ -45,10 +43,6 @@ class IniDumper implements DumperContract
 
     /**
      * Set nest separator.
-     *
-     * @param string $separator
-     *
-     * @return self
      */
     public function setNestSeparator(string $separator): self
     {
@@ -62,10 +56,6 @@ class IniDumper implements DumperContract
      *
      * If set to true, the INI file is rendered without sections completely
      * into the global namespace of the INI file.
-     *
-     * @param bool $withoutSections
-     *
-     * @return self
      */
     public function setRenderWithoutSectionsFlags(bool $withoutSections): self
     {
@@ -76,8 +66,6 @@ class IniDumper implements DumperContract
 
     /**
      * Return whether the writer should render without sections.
-     *
-     * @return bool
      */
     public function shouldRenderWithoutSections(): bool
     {
@@ -110,7 +98,6 @@ class IniDumper implements DumperContract
             }
         }
 
-
         return $output;
     }
 
@@ -119,8 +106,6 @@ class IniDumper implements DumperContract
      *
      * @param array<int|string, mixed>            $config
      * @param array<int|string, float|int|string> $parents
-     *
-     * @return string
      */
     protected function addBranch(array $config, array $parents = []): string
     {
@@ -172,8 +157,6 @@ class IniDumper implements DumperContract
 
     /**
      * Converts the supplied value into a valid ini representation.
-     *
-     * @param mixed $value
      *
      * @throws \Viserio\Contract\Parser\Exception\RuntimeException
      *

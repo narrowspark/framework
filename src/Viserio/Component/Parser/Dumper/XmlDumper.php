@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Parser\Dumper;
@@ -75,13 +75,10 @@ class XmlDumper implements DumperContract
     /**
      * Parse individual element.
      *
-     * @param \DOMDocument                        $document
-     * @param \DOMElement|DOMNode                 $element
+     * @param DOMElement|DOMNode                  $element
      * @param array<int|string, mixed>|int|string $value
      *
      * @throws DOMException
-     *
-     * @return void
      */
     private function convertElement(DOMDocument $document, $element, $value): void
     {
@@ -121,14 +118,10 @@ class XmlDumper implements DumperContract
     /**
      * Add node.
      *
-     * @param \DOMDocument        $document
-     * @param \DOMElement|DOMNode $element
-     * @param string              $key
-     * @param string|string[]     $value
+     * @param DOMElement|DOMNode $element
+     * @param string|string[]    $value
      *
      * @throws DOMException
-     *
-     * @return void
      */
     private function addNode(DOMDocument $document, $element, string $key, $value): void
     {
@@ -144,13 +137,10 @@ class XmlDumper implements DumperContract
     /**
      * Add collection node.
      *
-     * @param \DOMDocument        $document
-     * @param \DOMElement|DOMNode $element
-     * @param string|string[]     $value
+     * @param DOMElement|DOMNode $element
+     * @param string|string[]    $value
      *
      * @throws DOMException
-     *
-     * @return void
      */
     private function addCollectionNode(DOMDocument $document, $element, $value): void
     {
@@ -169,10 +159,7 @@ class XmlDumper implements DumperContract
     /**
      * Add sequential node.
      *
-     * @param \DOMElement|DOMNode $element
-     * @param string              $value
-     *
-     * @return void
+     * @param DOMElement|DOMNode $element
      */
     private function addSequentialNode($element, string $value): void
     {
@@ -193,10 +180,7 @@ class XmlDumper implements DumperContract
     /**
      * Create the root element.
      *
-     * @param DOMDocument                                 $document
      * @param array<string, array<string, string>>|string $rootElement
-     *
-     * @return DOMElement
      */
     private function createRootElement(DOMDocument $document, $rootElement): DOMElement
     {
@@ -223,10 +207,6 @@ class XmlDumper implements DumperContract
 
     /**
      * Check if array are all sequential.
-     *
-     * @param mixed $value
-     *
-     * @return bool
      */
     private static function isArrayAllKeySequential($value): bool
     {

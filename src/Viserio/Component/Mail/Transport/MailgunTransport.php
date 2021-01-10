@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Mail\Transport;
@@ -57,11 +57,6 @@ class MailgunTransport extends AbstractTransport
 
     /**
      * Create a new Mailgun transport instance.
-     *
-     * @param \GuzzleHttp\Client $client
-     * @param string             $key
-     * @param string             $domain
-     * @param null|string        $baseUrl
      */
     public function __construct(Client $client, string $key, string $domain, ?string $baseUrl = null)
     {
@@ -74,8 +69,6 @@ class MailgunTransport extends AbstractTransport
 
     /**
      * Get the API key being used by the transport.
-     *
-     * @return string
      */
     public function getKey(): string
     {
@@ -84,8 +77,6 @@ class MailgunTransport extends AbstractTransport
 
     /**
      * Set the API key being used by the transport.
-     *
-     * @param string $key
      *
      * @return $this
      */
@@ -98,8 +89,6 @@ class MailgunTransport extends AbstractTransport
 
     /**
      * Get the domain being used by the transport.
-     *
-     * @return string
      */
     public function getDomain(): string
     {
@@ -108,8 +97,6 @@ class MailgunTransport extends AbstractTransport
 
     /**
      * Set the domain being used by the transport.
-     *
-     * @param string $domain
      *
      * @return $this
      */
@@ -157,10 +144,6 @@ class MailgunTransport extends AbstractTransport
 
     /**
      * Get the "to" payload field for the API request.
-     *
-     * @param Swift_Mime_SimpleMessage $message
-     *
-     * @return string
      */
     protected function getTo(Swift_Mime_SimpleMessage $message): string
     {
@@ -169,10 +152,6 @@ class MailgunTransport extends AbstractTransport
 
     /**
      * Get the "cc" payload field for the API request.
-     *
-     * @param Swift_Mime_SimpleMessage $message
-     *
-     * @return string
      */
     protected function getCc(Swift_Mime_SimpleMessage $message): string
     {
@@ -181,10 +160,6 @@ class MailgunTransport extends AbstractTransport
 
     /**
      * Get the "bcc" payload field for the API request.
-     *
-     * @param Swift_Mime_SimpleMessage $message
-     *
-     * @return string
      */
     protected function getBcc(Swift_Mime_SimpleMessage $message): string
     {
@@ -193,10 +168,6 @@ class MailgunTransport extends AbstractTransport
 
     /**
      * Get Comma-Separated Address (with name, if available) for the API request.
-     *
-     * @param array $contacts
-     *
-     * @return string
      */
     protected function formatAddress(array $contacts): string
     {

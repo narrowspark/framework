@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Exception\Tests\Filter;
@@ -27,6 +27,7 @@ use Viserio\Component\Exception\Filter\CanDisplayFilter;
  * @internal
  *
  * @small
+ * @coversNothing
  */
 final class CanDisplayFilterTest extends MockeryTestCase
 {
@@ -67,11 +68,6 @@ final class CanDisplayFilterTest extends MockeryTestCase
         self::assertSame([$html, $json], $displayers);
     }
 
-    /**
-     * @param Throwable $exception
-     *
-     * @return \Mockery\MockInterface
-     */
     private function arrangeJsonDisplayer(Throwable $exception): MockInterface
     {
         $json = Mockery::mock(JsonDisplayer::class);
@@ -83,12 +79,6 @@ final class CanDisplayFilterTest extends MockeryTestCase
         return $json;
     }
 
-    /**
-     * @param Throwable $exception
-     * @param bool      $return
-     *
-     * @return \Mockery\MockInterface
-     */
     private function arrangeHtmlDisplayer(Throwable $exception, bool $return): MockInterface
     {
         $html = Mockery::mock(HtmlDisplayer::class);
@@ -100,13 +90,6 @@ final class CanDisplayFilterTest extends MockeryTestCase
         return $html;
     }
 
-    /**
-     * @param \Viserio\Component\Exception\Displayer\HtmlDisplayer $html
-     * @param \Viserio\Component\Exception\Displayer\JsonDisplayer $json
-     * @param Throwable                                            $exception
-     *
-     * @return array
-     */
     private function arrangeDisplayerFilter(HtmlDisplayer $html, JsonDisplayer $json, Throwable $exception): array
     {
         return (new CanDisplayFilter())->filter([$html, $json], $this->serverRequest, $exception, $exception, 500);

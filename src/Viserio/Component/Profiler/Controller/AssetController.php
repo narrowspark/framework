@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Profiler\Controller;
@@ -46,11 +46,6 @@ class AssetController extends AbstractController
 
     /**
      * Create a new AssetController instance.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface   $serverRequest
-     * @param \Psr\Http\Message\ResponseFactoryInterface $responseFactory
-     * @param \Psr\Http\Message\StreamFactoryInterface   $streamFactory
-     * @param \Viserio\Contract\Profiler\Profiler        $profiler
      */
     public function __construct(
         ServerRequestInterface $serverRequest,
@@ -70,8 +65,6 @@ class AssetController extends AbstractController
 
     /**
      * Return the javascript for the Debugbar.
-     *
-     * @return \Psr\Http\Message\ResponseInterface
      */
     public function js(): ResponseInterface
     {
@@ -89,8 +82,6 @@ class AssetController extends AbstractController
 
     /**
      * Return the stylesheets for the Debugbar.
-     *
-     * @return \Psr\Http\Message\ResponseInterface
      */
     public function css(): ResponseInterface
     {

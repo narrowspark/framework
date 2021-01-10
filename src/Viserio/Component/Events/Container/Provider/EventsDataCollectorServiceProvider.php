@@ -3,87 +3,17 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
-// namespace Viserio\Component\Events\Container\Provider;
-//
-// use Psr\Container\ContainerInterface;
-// use Psr\Log\LoggerInterface;
-// use Viserio\Component\Container\Definition\ReferenceDefinition;
-// use Viserio\Contract\Container\ObjectDefinition as ObjectDefinitionContract;
-// use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
-// use Viserio\Contract\Container\ServiceProvider\ExtendServiceProvider as ExtendServiceProviderContract;
-// use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
-// use Viserio\Contract\Config\ProvidesDefaultConfig as ProvidesDefaultConfigContract;
-// use Viserio\Contract\Config\RequiresComponentConfig as RequiresComponentConfigContract;
-// use Viserio\Contract\Profiler\Profiler as ProfilerContract;
-// use Viserio\Component\Events\DataCollector\TraceableEventManager;
-// use Viserio\Component\Events\DataCollector\ViserioEventsDataCollector;
-// use Viserio\Component\Config\Traits\OptionsResolverTrait;
-//
 // class EventsDataCollectorServiceProvider implements
 //    ServiceProviderContract,
 //    ExtendServiceProviderContract,
 //    RequiresComponentConfigContract,
 //    ProvidesDefaultConfigContract
 // {
-//    use OptionsResolverTrait;
-//
-//    /**
-//     * {@inheritdoc}
-//     */
-//    public function build(ContainerBuilderContract $container): void
-//    {
-//        $options = self::resolveOptions($container->get('config'));
-//
-//        if ($options['collector']['events']) {
-//            $container->singleton(TraceableEventManager::class)
-//                ->addMethodCall('setLogger', [new ReferenceDefinition(LoggerInterface::class, ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE)]);
-//            $container->singleton(ViserioEventsDataCollector::class);
-//        }
-//    }
-//
-//    /**
-//     * {@inheritdoc}
-//     */
-//    public function getExtensions(): array
-//    {
-//        return [
-//            ProfilerContract::class => static function (ObjectDefinitionContract $definition, ContainerInterface $container): ObjectDefinitionContract {
-//                $options = self::resolveOptions($container->get('config'));
-//
-//                if ($options['collector']['events']) {
-//                    $definition->addMethodCall('addCollector', [new ReferenceDefinition(ViserioEventsDataCollector::class)]);
-//                }
-//
-//                return $definition;
-//            },
-//        ];
-//    }
-//
-//    /**
-//     * {@inheritdoc}
-//     */
-//    public static function getDimensions(): iterable
-//    {
-//        return ['viserio', 'profiler'];
-//    }
-//
-//    /**
-//     * {@inheritdoc}
-//     */
-//    public static function getDefaultOptions(): array
-//    {
-//        return [
-//            'collector' => [
-//                'events' => false,
-//            ],
-//        ];
-//    }
-// }

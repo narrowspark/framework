@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Http\Tests;
@@ -26,6 +26,7 @@ use Viserio\Contract\Http\Exception\InvalidArgumentException;
  * @small
  *
  * @property \Psr\Http\Message\ResponseInterface $classToTest
+ * @coversNothing
  */
 final class ResponseTest extends AbstractMessageTest
 {
@@ -70,8 +71,6 @@ final class ResponseTest extends AbstractMessageTest
 
     /**
      * @dataProvider invalidStatusCodeRangeProvider
-     *
-     * @param mixed $invalidValues
      */
     public function testConstructResponseWithInvalidRangeStatusCode($invalidValues): void
     {
@@ -83,8 +82,6 @@ final class ResponseTest extends AbstractMessageTest
 
     /**
      * @dataProvider invalidStatusCodeRangeProvider
-     *
-     * @param mixed $invalidValues
      */
     public function testResponseChangeStatusCodeWithWithInvalidRange($invalidValues): void
     {
@@ -107,7 +104,9 @@ final class ResponseTest extends AbstractMessageTest
         ];
     }
 
-    // Test methods for change instances status
+    /**
+     * Test methods for change instances status
+     */
     public function testValidWithStatusDefaultReasonPhrase(): void
     {
         $message = $this->classToTest;
@@ -209,7 +208,7 @@ final class ResponseTest extends AbstractMessageTest
         ]);
 
         self::assertSame(['Foo' => ['baz', 'bar']], $response->getHeaders());
-        self::assertSame('baz,bar', $response->getHeaderLine('Foo'));
+        self::assertSame('baz, bar', $response->getHeaderLine('Foo'));
         self::assertSame(['baz', 'bar'], $response->getHeader('Foo'));
     }
 
@@ -315,7 +314,7 @@ final class ResponseTest extends AbstractMessageTest
 
         self::assertSame(['Foo' => ['Bar']], $response->getHeaders());
         self::assertSame(['Foo' => ['Bar'], 'baZ' => ['Bam', 'Bar']], $response2->getHeaders());
-        self::assertSame('Bam,Bar', $response2->getHeaderLine('baz'));
+        self::assertSame('Bam, Bar', $response2->getHeaderLine('baz'));
         self::assertSame(['Bam', 'Bar'], $response2->getHeader('baz'));
     }
 
@@ -337,7 +336,7 @@ final class ResponseTest extends AbstractMessageTest
 
         self::assertSame(['Foo' => ['Bar']], $response->getHeaders());
         self::assertSame(['Foo' => ['Bar', 'Baz']], $response2->getHeaders());
-        self::assertSame('Bar,Baz', $response2->getHeaderLine('foo'));
+        self::assertSame('Bar, Baz', $response2->getHeaderLine('foo'));
         self::assertSame(['Bar', 'Baz'], $response2->getHeader('foo'));
     }
 
@@ -348,7 +347,7 @@ final class ResponseTest extends AbstractMessageTest
 
         self::assertSame(['Foo' => ['Bar']], $response->getHeaders());
         self::assertSame(['Foo' => ['Bar', 'Baz', 'Bam']], $response2->getHeaders());
-        self::assertSame('Bar,Baz,Bam', $response2->getHeaderLine('foo'));
+        self::assertSame('Bar, Baz, Bam', $response2->getHeaderLine('foo'));
         self::assertSame(['Bar', 'Baz', 'Bam'], $response2->getHeader('foo'));
     }
 

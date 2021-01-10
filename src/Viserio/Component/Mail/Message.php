@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Mail;
@@ -33,8 +33,6 @@ class Message implements MessageContract
 
     /**
      * Create a new message instance.
-     *
-     * @param Swift_Mime_SimpleMessage $swift
      */
     public function __construct(Swift_Mime_SimpleMessage $swift)
     {
@@ -43,11 +41,6 @@ class Message implements MessageContract
 
     /**
      * Dynamically pass missing methods to the Swift instance.
-     *
-     * @param string $method
-     * @param array  $parameters
-     *
-     * @return mixed
      */
     public function __call(string $method, array $parameters)
     {
@@ -206,8 +199,6 @@ class Message implements MessageContract
 
     /**
      * Get the underlying Swift Message instance.
-     *
-     * @return Swift_Mime_SimpleMessage
      */
     public function getSwiftMessage(): Swift_Mime_SimpleMessage
     {
@@ -218,10 +209,6 @@ class Message implements MessageContract
      * Add a recipient to the message.
      *
      * @param array|string $address
-     * @param string       $name
-     * @param string       $type
-     *
-     * @return void
      */
     protected function addAddresses($address, string $name, string $type): void
     {
@@ -238,10 +225,6 @@ class Message implements MessageContract
 
     /**
      * Create a Swift Attachment instance.
-     *
-     * @param string $file
-     *
-     * @return Swift_Mime_Attachment
      */
     protected function createAttachmentFromPath(string $file): Swift_Mime_Attachment
     {
@@ -250,11 +233,6 @@ class Message implements MessageContract
 
     /**
      * Create a Swift Attachment instance from data.
-     *
-     * @param string $data
-     * @param string $name
-     *
-     * @return Swift_Mime_Attachment
      */
     protected function createAttachmentFromData(string $data, string $name): Swift_Mime_Attachment
     {
@@ -263,11 +241,6 @@ class Message implements MessageContract
 
     /**
      * Prepare and attach the given attachment.
-     *
-     * @param Swift_Mime_Attachment $attachment
-     * @param array                 $options
-     *
-     * @return void
      */
     protected function prepAttachment(Swift_Mime_Attachment $attachment, array $options = []): void
     {

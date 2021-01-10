@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Console;
@@ -120,8 +120,6 @@ class Application extends SymfonyConsole
 
     /**
      * Get the output for the last run command.
-     *
-     * @return string
      */
     public function getLastOutput(): string
     {
@@ -134,8 +132,6 @@ class Application extends SymfonyConsole
 
     /**
      * Add a command to the console.
-     *
-     * @param \Symfony\Component\Console\Command\Command $command
      *
      * @return null|\Symfony\Component\Console\Command\Command|\Viserio\Component\Console\Command\AbstractCommand
      */
@@ -162,8 +158,6 @@ class Application extends SymfonyConsole
      * @param array                 $aliases    an array of aliases for the command
      *
      * @throws \Viserio\Contract\Console\Exception\InvocationException
-     *
-     * @return \Viserio\Component\Console\Command\StringCommand
      */
     public function command(string $expression, $callable, array $aliases = []): StringCommand
     {
@@ -178,13 +172,7 @@ class Application extends SymfonyConsole
     /**
      * Run an console command by name.
      *
-     * @param string                                                 $command
-     * @param array                                                  $parameters
-     * @param null|\Symfony\Component\Console\Output\OutputInterface $outputBuffer
-     *
      * @throws Throwable
-     *
-     * @return int
      */
     public function call(string $command, array $parameters = [], ?OutputInterface $outputBuffer = null): int
     {
@@ -225,8 +213,6 @@ class Application extends SymfonyConsole
      *
      * @param string $commandName      name of the command
      * @param array  $argumentDefaults default argument values
-     *
-     * @return void
      */
     public function defaults(string $commandName, array $argumentDefaults = []): void
     {
@@ -241,10 +227,6 @@ class Application extends SymfonyConsole
 
     /**
      * Register an application starting bootstrapper.
-     *
-     * @param Closure $callback
-     *
-     * @return void
      */
     public static function starting(Closure $callback): void
     {
@@ -253,8 +235,6 @@ class Application extends SymfonyConsole
 
     /**
      * Clear the console application bootstrappers.
-     *
-     * @return void
      */
     public static function clearBootstrappers(): void
     {
@@ -263,8 +243,6 @@ class Application extends SymfonyConsole
 
     /**
      * The PHP executable.
-     *
-     * @return string
      */
     public static function phpBinary(): string
     {
@@ -275,8 +253,6 @@ class Application extends SymfonyConsole
 
     /**
      * The Cerebro executable.
-     *
-     * @return string
      */
     public static function cerebroBinary(): string
     {
@@ -287,10 +263,6 @@ class Application extends SymfonyConsole
 
     /**
      * Format the given command as a fully-qualified executable command.
-     *
-     * @param string $string
-     *
-     * @return string
      */
     public static function formatCommandString(string $string): string
     {
@@ -301,8 +273,6 @@ class Application extends SymfonyConsole
      * Get the container instance.
      *
      * @throws \Viserio\Contract\Console\Exception\LogicException
-     *
-     * @return \Psr\Container\ContainerInterface
      */
     public function getContainer(): ContainerInterface
     {
@@ -428,10 +398,6 @@ class Application extends SymfonyConsole
      * If an event dispatcher has been attached to the application,
      * events are also dispatched during the life-cycle of the command.
      *
-     * @param \Symfony\Component\Console\Command\Command        $command
-     * @param \Symfony\Component\Console\Input\InputInterface   $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     *
      * @throws Throwable
      *
      * @return int 0 if everything went fine, or an error code
@@ -491,8 +457,6 @@ class Application extends SymfonyConsole
      * Get the default input definitions for the applications.
      *
      * This is used to add the --env option to every available command.
-     *
-     * @return \Symfony\Component\Console\Input\InputDefinition
      */
     protected function getDefaultInputDefinition(): InputDefinition
     {
@@ -519,8 +483,6 @@ class Application extends SymfonyConsole
      * Get the global environment option for the definition.
      *
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
-     *
-     * @return \Viserio\Component\Console\Input\InputOption
      */
     private function getEnvironmentOption(): InputOption
     {

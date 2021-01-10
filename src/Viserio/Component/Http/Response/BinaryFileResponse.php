@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Http\Response;
@@ -83,8 +83,6 @@ class BinaryFileResponse extends Response
      * If this is set to true, the file will be unlinked after the request is send
      * Note: If the X-Sendfile header is used, the deleteFileAfterSend setting will not be used.
      *
-     * @param bool $shouldDelete
-     *
      * @return $this
      */
     public function deleteFileAfterSend(bool $shouldDelete = true): self
@@ -96,8 +94,6 @@ class BinaryFileResponse extends Response
 
     /**
      * Gets the file.
-     *
-     * @return \Viserio\Component\Http\File\File
      */
     public function getFile(): File
     {
@@ -107,16 +103,11 @@ class BinaryFileResponse extends Response
     /**
      * Transform a SplFileInfo to a Http File and check if the file exists.
      *
-     * @param mixed  $file
      * @param string $contentDisposition
-     * @param bool   $autoETag
-     * @param bool   $autoLastModified
      *
      * @throws \Viserio\Contract\Http\Exception\FileNotFoundException
      * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException
      * @throws \Viserio\Contract\Http\Exception\FileException
-     *
-     * @return \Psr\Http\Message\ResponseInterface
      */
     public function setFile(
         $file,
@@ -205,8 +196,6 @@ class BinaryFileResponse extends Response
      * @param string $filenameFallback A fallback filename, containing only ASCII characters. Defaults to an automatically encoded filename
      *
      * @throws \InvalidArgumentException
-     *
-     * @return \Psr\Http\Message\ResponseInterface
      */
     public function setContentDisposition(
         string $disposition,
@@ -224,8 +213,6 @@ class BinaryFileResponse extends Response
      * Automatically sets the Last-Modified header according the file modification date.
      *
      * @throws ErrorException
-     *
-     * @return void
      */
     protected function setAutoLastModified(): void
     {
@@ -246,8 +233,6 @@ class BinaryFileResponse extends Response
 
     /**
      * Automatically sets the ETag header according to the checksum of the file.
-     *
-     * @return void
      */
     protected function setAutoEtag(): void
     {

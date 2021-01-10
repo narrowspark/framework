@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Config\Command;
@@ -104,12 +104,6 @@ class ConfigDumpCommand extends AbstractCommand
 
     /**
      * Put the created content to file.
-     *
-     * @param string $file
-     * @param string $content
-     * @param string $key
-     *
-     * @return void
      */
     private function putContentToFile(string $file, string $content, string $key): void
     {
@@ -154,26 +148,20 @@ class ConfigDumpCommand extends AbstractCommand
             }
 
             /**
-             * Read the mandatory options and ask for the value.
-             *
-             * @param string $className
-             * @param array  $dimensions
-             * @param array  $mandatoryOptions
-             *
-             * @return array
+             * Read the mandatory config and ask for the value.
              */
-            protected function readMandatoryOption(string $className, array $dimensions, array $mandatoryOptions): array
+            protected function readMandatoryOption(string $className, array $dimensions, array $mandatoryConfig): array
             {
-                $options = [];
+                $config = [];
 
-                foreach ($mandatoryOptions as $key => $mandatoryOption) {
+                foreach ($mandatoryConfig as $key => $mandatoryOption) {
                     if (! \is_scalar($mandatoryOption)) {
-                        $options[$key] = $this->readMandatoryOption($className, $dimensions, $mandatoryOptions[$key]);
+                        $config[$key] = $this->readMandatoryOption($className, $dimensions, $mandatoryConfig[$key]);
 
                         continue;
                     }
 
-                    $options[$mandatoryOption] = $this->command->ask(
+                    $config[$mandatoryOption] = $this->command->ask(
                         \sprintf(
                             '%s: Please enter the following mandatory value for [%s]',
                             $className,
@@ -182,7 +170,7 @@ class ConfigDumpCommand extends AbstractCommand
                     );
                 }
 
-                return $options;
+                return $config;
             }
         };
     }
@@ -192,10 +180,6 @@ class ConfigDumpCommand extends AbstractCommand
  * Scope isolated include.
  *
  * Prevents access to $this/self from included files.
- *
- * @param string $file
- *
- * @return array
  */
 function includeFile(string $file): array
 {

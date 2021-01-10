@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Bridge\Twig\Command;
@@ -57,8 +57,6 @@ class LintCommand extends AbstractCommand
 
     /**
      * Create a DebugCommand instance.
-     *
-     * @param \Twig\Environment $environment
      */
     public function __construct(Environment $environment)
     {
@@ -117,8 +115,6 @@ class LintCommand extends AbstractCommand
      *
      * @param array $files       array of files to check
      * @param array $directories array of directories to get the files from
-     *
-     * @return array
      */
     protected function getFiles(array $files, array $directories): array
     {
@@ -140,8 +136,6 @@ class LintCommand extends AbstractCommand
      * Get a finder instance of Twig files in the specified directories.
      *
      * @param array $paths paths to search for files in
-     *
-     * @return iterable
      */
     protected function getFinder(array $paths): iterable
     {
@@ -165,10 +159,7 @@ class LintCommand extends AbstractCommand
      * Validate the template.
      *
      * @param string $template         twig template
-     * @param string $file
      * @param bool   $showDeprecations
-     *
-     * @return array
      */
     protected function validate(string $template, string $file, $showDeprecations): array
     {
@@ -213,8 +204,6 @@ class LintCommand extends AbstractCommand
      * @param string $format  Format to output the results in. Supports txt or json.
      *
      * @throws InvalidArgumentException thrown for an unknown format
-     *
-     * @return int
      */
     protected function display(array $details, string $format = 'txt'): int
     {
@@ -235,9 +224,6 @@ class LintCommand extends AbstractCommand
      * Output the results as text.
      *
      * @param array $details validation results from all linted files
-     * @param bool  $verbose
-     *
-     * @return int
      */
     protected function displayText(array $details, bool $verbose = false): int
     {
@@ -274,8 +260,6 @@ class LintCommand extends AbstractCommand
      * Output the results as json.
      *
      * @param array $details validation results from all linted files
-     *
-     * @return int
      */
     protected function displayJson(array $details): int
     {
@@ -307,8 +291,6 @@ class LintCommand extends AbstractCommand
      * Output the error to the console.
      *
      * @param array $info details for the file that failed to be linted
-     *
-     * @return void
      */
     protected function renderException(array $info): void
     {
@@ -341,8 +323,6 @@ class LintCommand extends AbstractCommand
      * @param string $template contents of Twig template
      * @param int    $line     line where the exception occurred
      * @param int    $context  number of lines around the line where the exception occurred
-     *
-     * @return array
      */
     protected function getContext(string $template, $line, int $context = 3): array
     {
@@ -362,12 +342,7 @@ class LintCommand extends AbstractCommand
     /**
      * Undocumented function.
      *
-     * @param string $dir
-     * @param array  $foundFiles
-     *
      * @throws \RuntimeException
-     *
-     * @return void
      */
     private function findTwigFiles(string $dir, array &$foundFiles): void
     {

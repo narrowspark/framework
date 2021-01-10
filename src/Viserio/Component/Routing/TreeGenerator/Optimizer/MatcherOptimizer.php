@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Routing\TreeGenerator\Optimizer;
@@ -34,11 +34,6 @@ final class MatcherOptimizer
 
     /**
      * Merge same matcher together.
-     *
-     * @param array $parentMatchers
-     * @param array $childMatchers
-     *
-     * @return array
      */
     public static function mergeMatchers(array $parentMatchers, array $childMatchers): array
     {
@@ -57,10 +52,6 @@ final class MatcherOptimizer
 
     /**
      * Optimize matcher and matcher order.
-     *
-     * @param array $matchers
-     *
-     * @return array
      */
     public static function optimizeMatchers(array $matchers): array
     {
@@ -73,10 +64,6 @@ final class MatcherOptimizer
 
     /**
      * Change matcher for a faster one, if available.
-     *
-     * @param \Viserio\Contract\Routing\SegmentMatcher $matcher
-     *
-     * @return \Viserio\Contract\Routing\SegmentMatcher
      */
     private static function optimizeMatcher(SegmentMatcherContract $matcher): SegmentMatcherContract
     {
@@ -109,10 +96,6 @@ final class MatcherOptimizer
 
     /**
      * Optimizing the matcher order, unknown types are added last.
-     *
-     * @param array $matchers
-     *
-     * @return array
      */
     private static function optimizeMatcherOrder(array $matchers): array
     {

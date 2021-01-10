@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * This file is part of Narrowspark Framework.
+ * Copyright (c) 2018-2020 Daniel Bannert
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * @see https://github.com/narrowspark/automatic
  */
 
 namespace Viserio\Component\Routing\Route;
@@ -21,13 +21,8 @@ class Action
     /**
      * Parse the given action into an array.
      *
-     * @param string $uri
-     * @param mixed  $action
-     *
      * @throws \Viserio\Contract\Routing\Exception\UnexpectedValueException if invalid route action
      * @throws \Viserio\Contract\Routing\Exception\LogicException           if no action found
-     *
-     * @return array
      */
     public static function parse(string $uri, $action): array
     {
@@ -68,11 +63,7 @@ class Action
     /**
      * Get an action for a route that has no action.
      *
-     * @param string $uri
-     *
      * @throws \Viserio\Contract\Routing\Exception\LogicException if no action found
-     *
-     * @return array
      */
     protected static function missingAction(string $uri): array
     {
@@ -83,11 +74,6 @@ class Action
 
     /**
      * Return the first element in an array passing a given truth test.
-     *
-     * @param array    $array
-     * @param callable $callback
-     *
-     * @return mixed
      */
     protected static function getFirst(array $array, callable $callback)
     {
